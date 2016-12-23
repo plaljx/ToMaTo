@@ -28,11 +28,11 @@ DATABASE_PORT = ''  # Set to empty string for default. Not used with sqlite3.
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'Europe/Berlin'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-US'
+LANGUAGE_CODE = 'zh-cn'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

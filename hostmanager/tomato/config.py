@@ -191,9 +191,9 @@ _socket.connect(("8.8.8.8",80))
 PUBLIC_ADDRESS = _socket.getsockname()[0]
 _socket.close()
 
-TIME_ZONE = 'Europe/Berlin'
+TIME_ZONE = 'Asia/Shanghai'
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'zh-cn'
 
 INSTALLED_APPS = ('tomato', 'south')
 SECRET_KEY = 'not needed'
