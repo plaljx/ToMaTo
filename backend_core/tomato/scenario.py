@@ -6,7 +6,7 @@ from .db import *
 # By Chang Rui
 class Scenario(BaseDocument):
 
-    name = StringField(required=True)
+    name = StringField(required=True, unique=True)
     description = StringField()
     accessibility = StringField()   # 'private' or 'public', in lower case.
     author = StringField()
