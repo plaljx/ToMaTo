@@ -3,12 +3,17 @@
 
 import os
 from django import VERSION as DJANGO_VERSION
+from django.utils.translation import ugettext_lazy as _
 
 CONFIG_YAML_PATH = "/etc/tomato/config/config.yaml"
 TOMATO_MODULE = "web"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+LOCALE_PATHS = (
+	'/usr/share/tomato/web/tomato/locale'
+)
 
 ADMINS = (
 	# ('Your Name', 'your_email@domain.com'),
@@ -33,7 +38,12 @@ TIME_ZONE = 'Asia/Shanghai'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'zh-cn'
-
+gettext_noop = lambda s: s
+LANGUAGES = (
+	('en', gettext_noop('English')),
+    ('zh-cn', gettext_noop('Simplified Chinese')),
+    ('zh-tw', gettext_noop('Traditional Chinese')),
+)
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -62,6 +72,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
 	'django.middleware.common.CommonMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.locale.LocaleMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
@@ -87,7 +98,10 @@ SESSION_COOKIE_AGE = 30 * 24 * 3600
 SESSION_COOKIE_SECURE = False
 
 
-TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
+TEMPLATE_CONTEXT_PROCESSORS = (
+	'django.core.context_processors.request',
+	'django.core.context_processors.i18n',
+)
 
 CURRENT_DIR = os.path.dirname(__file__)
 TEMPLATE_DIRS = (os.path.join(CURRENT_DIR, 'templates'),)

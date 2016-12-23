@@ -178,6 +178,8 @@ urlpatterns = patterns('',
     (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export$', 'tomato.dumpmanager.dump_export'),
     (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export_data$', 'tomato.dumpmanager.dump_export_with_data'),
 
+	url(r'^sysconfig$','tomato.sys_config.config', name="sysconfig"),
+	
     # Topology Scenario, by Chang Rui
     url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list'),  # TODO: all, my, public
     url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list_my'),
