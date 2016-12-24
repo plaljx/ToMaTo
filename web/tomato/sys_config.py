@@ -58,7 +58,7 @@ class SysConfigForm(BootstrapForm):
 				pass
 			return "%s (%s)" % (desc, code)
 		languages = [(k, get_language_display_name(k, v))
-			for k, v in settings.LANGUAGES]
+					  for k, v in settings.LANGUAGES]
 		self.fields['language'].choices = languages
 		self.helper.form_action = reverse(config)
 		self.helper.layout = Layout(
@@ -79,6 +79,6 @@ def config(api, request):
 			if hasattr(request, 'session'):
 				request.session['django_language'] = language
 				form = SysConfigForm(request.REQUEST)
-		response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language, expires=_one_year())               
+			response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language, expires=_one_year())               
 		return response
 
