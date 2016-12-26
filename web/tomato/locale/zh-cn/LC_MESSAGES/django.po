@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-23 21:52+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-12-23 22:07+0800\n"
+"Last-Translator: jlj <jlj101014@163.com>\n"
+"Language-Team: provinet <ljx413@163.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: .\settings.py:43
 msgid "English"
@@ -35,7 +37,7 @@ msgstr ""
 
 #: .\sys_config.py:73
 msgid "System Configuration"
-msgstr ""
+msgstr "系统配置"
 
 #: .\crispy_forms\tests\test_form_helper.py:129
 #: .\crispy_forms\tests\test_form_helper.py:139
@@ -53,3 +55,4 @@ msgstr ""
 #: .\crispy_forms\tests\test_layout_objects.py:111
 msgid "Enter a valid value."
 msgstr ""
+
