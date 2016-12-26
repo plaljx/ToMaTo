@@ -181,16 +181,18 @@ urlpatterns = patterns('',
 	url(r'^sysconfig$','tomato.sys_config.config', name="sysconfig"),
 	
     # Topology Scenario
-    url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),  # TODO: all, my, public
+    (r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
+    url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),
     url(r'^scenario/my$', 'tomato.scenario.list_', {"show": "my"}, name='scenario_list_my'),
     url(r'^scenario/public$', 'tomato.scenario.list_', {"show": "public"}, name='scenario_list_public'),
     url(r'^scenario/(?P<id_>\w{24})/$', 'tomato.scenario.info', name='scenario_info'),
     url(r'^scenario/(?P<id_>\w{24})/edit$', 'tomato.scenario.edit', name='scenario_edit'),
     url(r'^scenario/(?P<id_>\w{24})/remove$', 'tomato.scenario.remove', name='scenario_remove'),
     url(r'^scenario/(?P<id_>\w{24})/deploy$', 'tomato.scenario.deploy', name='scenario_deploy'),
+    url(r'^scenario/(?P<id_>\w{24})/download_topo$', 'tomato.scenario.download_topo', name='scenario_download_topo'),
+    url(r'^scenario/(?P<id_>\w{24})/upload_topo$', 'tomato.scenario.upload_topo', name='scenario_upload_topo'),
 
-    (r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
-    (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
-    (r'ajax/scenario/(?P<id_>\w{24})/deploy$', 'tomato.ajax.scenario_deploy'),
-    (r'ajax/scenario/(?P<id_>\w{24})/modify$', 'tomato.ajax.scenario_modify'),
+    # (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
+    # (r'ajax/scenario/(?P<id_>\w{24})/deploy$', 'tomato.ajax.scenario_deploy'),
+    # (r'ajax/scenario/(?P<id_>\w{24})/modify$', 'tomato.ajax.scenario_modify'),
 )

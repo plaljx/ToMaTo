@@ -24,7 +24,6 @@ class Scenario(BaseDocument):
 
     def mod(self, **attrs):
         for key in attrs:
-            # should not modify create_time
             if key in ['name', 'description', 'accessibility', 'author', 'topology_info_json']:
                 setattr(self, key, attrs[key])
             else:

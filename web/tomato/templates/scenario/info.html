@@ -69,6 +69,20 @@
 
 {% if request.session.user.isGlobalHostManager %}
 <form>
+
+    <button type="submit" formaction="{%url 'scenario_deploy' scenario.id %}" class="btn btn-default">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        topology info
+    </button>
+    <button type="submit" formaction="{%url 'scenario_upload_topo' scenario.id %}" class="btn btn-default">
+        <span class="glyphicon glyphicon-upload"></span>
+        upload topo
+    </button>
+    <button type="submit" formaction="{%url 'scenario_download_topo' scenario.id %}" class="btn btn-default">
+        <span class="glyphicon glyphicon-download"></span>
+        download topo
+    </button>
+
     <button type="submit" formaction="{%url 'scenario_deploy' scenario.id %}" class="btn btn-primary">
         <span class="glyphicon glyphicon-cog"></span>
         deploy scenario
@@ -79,8 +93,9 @@
     </button>
     <button type="submit" formaction="{%url 'scenario_remove' scenario.id %}" class="btn btn-danger">
         <span class="glyphicon glyphicon-trash"></span>
-      remove scenario
-  </button>
+        remove scenario
+    </button>
+
 </form>
 {%endif%}
 

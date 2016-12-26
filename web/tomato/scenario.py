@@ -1,9 +1,9 @@
 # by Chang Rui
-import datetime
+import datetime, re
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django import forms
 
 from admin_common import RemoveConfirmForm, BootstrapForm, Buttons, ConfirmForm
@@ -112,6 +112,52 @@ def edit(api, request, id_):
                        'form': form,
                        "heading": "Edit Scenario Data for '" + str(scenario_info['name'])
                        })
+
+@wrap_rpc
+def download_topo(api, request, id_):
+    if not api.user:
+        raise AuthError()
+    scenario = api.scenario_info(id_)
+    topo_json = scenario["topology_info_json"]
+    filename = re.sub('[^\w\-_\. ]', '_', scenario["name"].lower().replace(" ", "_")) + "__" + id_ + ".tomato4.json"
+    response = HttpResponse(topo_json, content_type="application/json")
+    response['Content-Disposition'] = 'attachment; filename="' + filename + '"'
+    return response
+
+
+@wrap_rpc
+def upload_topo(api, request, id_):
+    if not api.user:
+        raise AuthError()
+
+    if request.method == 'POST':
+        form = ImportScenarioForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['topologyfile']
+            file_content = f.read()
+            api.scenario_modify(id_, {'topology_info_json': file_content})
+            return redirect("scenario_info", id_=id_)
+        else:
+            return render(request, "form.html", {'form': form,
+                                                 "heading": "Edit Scenario %s" % id_,
+                                                 'message_before': "Here you can upload a topology file to update the topology info of the scenario."})
+    else:
+        form = ImportScenarioForm()
+        return render(request, "form.html", {'form': form,
+                                             "heading": "Edit Scenario %s" % id_,
+                                             'message_before': "Here you can upload a topology file to update the topology info of the scenario."})
+
+
+class ImportScenarioForm(BootstrapForm):
+    topologyfile = forms.FileField(label="Scenario Topology Info File")
+
+    def __init__(self, *args, **kwargs):
+        super(ImportScenarioForm, self).__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            'topologyfile',
+            Buttons.default(label="Import")
+        )
+
 
 class ScenarioForm(BootstrapForm):
     id_ = forms.CharField()
