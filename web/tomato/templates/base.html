@@ -45,6 +45,10 @@
 
 <link href="/style/custom.css" rel="stylesheet">
 
+<!-- changelayout20161220 -->
+<link href="/style/20161220/css/custom.min.css" rel="stylesheet">
+
+
 
 <!-- Just for debugging purposes. Don't actually copy this line! -->
 <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -69,7 +73,8 @@
 {% block header %}
 {% endblock %}
 </head>
-<body>
+<body class="nav-md" style="background: #2a3f54">
+<div class="container body">
 
 <div id="javascriptwarning">You have disabled Javascript. This may result in incorrect page display, and the editor won't work.</div>
 <script language="JavaScript" type="text/javascript">
@@ -97,22 +102,14 @@ head.appendChild(style);
 </form>
 {% endif %}
 
-<div class="container">
-
-		<div style="width:100%; display:block; height:80px;">
-
-			<div style="width:100%; width:100%; background:url(/img/logo_2.png); height:80px;">
-				<div style="background:white; width:285px; height:80px; float:left;">
-					<a href="/">
-						<img src="/img/logo_1.png"/>
-					</a>
-				</div>
+	<div class="main_container">
+        <div class="col-md-3 left_col">
+        	<div class="left_col col-md-3 DeepBlue">
+				<div id="sidebar-menu" class="main_menu_side hidden-print main_menu" style="width:100%">
+					<div class="menu_section active">
 
 
-
-				<div style="background:white; height:80px; width:13px; float:right;"><img src="/img/logo_3.png"/></div>
-				<div style="float: right;">
-					<div class="btn-group" role="group" aria-label="...">
+					<!-- <div class="btn-group" role="group" aria-label="...">
 						{% if request.session.user %}
 							<div class="btn-group" role="group">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -137,105 +134,129 @@ head.appendChild(style);
 								Register
 							</button>
 						{% endif %}
-					</div>
-				</div>
-			</div>
+					</div> -->
 
-        </div>
-	<div class="masthead">
-        <ul class="nav nav-justified">
-			{% if request.session.user %}
-				<li><a href="{%url "topology_list"%}">My Topologies</a></li>
 
-	        	{% if request.session.user.isAdmin %} 
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Users <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="{%url "account_list"%}">Your Organization's accounts</a></li>
-							<li><a href="{%url "account_list_all"%}">All accounts</a></li>
-							<li class="divider"></li>
-							<li><a href="{%url "account_list_registrations"%}">Pending account registrations</a></li>
-							<li class="divider"></li>
-							<li><a href="{%url "tomato.account.announcement_form"%}">Broadcast new announcement</a></li>
-						</ul>
-					</li>
-				{% endif %}
+			        	<ul class="nav side-menu">
+			        		{% if request.session.user %}
+			        		<li>
+			        			<a><i class="fa"  aria-haspopup="true" aria-expanded="false">{{request.session.user.realname}}</i><span class="fa fa-chevron-down"></span></a>
+									<ul class="nav child_menu">
+									<li><a href="{%url "account.info"%}">My Account</a></li>
+									<li><a href="{%url "main.logout" %}">Log Out</a></li>
+									</ul>
+							</li>
+							<li>
+								<!-- <a  href="{% url 'tomato.account.unread_notifications'%}"><i class="fa {%if request.session.user.notification_count%}btn-info{%else%}btn-default{%endif%}"">{{request.session.user.notification_count}}</i><span class="fa fa-chevron-down"></span></a> -->
+							</li>
+							
+							<li>
+							{% else %}
+							<!-- <a href="{%url "topology_list"%}"><i class="fa">Login</i><span class="fa fa-chevron-down"></span></a>
+							<a class="fa" herf="document.getElementById('loginnavbarform').submit();" href="#">
+								<span class="glyphicon glyphicon-user"></span> Login
+							</button>
+							<button type="button" class="fa" onclick="location.href='{%url "account.register"%}';">
+								Register
+							</button> -->
+							{% endif %}
+							</li>
 
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Resources <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="{%url "template.list"%}">Templates</a></li>
-						<li><a href="{%url "profile.list"%}">Device profiles</a></li>
-						<li><a href="{%url "external_network.list"%}">External networks</a></li>
-						<li class="divider"></li>
-                        <li><a href="{%url "scenario_list"%}">Scenarios</a></li>
-                        <li class="divider"></li>
-						<li><a href="{% url "web_resources.executable_archive_list" %}">Default Executable Archives</a></li>
-						<li><a href="{% url "web_resources.custom_element_icon_list" %}">Custom Element Icons</a></li>
-					</ul>
-				</li>
 
-				{% endif %}
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Testbed <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="{%url "admin.organization.list"%}">Organizations</a></li>
-						<li><a href="{%url "site_map.map"%}">Sites map</a></li>
-						{% if request.session.user %}
-						<li class="divider"></li>
-						<li><a href="{%url "admin.host.list"%}">Hosts</a></li>
-						{% endif %}
-						<li class="divider"></li>
-						<li><a href="{%url "main.statistics"%}">Statistics</a></li>
-					</ul>
-				</li>
-				{% if request.session.user.hasDebugFlag %}
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Debug <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="{%url "dumpmanager.group_list"%}">Dump Manager</a></li>
-						<li class="divider"></li>
-						<li><a href="{%url "tomato.debug.stats"%}">Backend</a></li>
-						<li><a href="{%url "tomato.debug.stats" "backend_api"%}">&nbsp; backend_api</a></li>
-						<li><a href="{%url "tomato.debug.stats" "backend_users"%}">&nbsp; backend_users</a></li>
-						<li><a href="{%url "tomato.debug.stats" "backend_core"%}">&nbsp; backend_core</a></li>
-						<li><a href="{%url "tomato.debug.stats" "backend_accounting"%}">&nbsp; backend_accounting</a></li>
-						<li><a href="{%url "tomato.debug.stats" "backend_debug"%}">&nbsp; backend_debug</a></li>
-						{% duration_log_enabled as show_duration_log_link %}
-						{% if show_duration_log_link %}
-							<li class="divider"></li>
-							<li><a href="{%url "tomato.debug.api_call_stats"%}">API Call Durations</a></li>
-						{% endif %}
-					</ul>
-				</li>				
-				{% endif %}
+							<li>	
+									{% if request.session.user %}
+									<a href="{%url "topology_list"%}"><i class="fa">MyTopologies</i><span class="fa fa-chevron-down"></span></a>
 
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Links <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-			      		<li><a href="{%externalurl 'project' %}" target="_blank">Project</a></li>
-						<li><a href="{%externalurl 'help' %}" target="_help">Help</a></li>
-						<li><a href="{%externalurl 'bugtracker' %}" target="_help">Bugtracker</a></li>
-			   			<li><a href="{%externalurl 'aup' %}" target="_blank">Acceptable Use Policy</a></li>
-   						<li><a href="{%url "help.contact_form"%}">Contact</a></li>
-					</ul>
-				</li>
-        </ul>
-      </div>
+				        			{% if request.session.user.isAdmin %} 
+							</li>
+							<li>
+									<a><i class="fa">Users</i><span class="fa fa-chevron-down"></span></a>
+									<ul class="nav child_menu">
+										<li><a href="{%url "account_list"%}">Your Organization's accounts</a></li>
+										<li><a href="{%url "account_list_all"%}">All accounts</a></li>
+										<li><a href="{%url "account_list_registrations"%}">Pending account registrations</a></li>
+										<li><a href="{%url "tomato.account.announcement_form"%}">Broadcast new announcement</a></li>
+									</ul>
+							</li>
+							{% endif %}
 
-      {% block content %}
+							<li>
+								<a><i class="fa">Resources</i><span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu">
+									<li><a href="{%url "template.list"%}">Templates</a></li>
+									<li><a href="{%url "profile.list"%}">Device profiles</a></li>
+									<li><a href="{%url "external_network.list"%}">External networks</a></li>
+									<li><a href="{% url "web_resources.executable_archive_list" %}">Default Executable Archives</a></li>
+									<li><a href="{% url "web_resources.custom_element_icon_list" %}">Custom Element Icons</a></li>
+								</ul>
+							</li>
 
-	  {% endblock %}      
+							{% endif %}
+							<li>
+								<a><i class="fa">Testbed</i> <span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu">
+									<li><a href="{%url "admin.organization.list"%}">Organizations</a></li>
+									<li><a href="{%url "site_map.map"%}">Sites map</a></li>
+									{% if request.session.user %}
+									<li><a href="{%url "admin.host.list"%}">Hosts</a></li>
+									{% endif %}
+									<li><a href="{%url "main.statistics"%}">Statistics</a></li>
+								</ul>
+							</li>
+							{% if request.session.user.hasDebugFlag %}
+							<li>
+								<a><i class="fa">Debug</i><span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu">
+									<li><a href="{%url "dumpmanager.group_list"%}">Dump Manager</a></li>
+									<li><a href="{%url "tomato.debug.stats"%}">Backend</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_api"%}">&nbsp; backend_api</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_users"%}">&nbsp; backend_users</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_core"%}">&nbsp; backend_core</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_accounting"%}">&nbsp; backend_accounting</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_debug"%}">&nbsp; backend_debug</a></li>
+									{% duration_log_enabled as show_duration_log_link %}
+									{% if show_duration_log_link %}
+										<li><a href="{%url "tomato.debug.api_call_stats"%}">API Call Durations</a></li>
+									{% endif %}
+								</ul>
+							</li>
+							{% endif %}
 
-      <!-- Site footer -->
-      <div class="footer">		
-      	<ul>
+							<li>
+								<a><i class="fa">Links</i><span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu">
+						      		<li><a href="{%externalurl 'project' %}" target="_blank">Project</a></li>
+									<li><a href="{%externalurl 'help' %}" target="_help">Help</a></li>
+									<li><a href="{%externalurl 'bugtracker' %}" target="_help">Bugtracker</a></li>
+						   			<li><a href="{%externalurl 'aup' %}" target="_blank">Acceptable Use Policy</a></li>
+			   						<li><a href="{%url "help.contact_form"%}">Contact</a></li>
+								</ul>
+							</li>
+			       		</ul>
+		       		</div>
+	       		</div>
+       		</div>
+      	</div>
+      	<div class = "right_col row">
+      		<button type="button" class="btn btn-default" onclick="location.href='{% url "sys_config.config"%}';">
+								&nbsp Configuration
+			</button>
+      		<button type="button" class="btn {%if request.session.user.notification_count%}btn-info{%else%}btn-default{%endif%}" onclick="location.href='{% url 'tomato.account.unread_notifications'%}';">
+								<span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="badge">{{request.session.user.notification_count}}</span>
+			</button>
+      	{% block content %}
+
+	  	{% endblock %}    
+	  	</div>
+      	<!-- Site footer -->
+      	<!-- <div class="footer nav-bottom">		
+      		<ul>
    			<li><a href="{%url "help.help" "license/license"%}">License</a></li>
    			<li><a href="{%externalurl 'impressum' %}">Impressum</a></li>
-   		</ul>
-        <p>&copy; Copyright 2013, Regionales Hochschulrechenzentrum Kaiserslautern (RHRK), Technische Universität Kaiserslautern</p>
-        <p class="version">Backend version: {% backend_version %} / Frontend version: {% frontend_version %}</p>
-      </div>
+   			</ul>
+        	<p>&copy; Copyright 2013, Regionales Hochschulrechenzentrum Kaiserslautern (RHRK), Technische Universität Kaiserslautern</p>
+        	<p class="version">Backend version: {% backend_version %} / Frontend version: {% frontend_version %}</p>
+      	</div> -->
 
     </div> <!-- /container -->
 
@@ -243,8 +264,8 @@ head.appendChild(style);
 
 
 
-
-
+</div>
+<script src="/style/20161220/js/custom.js"></script>
 </body> 
 {% endblock %}
 </html>
