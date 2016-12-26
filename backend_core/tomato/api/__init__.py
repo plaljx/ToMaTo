@@ -50,12 +50,6 @@ from hierarchy import object_exists, object_parents, objects_available
 # by Chang Rui
 from scenario import scenario_modify, scenario_remove, scenario_save, scenario_list, scenario_count, \
     scenario_topology_info_json, scenario_info
-
-# ,scenario_deploy
-
-#by jlj
-from security import security_create,security_info
-=======
 # scenario_deploy
 
 from security_resources.security_software import security_software_create, security_software_info, \
@@ -66,4 +60,3 @@ from security_resources.malicious_code import malicious_code_create, malicious_c
 
 from security_resources.vulnerability import vulnerability_create, vulnerability_info, vulnerability_list, \
     vulnerability_modify, vulnerability_remove
-

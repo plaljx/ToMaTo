@@ -7,39 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD:web/tomato/locale/zh-cn/LC_MESSAGES/django.po
-"POT-Creation-Date: 2016-12-23 21:52+0800\n"
-"PO-Revision-Date: 2016-12-23 22:07+0800\n"
-"Last-Translator: jlj <jlj101014@163.com>\n"
-=======
 "POT-Creation-Date: 2016-12-24 15:11+0800\n"
 "PO-Revision-Date: 2016-12-24 15:13+0800\n"
 "Last-Translator: liangjx <ljx413@163.com>\n"
->>>>>>> f1e5a81b929f0d0ae066f937c5675b0013f5ac1a:web/tomato/locale/zh_CN/LC_MESSAGES/django.po
 "Language-Team: provinet <ljx413@163.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-<<<<<<< HEAD:web/tomato/locale/zh-cn/LC_MESSAGES/django.po
-=======
 "Plural-Forms: nplurals=1; plural=0;\n"
->>>>>>> f1e5a81b929f0d0ae066f937c5675b0013f5ac1a:web/tomato/locale/zh_CN/LC_MESSAGES/django.po
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-<<<<<<< HEAD:web/tomato/locale/zh-cn/LC_MESSAGES/django.po
-#: .\settings.py:43
-msgid "English"
-msgstr ""
-
-#: .\settings.py:44
-msgid "Simplified Chinese"
-msgstr ""
-
-#: .\settings.py:45
-=======
 #: .\settings.py:39
 msgid "English"
 msgstr ""
@@ -49,7 +29,6 @@ msgid "Simplified Chinese"
 msgstr ""
 
 #: .\settings.py:41
->>>>>>> f1e5a81b929f0d0ae066f937c5675b0013f5ac1a:web/tomato/locale/zh_CN/LC_MESSAGES/django.po
 msgid "Traditional Chinese"
 msgstr ""
 

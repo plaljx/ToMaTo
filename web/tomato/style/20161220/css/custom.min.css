@@ -1,3 +1,6 @@
+.nav{
+    margin-bottom: 0;
+}
 li {
     color: #73879C
 }
@@ -1068,5 +1071,78 @@ ul.timeline li {
     background-color: #ffffff;
     height: 1px;
     margin: 10px 0
+}
+
+
+/*add 20161226*/
+
+
+.clearfix:after,
+form:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.nav-sm .profile {
+    display: none
+}
+
+
+.profile_pic {
+    width: 35%;
+    float: left
+}
+
+.img-circle.profile_img {
+    width: 70%;
+    background: #fff;
+    margin-left: 15%;
+    z-index: 1000;
+    position: inherit;
+    margin-top: 20px;
+    border: 1px solid rgba(52, 73, 94, 0.44);
+    padding: 4px
+}
+
+.profile_info {
+    padding: 25px 10px 10px;
+    width: 65%;
+    float: left
+}
+
+.profile_info span {
+    font-size: 13px;
+    line-height: 30px;
+    color: #BAB8B8
+}
+
+.profile_info h2 {
+    font-size: 14px;
+    color: #ECF0F1;
+    margin: 0;
+    font-weight: 300
+}
+
+.profile.img_2 {
+    text-align: center
+}
+
+.profile.img_2 .profile_pic {
+    width: 100%
+}
+
+.profile.img_2 .profile_pic .img-circle.profile_img {
+    width: 50%;
+    margin: 10px 0 0
+}
+
+.profile.img_2 .profile_info {
+    padding: 15px 10px 0;
+    width: 100%;
+    margin-bottom: 10px;
+    float: left
 }
 
