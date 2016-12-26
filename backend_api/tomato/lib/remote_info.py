@@ -798,6 +798,36 @@ class NetworkInstanceInfo(InfoObj):
 		get_backend_core_proxy().network_instance_remove(self.niid)
 
 
+#by jlj
+class SecurityInfo(InfoObj):
+	__slots__ = ("security_id")
+
+	def invalidate_list(self):
+		get_security_list.invalidate()
+
+	@staticmethod
+	def create(tech, name, attrs):
+		res = get_backend_core_proxy().security_create(tech, name, attrs)
+		get_security_info(res['id']).invalidate_info()
+		get_security_list.invalidate()
+		return res
+
+	def __init__(self, security_id):
+		super(SecurityInfo, self).__init__()
+		self.security_id = security_id
+
+	def _fetch_info(self, fetch=False):
+		return get_backend_core_proxy().security_info(self.security_id)
+
+	def _modify(self, attrs):
+		return get_backend_core_proxy().security_modify(self.security_id, attrs)
+
+	def _remove(self):
+		get_backend_core_proxy().security_remove(self.security_id)
+		_security_id.invalidate()
+
+	def is_restricted(self):
+		return self.info()['restricted']
 
 
 
@@ -1044,3 +1074,46 @@ def get_network_instance_list(network=None, host=None):
 	:rtype: list(dict)
 	"""
 	return get_backend_core_proxy().network_instance_list(network, host)
+
+#by jlj
+@cached(1800)
+def get_security_info(security_id):
+	"""
+	return securityInfo object for the respective security
+	:param str security_id: id of the target security
+	:return: securityInfo object
+	:rtype: securityInfo
+	"""
+	return SecurityInfo(security_id)
+
+@cached(1)
+def get_security_list(tech=None):
+	"""
+	get the list of all security
+	:param str tech: filter for tech if wanted
+	:return: list of security
+	:rtype: list(dict)
+	"""
+	return get_backend_core_proxy().security_list(tech)
+
+
+
+
+@cached(1800)
+def _security_id(tech, name):
+	"""
+	get security id by tech and name
+	:param tech: security tech
+	:param name: security name
+	:return: security id
+	"""
+	return get_backend_core_proxy().security_id(tech, name)
+def get_security_info_by_techname(tech, name):
+	"""
+	return securityInfo object for the respective security
+	:param str tech: tech of the target security
+	:param str name: name of the target security
+	:return: securityInfo object
+	:rtype: securityInfo
+	"""
+	return get_security_info(_security_id(tech, name))
