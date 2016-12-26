@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django import forms
 
 from admin_common import RemoveConfirmForm, BootstrapForm, Buttons, ConfirmForm
-from lib import wrap_rpc
+from lib import wrap_rpc, AuthError
 from tomato.crispy_forms.layout import Layout
 
 from lib.error import UserError #@UnresolvedImport
@@ -19,9 +19,18 @@ accessibility_choices = (
 
 
 @wrap_rpc
-def list(api, request):
-    scenario_list = api.scenario_list()
-    show = 'all'    # TODO: all, my, public
+def list_(api, request, show):
+    # show: ("all", "my", "public")
+    print "show: %s" % show
+    if api.user:
+        user = api.user.name
+        # user_id = api.user.id
+        print "current user: %s" % user
+    else:
+        raise AuthError()
+
+    scenario_list = api.scenario_list(user, show)
+
     return render(request, "scenario/list.html",
                   {
                       'scenario_list' : scenario_list,

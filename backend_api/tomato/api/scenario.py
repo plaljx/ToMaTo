@@ -22,8 +22,8 @@ def scenario_deploy(id_):
     return {'topo_id': topo_id, 'errors': errors}
 
 
-def scenario_list():
-    response = get_backend_core_proxy().scenario_list()
+def scenario_list(user, show):
+    response = get_backend_core_proxy().scenario_list(user, show)
     return response
 
 

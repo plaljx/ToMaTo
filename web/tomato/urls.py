@@ -180,10 +180,10 @@ urlpatterns = patterns('',
 
 	url(r'^sysconfig$','tomato.sys_config.config', name="sysconfig"),
 	
-    # Topology Scenario, by Chang Rui
-    url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list'),  # TODO: all, my, public
-    url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list_my'),
-    url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list_public'),
+    # Topology Scenario
+    url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),  # TODO: all, my, public
+    url(r'^scenario/my$', 'tomato.scenario.list_', {"show": "my"}, name='scenario_list_my'),
+    url(r'^scenario/public$', 'tomato.scenario.list_', {"show": "public"}, name='scenario_list_public'),
     url(r'^scenario/(?P<id_>\w{24})/$', 'tomato.scenario.info', name='scenario_info'),
     url(r'^scenario/(?P<id_>\w{24})/edit$', 'tomato.scenario.edit', name='scenario_edit'),
     url(r'^scenario/(?P<id_>\w{24})/remove$', 'tomato.scenario.remove', name='scenario_remove'),

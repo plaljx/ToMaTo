@@ -3,6 +3,7 @@ import datetime
 from .db import *
 # from generic import *
 
+
 # By Chang Rui
 class Scenario(BaseDocument):
 
@@ -67,9 +68,23 @@ class Scenario(BaseDocument):
 
     @classmethod
     def get_all(cls, **kwargs):
-        # return Scenario.objects.filter(**kwargs)
-        # ?
         return list(Scenario.objects.filter(**kwargs))
+
+    @classmethod
+    def get_list(cls, user, show):
+        if show == 'all':
+            print "Show all."
+            return list(cls.objects.filter(Q(accessibility='public') | Q(author=user)))
+        elif show == 'my':
+            print "Show mine."
+            return list(cls.objects.filter(author=user))
+        elif show == 'public':
+            print "Show public."
+            return list(cls.objects.filter(accessibility='public'))
+        else:
+            print "Invalid Parameter."
+            print "user: %s, show: %s" % (user, show)
+            return []
 
     @classmethod
     def get(cls, id_, **kwargs):
