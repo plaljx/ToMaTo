@@ -62,3 +62,6 @@ from orchestration.resources import resources_map
 
 # by Chang Rui
 from scenario import scenario_save, scenario_remove, scenario_deploy, scenario_modify, scenario_list ,scenario_info
+
+#by jlj
+from security import security_list,security_info,security_create,security_modify,security_remove

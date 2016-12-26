@@ -20,10 +20,14 @@ from ..profile import profile_list
 from ..network import network_list
 from ..network_instance import network_instance_list
 
+#by jlj
+from ..security import security_list
+
 def resources_map():
 	return {
 		'templates': template_list(),
 		'profiles': profile_list(),
 		'networks': network_list(),
-		'network_instances': network_instance_list()
+		'network_instances': network_instance_list(),
+		'security':security_list()
 	}

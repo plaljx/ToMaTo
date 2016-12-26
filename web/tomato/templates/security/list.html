@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% load tomato %}
+
+{% block title %}
+<title>Security - ToMaTo Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>Security</h1>
+
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+  	<span class="glyphicon glyphicon-filter"></span>
+    {% if tech %}
+      Showing all Security of tech '{{tech}}'
+    {% else %}
+      Showing all Security
+    {% endif %}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="{% url "security_list" %}">Show all security</a></li>
+    <li class="divider"></li>
+    {% for name, label in techs_dict.iteritems %}
+      <li><a href="{% url "security_list_bytech" tech=name %}">Show all security of tech '{{label}}'</a></li>    
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="skip-sm"></div>
+
+{% if secur_list|length > 10 and request.session.user.isGlobalHostManager %}
+<form>
+  <button type="submit" 
+  {% if tech %}
+  	formaction="{%url "security.add" tech%}"
+  {%else%}
+  	formaction="{%url "security.add" %}"
+  {%endif%}
+  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add security</button>
+</form>
+{% endif %}
+
+{% if secur_list %}
+	<script src="/js/enhancetable.js"></script>
+	<table class="sortable,filterable table table-striped">
+	  <tr>
+	  	<th class="icononly">Tech</th>
+	  	<th>Name</th>
+	    <th>Label</th>
+	    <th>Subtype</th>
+	    <th>Creation Date</th>
+	    <th>Ready</th>
+	    <th class="icononly"></th>
+	  </tr>
+	{% for secur in secur_list %}
+	  <tr>
+	  	<td enhancetable_customkey="{{secur.tech}}" align="right" class="icononly">
+	  		<img src="/img/{{secur.tech}}16.png" title="{{techs_dict|get:secur.tech}}" />
+		</td>
+	    <td><a href="{%url "security.info" secur.id%}">{{secur.name}}</a></td>
+	    <td>{{secur.label}}</td>
+	    <td>{{secur.subtype}}</td>
+	    <td>{{secur.creation_date|todate}}</td>
+	    <td>
+		    {% if secur.ready.backend %}
+		    	<img src="/img/tick.png" title="on backend" />
+		    {% else %}
+		    	<img src="/img/error.png" title="not on backend" />
+		    {% endif %}
+		    /
+		    {% if secur.ready.hosts.ready == secur.ready.hosts.total %}
+		    	<img src="/img/tick.png" title="on all hosts" />
+		    {% else %}
+		    	<img src="/img/error.png" title="not on all hosts" />
+	    		{{secur.ready.hosts.ready}}/{{secur.ready.hosts.total}}
+		    {% endif %}
+	    </td>
+	    <td class="icononly">
+	    <div class="hoverdescription">
+	    	{% if secur.description %}
+		    	<img src="/img/info.png" alt="i" />
+		    {% else %}
+		    	<img src="/img/invisible16.png" />
+		    {%endif%}	    
+		   
+		 </div>	    
+	    </td>
+	  </tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<p>No security</p>
+{% endif %}
+
+{% if request.session.user.isGlobalHostManager %}
+<form>
+  <button type="submit" 
+  {% if tech %}
+  	formaction="{%url "security.add" tech%}"
+  {%else%}
+  	formaction="{%url "security.add"%}"
+  {%endif%}
+  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add security</button>
+</form>
+{% endif %}
+
+{% endblock %}

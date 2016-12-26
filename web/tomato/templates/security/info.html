@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block header %}
+<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
+{% endblock %}
+
+{% block title %}
+<title>security '{{security.name}}' - ToMaTo Testbed</title>
+{% endblock %}
+
+{% block content %}
+{% load tomato %}
+
+<form>
+  <button type="submit" formaction="{%url "security_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> All Security</button>
+</form>
+
+<h1>Security '{{security.name}}'</h1>
+
+<div class="skip-sm"></div>
+
+{% load tomato %}
+
+<table class="table">
+	<tr>
+		<th>Name:</th>
+		<td>{{security.name}}</td>
+	</tr>
+	<tr>
+		<th>Label:</th>
+		<td>{{security.label}}</td>
+	</tr>
+	<tr>
+		<th>Tech:</th>
+		<td><img src="/img/{{security.tech}}16.png" /> {{security.tech|tech_to_label}} <small>({{security.tech}})</small></td>
+	</tr>
+	<tr>
+		<th>Subtype:</th>
+		<td>{{security.subtype}}</td>
+	</tr>
+
+	<tr>
+		<th>Creation date:</th>
+		<td>{{security.creation_date|todate}}</td>
+	</tr>	
+
+
+
+	<tr>
+		<th>External URLs</th>
+		<td>
+			{% for url in security.urls %}
+			<a href="{{url}}">{{url}}</a><br/>
+			{% endfor %}
+		</td>
+	</tr>
+
+
+	<tr>
+		<th>Availability:</th>
+		<td>
+			<dl class="dl-horizontal">
+  				<dt>Backend</dt><dd>
+				    {% if security.ready.backend %}
+				    	<img src="/img/tick.png"/> yes
+		    		{% else %}
+		    			<img src="/img/error.png"/> no
+		    		{% endif %}
+  				</dd>
+  				<dt>Hosts</dt><dd>
+				    {% if security.ready.hosts.ready == security.ready.hosts.total %}
+				    	<img src="/img/tick.png"/>
+		    		{% else %}
+				    	<img src="/img/error.png"/>
+		    		{% endif %}
+		    		{{security.ready.hosts.ready}}/{{security.ready.hosts.total}}
+  				</dd>
+			</dl>		
+	    </td>
+	</tr>
+	<tr>
+		<th>Description:</th>
+		<td>{{security.description|linebreaks|escape|simpletags:"b i em strong"|safe }}</td>
+	</tr>
+</table>
+
+<div class="skip-sm"></div>
+
+{% load tomato %}
+
+{% if request.session.user.isGlobalHostManager %}
+<form>
+  <button type="submit" formaction="{%url "security.edit" security.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> edit security</button>
+  <button type="submit" formaction="{%url "security.remove" security.id%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> remove security</button>
+</form>
+{%endif%}
+
+{% endblock %}
