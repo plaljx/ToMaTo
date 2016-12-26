@@ -11,10 +11,6 @@ TOMATO_MODULE = "web"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-LOCALE_PATHS = (
-	'/usr/share/tomato/web/tomato/locale'
-)
-
 ADMINS = (
 	# ('Your Name', 'your_email@domain.com'),
 )
@@ -105,6 +101,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CURRENT_DIR = os.path.dirname(__file__)
 TEMPLATE_DIRS = (os.path.join(CURRENT_DIR, 'templates'),)
+LOCALE_PATHS = (os.path.join(CURRENT_DIR, 'locale'),)
 
 INSTALLED_APPS = (
 	'django.contrib.auth',

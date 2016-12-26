@@ -165,9 +165,9 @@ web:
     size:    25
 
   web-resources:
-    tutorial-list:        http://packages.tomato-lab.org/tutorials/index.json
-    default-executable-archive-list:
-    custom-element-icons:
+    tutorial-list:        http://10.109.241.100/static/tutorials/index.json
+    default-executable-archive-list: http://10.109.241.100/static/archives/index.json
+    custom-element-icons: http://10.109.241.100/static/custom_icons/index.json
 
   # specify how often user information is updated (seconds between updates).
   # a longer interval improves performance for webfrontend and backend,

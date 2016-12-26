@@ -178,16 +178,27 @@ urlpatterns = patterns('',
     (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export$', 'tomato.dumpmanager.dump_export'),
     (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export_data$', 'tomato.dumpmanager.dump_export_with_data'),
 
+
     url(r'^sysconfig$','tomato.sys_config.config', name="sysconfig"),
     
     # Topology Scenario, by Chang Rui
     url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list'),  # TODO: all, my, public
     url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list_my'),
     url(r'^scenario/$', 'tomato.scenario.list', name='scenario_list_public'),
+
+    # Topology Scenario
+    (r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
+    url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),
+    url(r'^scenario/my$', 'tomato.scenario.list_', {"show": "my"}, name='scenario_list_my'),
+    url(r'^scenario/public$', 'tomato.scenario.list_', {"show": "public"}, name='scenario_list_public'),
+
     url(r'^scenario/(?P<id_>\w{24})/$', 'tomato.scenario.info', name='scenario_info'),
     url(r'^scenario/(?P<id_>\w{24})/edit$', 'tomato.scenario.edit', name='scenario_edit'),
     url(r'^scenario/(?P<id_>\w{24})/remove$', 'tomato.scenario.remove', name='scenario_remove'),
     url(r'^scenario/(?P<id_>\w{24})/deploy$', 'tomato.scenario.deploy', name='scenario_deploy'),
+    url(r'^scenario/(?P<id_>\w{24})/download_topo$', 'tomato.scenario.download_topo', name='scenario_download_topo'),
+    url(r'^scenario/(?P<id_>\w{24})/upload_topo$', 'tomato.scenario.upload_topo', name='scenario_upload_topo'),
+
 
     (r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
     (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
@@ -203,7 +214,9 @@ urlpatterns = patterns('',
     (r'^security/(?P<res_id>\w{24})/edit$', 'tomato.security.edit'),
     (r'^security/(?P<res_id>\w{24})/remove$', 'tomato.security.remove'),
 
+    # (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
+    # (r'ajax/scenario/(?P<id_>\w{24})/deploy$', 'tomato.ajax.scenario_deploy'),
+    # (r'ajax/scenario/(?P<id_>\w{24})/modify$', 'tomato.ajax.scenario_modify'),
 
-    
 )
 

@@ -19,11 +19,11 @@ def scenario_topology_info_json(id_):
     return Scenario.get_topology_info_json(id_)
 
 
-def scenario_list():
+def scenario_list(user, show):
     """Return the list of all scenarios"""
-    # need serializable, use Scenario.info()
-    # return Scenario.get_all()
-    return [scenario.info() for scenario in Scenario.get_all()]
+    # return [scenario.info() for scenario in Scenario.get_all()]
+    sc_list = Scenario.get_list(user, show)
+    return [sc.info() for sc in sc_list]
 
 
 def scenario_modify(id_, data=None):
