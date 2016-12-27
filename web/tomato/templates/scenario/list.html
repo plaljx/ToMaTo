@@ -305,10 +305,15 @@
         <li><a href="{% url "scenario_list_my" %}">Showing my scenarios</a></li>
         <li><a href="{% url "scenario_list_public" %}">Showing public scenarios</a></li>
     </ul>
-
 </div>
 
 <div class="skip-sm"></div>
+
+<form>
+    <button type="submit" formaction="{%url 'scenario_add'%}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add template</button>
+</form>
 
 <script src="/js/enhancetable.js"></script>
 

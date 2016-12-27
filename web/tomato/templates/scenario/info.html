@@ -2,13 +2,39 @@
 
 {% load url from future %}
 
-{% block header %}
-<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
-{% endblock %}
-
 {% block title %}
 <title>Scenario '{{scenario.name}}' - ToMaTo Testbed</title>
 {% endblock %}
+
+{% block header %}
+<link type="text/css" href="/style/pretty-json.css" rel="stylesheet" />
+<link type="text/css" href="/style/jquery-ui.css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="/js/jquery-ui.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/underscore-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/backbone-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/pretty-json-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/pretty-json-popup.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+    function showTopology(scenarioId) {
+        var url = "{%url 'scenario_download_topo' '012345678901234567890123' %}";
+        url = url.replace('012345678901234567890123', scenarioId);
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState==4) {
+                var res = JSON.parse(xmlhttp.responseText);     // xmlhttp.responseText: JSON content
+                var title = "Scenario Topology Info: " + scenarioId;
+                var filename = scenarioId + ".json";
+                pretty_json_popup(res, title, filename);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+</script>
+{% endblock %}
+
 
 {% block content %}
 {% load tomato %}
@@ -26,7 +52,7 @@
 
 {% load tomato %}
 
-<table class="table">
+<table class="table" id="content">
     <tr>
         <th>ID:</th>
         <td>{{ scenario.id }}</td>
@@ -70,7 +96,7 @@
 {% if request.session.user.isGlobalHostManager %}
 <form>
 
-    <button type="submit" formaction="{%url 'scenario_deploy' scenario.id %}" class="btn btn-default">
+    <button type="submit" onclick="showTopology('{{ scenario.id }}'); return false" class="btn btn-default">
         <span class="glyphicon glyphicon-info-sign"></span>
         topology info
     </button>

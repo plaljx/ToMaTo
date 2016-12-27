@@ -48,7 +48,7 @@ from topology import topology_action, topology_create, topology_info,\
 from hierarchy import object_exists, object_parents, objects_available
 
 # by Chang Rui
-from scenario import scenario_modify, scenario_remove, scenario_save, scenario_list, scenario_count, \
+from scenario import scenario_modify, scenario_remove, scenario_create, scenario_list, scenario_count, \
     scenario_topology_info_json, scenario_info
 # scenario_deploy
 

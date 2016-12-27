@@ -20,7 +20,7 @@ class Scenario(BaseDocument):
         scenario.create_time = datetime.datetime.now()
         scenario.mod(**attrs)
         scenario.save()
-        return scenario.info
+        return scenario.info()
 
     def mod(self, **attrs):
         for key in attrs:
@@ -72,13 +72,10 @@ class Scenario(BaseDocument):
     @classmethod
     def get_list(cls, user, show):
         if show == 'all':
-            print "Show all."
             return list(cls.objects.filter(Q(accessibility='public') | Q(author=user)))
         elif show == 'my':
-            print "Show mine."
             return list(cls.objects.filter(author=user))
         elif show == 'public':
-            print "Show public."
             return list(cls.objects.filter(accessibility='public'))
         else:
             print "Invalid Parameter."
