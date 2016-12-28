@@ -48,6 +48,9 @@ kblang_options = [
 	("fr", "French"),
 	("ja", "Japanese")
 ]
+customize_options = [("", "NULL"),
+					 ("mgen", "Traffic genarator MGEN")
+					]
 
 def dateToTimestamp(date):
 	td = date - datetime.date(1970, 1, 1)
@@ -65,6 +68,7 @@ class TemplateForm(BootstrapForm):
 	icon = forms.URLField(label="Icon", help_text="URL of a 32x32 icon to use for elements of this template, leave empty to use the default icon", required=False)
 	kblang = forms.CharField(max_length=50,label="Keyboard Layout",widget = forms.widgets.Select(choices=kblang_options), help_text="Only for KVM templates", required=False)
 	urls = forms.CharField(widget = forms.Textarea, required=True, help_text="URLs that point to the template's image file. Enter one or more URLs; one URL per line.")
+	customize = forms.CharField(max_length =50,label="Customize Function",widget=forms.widgets.Select(choices=customize_options),help_text="Only chose when you customize the template",required=False)
 	def __init__(self, *args, **kwargs):
 		super(TemplateForm, self).__init__(*args, **kwargs)
 		self.fields['creation_date'].initial=datetime.date.today()
@@ -87,6 +91,7 @@ class AddTemplateForm(TemplateForm):
             'restricted',
             'nlXTP_installed',
             'kblang',
+            'customize',
             'icon',
             'creation_date',
 			'urls',
@@ -118,6 +123,7 @@ class EditTemplateForm(TemplateForm):
 				'icon',
 	            'creation_date',
 	            'kblang',
+	            'customize',
 				'urls',
 				Buttons.cancel_save
 	        )
@@ -132,6 +138,7 @@ class EditTemplateForm(TemplateForm):
 	            'show_as_common',
 	            'restricted',
 	            'nlXTP_installed',
+				'customize',
 				'icon',
 	            'creation_date',
 				'urls',
@@ -175,7 +182,8 @@ def add(api, request, tech=None):
 						'creation_date':dateToTimestamp(creation_date) if creation_date else None,
 						'icon':formData['icon'],
 						'show_as_common':formData['show_as_common'],
-						'urls': filter(lambda x: x, formData['urls'].splitlines())}
+						'urls': filter(lambda x: x, formData['urls'].splitlines()),
+						'customize':formData['customize']}
 			if formData['tech'] == TypeName.KVMQM:
 				attrs['kblang'] = formData['kblang']
 			res = api.template_create(formData['tech'], formData['name'], attrs)
@@ -207,7 +215,7 @@ def edit(api, request, res_id=None):
 		if form.is_valid():
 			formData = form.cleaned_data
 			creation_date = formData['creation_date']
-			attrs = {'label':formData['label'],
+			attrs = {	'label':formData['label'],
 						'restricted': formData['restricted'],
 						'subtype':formData['subtype'],
 						'preference':formData['preference'],
@@ -216,6 +224,7 @@ def edit(api, request, res_id=None):
 						'nlXTP_installed':formData['nlXTP_installed'],
 						'icon':formData['icon'],
 						'show_as_common':formData['show_as_common'],
+						'customize':formData['customize'],
 						'urls': filter(lambda x: x, formData['urls'].splitlines())}
 			if res_inf['tech'] == TypeName.KVMQM:
 				attrs['kblang'] = formData['kblang']

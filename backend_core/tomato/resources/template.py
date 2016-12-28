@@ -63,6 +63,10 @@ class Template(Entity, BaseDocument):
 	creationDate = FloatField(db_field='creation_date', required=False)
 	hosts = ListField(StringField())
 	icon = StringField()
+
+	#add by None at 2016/12/28
+	customize = StringField(required = False)
+
 	meta = {
 		'ordering': ['tech', '+preference', 'name'],
 		'indexes': [
@@ -133,6 +137,7 @@ class Template(Entity, BaseDocument):
 			schema=schema.String(options=kblang_options.keys())),
 		"nlXTP_installed": Attribute(field=nlXTPInstalled),
 		"show_as_common": Attribute(field=showAsCommon),
+		"customize": Attribute(field=customize),
 		"creation_date": Attribute(field=creationDate, schema=schema.Number(null=True)),
 		"icon": Attribute(field=icon),
 		"size": Attribute(get=lambda obj: float(obj.size) if obj.size else obj.size, readOnly=True, schema=schema.Number()),
