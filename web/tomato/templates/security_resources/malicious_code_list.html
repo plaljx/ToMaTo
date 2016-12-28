@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% load tomato %}
+
+{% block title %}
+<title>Malicious Code - ToMaTo Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>Malicious Code</h1>
+
+<div class="skip-sm"></div>
+
+{% if request.session.user.isGlobalHostManager %}
+<form>
+    <button type="submit" formaction="{%url 'malicious_code_add' %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add malicious code
+    </button>
+</form>
+{% endif %}
+
+{% if mc_list %}
+<script src="/js/enhancetable.js"></script>
+<table class="sortable,filterable table table-striped">
+
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>System</th>
+        <th>creation_date</th>
+    </tr>
+
+    {% for mc in mc_list %}
+    <tr>
+        <td><a href="{% url 'malicious_code_info' mc.id %}">{{ mc.name }}</a></td>
+        <td>{{ mc.type }}</td>
+        <td>{{ mc.system }}</td>
+        <td>{{ mc.creation_date|todate }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% else %}
+<p>No Malicious Code</p>
+{% endif %}
+{% endblock %}

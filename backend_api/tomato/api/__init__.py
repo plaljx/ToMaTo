@@ -60,6 +60,17 @@ from orchestration.topology_export_import import topology_export, topology_impor
 
 from orchestration.resources import resources_map
 
-# by Chang Rui
+# Scenarios
 from scenario import scenario_save, scenario_create, scenario_remove,\
     scenario_deploy, scenario_modify, scenario_list ,scenario_info
+
+# Security Resources
+# Security Resources
+from security_resources.malicious_code import malicious_code_remove, malicious_code_create, malicious_code_info, \
+    malicious_code_list, malicious_code_modify
+from security_resources.vulnerability import vulnerability_create, vulnerability_remove, vulnerability_modify, \
+    vulnerability_list, vulnerability_info
+from security_resources.security_software import security_software_create, security_software_info, \
+    security_software_list, security_software_modify, security_software_remove
+
+
