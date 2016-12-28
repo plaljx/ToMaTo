@@ -40,8 +40,6 @@ def list_(api, request, show):
 
 @wrap_rpc
 def info(api, request, id_):
-    # template = api.template_info(res_id)
-    # return render(request, "templates/info.html", {"template": template, "techs_dict": techs_dict})
     scenario = api.scenario_info(id_)
     return render(request, "scenario/info.html", {"scenario": scenario})
 

@@ -7,7 +7,7 @@ from ..lib.error import UserError, InternalError #@UnresolvedImport
 
 
 
-class MaliciousCode(BaseDocument, Entity):
+class MaliciousCode(Entity, BaseDocument):
 
     name = StringField(required=True, unique=True)
     type = StringField(required=True)

@@ -18,5 +18,5 @@ def malicious_code_remove(id_):
 
 
 def malicious_code_info(id_):
-    return get_backend_core_proxy().malicious_code_info()
+    return get_backend_core_proxy().malicious_code_info(id_)
 
