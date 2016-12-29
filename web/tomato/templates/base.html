@@ -103,22 +103,23 @@ head.appendChild(style);
 {% endif %}
 
 	<div class="main_container">
-        <div class="col-md-3 left_col">
-        	<div class="left_col DeepBlue scroll-view">
+        <div class="col-md-3 left_col" id="menu_">
+        	<div class="left_col DeepBlue scroll-view" style="width:100%"><!-- 
         	<div class="navbar nav_title" style="border: 0;">
-              <a href="#" class="site_title"><i class="fa fa-paw"></i> <span>BUPTNIC</span></a>
-            </div>
+            <a href="#" class="site_title"><img src="img/bupt.jpg" alt="..." class="img-circle profile_img"></a>
+            </div> -->
 
-            <div class="clearfix"></div>
+            <!-- <div class="clearfix"></div> -->
 
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="/img/bupt.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
-                <!-- <h2>John Doe</h2> -->
+                <span><i>Welcome</i></span>
+                <!-- </br>
+                <h>{{uesrname}}</h> -->
               </div>
             </div>
 				<div id="sidebar-menu" class="main_menu_side hidden-print main_menu" style="width:100%">
@@ -253,13 +254,20 @@ head.appendChild(style);
 	       		</div>
        		</div>
       	</div>
-      	<div class = "right_col row">
-      		<button type="button" class="btn btn-default" onclick="location.href='{% url "sys_config.config"%}';">
-				&nbsp Configuration
-			</button>
-      		<button type="button" class="btn {%if request.session.user.notification_count%}btn-info{%else%}btn-default{%endif%}" onclick="location.href='{% url 'tomato.account.unread_notifications'%}';">
-								<span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="badge">{{request.session.user.notification_count}}</span>
-			</button>
+        <div style = "background-color: #d9dee4" class="top_nav">
+        <div class = "nav_menu">
+            <!-- <button type="button" class="btn btn-default" id="menu_toggle">
+            Pack up</button> -->
+            <button type="button" class="btn btn-default navbar-right" onclick="location.href='{% url "sys_config.config"%}';">
+                &nbsp Configuration
+            </button>
+            <button type="button" class="btn {%if request.session.user.notification_count%}btn-info{%else%}btn-default{%endif%} navbar-right" onclick="location.href='{% url 'tomato.account.unread_notifications'%}';">
+                                <span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="badge">{{request.session.user.notification_count}}</span>
+            </button>
+        </div>
+        </div>
+      	<div class = "right_col row" id="r">
+        
       	{% block content %}
 
 	  	{% endblock %}    
