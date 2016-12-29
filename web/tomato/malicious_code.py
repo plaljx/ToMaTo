@@ -85,8 +85,8 @@ def edit(api, request, res_id):
         label = request.POST["label"]
         UserError.check(label, UserError.INVALID_DATA, "Form transmission failed.")
         return render(request, "form.html", {'label': label, 'form': form,
-                                             "heading": "Edit Malicious Code Data for '" + label + "' (" + res_inf[
-                                                 'name'] + ")"})
+                                             "heading": "Edit Malicious Code Data for '" + label +
+                                                        "' (" + res_inf['name'] + ")"})
     else:
         UserError.check(res_id, UserError.INVALID_DATA, "No resource specified.")
         # res_inf['id'] = res_id

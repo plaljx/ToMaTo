@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block header %}
+<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
+{% endblock %}
+
+
+{% block title %}
+<title>Security Software '{{ ss_info.name }}' - ToMaTo Testbed</title>
+{% endblock %}
+
+{% block content %}
+{% load tomato %}
+
+<form>
+    <button type="submit" formaction="{%url 'security_software_list'%}" class="btn btn-primary" style="float:right;">
+        <span class="glyphicon glyphicon-list"></span>
+        All Security Software
+    </button>
+</form>
+
+<h1>Security Software '{{ss_info.name}}'</h1>
+
+<div class="skip-sm"></div>
+
+<table class="table">
+    <tr>
+        <th>ID:</th>
+        <td>{{ ss_info.id }}</td>
+    </tr>
+    <tr>
+        <th>Name:</th>
+        <td>{{ ss_info.name }}</td>
+    </tr>
+    <tr>
+        <th>Type:</th>
+        <td>{{ ss_info.type }}</td>
+    </tr>
+    <tr>
+        <th>System:</th>
+        <td>{{ ss_info.system }}</td>
+    </tr>
+    <tr>
+        <th>URL:</th>
+        <td>{{ ss_info.url }}</td>
+    </tr>
+    <tr>
+        <th>Description:</th>
+        <td>{{ ss_info.description }}</td>
+    </tr>
+    <tr>
+        <th>Creation Date:</th>
+        <td>{{ ss_info.creation_date|todate }}</td>
+    </tr>
+</table>
+
+<div class="skip-sm"></div>
+
+{% load tomato %}
+
+{% if request.session.user.isGlobalHostManager %}
+<form>
+    <button type="submit" formaction="{%url 'security_software_edit' ss_info.id%}" class="btn btn-warning">
+        <span class="glyphicon glyphicon-pencil"></span>
+        edit security software
+    </button>
+    <button type="submit" formaction="{%url 'security_software_remove' ss_info.id%}" class="btn btn-danger">
+        <span class="glyphicon glyphicon-trash"></span>
+        remove security software
+    </button>
+</form>
+{%endif%}
+
+{% endblock %}
