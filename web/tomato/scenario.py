@@ -1,4 +1,8 @@
 # by Chang Rui
+# TODO: handle with create_time in scenario edit
+# TODO: change topology_info from text field to file field ?
+# TODO: handle with add form is_valid()
+
 import datetime, re
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -20,12 +24,8 @@ accessibility_choices = (
 
 @wrap_rpc
 def list_(api, request, show):
-    # show: ("all", "my", "public")
-    print "show: %s" % show
     if api.user:
         user = api.user.name
-        # user_id = api.user.id
-        print "current user: %s" % user
     else:
         raise AuthError()
 
@@ -40,10 +40,32 @@ def list_(api, request, show):
 
 @wrap_rpc
 def info(api, request, id_):
-    # template = api.template_info(res_id)
-    # return render(request, "templates/info.html", {"template": template, "techs_dict": techs_dict})
     scenario = api.scenario_info(id_)
     return render(request, "scenario/info.html", {"scenario": scenario})
+
+
+@wrap_rpc
+def add(api, request):
+    if request.method == 'POST':
+        form = AddScenarioForm(api.user.name, request.POST, request.FILES)
+        if form.is_valid():
+            form_data = form.cleaned_data
+            # create_time = form_data['create_time']
+            attrs = {
+                'name': form_data['name'],
+                'description': form_data['description'],
+                'accessibility': form_data['accessibility'],
+                'author': form_data['author'],
+                # 'creation_date': dateToTimestamp(creation_date) if creation_date else None,
+                'topology_info_json': form_data['topology_info_json']
+            }
+            res = api.scenario_create(attrs)
+            return HttpResponseRedirect(reverse("scenario_info", kwargs={"id_": res["id"]}))
+        else:
+            return render(request, "form.html", {'form': form, "heading": "Add Scenario"})
+    else:
+        form = AddScenarioForm(api.user.name)
+        return render(request, "form.html", {'form': form, "heading": "Add Scenario"})
 
 
 @wrap_rpc
@@ -131,7 +153,7 @@ def upload_topo(api, request, id_):
         raise AuthError()
 
     if request.method == 'POST':
-        form = ImportScenarioForm(request.POST, request.FILES)
+        form = UploadScenarioInfoForm(request.POST, request.FILES)
         if form.is_valid():
             f = request.FILES['topologyfile']
             file_content = f.read()
@@ -142,17 +164,17 @@ def upload_topo(api, request, id_):
                                                  "heading": "Edit Scenario %s" % id_,
                                                  'message_before': "Here you can upload a topology file to update the topology info of the scenario."})
     else:
-        form = ImportScenarioForm()
+        form = UploadScenarioInfoForm()
         return render(request, "form.html", {'form': form,
                                              "heading": "Edit Scenario %s" % id_,
                                              'message_before': "Here you can upload a topology file to update the topology info of the scenario."})
 
 
-class ImportScenarioForm(BootstrapForm):
+class UploadScenarioInfoForm(BootstrapForm):
     topologyfile = forms.FileField(label="Scenario Topology Info File")
 
     def __init__(self, *args, **kwargs):
-        super(ImportScenarioForm, self).__init__(*args, **kwargs)
+        super(UploadScenarioInfoForm, self).__init__(*args, **kwargs)
         self.helper.layout = Layout(
             'topologyfile',
             Buttons.default(label="Import")
@@ -170,10 +192,30 @@ class ScenarioForm(BootstrapForm):
 
     def __init__(self, *args, **kwargs):
         super(ScenarioForm, self).__init__(*args, **kwargs)
+
+
+class AddScenarioForm(ScenarioForm):
+    def __init__(self, username, *args, **kwargs):
+        super(AddScenarioForm, self).__init__(*args, **kwargs)
+        self.helper.form_action = reverse(add)
+        self.helper.layout = Layout(
+            'name',
+            'description',
+            'accessibility',
+            'author',
+            # 'create_time',
+            'topology_info_json',
+            Buttons.cancel_add,
+        )
         self.fields['create_time'].initial = datetime.datetime.now()
-        self.fields['id_'].widget.attrs['readonly'] = True
-        self.fields['author'].widget.attrs['readonly'] = True
-        self.fields['create_time'].widget.attrs['readonly'] = True  # TODO: datetime is not serializable
+        self.fields['create_time'].widget.attrs['readonly'] = 'True'
+        self.fields['author'].initial = username
+        self.fields['author'].widget.attrs['readonly'] = 'True'
+
+    def is_valid(self):
+        # TODO: handle this !
+        valid = super(AddScenarioForm, self).is_valid()
+        return True
 
 
 class EditScenarioForm(ScenarioForm):
@@ -191,5 +233,9 @@ class EditScenarioForm(ScenarioForm):
             'topology_info_json',
             Buttons.cancel_save
         )
+        self.fields['create_time'].initial = datetime.datetime.now()
+        self.fields['id_'].widget.attrs['readonly'] = True
+        self.fields['author'].widget.attrs['readonly'] = True
+        self.fields['create_time'].widget.attrs['readonly'] = True  # TODO: datetime is not serializable
 
 

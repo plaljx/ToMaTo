@@ -2,7 +2,7 @@
 
 from ..scenario import Scenario
 
-def scenario_save(id_, data=None):
+def scenario_create(data=None):
     """Save the topology specified by topology id"""
     # return "Success from backend_core. id=%s, data=%s" % (_id, data
     # return "Now there are %s scenarios in DB." % Scenario.get_count()

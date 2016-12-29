@@ -199,8 +199,9 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         filename = grant.path
         with open(filename, "wb") as file_:
             form = cgi.FieldStorage(fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD':self.command, 'CONTENT_TYPE':self.headers['Content-Type']})
-            upload = form["upload"].file
-            shutil.copyfileobj(upload, file_)
+            for field in form.keys():
+                upload = form[field].file
+                shutil.copyfileobj(upload, file_)
         grant.trigger()
         if redirect:
             self.html("success, redirecting...", redirect=base64.b64decode(redirect))
