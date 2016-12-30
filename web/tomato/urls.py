@@ -213,4 +213,9 @@ urlpatterns = patterns('',
     # url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
     # url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
     # url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
+
+    #add by Nong Caihua at 2016.12.29
+    (r'^ajax/element/(?P<element_id>\w{24})/traffic_create$' , 'tomato.ajax.traffic_create'),
+    (r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
+    (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
 )

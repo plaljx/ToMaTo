@@ -126,3 +126,33 @@ def scenario_deploy(api, request, id_, **data):
 def scenario_modify(api, request, id_, **data):
 	response = api.scenario_modify(id_, data)
 	return response
+
+#add by Nong Caihua at 2016.12.29
+@wrap_json
+def traffic_info(api, request, id):
+	info = api.traffic_info(id)
+	return info
+
+@wrap_json
+def traffic_create(api, request, element_id,**attrs):
+	res = api.traffic_create(element_id, **attrs)
+	print res
+	return res
+
+@wrap_json
+def traffic_list(api, request, element_id=None):
+	res = api.traffic_list(element_id)
+	return res
+
+@wrap_json
+def traffic_remove(api, request, traffic_id):
+	res = api.traffic_remove(traffic_id)
+	return res
+
+@wrap_json
+def traffic_modify(api, request,element_id, **attrs):
+	res = api.traffic_modigy(element_id, attrs)
+	return res
+
+
+

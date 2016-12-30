@@ -37,3 +37,5 @@ from .resources.template import Template
 from .resources.network import Network, NetworkInstance
 from .resources.profile import Profile
 from .db import DataEntry
+from .traffic import Traffic
+
