@@ -203,7 +203,7 @@ urlpatterns = patterns('',
     url(r'^malicious_code/(?P<res_id>\w{24})/$', 'tomato.malicious_code.info', name='malicious_code_info'),
     url(r'^malicious_code/(?P<res_id>\w{24})/edit/$', 'tomato.malicious_code.edit', name='malicious_code_edit'),
     url(r'^malicious_code/(?P<res_id>\w{24})/remove/$', 'tomato.malicious_code.remove', name='malicious_code_remove'),
-<<<<<<< HEAD
+
     # url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
     # url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
     # url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
@@ -220,6 +220,7 @@ urlpatterns = patterns('',
     (r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
     (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
 
+
     url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
     url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
     url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
@@ -230,5 +231,5 @@ urlpatterns = patterns('',
     url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
     url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
     url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
-    
+
 )
