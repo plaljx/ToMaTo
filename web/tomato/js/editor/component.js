@@ -243,5 +243,16 @@ var Component = Class.extend({
 			}
 		}
 		new errorWindow({error:error});
+	},
+	trafficAvailable:function(){
+		var t = this;
+		if(this.data.type != "openvz"){
+			return false
+		}
+		var settings = this.configWindowSettings();
+		if(settings.special.template.template.customize == "mgen") {
+			return true;
+		}
+		return true;
 	}
 });

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% load tomato %}
+
+{% block title %}
+<title>Security Software - ToMaTo Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>Security Software</h1>
+
+<div class="skip-sm"></div>
+
+{% if request.session.user.isGlobalHostManager %}
+<form>
+    <button type="submit" formaction="{%url 'security_software_add' %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add Security Software
+    </button>
+</form>
+{% endif %}
+
+{% if ss_list %}
+<script src="/js/enhancetable.js"></script>
+<table class="sortable,filterable table table-striped">
+
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>System</th>
+        <th>creation_date</th>
+    </tr>
+
+    {% for ss in ss_list %}
+    <tr>
+        <td><a href="{% url 'security_software_info' ss.id %}">{{ ss.name }}</a></td>
+        <td>{{ ss.type }}</td>
+        <td>{{ ss.system }}</td>
+        <td>{{ ss.creation_date|todate }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% else %}
+<p>No Security Software</p>
+{% endif %}
+{% endblock %}

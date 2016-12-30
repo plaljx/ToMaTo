@@ -7,7 +7,7 @@ from ..lib.error import UserError, InternalError #@UnresolvedImport
 
 
 
-class SecuritySoftware(BaseDocument, Entity):
+class SecuritySoftware(Entity, BaseDocument):
 
     name = StringField(required=True, unique=True)
     type = StringField(required=True)
