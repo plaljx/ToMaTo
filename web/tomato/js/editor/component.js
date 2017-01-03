@@ -5,6 +5,16 @@ var Component = Class.extend({
 		this.editor = topology.editor;
 		this.setData(data);
 		this.canvas = canvas;
+
+		this.trafficWindow = new TrafficWindow({
+			autoOpen: false,
+    		draggable: true,
+    		resizable: false,
+    		title:"Traffics",
+    		compoent:this,
+    		modal: false,
+    		width: 500
+		});
 	},	
 	paint: function() {
 	},
@@ -253,6 +263,13 @@ var Component = Class.extend({
 		if(settings.special.template.template.customize == "mgen") {
 			return true;
 		}
-		return true;
+		return false;
+	},
+	//add at 2017/1/21   
+	showTrafficWindow:function(){
+		this.trafficWindow.createTrafficList();
+		//this.checkTrafficWindow();
+		//this.trafficWindow.createTrafficList();
+		//this.trafficWindow.show();
 	}
 });

@@ -221,6 +221,13 @@ var createElementMenu = function(obj) {
 						obj.showConfigWindow(true);
 					}
 				},
+				"traffic_customize" : obj.trafficAvailable() ? {
+					name:"Traffic Customize",
+					icon:"configure",
+					callback:function(){
+						obj.showTrafficWindow();
+					}
+				}:null,
 				"debug": obj.editor.options.debug_mode ? {
 					name:'Debug',
 					icon:'debug',

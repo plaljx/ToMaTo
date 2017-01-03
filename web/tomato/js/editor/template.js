@@ -13,6 +13,7 @@ var Template = Class.extend({
 		this.preference = options.preference;
 		this.showAsCommon = options.show_as_common;
 		this.icon = options.icon;
+		this.customize = options.customize;
 	},
 	iconUrl: function() {
 		return this.icon || dynimg(32,this.type,(this.subtype?this.subtype:null),(this.name?this.name:null));
