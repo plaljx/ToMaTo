@@ -135,8 +135,7 @@ def traffic_info(api, request, id):
 
 @wrap_json
 def traffic_create(api, request, element_id,**attrs):
-	res = api.traffic_create(element_id, **attrs)
-	print res
+	res = api.traffic_create(element_id, attrs)
 	return res
 
 @wrap_json

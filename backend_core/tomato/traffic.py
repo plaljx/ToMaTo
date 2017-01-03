@@ -4,10 +4,10 @@ from .db import *
 class Traffic(BaseDocument):
 
 	element_id = StringField(required=True)
-	traffic_name = StringField(required=True, unique=True)
+	traffic_name = StringField(required=True,unique=True)
 	flow_number = IntField(default=1)#@unresolved
-	start_time = IntField(default=0)#@unresolved
-	off_time = IntField()
+	start_time = StringField(default='0')#@unresolved
+	off_time = StringField()
 	dest_ip = StringField()
 	dest_port = StringField()
 	protocol = StringField()
@@ -16,14 +16,13 @@ class Traffic(BaseDocument):
 
 	def init(self,element_id, **attrs):
 		self.element_id = element_id
-		self.traffic_name = "flow1"
 		self.modify(**attrs)
 		self.save()
 
 	def modify(self, **attrs):
-		for key, value in attrs:
+		for key in attrs:
 			if hasattr(self, "modify_%s" % key):
-				getattr(self, "modify_%s" % key)(value)
+				getattr(self, "modify_%s" % key)(attrs[key])
 			else:
 				print "Wrong attribute %s" % key
 		self.save()
@@ -86,12 +85,11 @@ def getAll(**kwargs):
 
 def create(element_id, **attrs):
 	res = Traffic()
-	print "creat:"
-	print element_id
+	print attrs
 	try:
 		res.init(element_id, **attrs)
 	except Exception, e:
-		if res.id:
+		if res.id.__str__():
 			try:
 				res.remove()
 			except:
