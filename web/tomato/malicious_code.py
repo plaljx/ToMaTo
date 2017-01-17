@@ -90,6 +90,7 @@ def edit(api, request, res_id):
     else:
         UserError.check(res_id, UserError.INVALID_DATA, "No resource specified.")
         # res_inf['id'] = res_id
+        res_inf['creation_date'] = datetime.date.fromtimestamp(float(res_inf['creation_date'] or "0.0"))
         form = EditMaliciousCodeForm(res_id, res_inf)
         return render(request, "form.html",
                       {'name': res_inf['name'],
@@ -143,6 +144,7 @@ class AddMaliciousCodeForm(MaliciousCodeForm):
             'system',
             'url',
             'description',
+            'creation_date',
             Buttons.cancel_add
         )
 
@@ -152,7 +154,7 @@ class EditMaliciousCodeForm(MaliciousCodeForm):
         super(EditMaliciousCodeForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse(edit, kwargs={"res_id": res_id})
         self.helper.layout = Layout(
-            # 'res_id',  # TODO: res_id does not have initial value.
+            'res_id',
             'name',
             'type',
             'system',
