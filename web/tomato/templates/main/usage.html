@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
@@ -134,13 +135,13 @@ $(function () {
 <script src="/js/modules/exporting.js"></script>
 
 <div style="min-width: 400px; margin: auto auto; text-align:right">
-	<b>Interval: </b>
+	<b>{%trans 'Interval'%}: </b>
 	<select onchange="setRange(this.options[this.selectedIndex].value);">
-  		<option value="year">Years</option>
-  		<option value="month">Months</option>
-  		<option value="day">Days</option>
-  		<option value="hour">Hours</option>
-  		<option value="5minutes" selected>5 Minutes</option>
+  		<option value="year">{%trans 'Years'%}</option>
+  		<option value="month">{%trans 'Months'%}</option>
+  		<option value="day">{%trans 'Days'%}</option>
+  		<option value="hour">{%trans 'Hours'%}</option>
+  		<option value="5minutes" selected>{%trans '5 Minutes'%}</option>
 	</select>
 </div>
 <div id="container" style="min-width: 400px; height: 400px; margin: auto auto"></div>

@@ -1,16 +1,17 @@
 {% extends "main/base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Error page - ToMaTo Testbed</title>
+<title>{%trans 'Error page'%} - ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
-<h1>Oops an error occurred !</h1>
+<h1>{%trans 'Oops an error occurred'%} !</h1>
 
-<h2>Error Details</h2>
-Type: {{type}}<br/>
-Code: {{code}}<br/>
-Description: {{text}}<br/>
+<h2>{%trans 'Error Details'%}</h2>
+{%trans 'Type'%}: {{type}}<br/>
+{%trans 'Code'%}: {{code}}<br/>
+{%trans 'Description'%}: {{text}}<br/>
 {% endblock %}          

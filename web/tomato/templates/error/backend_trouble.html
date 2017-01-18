@@ -1,30 +1,31 @@
 {% extends "main/base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Backend Problems - ToMaTo Testbed</title>
+<title>{%trans 'Backend Problems'%}'- ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
-<h1>Backend Problems</h1>
+<h1>{%trans 'Backend Problems'%}</h1>
 
-<p>The ToMaTo backend is not responding properly. Please try again later.</p>
+<p>{%trans 'The ToMaTo backend is not responding properly. Please try again later.'%}</p>
 
-<p>If this problem continues to occur, please contact an administrator.</p>
+<p>{%trans 'If this problem continues to occur, please contact an administrator.'%}</p>
 
 <p>
     <table>
         <tr>
-            <th>ToMaTo Module</th>
+            <th>{%trans 'ToMaTo Module'%}</th>
             <td>{{tomato_module}}</td>
         </tr>
         <tr>
-            <th>Code</th>
+            <th>{%trans 'Code'%}</th>
             <td>{{code}}</td>
         </tr>
         <tr>
-            <th>Description</th>
+            <th>{%trans 'Description'%}</th>
             <td>{{text}}</td>
         </tr>
     </table>

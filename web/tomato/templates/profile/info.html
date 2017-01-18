@@ -1,19 +1,20 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Device profile '{{profile.label}}' - ToMaTo Testbed</title>
+<title>{%trans 'Device profile '%}{{profile.label}}' - ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
 {% load tomato %}
 
 <form>
-  <button type="submit" formaction="{%url "profile_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> All Device Profiles</button>
+  <button type="submit" formaction="{%url "profile_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> {%trans 'All Device Profiles%}</button>
 </form>
 
-<h1>Device profile '{{profile.label}}'</h1>
+<h1>{%trans 'Device profile'%} '{{profile.label}}'</h1>
 
 <div class="skip-sm"></div>
 
@@ -21,23 +22,23 @@
 
 <table class="table">
 	<tr>
-		<th>Name:</th>
+		<th>{%trans 'Name'%}:</th>
 		<td>{{profile.name}}</td>
 	</tr>
 	<tr>
-		<th>Label:</th>
+		<th>{%trans 'Label'%}:</th>
 		<td>{{profile.label}}</td>
 	</tr>
 	<tr>
-		<th>Tech:</th>
+		<th>{%trans 'Tech'%}:</th>
 		<td><img src="/img/{{profile.tech}}16.png" /> {{profile.tech|tech_to_label}} <small>({{profile.tech}})</small></td>
 	</tr>
 	<tr>
-		<th>Preference:</th>
+		<th>{%trans 'Preference'%}:</th>
 		<td>{{profile.preference}}</td>
 	</tr>	
 	<tr>
-		<th>Restricted:</th>
+		<th>{%trans 'Restricted'%}:</th>
 		<td>
 		{% if profile.restricted %}
 			<img src="/img/lock.png" /> yes
@@ -47,19 +48,19 @@
 		</td>
 	</tr>	
 	<tr>
-		<th>Resources:</th>
+		<th>{%trans 'Resources'%}:</th>
 		<td>
 			<dl class="dl-horizontal">
 				{% if profile.tech != 'repy' %}
-  					<dt>Disk space</dt><dd>{{profile.diskspace}} MB</dd>
+  					<dt>{%trans 'Disk space'%}</dt><dd>{{profile.diskspace}} MB</dd>
 				{% endif %}
-				<dt>Memory</dt><dd>{{profile.ram}} MB</dd>
-				<dt>CPUs</dt><dd>{{profile.cpus}}</dd>
+				<dt>{%trans 'Memory'%}</dt><dd>{{profile.ram}} MB</dd>
+				<dt>{%trans 'CPUs'%}</dt><dd>{{profile.cpus}}</dd>
 			</dl>		
 	    </td>
 	</tr>
 	<tr>
-		<th>Description:</th>
+		<th>{%trans 'Description'%}:</th>
 		<td>{{profile.description|linebreaks|escape|simpletags:"b i em strong"|safe }}</td>
 	</tr>
 </table>
@@ -70,8 +71,8 @@
 
 {% if request.session.user.isGlobalHostManager or request.session.user.isGlobalAdmin %}
 <form>
-  <button type="submit" formaction="{%url "profile.edit" profile.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> edit device profile</button>
-  <button type="submit" formaction="{%url "profile.remove" profile.id%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> remove device profile</button>
+  <button type="submit" formaction="{%url "profile.edit" profile.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> {%trans 'edit device profile'%}</button>
+  <button type="submit" formaction="{%url "profile.remove" profile.id%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> {%trans 'remove device profile'%}</button>
 </form>
 {%endif%}
 

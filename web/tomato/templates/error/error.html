@@ -1,10 +1,11 @@
 {% extends "main/base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 {% load tomato %}
 
 {% block title %}
-<title>Error: {{typemsg}}</title> 
+<title>{%trans 'Error'%}: {{typemsg}}</title> 
 {% endblock %}
 
 {% block header %}
@@ -23,28 +24,28 @@
 {% endblock %}
 
 {% block content %}
-<h1>Error: {{typemsg}}</h1>
+<h1>{%trans 'Error'%}: {{typemsg}}</h1>
 
 	<p>{{errormsg}}</p>
 	
 {% if request.session.user.hasDebugFlag %}
-	<h2>Error Details</h2>
+	<h2>{%trans 'Error Details'%}</h2>
 	<table><tbody>
 	{% for tr in debuginfos %}
 		<tr><th>{{tr.th}}:</th><td>{{tr.td|safe}}</td></tr>
 	{% endfor %}
 	{% if frame_trace %}
-		<tr><th>Frame Trace &nbsp; </th><td><button type="button" class="btn btn-info" onclick="pretty_json_popup(frame_trace,'Error Trace',frame_trace.json);; return false" style="cursor:pointer;"}">&nbsp;<span class="glyphicon glyphicon-info-sign"></span> Show</button><br/><small>(as seen by webfrontend)</small></td></tr>
+		<tr><th>{%trans 'Frame Trace'%} &nbsp; </th><td><button type="button" class="btn btn-info" onclick="pretty_json_popup(frame_trace,'Error Trace',frame_trace.json);; return false" style="cursor:pointer;"}">&nbsp;<span class="glyphicon glyphicon-info-sign"></span> {%trans 'Show'%}</button><br/><small>{%trans '(as seen by webfrontend)'%}</small></td></tr>
 	{% endif %}
 	</tbody></table>
 
 	{% if errorgroup_id %}
-		<a href="{%url "dumpmanager.group_info" errorgroup_id%}">View in Dump Manager</a>
+		<a href="{%url "dumpmanager.group_info" errorgroup_id%}">{%trans 'View in Dump Manager'%}</a>
 	{% endif %}
 
 
 {% else %}
-	<p>If you continue to encounter this problem, please <a href="{%url "help.contact_form"%}">contact an administrator</a> or <a href="{%externalurl 'bugtracker' %}" target="_help">file a bug report</a>.</p>
+	<p>If you continue to encounter this problem, please <a href="{%url "help.contact_form"%}">{%trans 'contact an administrator'%}</a> or <a href="{%externalurl 'bugtracker' %}" target="_help">file a bug report</a>.</p>
 {% endif %}
 
 {% endblock %}

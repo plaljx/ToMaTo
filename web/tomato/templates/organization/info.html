@@ -1,18 +1,19 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Organization "{{organization.label}}" - ToMaTo Testbed</title>
+<title>{%trans 'Organization'%} "{{organization.label}}" - ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
 
 <form>
-  <button type="submit" formaction="{%url "admin.organization.list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-globe"></span> All Organizations</button>
+  <button type="submit" formaction="{%url "admin.organization.list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-globe"></span> {%trans 'All Organizations'%}</button>
 </form>
 
-<h1>Organization "{{organization.label}}"</h1>
+<h1>{%trans 'Organization'%} "{{organization.label}}"</h1>
 
 <div class="skip-xs"></div>
 
@@ -20,12 +21,12 @@
 
 <table class="table">
 	<tr>
-		<th>Icon:</th>
+		<th>{%trans 'Icon'%}:</th>
 		<td>{% if organization.image_url %}<img class="site" src="{{organization.image_url}}"/>{% endif %}</td>
 	</tr>
 	{% if request.session.user and request.session.user|args:organization.name|call:"isAdmin" %}
 	<tr>
-		<th>Internal name:</th>
+		<th>{%trans 'Internal name'%}:</th>
 	    <td>{{organization.name}}</td>
 	</tr>
 	{% endif %}
@@ -34,19 +35,19 @@
 			<b>{{organization.hosts.count}} host{% if site.hosts.count != 1 %}s{%endif%}</b>
 			{% if organization.hosts.count > 0 %}
 			<br/>
-			Availability: {{organization.hosts.avg_availability|percentage}}<br/>
-			Load: {{organization.hosts.avg_load|percentage}}
+			{%trans 'Availability'%}: {{organization.hosts.avg_availability|percentage}}<br/>
+			{%trans 'Load'%}: {{organization.hosts.avg_load|percentage}}
 			{% endif %}
 		</td>
 	{% if organization.homepage_url %}
 	<tr>
-		<th>Homepage:</th>
+		<th>{%trans 'Homepage'%}:</th>
 		<td><a href="{{organization.homepage_url}}" target="_blank">{{organization.homepage_url}}</a>
 	</tr>
 	{% endif %}
 	{% if organization.description %}
 	<tr>
-		<th>Description:</th>
+		<th>{%trans 'Description'%}:</th>
 		<td>{{organization.description|linebreaks|escape|simpletags:"b i em strong"|safe}}</td>
 	</tr>
 	{% endif %}
@@ -58,19 +59,19 @@
 
 <form>
   {% if request.session.user and request.session.user|args:organization.name|call:"isAdmin" %}
-  	<button type="submit" formaction="{%url "organization_accounts" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Accounts</button>
+  	<button type="submit" formaction="{%url "organization_accounts" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'Accounts'%}</button>
   {%endif%}
   {% if request.session.user and request.session.user|args:organization.name|call:"hasOrgaToplFlags" or request.session.user.hasGlobalToplFlags %}
-  	<button type="submit" formaction="{%url "organization_topologies" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Topologies</button>
+  	<button type="submit" formaction="{%url "organization_topologies" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'Topologies'%}</button>
   {%endif%}
-  <button type="submit" formaction="{%url "organization_hosts" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Hosts</button>
-  <button type="submit" formaction="{%url "organization_external_networks" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> External Network Instances</button>
+  <button type="submit" formaction="{%url "organization_hosts" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'Hosts'%}</button>
+  <button type="submit" formaction="{%url "organization_external_networks" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'External Network Instances'%}</button>
   <a class="btn btn-info" href="javascript:window.open('{%url "usage.organization" organization.name%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> Resource Usage</a>
   {% if request.session.user and request.session.user|args:organization.name|call:"isHostManager" %}
 	<div class="skip-xs"></div>
-	<button type="submit" formaction="{%url "admin.site.add" organization.name%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add Site</button>
-	<button type="submit" formaction="{%url "admin.organization.edit" organization.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> Edit Organization</button>
-	<button type="submit" formaction="{%url "admin.organization.remove" organization.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Remove Organization</button>
+	<button type="submit" formaction="{%url "admin.site.add" organization.name%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Add Site'%}</button>
+	<button type="submit" formaction="{%url "admin.organization.edit" organization.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span>{%trans 'Edit Organization'%}</button>
+	<button type="submit" formaction="{%url "admin.organization.remove" organization.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> {%trans 'Remove Organization'%}</button>
   {% endif %}
 </form>
 
@@ -80,35 +81,35 @@
 <a name="{{site.name}}"></a>
 <div class="skip-sm"><hr/></div>
 
-<h2>Site "{{site.label}}"</h2>
+<h2>{%trans 'Site'%} "{{site.label}}"</h2>
 
 <table class="table">
 	{% if request.session.user and request.session.user|args:organization.name|call:"isHostManager" %}
 	<tr>
-		<th>Internal name:</th>
+		<th>{%trans 'Internal name'%}:</th>
 	    <td>{{site.name}}</td>
 	</tr>
 	{% endif %}
 	<tr>
-		<th>Hosts:</th>
+		<th>{%trans 'Hosts'%}:</th>
 		<td>
 			<b>{{site.hosts.count}} host{% if site.hosts.count != 1 %}s{%endif%}</b>
 			{% if site.hosts.count > 0 %}
 			<br/>
-			Availability: {{site.hosts.avg_availability|percentage}}<br/>
-			Load: {{site.hosts.avg_load|percentage}}
+			{%trans 'Availability'%}: {{site.hosts.avg_availability|percentage}}<br/>
+			{%trans 'Load'%}: {{site.hosts.avg_load|percentage}}
 			{% endif %}
 		</td>
 	</tr>
 	<tr>
-		<th>Location:</th>
+		<th>{%trans 'Location'%}:</th>
 		<td>{{site.location}}</td>
 	</tr>
 	<tr>
-		<th>Geolocation:</th>
+		<th>{%trans 'Geolocation'%}:</th>
 		<td>{% if site.geolocation %}
 				Longitude: {{site.geolocation.longitude}}, Latitude: {{site.geolocation.latitude}}
-				<a class="btn btn-default btn-xs" target="_blank" href="http://www.google.com/maps/place/{{site.geolocation.latitude}}+{{site.geolocation.longitude}}"><span class="glyphicon glyphicon-share-alt"></span> Google Maps</a>
+				<a class="btn btn-default btn-xs" target="_blank" href="http://www.google.com/maps/place/{{site.geolocation.latitude}}+{{site.geolocation.longitude}}"><span class="glyphicon glyphicon-share-alt"></span> {%trans 'Google Maps'%}</a>
 			{% else %}
 				unknown
 			{% endif %}
@@ -116,7 +117,7 @@
 	</tr>
 	{% if site.description %}
 	<tr>
-		<th>Description:</th>
+		<th>{%trans 'Description'%}:</th>
 	    <td>{{site.description|linebreaks|escape|simpletags:"b i em strong"|safe}}</td>
 	</tr>
 	{% endif %}
@@ -125,11 +126,11 @@
 <div class="skip-xs"></div>
 
 <form>
-  <button type="submit" formaction="{%url "site_hosts" site.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Hosts</button>
-  <button type="submit" formaction="{%url "site_external_networks" site.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> External Network Instances</button>
+  <button type="submit" formaction="{%url "site_hosts" site.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'Hosts'%}</button>
+  <button type="submit" formaction="{%url "site_external_networks" site.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'External Network Instances'%}</button>
   {% if request.session.user and request.session.user|args:organization.name|call:"isHostManager" %}
-  <button type="submit" formaction="{%url "admin.site.edit" site.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> Edit Site</button>
-  <button type="submit" formaction="{%url "admin.site.remove" site.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Remove Site</button>
+  <button type="submit" formaction="{%url "admin.site.edit" site.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> {%trans 'Edit Site'%}</button>
+  <button type="submit" formaction="{%url "admin.site.remove" site.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> {%trans 'Remove Site'%}</button>
   {% endif %}
 </form>
 {% endfor %}

@@ -1,10 +1,11 @@
 {% extends "main/base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 {% load tomato %}
 
 {% block title %}
-<title>ToMaTo Testbed</title>
+<title>ProviSec {%trans 'Testbed'%}</title>
 {% endblock %}
 
 {% block header %}
@@ -19,8 +20,8 @@
 {% block content %}
 <div class="row"><div class="col-md-8 col-md-offset-2">
 
-<h1>Welcome to the ToMaTo Testbed</h1>
-<p>The Topology Management Tool (ToMaTo) is a topology-centric network testbed, giving researchers the possibility to run their software in specifically designed virtual networking topologies.</p>
+<h1>Welcome to the ProviSec Testbed</h1>
+<p>The Topology Management Tool is a topology-centric network testbed, giving researchers the possibility to run their software in specifically designed virtual networking topologies.</p>
 
 
 <div class="skip-xs" style="height:1cm;"></div>
@@ -39,7 +40,7 @@
 <div class="alert alert-info col-xs-8 col-xs-offset-2 text-center" style="background-color:#eeeeee !important; color:black !important; border-color:grey !important;">
 	<p>
 	{% if request.session.user %}
-		<a href="{%url "topology_list"%}" class="btn btn-primary btn-lg">My Topologies</a>
+		<a href="{%url "topology_list"%}" class="btn btn-primary btn-lg">{%trans 'My Topologies'%}</a>
 		
 		{% if request.session.user.isAdmin or request.session.user.isHostManager %}
 		
@@ -50,7 +51,7 @@
 			{%endif%}
 			
 			{% if request.session.user.isAdmin %}
-				<a href="{%url "account_list"%}" class="btn btn-default btn-lg">Manage Users</a>
+				<a href="{%url "account_list"%}" class="btn btn-default btn-lg">{%trans 'Manage Users'%}</a>
 			{% endif %}
 			
 			{% if request.session.user.isAdmin and request.session.user.isHostManager %}
@@ -58,23 +59,23 @@
 			{%endif%}
 			
 			{% if request.session.user.isHostManager %}
-				<a href="{%url "admin.host.list"%}" class="btn btn-default btn-lg">Manage Hosts</a>
+				<a href="{%url "admin.host.list"%}" class="btn btn-default btn-lg">{%trans 'Manage Hosts'%}</a>
 			{%endif%}
 		{%else%}
 			<span style="margin-left:0.3cm; margin-right:0.3cm;"></span>
-			<a href="{%url "topology.create"%}" class="btn btn-default btn-lg">Create New Topology</a>
+			<a href="{%url "topology.create"%}" class="btn btn-default btn-lg">{%trans 'Create New Topology'%}</a>
 		{%endif%}
 		
 		
 	{% else %}
-		<a href="{%url "topology_list"%}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-user"></span> Login</a>
+		<a href="{%url "topology_list"%}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-user"></span> {%trans 'Login'%}</a>
 		<span style="margin-left:0.3cm; margin-right:0.3cm;">or</span>
-		<a href="{%url "account.register"%}" class="btn btn-default btn-lg">Register</a>
+		<a href="{%url "account.register"%}" class="btn btn-default btn-lg">{%trans 'Register'%}</a>
 	{% endif %}
 	</p>
 	<div class="skip-xs""></div>
 	<p>
-		<a href="{%externalurl 'project' %}" class="btn btn-primary"><span class="glyphicon glyphicon-globe"></span> Visit our Homepage</a>
+		<a href="{%externalurl 'project' %}" class="btn btn-primary"><span class="glyphicon glyphicon-globe"></span> {%trans 'Visit our Homepage'%}</a>
 	</p>
 </div>
 </div>
@@ -88,7 +89,7 @@
   	<div class="panel-heading">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          <span class="glyphicon glyphicon-info-sign"></span> Features <small>(click to expand)</small>
+          <span class="glyphicon glyphicon-info-sign"></span> {%trans 'Features'%} <small>{%trans '(click to expand)'%}</small>
         </a>
       </h4>
     </div>
@@ -129,8 +130,8 @@
 		            <img src="/img/carousel/editor1.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Intuitive editor</h3>
-		            <p>Create your virtual network topology in an intuitive web-based editor. No need to write config files or code.</p>
+		            <h3>{%trans 'Intuitive editor'%}</h3>
+		            <p>{%trans 'Create your virtual network topology in an intuitive web-based editor. No need to write config files or code.'%}</p>
 		          </div>
 		        </div>
 		
@@ -142,8 +143,8 @@
 		            <img src="/img/carousel/fast.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Up and running in seconds</h3>
-		            <p>Even very complex topologies can be configured and started in a few seconds.</p>
+		            <h3>{%trans 'Up and running in seconds'%}</h3>
+		            <p>{%trans 'Even very complex topologies can be configured and started in a few seconds.'%}</p>
 		          </div>
 		        </div>
 		
@@ -155,8 +156,8 @@
 		            <img src="/img/carousel/worldwide.jpeg" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Sites worldwide</h3>
-		            <p>Create topologies that go around the globe, select freely from our various sites.</p>
+		            <h3>{%trans 'Sites worldwide'%}</h3>
+		            <p>{%trans 'Create topologies that go around the globe, select freely from our various sites.'%}</p>
 		          </div>
 		        </div>
 		
@@ -168,8 +169,8 @@
 		            <img src="/img/carousel/packet_capturing.jpeg" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Packet capturing</h3>
-		            <p>Have a look at what goes over the wire. Just activate packet capturing on a link and analyze the traffic in Wireshark.</p>
+		            <h3>{%trans 'Packet capturing'%}</h3>
+		            <p>{%trans 'Have a look at what goes over the wire. Just activate packet capturing on a link and analyze the traffic in Wireshark.'%}</p>
 		          </div>
 		        </div>
 		
@@ -181,8 +182,8 @@
 		            <img src="/img/carousel/link_emulation.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Link emulation</h3>
-		            <p>Configure different properties like latency, packet loss or bandwidth on each link.</p>
+		            <h3>{%trans 'Link emulation'%}</h3>
+		            <p>{%trans 'Configure different properties like latency, packet loss or bandwidth on each link.'%}</p>
 		          </div>
 		        </div>
 		
@@ -194,8 +195,8 @@
 		            <img src="/img/carousel/graphical_console.jpeg" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Graphical console</h3>
-		            <p>Control your virtual machines directly from a web-based console viewer. Watch your VM boot or control graphical user interfaces.</p>
+		            <h3>{%trans 'Graphical console'%}</h3>
+		            <p>{%trans 'Control your virtual machines directly from a web-based console viewer. Watch your VM boot or control graphical user interfaces.'%}</p>
 		          </div>
 		        </div>
 		
@@ -207,8 +208,8 @@
 		            <img src="/img/carousel/virtual_networks.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Virtual networks</h3>
-		            <p>Use virtual switches or external networks to connect your topology.</p>
+		            <h3>{%trans 'Virtual networks'%}</h3>
+		            <p>{%trans 'Use virtual switches or external networks to connect your topology.'%}</p>
 		          </div>
 		        </div>
 		
@@ -220,8 +221,8 @@
 		            <img src="/img/carousel/virtualization_techs.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Different virtualization technologies</h3>
-		            <p>Select from full virtualization (KVM) and container virtualization (OpenVZ) for each topology component to save resources.</p>
+		            <h3>{%trans 'Different virtualization technologies'%}</h3>
+		            <p>{%trans 'Select from full virtualization (KVM) and container virtualization (OpenVZ) for each topology component to save resources.'%}</p>
 		          </div>
 		        </div>
 		
@@ -233,8 +234,8 @@
 		            <img src="/img/carousel/templates.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Pre-configured templates</h3>
-		            <p>Select from a wide range of pre-configures VM images spanning from Debian, Ubuntu and other Linux systems to Windows XP.</p>
+		            <h3>{%trans 'Pre-configured templates'%}</h3>
+		            <p>{%trans 'Select from a wide range of pre-configures VM images spanning from Debian, Ubuntu and other Linux systems to Windows XP.'%}</p>
 		          </div>
 		        </div>
 		
@@ -246,8 +247,8 @@
 		            <img src="/img/carousel/monitoring.png" class="img-responsive carousel-img-fixedwidth">
 		          </div>
 		          <div class="carousel-caption">
-		            <h3>Integrated monitoring</h3>
-		            <p>Observe the resource usage of a whole topology or individual components.</p>
+		            <h3>{%trans 'Integrated monitoring'%}</h3>
+		            <p>{%trans 'Observe the resource usage of a whole topology or individual components.'%}</p>
 		          </div>
 		        </div>
 		
@@ -270,7 +271,7 @@
 <div class="skip-sm"></div> 
 
 {% if news %}
-<h2>Latest news <a href="{%externalurl 'rss-feed'%}" class="btn btn-warning btn-sm pull-right"><span class="icomoon-rss"></span> RSS Feed</a></h2>
+<h2>{%trans 'Latest news '%}<a href="{%externalurl 'rss-feed'%}" class="btn btn-warning btn-sm pull-right"><span class="icomoon-rss"></span> {%trans 'RSS Feed'%}</a></h2>
 {% for item in news.items %}
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -283,7 +284,7 @@
 </div>
 {% endfor %}
 {% else %}
-<div class="alert alert-danger"><b>Failed to load news feed!</b></div>
+<div class="alert alert-danger"><b>{%trans 'Failed to load news feed!'%}</b></div>
 {% endif %}
 
 </div></div>
