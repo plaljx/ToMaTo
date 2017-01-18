@@ -120,7 +120,7 @@ class MaliciousCodeForm(BootstrapForm):
     name = forms.CharField(required=True, max_length=31)
     type = forms.ChoiceField(required=True, widget=forms.RadioSelect, choices=malicious_code_type_options)
     system = forms.ChoiceField(required=True, widget=forms.RadioSelect, choices=system_options)
-    url = forms.URLField(required=True, max_length=255)
+    url = forms.URLField(required=False, max_length=255)
     description = forms.CharField(widget = forms.Textarea, required=False)
     creation_date = forms.DateField(required=False, widget=forms.TextInput(attrs={'class': 'datepicker'}))
 
