@@ -66,8 +66,8 @@ var OptionsManager = Class.extend({
 		    },*/
 		    {
 		    	name:"show_connection_controls",
-		    	label:gettext("Show Connection Controls"),
-		    	tooltip:gettext("Show network interfaces on elements, and a connection control handle on connections. These might be useful to hide when taking screenshots."),
+		    	label:"Show Connection Controls",
+		    	tooltip:"Show network interfaces on elements, and a connection control handle on connections. These might be useful to hide when taking screenshots.",
    				default_value: true
 		    }
 		];
@@ -144,7 +144,7 @@ var OptionsManager = Class.extend({
 			this.editor.optionCheckboxes[this.topl_opts[i].name] = this.editor.optionMenuItem(this.topl_opts[i])
 			topl_options.push(this.editor.optionCheckboxes[this.topl_opts[i].name]);
 		}
-		var topl_group = tab.addGroup(gettext("Topology"));
+		var topl_group = tab.addGroup("Topology");
 		topl_group.addStackedElements(topl_options);
 
 		var user_options = [];
@@ -152,7 +152,7 @@ var OptionsManager = Class.extend({
 		this.editor.optionCheckboxes[this.user_opts[i].name] = this.editor.optionMenuItem(this.user_opts[i])
 			user_options.push(this.editor.optionCheckboxes[this.user_opts[i].name]);
 		}
-		var user_group = tab.addGroup(gettext("User"));
+		var user_group = tab.addGroup("User");
 		user_group.addStackedElements(user_options);
 	}
 });
