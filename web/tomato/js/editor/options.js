@@ -9,52 +9,52 @@ var OptionsManager = Class.extend({
 		this.topl_opts = [
 			{
 				name:"safe_mode",
-   				label:gettext("Safe mode"),
-   				tooltip:gettext("Asks before all destructive actions"),
+   				label:"Safe mode",
+   				tooltip:"Asks before all destructive actions",
    				default_value: true
    			},
    			{
    				name:"snap_to_grid",
-   				label:gettext("Snap to grid"),
-   				tooltip:gettext("All elements snap to an invisible "+this.editor.options.grid_size+" pixel grid"),
+   				label:"Snap to grid",
+   				tooltip:"All elements snap to an invisible "+this.editor.options.grid_size+" pixel grid",
    				default_value: false
    			},
    			{
 		        name:"fixed_pos",
-		        label:gettext("Fixed positions"),
-		        tooltip:gettext("Elements can not be moved"),
+		        label:"Fixed positions",
+		        tooltip:"Elements can not be moved",
    				default_value: false
 		    },
 		    {
 		    	name:"big_editor",
-		    	label:gettext("Big workspace"),
-		    	tooltip:gettext("Have a bigger editor workspace. Requires page reload."),
+		    	label:"Big workspace",
+		    	tooltip:"Have a bigger editor workspace. Requires page reload.",
    				default_value: false
 		    }
 		];
 		this.user_opts = [
 			{
 		        name:"colorify_segments",
-		        label:gettext("Colorify segments"),
-		        tooltip:gettext("Paint different network segments with different colors"),
+		        label:"Colorify segments",
+		        tooltip:"Paint different network segments with different colors",
    				default_value: false
 		    },
 		    {
 		        name:"show_ids",
-		        label:gettext("Show IDs"),
-		        tooltip:gettext("Show IDs in right-click menus"),
+		        label:"Show IDs",
+		        tooltip:"Show IDs in right-click menus",
    				default_value: false
 		    },
 		    {
 		        name:"show_sites_on_elements",
-		        label:gettext("Show Element Sites"),
-		        tooltip:gettext("Show the site an element is located at in its right-click menu"),
+		        label:"Show Element Sites",
+		        tooltip:"Show the site an element is located at in its right-click menu",
    				default_value: false
 		    },
 		    {
 		        name:"debug_mode",
-		        label:gettext("Debug mode"),
-		        tooltip:gettext("Displays debug messages"),
+		        label:"Debug mode",
+		        tooltip:"Displays debug messages",
    				default_value: false
 		    },
 		    /*

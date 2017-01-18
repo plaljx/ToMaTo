@@ -239,11 +239,11 @@ var Editor = Class.extend({
 
 		var toggleGroup = new ToggleGroup();
 	
-		var tab = this.menu.addTab(gettext("Home"));
+		var tab = this.menu.addTab("Home");
 
-		var group = tab.addGroup(gettext("Modes"));
+		var group = tab.addGroup("Modes");
 		this.selectBtn = Menu.button({
-			label: gettext("Select & Move"),
+			label: "Select & Move",
 			name: "Modes_SelectandMove",
 			icon: "img/select32.png",
 			toggle: true,
