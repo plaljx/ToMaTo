@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}
-<title>User Account '{{account.name}}' - ToMaTo Testbed</title>
+<title>{%trans 'User Account'%} '{{account.name}}' - ToMaTo Testbed</title>
 {% endblock %}
 
 {% block content %}
@@ -11,11 +12,11 @@
 
 {% if "orga_admin" in request.session.user.flags or "global_admin" in request.session.user.flags %}
 <form>
-  <button type="submit" formaction="{%url "account_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> All Accounts</button>
+  <button type="submit" formaction="{%url "account_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> {%trans 'All Accounts'%}</button>
 </form>
 {% endif %}
 
-<h1>User Account '{{account.name}}'</h1>
+<h1>{%trans 'User Account'%} '{{account.name}}'</h1>
 
 <div class="skip-sm"></div>
 
@@ -31,19 +32,19 @@ While waiting for the account activation you can create and design topologies bu
 
 <table class="table">
 	<tr>
-		<th>Full name:</th>
+		<th>{%trans 'Full name'%}:</th>
 		<td>{{account.realname}}</td>
 	</tr>
 	<tr>
-		<th>Origin:</th>
+		<th>{%trans 'Origin'%}:</th>
 		<td>{{account.origin}}</td>
 	</tr>
 	<tr>
-		<th>Organization:</th>
+		<th>{%trans 'Organization'%}:</th>
 		<td><a href="{%url "admin.organization.info" account.organization%}">{{organization.label}}</a></td>
 	</tr>
 	<tr>
-		<th>Email:</th>
+		<th>{%trans 'Email'%}:</th>
 		<td>
 			{% if account.email %}
 				<a href="mailto:{{account.email}}">{{account.email}}</a>
@@ -53,30 +54,30 @@ While waiting for the account activation you can create and design topologies bu
 		</td>
 	</tr>
 	<tr>
-		<th>Flags:</th>
+		<th>{%trans 'Flags'%}:</th>
 		<td>
 			{% if account.flags %}
 				<ul>{{flaglist}}</ul>
 			{% else %}
-				Not shown
+				{%trans 'Not shown'%}
 			{% endif %}
 		</td>
 	</tr>
 {% if "new_account" in account.flags %}
 	<tr>
-		<th>Reason for registering:</th>
+		<th>{%trans 'Reason for registering'%}:</th>
 		<td>{{account.reason}}</td>
 	</tr>
 {% endif %}
 {% if account.quota %}
 	<tr>
-		<th>Quota:</th>
+		<th>{%trans 'Quota'%}:</th>
 		<td>
 			<dl class="dl-horizontal">
-				<dt>CPU time</dt><dd>{{account.quota.used.cputime|toduration}} / {{account.quota.monthly.cputime|toduration}} ({{account.quota.used.cputime|percentage:account.quota.monthly.cputime}})</dd>
-				<dt>Memory</dt><dd>{{account.quota.used.memory|filesizeformat}} / {{account.quota.monthly.memory|filesizeformat}} ({{account.quota.used.memory|percentage:account.quota.monthly.memory}})</dd>
-				<dt>Disk space</dt><dd>{{account.quota.used.diskspace|filesizeformat}} / {{account.quota.monthly.diskspace|filesizeformat}} ({{account.quota.used.diskspace|percentage:account.quota.monthly.diskspace}})</dd>
-				<dt>Traffic</dt><dd>{{account.quota.used.traffic|filesizeformat}} / {{account.quota.monthly.traffic|filesizeformat}} ({{account.quota.used.traffic|percentage:account.quota.monthly.traffic}})</dd>
+				<dt>{%trans 'CPU time'%}</dt><dd>{{account.quota.used.cputime|toduration}} / {{account.quota.monthly.cputime|toduration}} ({{account.quota.used.cputime|percentage:account.quota.monthly.cputime}})</dd>
+				<dt>{%trans 'Memory'%}</dt><dd>{{account.quota.used.memory|filesizeformat}} / {{account.quota.monthly.memory|filesizeformat}} ({{account.quota.used.memory|percentage:account.quota.monthly.memory}})</dd>
+				<dt>{%trans 'Disk space'%}</dt><dd>{{account.quota.used.diskspace|filesizeformat}} / {{account.quota.monthly.diskspace|filesizeformat}} ({{account.quota.used.diskspace|percentage:account.quota.monthly.diskspace}})</dd>
+				<dt>{%trans 'Traffic'%}</dt><dd>{{account.quota.used.traffic|filesizeformat}} / {{account.quota.monthly.traffic|filesizeformat}} ({{account.quota.used.traffic|percentage:account.quota.monthly.traffic}})</dd>
 			</dl>
 		</td>
 	</tr>
@@ -89,15 +90,15 @@ While waiting for the account activation you can create and design topologies bu
 
 <form>
 {% if "new_account" in account.flags and request.session.user|args:account.organization|call:"isAdmin" %}
-  <button type="submit" formaction="{%url "account.accept" id=account.id%}" class="btn btn-success"><span class="glyphicon glyphicon-check"></span> Accept Account</button>
+  <button type="submit" formaction="{%url "account.accept" id=account.id%}" class="btn btn-success"><span class="glyphicon glyphicon-check"></span> {%trans 'Accept Account'%}</button>
 {% endif %}  
 {% if request.session.user|args:account.organization|call:"isAdmin" or account.id == request.session.user.id %}
-  <a class="btn btn-info" onclick="window.open('{%url "usage.account" account.id%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> Resource Usage</a>
-  <button type="submit" formaction="{%url "account.edit" id=account.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> Edit Account</button>
+  <a class="btn btn-info" onclick="window.open('{%url "usage.account" account.id%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> {%trans 'Resource Usage'%}</a>
+  <button type="submit" formaction="{%url "account.edit" id=account.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> {%trans 'Edit Account'%}</button>
 {% endif %}
 {% if request.session.user|args:account.organization|call:"isAdmin" %}
-  <button type="submit" formaction="{%url "account.reset_password" id=account.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-wrench"></span> reset password</button>
-  <button type="submit" formaction="{%url "account.remove" id=account.id%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Remove Account</button>
+  <button type="submit" formaction="{%url "account.reset_password" id=account.id%}" class="btn btn-warning"><span class="glyphicon glyphicon-wrench"></span> {%trans 'reset password'%}</button>
+  <button type="submit" formaction="{%url "account.remove" id=account.id%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> {%trans 'Remove Account'%}</button>
 {% endif %}
 </form>
 

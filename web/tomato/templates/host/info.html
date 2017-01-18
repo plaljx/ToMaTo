@@ -1,24 +1,25 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Host '{{host.name}}' - ToMaTo Testbed</title>
+<title>{%trans 'Host'%} '{{host.name}}' - ToMaTo Testbed</title>
 {% endblock %}
 
 {% block content %}
 
 <form>
-  <button type="submit" formaction="{%url "host_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> All Hosts</button>
+  <button type="submit" formaction="{%url "host_list"%}" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-list"></span> {%trans 'All Hosts'%}</button>
 </form>
 
-<h1>Host '{{host.name}}'</h1>
+<h1>{%trans 'Host'%} '{{host.name}}'</h1>
 
 <div class="skip-sm"></div>
 
 {% if host.problems %}
 	<div class="alert alert-danger">
-	  <b>Host has problems:</b> This host is currently not working properly and is disabled. The details of the problems follow:
+	  <b>{%trans 'Host has problems'%}:</b> {%trans 'This host is currently not working properly and is disabled. The details of the problems follow'%}:
 	  <ul>
 	  	{% for p in host.problems %}
 	  		<li><b>{{p}}</b></li>
@@ -26,26 +27,26 @@
 	  </ul>
 	</div>
 {% else %}
-	<div class="alert alert-success"><b>No problems:</b> This host is currently working without problems.</div>
+	<div class="alert alert-success"><b>{{%trans 'No problems'%}:</b> This host is currently working without problems.</div>
 {% endif %}
 
 {% load tomato %}
 
 <table class="table">
 	<tr>
-		<th>Name:</th>
+		<th>{%trans 'Name'%]:</th>
 		<td>{{host.name}}</td>
 	</tr>
 	<tr>
-		<th>Address:</th>
+		<th>{%trans 'Address'%}:</th>
 		<td>{{host.address}}</td>
 	</tr>
 	<tr>
-		<th>RPC URL:</th>
+		<th>{%trans 'RPC URL'%}:</th>
 		<td>{{host.rpcurl}}</td>
 	</tr>
 	<tr>
-		<th>Site:</th>
+		<th>{%trans 'Site'%}</th>
 		<td><a href="{%url "admin.organization.info" organization.name%}#{{site.name}}">{{site.label}} ({{site.name}})</a></td>
 	</tr>
 	<tr>
@@ -182,15 +183,15 @@
 
 {% load tomato %}
 <form>
-  <button type="submit" formaction="{%url "host_external_networks" host.name%}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> External Networks on This Host</button>
+  <button type="submit" formaction="{%url "host_external_networks" host.name%}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> {%trans 'External Networks on This Host'%}</button>
   {% if request.session.user|args:organization.name|call:"isAdmin" %}
-  	<button type="submit" formaction="{%url "debug.host_users" host.name%}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Host Users</button>
+  	<button type="submit" formaction="{%url "debug.host_users" host.name%}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> {%trans 'Host Users'%}</button>
   {% endif %}
   {% if request.session.user|args:organization.name|call:"isHostManager" %}
   	<!-- <a class="btn btn-info" onclick="window.open('{%url "usage.host" host.name%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> Resource Usage</a>-->
-  	<button type="submit" formaction="{%url "admin.host.forced_update" host.name%}" class="btn btn-success"><span class="glyphicon glyphicon-repeat"></span> Refresh Host Information</button>
-	<button type="submit" formaction="{%url "admin.host.edit" host.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> Edit Host</button>
-	<button type="submit" formaction="{%url "admin.host.remove" host.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Remove Host</button>
+  	<button type="submit" formaction="{%url "admin.host.forced_update" host.name%}" class="btn btn-success"><span class="glyphicon glyphicon-repeat"></span> {%trans Refresh Host Information'%}</button>
+	<button type="submit" formaction="{%url "admin.host.edit" host.name%}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> {%trans 'Edit Host'%}</button>
+	<button type="submit" formaction="{%url "admin.host.remove" host.name%}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> {%trans 'Remove Host'%}</button>
   {% endif %}
 </form>
 

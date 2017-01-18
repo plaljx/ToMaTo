@@ -1,27 +1,28 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>{{tomato_module}} Debug Statistics - ToMaTo Testbed</title>
+<title>{{tomato_module}} {%trans 'Debug Statistics'%} - ToMaTo Testbed</title>
 {% endblock %}
 
 {% block content %}
 
-<h1>{{tomato_module}}<small> - Debug Statistics</small></h1>
+<h1>{{tomato_module}}<small> - {%trans 'Debug Statistics'%}</small></h1>
 
 <div class="skip-sm"></div>
 
 {% if stats.db %}
-<h2>Database</h2>
+<h2>{%trans 'Database'%}</h2>
 
 {% load tomato %}
 
 <table class="table table-striped">
 	<tr>
-		<th>Total size</th>
-		<th>Data size</th>
-		<th>Objects</th>
+		<th>{%trans 'Total size'%}</th>
+		<th>{%trans 'Data size'%}</th>
+		<th>{%trans 'Objects'%}</th>
 	</tr>
 	<tr>
 		<td>{{stats.db.storageSize|filesizeformat}}</td>
@@ -33,11 +34,11 @@
 <script src="/js/enhancetable.js"></script>	
 <table class="sortable,filterable, table table-striped">
 	<tr>
-		<th>Collection</th>
-		<th>Entries</th>
-		<th>Storage Size</th>
-		<th>Index Size</th>
-		<th>Data Size</th>
+		<th>{%trans 'Collection'%}</th>
+		<th>{%trans 'Entries'%}</th>
+		<th>{%trans 'Storage Size'%}</th>
+		<th>{%trans 'Index Size'%}</th>
+		<th>{%trans 'Data Size'%}</th>
 	</tr>
 	{% for name, col in stats.db.collections.items %}
 	<tr>
@@ -55,15 +56,15 @@
 {% endif %}
 
 {% if stats.scheduler %}
-<h2>Tasks</h2>
+<h2>{%trans 'Tasks'%}</h2>
 
 <table class="table table-striped">
 	<tr>
-		<th>Workers</th>
-		<th>Max late time</th>
-		<th>Waiting fraction</th>
-		<th>Last task</th>
-		<th>Tasks per minute</th>
+		<th>{%trans 'Workers'%}</th>
+		<th>{%trans 'Max late time'%}</th>
+		<th>{%trans 'Waiting fraction'%}</th>
+		<th>{%trans 'Last task'%}</th>
+		<th>{%trans 'Tasks per minute'%}</th>
 	</tr>
 	<tr>
 		<td>{{stats.scheduler.workers}} (min: {{stats.scheduler.min_workers}}, max: {{stats.scheduler.max_workers}})</td>
@@ -79,13 +80,13 @@
 		<th />
 		<th />
 		<th>Id</th>
-		<th>Method</th>
-		<th>Repeated</th>
-		<th>Last</th>
-		<th>Next</th>
-		<th>Duration</th>
-		<th>Args</th>
-		<th>Kwargs</th>
+		<th>{%trans 'Method'%}</th>
+		<th>{%trans 'Repeated'%}</th>
+		<th>{%trans 'Last'%}</th>
+		<th>{%trans 'Next'%}</th>
+		<th>{%trans 'Duration'%}</th>
+		<th>{%trans 'Args'}</th>
+		<th>{%trans 'Kwargs'%}</th>
 	</tr>
 	{% for t in stats.scheduler.tasks %}
 
@@ -132,7 +133,7 @@
 {% endif %}
 
 {% if stats.accounting %}
-	Record Count: {{stats.accounting.record_count}}
+	{%trans 'Record Count'%}: {{stats.accounting.record_count}}
 {% endif %}
 
 {% endblock %}

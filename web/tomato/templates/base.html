@@ -5,7 +5,7 @@
  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 
- {% load i18n %}
+{% load i18n %}
 
 <meta name="DESCRIPTION" content="German Lab Webpage" /> 
 
@@ -82,14 +82,12 @@
 var css = '#javascriptwarning{display:none;}',
 head = document.getElementsByTagName('head')[0],
 style = document.createElement('style');
-
 style.type = 'text/css';
 if (style.styleSheet){
 style.styleSheet.cssText = css;
 } else {
 style.appendChild(document.createTextNode(css));
 }
-
 head.appendChild(style);
 </script>
 
@@ -107,7 +105,7 @@ head.appendChild(style);
         <div class="col-md-3 left_col" id="menu_">
         	<div class="left_col DeepBlue scroll-view" style="width:100%">
             <div class = "site_title">
-            <span><i calss = "fa fa-paw"></i>BUPT ProviSec</span>
+            <span><i calss = "fa fa-paw"></i>{%trans 'BUPT ProviSec'%}</span>
             </div>
         	<!-- <div class="navbar nav_title" style="border: 0;">
             <a href="#" class="site_title"><img src="img/bupt.jpg" alt="..." class="img-circle profile_img"></a>
@@ -121,7 +119,7 @@ head.appendChild(style);
                 <img src="/img/bupt.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span><i>Welcome</i></span>
+                <span><i>{%trans 'Welcome' %}</i></span>
                 <!-- </br>
                 <h>{{uesrname}}</h> -->
               </div>
@@ -163,8 +161,8 @@ head.appendChild(style);
 			        		<li>
 			        			<a><i class="fa"  aria-haspopup="true" aria-expanded="false">{{request.session.user.realname}}</i><span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
-									<li><a href="{%url "account.info"%}">My Account</a></li>
-									<li><a href="{%url "main.logout" %}">Log Out</a></li>
+									<li><a href="{%url "account.info"%}">{%trans 'My Account'%}</a></li>
+									<li><a href="{%url "main.logout" %}">{%trans 'Log Out'%}</a></li>
 									</ul>
 							</li>
 							<li>
@@ -186,75 +184,75 @@ head.appendChild(style);
 
 							<li>	
 									{% if request.session.user %}
-									<a href="{%url "topology_list"%}"><i class="fa">MyTopologies</i><span class="fa"></span></a>
+									<a href="{%url "topology_list"%}"><i class="fa">{%trans 'MyTopologies'%} </i><span class="fa"></span></a>
 
 				        			{% if request.session.user.isAdmin %} 
 							</li>
 							<li>
-									<a><i class="fa">Users</i><span class="fa fa-chevron-down"></span></a>
+									<a><i class="fa">{%trans 'Users'%}</i><span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
-										<li><a href="{%url "account_list"%}">Your Organization's accounts</a></li>
-										<li><a href="{%url "account_list_all"%}">All accounts</a></li>
-										<li><a href="{%url "account_list_registrations"%}">Pending account registrations</a></li>
-										<li><a href="{%url "tomato.account.announcement_form"%}">Broadcast new announcement</a></li>
+										<li><a href="{%url "account_list"%}">{%trans "Your Organization's accounts"%}</a></li>
+										<li><a href="{%url "account_list_all"%}">{%trans 'All accounts'%}</a></li>
+										<li><a href="{%url "account_list_registrations"%}">{%trans 'Pending account registrations'%}</a></li>
+										<li><a href="{%url "tomato.account.announcement_form"%}">{% trans 'Broadcast new announcement'%}</a></li>
 									</ul>
 							</li>
 							{% endif %}
 
 							<li>
-								<a><i class="fa">Resources</i><span class="fa fa-chevron-down"></span></a>
+								<a><i class="fa">{% trans 'Resources'%}</i><span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a href="{%url "template.list"%}">Templates</a></li>
-									<li><a href="{%url "profile.list"%}">Device profiles</a></li>
-									<li><a href="{%url "external_network.list"%}">External networks</a></li>
-									<li><a href="{% url "web_resources.executable_archive_list" %}">Default Executable Archives</a></li>
-									<li><a href="{% url "web_resources.custom_element_icon_list" %}">Custom Element Icons</a></li>
-                                    <li><a href="{% url 'scenario_list' %}">Scenarios</a></li>
-                                    <li><a href="{% url 'malicious_code_list' %}">Malicious Code</a></li>
-                                    <li><a href="{% url 'security_software_list' %}">Security Softwares</a></li>
-                                    <li><a href="{% url 'vulnerability_list'%}">Vulnerabilities</a></li>
+									<li><a href="{%url "template.list"%}">{%trans 'Templates'%}</a></li>
+									<li><a href="{%url "profile.list"%}">{%trans 'Device profiles'%}</a></li>
+									<li><a href="{%url "external_network.list"%}">{%trans 'External networks'%}</a></li>
+									<li><a href="{% url "web_resources.executable_archive_list" %}">{%trans 'Default Executable Archives'%}</a></li>
+									<li><a href="{% url "web_resources.custom_element_icon_list" %}">{%trans 'Custom Element Icons'%}</a></li>
+                                    <li><a href="{% url 'scenario_list' %}">{%trans 'Scenarios'%}</a></li>
+                                    <li><a href="{% url 'malicious_code_list' %}">{%trans 'Malicious Code'%}</a></li>
+                                    <li><a href="{% url 'security_software_list' %}">{% trans 'Security Softwares'%}</a></li>
+                                    <li><a href="{% url 'vulnerability_list'%}">{% trans 'Vulnerabilities'%}</a></li>
 								</ul>
 							</li>
 
 							{% endif %}
 							<li>
-								<a><i class="fa">Testbed</i> <span class="fa fa-chevron-down"></span></a>
+								<a><i class="fa">{%trans 'Testbed'%}</i> <span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a href="{%url "admin.organization.list"%}">Organizations</a></li>
-									<li><a href="{%url "site_map.map"%}">Sites map</a></li>
+									<li><a href="{%url "admin.organization.list"%}">{%trans 'Organizations'%}</a></li>
+									<li><a href="{%url "site_map.map"%}">{%trans 'Sites map'%}</a></li>
 									{% if request.session.user %}
-									<li><a href="{%url "admin.host.list"%}">Hosts</a></li>
+									<li><a href="{%url "admin.host.list"%}">{%trans 'Hosts'%}</a></li>
 									{% endif %}
-									<li><a href="{%url "main.statistics"%}">Statistics</a></li>
+									<li><a href="{%url "main.statistics"%}">{%trans 'Statistics'%}</a></li>
 								</ul>
 							</li>
 							{% if request.session.user.hasDebugFlag %}
 							<li>
-								<a><i class="fa">Debug</i><span class="fa fa-chevron-down"></span></a>
+								<a><i class="fa">{%trans 'Debug'%}</i><span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a href="{%url "dumpmanager.group_list"%}">Dump Manager</a></li>
-									<li><a href="{%url "tomato.debug.stats"%}">Backend</a></li>
-									<li><a href="{%url "tomato.debug.stats" "backend_api"%}">&nbsp; backend_api</a></li>
-									<li><a href="{%url "tomato.debug.stats" "backend_users"%}">&nbsp; backend_users</a></li>
-									<li><a href="{%url "tomato.debug.stats" "backend_core"%}">&nbsp; backend_core</a></li>
-									<li><a href="{%url "tomato.debug.stats" "backend_accounting"%}">&nbsp; backend_accounting</a></li>
-									<li><a href="{%url "tomato.debug.stats" "backend_debug"%}">&nbsp; backend_debug</a></li>
+									<li><a href="{%url "dumpmanager.group_list"%}">{%trans 'Dump Manager'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats"%}">{%trans 'Backend'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_api"%}">&nbsp;{%trans 'backend_api'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_users"%}">&nbsp; {%trans 'backend_users'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_core"%}">&nbsp; {%trans 'backend_core'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_accounting"%}">&nbsp; {%trans 'backend_accounting'%}</a></li>
+									<li><a href="{%url "tomato.debug.stats" "backend_debug"%}">&nbsp; {%trans 'backend_debug'%}</a></li>
 									{% duration_log_enabled as show_duration_log_link %}
 									{% if show_duration_log_link %}
-										<li><a href="{%url "tomato.debug.api_call_stats"%}">API Call Durations</a></li>
+										<li><a href="{%url "tomato.debug.api_call_stats"%}">{%trans 'API Call Durations'%}</a></li></a></li>
 									{% endif %}
 								</ul>
 							</li>
 							{% endif %}
 
 							<li>
-								<a><i class="fa">Links</i><span class="fa fa-chevron-down"></span></a>
+								<a><i class="fa">{%trans 'Links'%}</i><span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-						      		<li><a href="{%externalurl 'project' %}" target="_blank">Project</a></li>
-									<li><a href="{%externalurl 'help' %}" target="_help">Help</a></li>
-									<li><a href="{%externalurl 'bugtracker' %}" target="_help">Bugtracker</a></li>
-						   			<li><a href="{%externalurl 'aup' %}" target="_blank">Acceptable Use Policy</a></li>
-			   						<li><a href="{%url "help.contact_form"%}">Contact</a></li>
+						      		<li><a href="{%externalurl 'project' %}" target="_blank">{%trans 'Project'%}</a></li>
+									<li><a href="{%externalurl 'help' %}" target="_help">{%trans 'Help'%}</a></li>
+									<li><a href="{%externalurl 'bugtracker' %}" target="_help">{%trans 'Bugtracker'%}</a></li>
+						   			<li><a href="{%externalurl 'aup' %}" target="_blank">{%trans 'Acceptable Use Policy'%}</a></li>
+			   						<li><a href="{%url "help.contact_form"%}">{%trans 'Contact'%}</a></li>
 								</ul>
 							</li>
 			       		</ul>
@@ -267,7 +265,7 @@ head.appendChild(style);
             <!-- <button type="button" class="btn btn-default" id="menu_toggle">
             Pack up</button> -->
             <button type="button" class="btn btn-default navbar-right" onclick="location.href='{% url "sys_config.config"%}';">
-                &nbsp Configuration
+                &nbsp {%trans 'Configuration'%}
             </button>
             <button type="button" class="btn {%if request.session.user.notification_count%}btn-info{%else%}btn-default{%endif%} navbar-right" onclick="location.href='{% url 'tomato.account.unread_notifications'%}';">
                                 <span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="badge">{{request.session.user.notification_count}}</span>

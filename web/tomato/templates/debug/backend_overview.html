@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
@@ -10,8 +11,8 @@
 <table class="sortable,filterable, table table-striped"><tbody>
 
 <tr>
-    <th>Backend Module</th>
-    <th>Reachable</th>
+    <th>{%trans 'Backend Module'%}</th>
+    <th>{%trans 'Reachable'%}</th>
 </tr>
 
 {% for module_result in reachability_stats %}

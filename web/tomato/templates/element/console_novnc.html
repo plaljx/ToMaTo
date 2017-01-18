@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html>
     <head>
     <base href="/static/novnc/"/>
@@ -18,14 +19,14 @@
         <div id="noVNC_screen">
             <div id="noVNC_status_bar" class="noVNC_status_bar" style="margin: 0px; height: 35px;">
                 <table border=0 width="100%"><tr>
-                    <td><div id="noVNC_status">Loading</div></td>
+                    <td><div id="noVNC_status">{%trans 'Loading'%}</div></td>
                     <td width="1%"><div id="noVNC_buttons" style="white-space: nowrap;">
                         <input type=button value="Send CtrlAltDel" id="sendCtrlAltDelButton">
                     </div></td>
                 </tr></table>
             </div>
             <canvas id="noVNC_canvas" width="640px" height="20px" style="margin: 0px;">
-                Canvas not supported.
+                {%trans 'Canvas not supported.'%}
             </canvas>
         </div>
         <script>

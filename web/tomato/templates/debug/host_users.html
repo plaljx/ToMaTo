@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
 {% block title %}
-<title>Users of host {{host}} - ToMaTo Testbed</title>
+<title>{%trans 'Users of host'%} {{host}} - ToMaTo Testbed</title>
 {% endblock %}
 
 {% block content %}
 
-<h1>Users of host {{host}}</h1>
+<h1>{%trans 'Users of host'%} {{host}}</h1>
 
 <div class="skip-sm"></div>
 
@@ -17,12 +18,12 @@
 <script src="/js/enhancetable.js"></script>	
 <table class="sortable,filterable, table table-striped">
 	<tr>
-		<th>ID on host</th>
-		<th>Type</th>
-		<th>State</th>
-		<th>Topology</th>
-		<th>Element</th>
-		<th>Connection</th>
+		<th>{%trans 'ID on host'%}</th>
+		<th>{%trans 'Type'%}</th>
+		<th>{%trans 'State'%}</th>
+		<th>{%trans 'Topology'%}</th>
+		<th>{%trans 'Element'%}</th>
+		<th>{%trans 'Connection'%}</th>
 	</tr>
 	{% for u in users %}
 	<tr>
