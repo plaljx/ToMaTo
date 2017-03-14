@@ -5,7 +5,7 @@ import os
 from django import VERSION as DJANGO_VERSION
 from django.utils.translation import ugettext_lazy as _
 
-CONFIG_YAML_PATH = "/etc/tomato/config/config.yaml"
+CONFIG_YAML_PATH = "/etc/tomato/config.yaml"
 TOMATO_MODULE = "web"
 
 DEBUG = True

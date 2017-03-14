@@ -20,7 +20,7 @@ import os, sys, signal, time, thread
 from lib import settings
 
 tomato_module = settings.Config.TOMATO_MODULE_BACKEND_API
-settings.init('/etc/tomato/config/config.yaml', tomato_module)
+settings.init('/etc/tomato/config.yaml', tomato_module)
 os.environ['TOMATO_MODULE'] = tomato_module
 
 import socket

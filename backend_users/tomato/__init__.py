@@ -19,7 +19,7 @@ import os, sys, signal, time, thread, threading
 from lib import settings
 
 tomato_module = settings.Config.TOMATO_MODULE_BACKEND_USERS
-settings.init('/etc/tomato/config/config.yaml', tomato_module)
+settings.init('/etc/tomato/config.yaml', tomato_module)
 os.environ['TOMATO_MODULE'] = tomato_module
 
 from lib import monkey
