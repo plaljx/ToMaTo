@@ -1,1 +1,0 @@
-../../../../shared/lib/newcmd/__init__.py

@@ -1,4 +1,1 @@
-from cmd import CommandError, run, spawn, spawnDaemon
-from daemon import Daemon
-from locks import LockMatrix
-from misc import removeControlChars, escape, identifier, randomPassword
+../../../../../shared/lib/newcmd/util/__init__.py

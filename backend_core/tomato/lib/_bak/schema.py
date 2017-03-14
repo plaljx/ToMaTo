@@ -1,1 +1,0 @@
-../../../shared/lib/schema.py
