@@ -11,18 +11,16 @@ var Topology = Class.extend({
 	loadElement: function(el) {
 		var elObj;
 		switch (el.type) {
-			case "kvm":
-			case "kvmqm":
-			case "openvz":
+			case "full":
+			case "container":
 			case "repy":
 				elObj = new VMElement(this, el, this._getCanvas());
 				break;
-			case "kvm_interface":
-			case "kvmqm_interface":
+			case "full_interface":
 			case "repy_interface":
 				elObj = new VMInterfaceElement(this, el, this._getCanvas());
 				break;
-			case "openvz_interface":
+			case "container_interface":
 				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas());
 				break;
 			case "external_network":
@@ -347,8 +345,8 @@ var Topology = Class.extend({
 		for (var id in this.elements) {
 			var element = this.elements[id];
 			switch (element.data.type) {
-				case 'openvz':
-				case 'kvmqm':
+				case 'container':
+				case 'full':
 				case 'repy':
 					vmids[id] = element;
 					break;
@@ -572,8 +570,8 @@ var Topology = Class.extend({
 		var timeout_settings = t.editor.options.timeout_settings;
 		for (var i = 0; i < timeout_settings.options.length; i++) choices[timeout_settings.options[i]] = formatDuration(timeout_settings.options[i]);
 		var timeout_val = t.data.timeout - new Date().getTime()/1000.0;
-		var text = timeout_val > 0 ? ("Your topology will time out in " + formatDuration(timeout_val)) : "Your topology has timed out. You must renew it to use it.";
-		if (timeout_val < timeout_settings.warning) text = '<b style="color:red">' + text + '</b>';
+		var text = timeout_val > 0 ? ("Your topology will time out in <strong>" + formatDuration(timeout_val)) + "</strong>" : "Your topology has timed out. You must renew it to use it.";
+		if (timeout_val < timeout_settings.warning) text = '<p class="alert alert-danger">' + text + '</p>';
 		dialog.addText("<center>"  + text + "</center>");
 		if (may_renew) {
 			// if user is allowed to renew

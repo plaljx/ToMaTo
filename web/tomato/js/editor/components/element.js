@@ -213,11 +213,10 @@ var Element = Component.extend({
 		this.action("download_grant", {callback: function(el, res) {
 			var name = el.topology.data.name + "_" + el.data.name;
 			switch (el.data.type) {
-				case "kvmqm":
-				case "kvm":
+				case "full":
 					name += ".qcow2";
 					break;
-				case "openvz":
+				case "container":
 					name += ".tar.gz";
 					break;
 				case "repy":
@@ -384,12 +383,6 @@ var Element = Component.extend({
 	},
 	action_destroy: function() {
 		this.action("destroy");
-	},
-	action_prepareAndStart: function() {
-	    t = this;
-	    this.action("prepare" , { callback: function() { t.action("start"); }
-	                            });
-
 	},
 	updateDependent: function() {
 		for (var i = 0; i < this.children.length; i++) {

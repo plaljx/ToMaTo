@@ -1,3 +1,13 @@
+"""
+Web resources are resources that are only available to the webfrontend
+They are defined via a fixed URL that usually points to a JSON document.
+
+Current kinds of web resources:
+ - default executable archives
+ - custom element icons
+"""
+
+
 __author__ = 't-gerhard'
 
 import json, urllib2
@@ -10,7 +20,7 @@ settings = get_settings(config_module)
 from django.shortcuts import render
 import time
 from .lib import wrap_rpc
-from .lib.reference_library import techs
+from .lib.references_web import techs
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 
 def web_resources():

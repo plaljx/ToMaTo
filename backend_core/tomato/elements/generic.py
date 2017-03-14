@@ -25,7 +25,8 @@ from ..resources.template import Template
 from .. import elements, host
 from ..lib.error import UserError, InternalError
 import time
-from ..lib.constants import StateName, ActionName
+from ..lib.constants import StateName, ActionName, TypeTechTrans
+from ..lib.references import Reference
 
 ST_CREATED = StateName.CREATED
 ST_PREPARED = StateName.PREPARED
@@ -167,17 +168,28 @@ class VMElement(Element):
 	def action_change_template(self, template):
 		self.modify_template(template)
 
+	def _get_elementTypeConfigurations(self):
+		"""
+		get element type configurations for action_prepare()
+		:return:
+		"""
+		return [[self.TYPE] + self.CAP_CHILDREN.keys()]
+
+	def _select_tech(self, _host):
+		return self.type
+
 	def action_prepare(self):
 		hPref, sPref = self.getLocationPrefs()
-		_host = host.select(site=self.site if self.site else self.topology.site, elementTypes=[self.TYPE]+self.CAP_CHILDREN.keys(), hostPrefs=hPref, sitePrefs=sPref, template=self.template)
+		_host = host.select(site=self.site if self.site else self.topology.site, elementTypeConfigurations=self._get_elementTypeConfigurations(), hostPrefs=hPref, sitePrefs=sPref, template=self.template)  # fixme: use tech
 		UserError.check(_host, code=UserError.NO_RESOURCES, message="No matching host found for element",
-			data={"type": self.TYPE})
+			data={"type": self.TYPE, "configs": self._get_elementTypeConfigurations()})
 		attrs = self._remoteAttrs
+		type_ = self._select_tech(_host)
 		attrs.update({
-			"template": self.template.name,
+			"template": self.template.name
 		})
 		attrs.update(self._profileAttrs)
-		self.element = _host.createElement(self.TYPE, parent=None, attrs=attrs, ownerElement=self)
+		self.element = _host.createElement(type_, parent=None, attrs=attrs, ownerElement=self)
 		self.save()
 		for iface in self.children:
 			iface._create()
@@ -187,11 +199,16 @@ class VMElement(Element):
 	def action_destroy(self):
 		if isinstance(self.element, HostElement):
 			try:
+				if self.state == ST_STARTED:
+					self.element.action(ActionName.STOP)
 				self.element.action(ActionName.DESTROY)
 			except UserError:
 				if self.element.state != ST_CREATED:
 					raise
+			except:
+				pass
 			for iface in self.children:
+				iface.triggerConnectionStop()
 				iface._remove()
 			self.element.remove()
 			self.element = None
@@ -204,6 +221,12 @@ class VMElement(Element):
 		self.setState(ST_PREPARED, True)
 		for ch in self.children:
 			ch.triggerConnectionStop()
+
+	def action_start(self):
+		if self.state == ST_CREATED:
+			self.action_prepare()
+		self.element.action(ActionName.START)
+		self.setState(ST_STARTED, True)
 
 	def after_rextfv_upload_use(self):
 		self.set_rextfv_last_started()
@@ -230,12 +253,45 @@ class VMElement(Element):
 	ACTIONS = Element.ACTIONS.copy()
 	ACTIONS.update({
 		Entity.REMOVE_ACTION: StatefulAction(Element._remove, check=Element.checkRemove, allowedStates=[ST_CREATED]),
+		ActionName.START: StatefulAction(action_start, allowedStates=[ST_CREATED, ST_PREPARED], stateChange=ST_STARTED),
 		ActionName.STOP: StatefulAction(action_stop, allowedStates=[ST_STARTED], stateChange=ST_PREPARED),
 		ActionName.PREPARE: StatefulAction(action_prepare, check=Element.checkTopologyTimeout, allowedStates=[ST_CREATED], stateChange=ST_PREPARED),
-		ActionName.DESTROY: StatefulAction(action_destroy, allowedStates=[ST_PREPARED], stateChange=ST_CREATED),
+		ActionName.DESTROY: StatefulAction(action_destroy, allowedStates=[ST_PREPARED, ST_STARTED], stateChange=ST_CREATED),
 		ActionName.CHANGE_TEMPLATE: StatefulAction(action_change_template, allowedStates=[ST_CREATED, ST_PREPARED])
 	})
 
+
+class MultiTechVMElement(VMElement):
+	TECHS = []
+	tech = StringField(required=False, default=None)
+
+	def modify_tech(self, tech):
+		if tech is not None:
+			UserError.check(tech in self.TECHS, UserError.INVALID_VALUE, "tech '%s' not supported for type '%s'" % (tech, self.TYPE), data={"tech": tech, "type": self.TYPE})
+		self.tech = tech
+
+	def _get_elementTypeConfigurations(self):
+		if self.tech:
+			return [[self.tech, TypeTechTrans.TECH_TO_CHILD_TECH[self.tech]]]
+		return [[k, v] for k, v in TypeTechTrans.TECH_TO_CHILD_TECH.iteritems()]
+
+	def get_tech_attribute(self):
+		return self.element.type if self.element else self.tech
+
+	def _select_tech(self, _host):
+		if self.tech:
+			return self.tech
+		else:
+			for tech in self.TECHS:
+				if tech in _host.elementTypes:
+					return tech
+		raise InternalError(code=InternalError.ASSERTION, message="selected host doesn't match element requirement",
+		                    data={"type": self.TYPE, "host": _host.name, "ref": Reference.host(_host.name)})
+
+	ATTRIBUTES = VMElement.ATTRIBUTES.copy()
+	ATTRIBUTES.update({
+		"tech": StatefulAttribute(get=lambda self: self.get_tech_attribute(), label="Tech", set=modify_tech, writableStates=[ST_CREATED], schema=schema.Identifier())
+	})
 
 class VMInterface(Element):
 	"""
@@ -261,11 +317,15 @@ class VMInterface(Element):
 	def mainElement(self):
 		return self.element
 
+	@property
+	def _create_type(self):
+		return self.TYPE
+
 	def _create(self):
 		parEl = self.parent.element
 		assert parEl
 		attrs = self._remoteAttrs
-		self.element = parEl.createChild(self.TYPE, attrs=attrs, ownerElement=self)
+		self.element = parEl.createChild(self._create_type, attrs=attrs, ownerElement=self)
 		self.save()
 		
 	def _remove(self, recurse=None):
@@ -286,6 +346,30 @@ class VMInterface(Element):
 	ACTIONS = Element.ACTIONS.copy()
 	ACTIONS.update({
 		Entity.REMOVE_ACTION: StatefulAction(Element._remove, check=Element.checkRemove, allowedStates=[ST_CREATED, ST_PREPARED])
+	})
+
+
+class MultiTechVMInterface(VMInterface):
+	TECHS = []
+
+	def get_tech_attribute(self):
+		if self.parent:
+			parent_tech = self.parent.get_tech_attribute()
+		else:
+			parent_tech = None
+
+		if parent_tech:
+			return TypeTechTrans.TECH_TO_CHILD_TECH[parent_tech]
+		else:
+			return None
+
+	@property
+	def _create_type(self):
+		return self.get_tech_attribute()
+
+	ATTRIBUTES = VMInterface.ATTRIBUTES.copy()
+	ATTRIBUTES.update({
+		"tech": Attribute(get=lambda self: self.get_tech_attribute(), label="Tech", readOnly=True, schema=schema.Identifier()),
 	})
 
 

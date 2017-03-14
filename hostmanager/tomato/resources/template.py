@@ -24,12 +24,12 @@ from ..lib.newcmd import aria2
 from ..lib.newcmd.util import fs
 from ..lib.error import UserError, InternalError #@UnresolvedImport
 import os, threading
-from ..lib.constants import TypeName
+from ..lib.constants import TypeName,TechName
 
 PATTERNS = {
-	TypeName.KVMQM: "%s.qcow2",
-	TypeName.KVM: "%s.qcow2",
-	TypeName.OPENVZ: "%s.tar.gz",
+	TechName.KVMQM: "%s.qcow2",
+	TechName.KVM: "%s.qcow2",
+	TechName.OPENVZ: "%s.tar.gz",
 	TypeName.REPY: "%s.repy",
 }
 
@@ -63,11 +63,11 @@ class Template(resources.Resource):
 		resources.Resource.init(self, *args, **kwargs)
 
 	def fetch(self, detached=False):
-		if self.ready is True:
+		path = self.getPath()
+		if self.ready and os.path.exists(path):
 			return
 		if detached:
 			return threading.Thread(target=self.fetch).start()
-		path = self.getPath()
 		aria2.download(self.urls, path)
 		self.ready = True
 		self.save()

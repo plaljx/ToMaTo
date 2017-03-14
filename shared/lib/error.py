@@ -54,12 +54,13 @@ class Error(Exception):
 	TYPE = "general"
 	UNKNOWN = None
 
-	def __init__(self, code=None, message=None, data=None, type=None, todump=None, module=MODULE, httpcode=None, onscreenmessage=None, frame=None, frame_trace=None, trace=None):
+	def __init__(self, code=None, message=None, data=None, type=None, todump=None, module=MODULE, httpcode=None, onscreenmessage=None, frame=None, frame_trace=None, trace=None, wasdumped=False):
 		self.type = type or self.TYPE
 		self.code = code
 		self.message = message
 		self.data = data or {}
 		self.module = module
+		self.wasdumped = wasdumped
 		if trace is None:
 			self.trace = traceback.extract_stack()
 		else:
@@ -188,6 +189,7 @@ class InternalError(Error):
 	CONFIGURATION_ERROR = "configuration_error"
 	RESOURCE_ERROR = "resource_error"
 	ASSERTION = "assertion"
+	DEPRECATED_CODE = "deprecated_code"
 
 @ErrorType
 class UserError(Error):

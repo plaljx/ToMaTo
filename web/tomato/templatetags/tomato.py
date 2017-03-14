@@ -5,11 +5,14 @@ from django import template
 from ..lib import getVersion, serverInfo, security_token
 from django.utils.safestring import mark_safe
 from ..lib import anyjson as json
-from ..lib.reference_library import tech_to_label as lib_tech_to_label
 
 from ..lib.settings import get_settings
 from .. import settings as config_module
 settings = get_settings(config_module)
+
+from ..lib.constants import TypeName, TechName
+ONSCREEN_TYPESTECHS = TypeName.ONSCREEN
+ONSCREEN_TYPESTECHS.update(TechName.ONSCREEN)
 
 register = template.Library()
 
@@ -30,7 +33,7 @@ def externalurl(name):
 
 @register.filter
 def tech_to_label(value):
-	return lib_tech_to_label(value)
+	return ONSCREEN_TYPESTECHS.get(value, value)
 	
 @register.simple_tag
 def backend_version():
@@ -57,6 +60,10 @@ def absolute(value):
 	if value<0:
 		return -value
 	return value
+
+@register.filter
+def typetech_onscreen(value):
+	return sorted([ONSCREEN_TYPESTECHS.get(v, v) for v in value])
 	
 @register.filter
 def mult(value, arg):
