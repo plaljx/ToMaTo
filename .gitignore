@@ -29,7 +29,9 @@ docs/presentations
 cli/ovz
 docs/static/doc
 cli/tests/backend/old
-docker
-docker.bak
-web/tomato/static
-.idea
+
+########
+
+# docker
+# docker.bak
+# web/tomato/static
