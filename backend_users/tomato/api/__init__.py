@@ -16,3 +16,5 @@ from user import user_create, user_exists, user_info, user_list, user_modify, us
 from misc import statistics
 
 from hierarchy import object_exists, object_parents, objects_available
+
+from group import group_create, group_remove, group_modify, group_list, group_info, group_exists

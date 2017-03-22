@@ -245,6 +245,18 @@ urlpatterns = patterns('',
     url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
     # (r'^fight/$', 'tomato.finght.start'),
 
+    #add by Nong Caihua at 2016.12.29
+    (r'^ajax/element/(?P<element_id>\w{24})/traffic_create$' , 'tomato.ajax.traffic_create'),
+    (r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
+    (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
+
+	# Group
+	url(r'^group/$', 'tomato.admin.group.list_', name='group_list'),
+	url(r'^group/add$', 'tomato.admin.group.add', name='group_add'),
+	url(r'^group/(?P<name>\w+)$', 'tomato.admin.group.info', name='group_info'),
+	url(r'^group/(?P<name>\w+)/edit$', 'tomato.admin.group.edit', name='group_edit'),
+	url(r'^group/(?P<name>\w+)/remove$', 'tomato.admin.group.remove', name='group_remove'),
+
 )
 urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )
 

@@ -198,6 +198,7 @@ head.appendChild(style);
 										<li><a href="{%url "account_list_all"%}">{%trans 'All accounts'%}</a></li>
 										<li><a href="{%url "account_list_registrations"%}">{%trans 'Pending account registrations'%}</a></li>
 										<li><a href="{%url "tomato.account.announcement_form"%}">{% trans 'Broadcast new announcement'%}</a></li>
+										<li><a href="{%url 'group_list'%}">{% trans 'Group List' %}</a></li>
 									</ul>
 							</li>
 							{% endif %}
@@ -263,8 +264,8 @@ head.appendChild(style);
 	       		</div>
        		</div>
       	</div>
-        
-        
+
+
       	<div class = "right_col row" id="r">
       	<div class = "nav_menu">
             <!-- <button type="button" class="btn btn-default" id="menu_toggle">

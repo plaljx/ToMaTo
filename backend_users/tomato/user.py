@@ -67,10 +67,12 @@ class User(Entity, BaseDocument):
 	:type notifications: list of Notification
 	"""
 	from .organization import Organization
+	from .group import Group
 	from .quota import Quota
 
 	name = StringField(required=True)
 	organization = ReferenceField(Organization, required=True, reverse_delete_rule=DENY)
+	group = ReferenceField(Group,required=False ,reverse_delete_rule=DENY)
 	password = StringField(required=True)
 	lastLogin = FloatField(db_field='last_login', required=True)
 	quota = EmbeddedDocumentField(Quota, required=True)
@@ -171,6 +173,17 @@ class User(Entity, BaseDocument):
 		orga = Organization.get(val)
 		UserError.check(orga, code=UserError.ENTITY_DOES_NOT_EXIST, message="Organization with that name does not exist", data={"name": val})
 		self.organization = orga
+
+	def modify_group(self, val):
+		from .group import Group
+		group = Group.get(val)
+		UserError.check(group, code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist", data={"name": val})
+		self.group = group
+
+	def get_group(self):
+		if self.group is None:
+			return None
+		return self.group.name
 
 	def modify_quota(self, val):
 		self.quota.modify(val)
@@ -291,6 +304,7 @@ class User(Entity, BaseDocument):
 		"email": Attribute(field=email, schema=schema.Email()),
 		"flags": Attribute(field=flags, set=modify_flags),
 		"organization": Attribute(get=lambda self: self.organization.name, set=modify_organization),
+		"group": Attribute(get=get_group, set=modify_group),
 		"quota": Attribute(get=lambda self: self.quota.info(), set=modify_quota),
 		"notification_count": Attribute(get=lambda self: len(filter(lambda n: not n.read, self.notifications))),
 		"last_login": Attribute(get=lambda self: self.lastLogin),
