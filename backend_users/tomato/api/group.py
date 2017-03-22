@@ -1,0 +1,39 @@
+from ..group import Group
+from ..user import User
+from _shared import _getGroup
+from ..lib.error import UserError
+
+
+def group_exists(name):
+	if Group.get(name):
+		return True
+	return False
+
+
+def group_create(args):
+	# UserError.check(not group_exists(name), code=UserError.ALREADY_EXISTS, message="Group with that name already exists", data={"name": name})
+	# args['name'] = name
+	group = Group.create(**args)
+	return group.info()
+
+
+def group_list(organization=None):
+	# TODO: organization filter
+	return [g.info() for g in Group.objects.all()]
+
+
+def group_info(name):
+	group = _getGroup(name)
+	return group.info()
+
+
+def group_modify(name, args):
+	group = _getGroup(name)
+	group.modify(**args)
+	return group.info()
+
+
+def group_remove(name):
+	group = _getGroup(name)
+	group.remove()
+	return True

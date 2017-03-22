@@ -19,3 +19,4 @@ from .user import User
 from .quota import Quota
 from .organization import Organization
 from .db import DataEntry
+from .group import Group
