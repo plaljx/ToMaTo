@@ -1,6 +1,7 @@
 from ..user import User
 from ..lib.error import UserError
 from ..organization import Organization
+from ..group import Group
 
 def _getOrganization(name):
 	o = Organization.get(name)
@@ -11,3 +12,8 @@ def _getUser(name, include_notifications=True):
 	u = User.get(name, include_notifications=include_notifications)
 	UserError.check(u, code=UserError.ENTITY_DOES_NOT_EXIST, message="User with that name does not exist", data={"name": name})
 	return u
+
+def _getGroup(name):
+	g = Group.get(name)
+	UserError.check(g, code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist", data={"name": name})
+	return g
