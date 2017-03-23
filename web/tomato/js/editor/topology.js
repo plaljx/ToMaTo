@@ -379,7 +379,7 @@ var Topology = Class.extend({
 	},
 	action_destroy: function() {
 		var t = this;
-		if (this.editor.options.safe_mode && !confirm("Are you sure you want to completely destroy this topology?")) return;
+		if (this.editor.options.safe_mode && !confirm(gettext("Are you sure you want to completely destroy this topology?"))) return;
 		this.action_delegate("stop", {
 			callback: function(){
 				t.action_delegate("destroy", {noask: true});
@@ -387,7 +387,7 @@ var Topology = Class.extend({
 		});
 	},
 	remove: function() {
-		if (this.editor.options.safe_mode && !confirm("Are you sure you want to completely remove this topology?")) return;
+		if (this.editor.options.safe_mode && !confirm(gettext("Are you sure you want to completely remove this topology?"))) return;
 		var t = this;
 		var removeTopology = function() {
 			t.editor.triggerEvent({component: "topology", object: t, operation: "remove", phase: "begin"});
@@ -580,7 +580,7 @@ var Topology = Class.extend({
 				label: "New timeout",
 				choices: choices,
 				value: timeout_settings["default"],
-				help_text: "After this time, your topology will automatically be stopped. Timeouts can be extended regularly to allow your topology to run longer without interruptions. You will receive a warning before your topology is stopped."
+				help_text: gettext("After this time, your topology will automatically be stopped. Timeouts can be extended regularly to allow your topology to run longer without interruptions. You will receive a warning before your topology is stopped.")
 			}));
 		} else {
 			dialog.addText("<div>You do not have permissions to renew this topology. Please contact a topology owner or manager to renew.</div>")
@@ -644,7 +644,7 @@ var Topology = Class.extend({
         name = dialog.add(new TextElement({
             name: "name",
             label: "Name",
-            help_text: "The name of your scenario",
+            help_text: gettext("The name of your scenario"),
             onChangeFct: function() {
                 // TODO: name inspection ineffective?
                 if(this.value == '') {
@@ -657,14 +657,14 @@ var Topology = Class.extend({
         description = dialog.add(new TextAreaElement({
             name: "description",
             label: "Description",
-            help_text: "The text description of your scenario.",
+            help_text: gettext("The text description of your scenario."),
         }));
         accessibility = dialog.add(new ChoiceElement({
             name: "accessibility",
             label: "Accessibility",
             // value: choices[0],
             choices: choices,
-            help_text: "Whether other users can use the scenario."
+            help_text: gettext("Whether other users can use the scenario.")
         }));
 
         dialog.show();
@@ -722,12 +722,12 @@ var Topology = Class.extend({
 			label: "Timeout",
 			choices: choices,
 			value: timeout_settings["default"],
-			help_text: "After this time, your topology will automatically be stopped. Timeouts can be extended arbitrarily."
+			help_text: gettext("After this time, your topology will automatically be stopped. Timeouts can be extended arbitrarily.")
 		}));
 		description = dialog.add(new TextAreaElement({
 			name: "description",
 			label: "Description",
-			help_text: "Description of the experiment. (Optional)",
+			help_text: gettext("Description of the experiment. (Optional)"),
 			value: t.data._notes
 		}));
 		dialog.show();
@@ -769,7 +769,7 @@ var Topology = Class.extend({
 			}
 			maxCount = Math.max(maxCount, count);
 		}
-		if (maxCount > this.loop_last_warn) showError("Network segments must not contain multiple external network exits! This could lead to loops in the network and result in a total network crash.");
+		if (maxCount > this.loop_last_warn) showError(gettext("Network segments must not contain multiple external network exits! This could lead to loops in the network and result in a total network crash."));
 		this.loop_last_warn = maxCount;
 	},
 	colorNetworkSegments: function(segments) {

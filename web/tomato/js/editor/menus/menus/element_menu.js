@@ -26,7 +26,7 @@ var createElementMenu = function(obj) {
 			items: {
 				"header": header,
 				"busy_indicator": {
-					name:'Please wait for the current action to finish and re-open this menu.',
+					name:gettext('Please wait for the current action to finish and re-open this menu.'),
 					icon:'loading'
 				}
 			}
@@ -37,35 +37,35 @@ var createElementMenu = function(obj) {
 			items: {
 				"header": header,
 				"connect": obj.isConnectable() ? {
-					name:'Connect',
+					name:gettext('Connect'),
 					icon:'connect',
 					callback: function(){
 						obj.editor.onElementConnectTo(obj);
 					}
 				} : null,
 				"start": obj.actionEnabled("start") ? {
-					name:'Start',
+					name:gettext('Start'),
 					icon:'start',
 					callback: function(){
 						obj.action_start();
 					}
 				} : null,
 				"stop": obj.actionEnabled("stop") ? {
-					name:"Stop",
+					name:gettext("Stop"),
 					icon:"stop",
 					callback: function(){
 						obj.action_stop();
 					}
 				} : null,
 				"prepare": obj.actionEnabled("prepare") ? {
-					name:"Prepare",
+					name:gettext("Prepare"),
 					icon:"prepare",
 					callback: function(){
 						obj.action_prepare();
 					}
 				} : null,
 				"destroy": obj.actionEnabled("destroy") ? {
-					name:"Destroy",
+					name:gettext("Destroy"),
 					icon:"destroy",
 					callback: function(){
 						obj.action_destroy();
@@ -74,7 +74,7 @@ var createElementMenu = function(obj) {
 				"sep2": (obj.actionEnabled("destroy") || obj.actionEnabled("prepared") || obj.actionEnabled("start")) ? "---"
 				: null,
 				"console": obj.consoleAvailable() || obj.actionEnabled("download_log_grant") ? {
-					name:"Console",
+					name:gettext("Console"),
 					icon:"console",
 					items: {
 						"console_novnc": obj.consoleAvailable() && obj.data.websocket_pid ? {
@@ -107,7 +107,7 @@ var createElementMenu = function(obj) {
 						} : null,
 						"sepconsole": obj.actionEnabled("download_log_grant") && obj.consoleAvailable() ? "---" : null,
 						"log": obj.actionEnabled("download_log_grant") ? {
-							name:"Download Log",
+							name:gettext("Download Log"),
 							icon:"console_download",
 							callback: function(){
 								obj.downloadLog();
@@ -116,46 +116,46 @@ var createElementMenu = function(obj) {
 					}
 				} : null,
 				"used_addresses": obj.data.used_addresses ? {
-					name:"Used addresses",
+					name:gettext("Used addresses"),
 					icon:"info",
 					callback: function(){
 						obj.showUsedAddresses();
 					}
 				} : null,
 				"usage": {
-					name:"Resource usage",
+					name:gettext("Resource usage"),
 					icon:"usage",
 					callback: function(){
 						obj.showUsage();
 					}
 				},
 				"disk_image": (obj.actionEnabled("download_grant") || obj.actionEnabled("upload_grant")) || obj.actionEnabled("change_template") ? { 
-					name: "Disk image",
+					name: gettext("Disk image"),
 					icon: "drive",
 					items: {
 						"change_template": obj.actionEnabled("change_template") ? {
-							name:"Change Template",
+							name:gettext("Change Template"),
 							icon:"edit",
 							callback: function() {
 								obj.showTemplateWindow();
 							}
 						} : null,
 						"download_image": obj.actionEnabled("download_grant") ? {
-							name:"Download image",
+							name:gettext("Download image"),
 							icon:"download",
 							callback: function(){
 								obj.downloadImage();
 							}
 						} : null,
 						"upload_image_file": obj.actionEnabled("upload_grant") ? {
-							name:"Upload custom image from disk",
+							name:gettext("Upload custom image from disk"),
 							icon:"upload_file",
 							callback: function(){
 								obj.uploadImage_fromFile();
 							}
 						} : null,
 						"upload_image_url": (obj.actionEnabled("upload_grant") && editor.web_resources.executable_archives.length > 0) ? {
-							name:"Upload custom image from URL",
+							name:gettext("Upload custom image from URL"),
 							icon:"upload_url",
 							callback: function(){
 								obj.uploadImage_byURL();
@@ -164,11 +164,11 @@ var createElementMenu = function(obj) {
 					}
 				} : null,
 				"rextfv": obj.actionEnabled("rextfv_download_grant") || obj.actionEnabled("rextfv_upload_grant") || obj.rextfvStatusSupport() ? {
-					name:"Executable archive",
+					name:gettext("Executable archive"),
 					icon:"rextfv",
 					items: {
 						"download_rextfv": obj.actionEnabled("rextfv_download_grant") ? {
-							name:"Download Archive",
+							name:gettext("Download Archive"),
 							icon:"download",
 							callback: function(){
 								obj.downloadRexTFV();
@@ -176,21 +176,21 @@ var createElementMenu = function(obj) {
 						} : null,
 						"sep2": obj.actionEnabled("rextfv_upload_grant") && obj.actionEnabled("rextfv_download_grant") ? "---" : null,
 						"upload_rextfv_file": obj.actionEnabled("rextfv_upload_grant") ? {
-							name:"Upload Archive from Disk",
+							name:gettext("Upload Archive from Disk"),
 							icon:"upload_file",
 							callback: function(){
 								obj.uploadRexTFV_fromFile();
 							}
 						} : null,
 						"upload_rextfv_url": obj.actionEnabled("rextfv_upload_grant") ? {
-							name:"Upload Archive from URL",
+							name:gettext("Upload Archive from URL"),
 							icon:"upload_url",
 							callback: function(){
 								obj.uploadRexTFV_byURL();
 							}
 						} : null,
 						"upload_rextfv_default": obj.actionEnabled("rextfv_upload_grant") ? {
-							name:"Use a Default Archive",
+							name:gettext("Use a Default Archive"),
 							icon:"upload_defaultrextfv",
 							callback: function(){
 								obj.uploadRexTFV_fromDefault();
@@ -198,7 +198,7 @@ var createElementMenu = function(obj) {
 						} : null,
 						"sep2": obj.actionEnabled("rextfv_upload_grant") && obj.rextfvStatusSupport() ? "---" : null,
 						"rextfv_status": obj.rextfvStatusSupport() ? {
-							name:"Status",
+							name:gettext("Status"),
 							icon:"info",
 							callback: function(){
 								obj.openRexTFVStatusWindow();
@@ -208,21 +208,21 @@ var createElementMenu = function(obj) {
 				} : null,
 				"sep3": "---",
 				"configure": {
-					name:'Configure',
+					name:gettext('Configure'),
 					icon:'configure',
 					callback:function(){
 						obj.showConfigWindow(true);
 					}
 				},
 				"traffic_customize" : obj.trafficAvailable() ? {
-					name:"Traffic Customize",
+					name:gettext("Traffic Customize"),
 					icon:"configure",
 					callback:function(){
 						obj.showTrafficWindow();
 					}
 				}:null,
 				"debug": obj.editor.options.debug_mode ? {
-					name:'Debug',
+					name:gettext('Debug'),
 					icon:'debug',
 					callback: function(){
 						obj.showDebugInfo();
@@ -230,7 +230,7 @@ var createElementMenu = function(obj) {
 				} : null,
 				"sep4": "---",
 				"remove": obj.isRemovable() ? {
-					name:'Delete',
+					name:gettext('Delete'),
 					icon:'remove',
 					callback: function(){
 						obj.remove(null, true);

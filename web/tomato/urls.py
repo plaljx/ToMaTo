@@ -22,10 +22,20 @@ if DJANGO_VERSION < (1,6):
 else:
     from django.conf.urls import patterns, url, include
 
+from django.views.i18n import javascript_catalog
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+js_info_dict = {
+	'domain': 'djangojs',
+    'packages': ('django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sites',
+	'tomato.crispy_forms',
+	'tomato'),
+}
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = patterns('',
 	(r'^$', 'tomato.main.index'),
@@ -73,7 +83,6 @@ urlpatterns = patterns('',
 	(r'^tutorial$', 'tomato.tutorial.list'),
 	(r'^tutorial/start$', 'tomato.tutorial.start'),
 	(r'^connection/(?P<id>\w{24})/usage$', 'tomato.usage.connection'),
-	(r'^connection/(?P<id>\w{24})/link$', 'tomato.topology.connection_stats'),
 	(r'^element/(?P<id>\w{24})/usage$', 'tomato.usage.element'),
 	(r'^element/(?P<id>\w{24})/rextfv_status$', 'tomato.element.rextfv_status'),
 	(r'^element/(?P<id>\w{24})/console$', 'tomato.element.console'),
@@ -232,5 +241,8 @@ urlpatterns = patterns('',
     url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
     url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
     url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
+    # (r'^fight/$', 'tomato.finght.start'),
 
 )
+urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )
+

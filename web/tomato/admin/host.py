@@ -41,14 +41,16 @@ from ..lib import wrap_rpc
 from . import AddEditForm, RemoveConfirmForm, append_empty_choice, \
 	site_name_list
 
+from django.utils.translation import ugettext_lazy as _
+
 
 class HostForm(AddEditForm):
-	name = forms.CharField(max_length=255, help_text="The host's name. This is also its unique id.")
-	address = forms.CharField(max_length=255, help_text="The host's IP address.")
-	rpcurl = forms.CharField(max_length=255, help_text="The host's RPC url.")
-	site = forms.CharField(max_length=50, help_text="The site this host belongs to.")
-	enabled = forms.BooleanField(initial=True, required=False, help_text="Whether this host is enabled.")
-	description = forms.CharField(widget=forms.Textarea, label="Description", required=False)
+	name = forms.CharField(max_length=255, help_text=_("The host's name. This is also its unique id."))
+	address = forms.CharField(max_length=255, help_text=_("The host's IP address."))
+	rpcurl = forms.CharField(max_length=255, help_text=_("The host's RPC url."))
+	site = forms.CharField(max_length=50, help_text=_("The site this host belongs to."))
+	enabled = forms.BooleanField(initial=True, required=False, help_text=_("Whether this host is enabled."))
+	description = forms.CharField(widget=forms.Textarea, label=_("Description"), required=False)
 
 	buttons = Buttons.cancel_add
 

@@ -32,6 +32,8 @@ from django.core.urlresolvers import reverse
 
 from lib.error import UserError #@UnresolvedImport
 
+from django.utils.translation import ugettext_lazy as _
+
 techs = [{"name": t, "label": TypeName.ONSCREEN.get(t, t)} for t in [TypeName.FULL_VIRTUALIZATION, TypeName.CONTAINER_VIRTUALIZATION, TypeName.REPY]]
 
 techs_dict = dict([(t["name"], t["label"]) for t in techs])
@@ -56,25 +58,25 @@ def dateToTimestamp(date):
 	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 class TemplateForm(BootstrapForm):
-	label = forms.CharField(max_length=255, help_text="The displayed label for this template")
+	label = forms.CharField(max_length=255, help_text=_("The displayed label for this template"))
 	subtype = forms.CharField(max_length=255, required=False)
 	description = forms.CharField(widget = forms.Textarea, required=False)
-	preference = forms.IntegerField(label="Preference", help_text="Sort templates in the editor (higher preference first). The template with highest preference will be the default. Must be an integer number.")
-	restricted = forms.BooleanField(label="Restricted", help_text="Restrict usage of this template to administrators", required=False)
-	nlXTP_installed = forms.BooleanField(label="nlXTP Guest Modules installed", help_text="Ignore this for Repy devices.", required=False)
+	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort templates in the editor (higher preference first). The template with highest preference will be the default. Must be an integer number."))
+	restricted = forms.BooleanField(label=_("Restricted"), help_text=_("Restrict usage of this template to administrators"), required=False)
+	nlXTP_installed = forms.BooleanField(label=_("nlXTP Guest Modules installed"), help_text=_("Ignore this for Repy devices."), required=False)
 	creation_date = forms.DateField(required=False,widget=forms.TextInput(attrs={'class': 'datepicker'}))
-	show_as_common = forms.BooleanField(label="Show in Common Elements", help_text="Show this template in the common elements section in the editor", required=False)
-	icon = forms.URLField(label="Icon", help_text="URL of a 32x32 icon to use for elements of this template, leave empty to use the default icon", required=False)
-	kblang = forms.CharField(max_length=50,label="Keyboard Layout",widget = forms.widgets.Select(choices=kblang_options), help_text="Only for full-virtualization templates", required=False)
-	urls = forms.CharField(widget = forms.Textarea, required=True, help_text="URLs that point to the template's image file. Enter one or more URLs; one URL per line.")
-	customize = forms.CharField(max_length =50,label="Customize Function",widget=forms.widgets.Select(choices=customize_options),help_text="Only chose when you customize the template",required=False)
+	show_as_common = forms.BooleanField(label=_("Show in Common Elements"), help_text=_("Show this template in the common elements section in the editor"), required=False)
+	icon = forms.URLField(label=_("Icon"), help_text=_("URL of a 32x32 icon to use for elements of this template, leave empty to use the default icon"), required=False)
+	kblang = forms.CharField(max_length=50,label=_("Keyboard Layout"),widget = forms.widgets.Select(choices=kblang_options), help_text=_("Only for full-virtualization templates"), required=False)
+	urls = forms.CharField(widget = forms.Textarea, required=True, help_text=_("URLs that point to the template's image file. Enter one or more URLs; one URL per line."))
+	customize = forms.CharField(max_length =50,label=_("Customize Function"),widget=forms.widgets.Select(choices=customize_options),help_text=_("Only chose when you customize the template"),required=False)
 	def __init__(self, *args, **kwargs):
 		super(TemplateForm, self).__init__(*args, **kwargs)
 		self.fields['creation_date'].initial=datetime.date.today()
 		self.fields['kblang'].initial="en_US"
 	
 class AddTemplateForm(TemplateForm):
-	name = forms.CharField(max_length=50,label="Internal Name", help_text="Must be unique for all profiles. Cannot be changed. Not displayed.")
+	name = forms.CharField(max_length=50,label=_("Internal Name"), help_text=_("Must be unique for all profiles. Cannot be changed. Not displayed."))
 	tech = forms.CharField(max_length=255,widget = forms.widgets.Select(choices=techs_choices()))
 	def __init__(self, *args, **kwargs):
 		super(AddTemplateForm, self).__init__(*args, **kwargs)
@@ -196,12 +198,12 @@ def add(api, request, tech=None):
 			res = api.template_create(formData['tech'], formData['name'], attrs)
 			return HttpResponseRedirect(reverse("tomato.template.info", kwargs={"res_id": res["id"]}))
 		else:
-			return render(request, "form.html", {'form': form, "heading":"Add Template"})
+			return render(request, "form.html", {'form': form, "heading":_("Add Template")})
 	else:
 		form = AddTemplateForm()
 		if tech:
 			form.fields['tech'].initial = tech
-		return render(request, "form.html", {'form': form, "heading":"Add Template", 'hide_errors':True})
+		return render(request, "form.html", {'form': form, "heading":_("Add Template"), 'hide_errors':True})
 
 @wrap_rpc
 def remove(api, request, res_id=None):

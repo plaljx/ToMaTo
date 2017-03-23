@@ -1,4 +1,3 @@
-
 var Template = Class.extend({
 	init: function(options) {
 		this.classoptions = options;

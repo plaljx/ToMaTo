@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
@@ -42,11 +43,11 @@
 <form>
     <button type="submit" formaction="{%url 'scenario_list'%}" class="btn btn-primary" style="float:right;">
         <span class="glyphicon glyphicon-list"></span>
-        All Scenarios
+        {%trans 'All Scenarios'%}
     </button>
 </form>
 
-<h1>Scenario '{{scenario.name}}'</h1>
+<h1>{%trans 'Scenario'%} '{{scenario.name}}'</h1>
 
 <div class="skip-sm"></div>
 
@@ -54,31 +55,31 @@
 
 <table class="table" id="content">
     <tr>
-        <th>ID:</th>
+        <th>{%trans 'ID'%}:</th>
         <td>{{ scenario.id }}</td>
     </tr>
     <tr>
-        <th>Name:</th>
+        <th>{%trans 'Name'%}:</th>
         <th>{{ scenario.name }}</th>
     </tr>
     <tr>
-        <th>Description:</th>
+        <th>{%trans 'Description'%}:</th>
         <th>{{ scenario.description }}</th>
     </tr>
     <tr>
-        <th>Accessibility:</th>
+        <th>{%trans 'Accessibility'%}:</th>
         <th>{{ scenario.accessibility }}</th>
     </tr>
     <tr>
-        <th>Author:</th>
+        <th>{%trans 'Author'%}:</th>
         <th>{{ scenario.author }}</th>
     </tr>
     <tr>
-        <th>Creation Time:</th>
+        <th>{%trans 'Creation Time'%}:</th>
         <th>{{ scenario.create_time }}</th>
     </tr>
     <tr>
-        <th>Topology Info:</th>
+        <th>{%trans 'topology Info'%}:</th>
         <th>
             <label style="width: 80%; height: 30em">
                 <textarea style="width: 100%; height: 30em">
@@ -98,28 +99,28 @@
 
     <button type="submit" onclick="showTopology('{{ scenario.id }}'); return false" class="btn btn-default">
         <span class="glyphicon glyphicon-info-sign"></span>
-        topology info
+        {%trans 'topology info'%}
     </button>
     <button type="submit" formaction="{%url 'scenario_upload_topo' scenario.id %}" class="btn btn-default">
         <span class="glyphicon glyphicon-upload"></span>
-        upload topo
+        {%trans 'upload topo'%}
     </button>
     <button type="submit" formaction="{%url 'scenario_download_topo' scenario.id %}" class="btn btn-default">
         <span class="glyphicon glyphicon-download"></span>
-        download topo
+        {%trans 'download topo'%}
     </button>
 
     <button type="submit" formaction="{%url 'scenario_deploy' scenario.id %}" class="btn btn-primary">
         <span class="glyphicon glyphicon-cog"></span>
-        deploy scenario
+        {%trans 'deploy scenario'%}
     </button>
     <button type="submit" formaction="{%url 'scenario_edit' scenario.id %}" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>
-        edit scenario
+        {%trans 'edit scenario'%}
     </button>
     <button type="submit" formaction="{%url 'scenario_remove' scenario.id %}" class="btn btn-danger">
         <span class="glyphicon glyphicon-trash"></span>
-        remove scenario
+        {%trans 'remove scenario'%}
     </button>
 
 </form>

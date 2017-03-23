@@ -31,12 +31,14 @@ from lib.error import UserError #@UnresolvedImport
 
 from tomato.crispy_forms.layout import Layout
 
+from django.utils.translation import ugettext_lazy as _
+
 class ProfileForm(BootstrapForm):
-	label = forms.CharField(max_length=255, help_text="The displayed label for this profile")
-	ram = forms.IntegerField(label="RAM (MB)")
-	preference = forms.IntegerField(label="Preference", help_text="Sort profiles in the editor (higher preference first). The profile with highest preference will be the default. Must be an integer number.")
-	restricted = forms.BooleanField(label="Restricted", help_text="Restrict usage of this profile to administrators", required=False)
-	tech = forms.ChoiceField(label="Tech",choices=techs_choices())
+	label = forms.CharField(max_length=255, help_text=_("The displayed label for this profile"))
+	ram = forms.IntegerField(label=_("RAM (MB)"))
+	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort profiles in the editor (higher preference first). The profile with highest preference will be the default. Must be an integer number."))
+	restricted = forms.BooleanField(label=_("Restricted"), help_text=_("Restrict usage of this profile to administrators"), required=False)
+	tech = forms.ChoiceField(label=_("Tech"),choices=techs_choices())
 	description = forms.CharField(widget = forms.Textarea, required=False)
 	def __init__(self, *args, **kwargs):
 		super(ProfileForm, self).__init__(*args, **kwargs)
@@ -102,9 +104,9 @@ class EditKVMqmForm(EditProfileForm):
 	
 	
 class AddProfileForm(ProfileForm):
-	name = forms.CharField(max_length=50,label="Internal Name", help_text="Must be unique for all profiles of the same tech. Cannot be changed. Not displayed.")
-	diskspace = forms.IntegerField(label="Disk Space (MB)", required = False, help_text="only OpenVZ and KVMqm")
-	cpus = forms.FloatField(label="number of CPUs", help_text="Repy, OpenVZ: float number; KVMqm: integer number")
+	name = forms.CharField(max_length=50,label=_("Internal Name"), help_text=_("Must be unique for all profiles of the same tech. Cannot be changed. Not displayed."))
+	diskspace = forms.IntegerField(label=_("Disk Space (MB)"), required = False, help_text=_("only OpenVZ and KVMqm"))
+	cpus = forms.FloatField(label=_("number of CPUs"), help_text=_("Repy, OpenVZ: float number; KVMqm: integer number"))
 	def __init__(self, *args, **kwargs):
 		super(AddProfileForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(add)
@@ -164,12 +166,12 @@ def add(api, request, tech=None):
 			res = api.profile_create(formData['tech'], formData['name'], data)
 			return HttpResponseRedirect(reverse("tomato.profile.info", kwargs={"res_id": res["id"]}))
 		else:
-			return render(request, "form.html", {'form': form, "heading":"Add Device Profile"})
+			return render(request, "form.html", {'form': form, "heading":_("Add Device Profile")})
 	else:
 		form = AddProfileForm()
 		if tech:
 			form.fields['tech'].initial = tech
-		return render(request, "form.html", {'form': form, "heading":"Add Device Profile"})
+		return render(request, "form.html", {'form': form, "heading":_("Add Device Profile")})
 
 @wrap_rpc
 def remove(api, request, res_id=None):

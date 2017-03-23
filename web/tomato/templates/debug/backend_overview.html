@@ -11,28 +11,13 @@
 <table class="sortable,filterable, table table-striped"><tbody>
 
 <tr>
-<!--<<<<<<< HEAD-->
-    <!--<th>{%trans 'Backend Module'%}</th>-->
-    <!--<th>{%trans 'Reachable'%}</th>-->
-<!--=======-->
-    <!--<th>Backend Module</th>-->
-    <!--<th>Known Problems</th>-->
-    <!--<th>Reachable</th>-->
-<!--&gt;>>>>>> glab_origin/master-->
     <th>{%trans 'Backend Module'%}</th>
-    <th>{%trans 'Reachable'%}</th>
     <th>{%trans 'Reachable'%}</th>
 </tr>
 
 {% for module_result in reachability_stats %}
     <tr>
         <td><a href="{%url "tomato.debug.stats" module_result.module%}">{{module_result.module}}</a></td>
-
-        <td>
-            {% if module_result.problems %}
-                {{module_result.problems}}
-            {% endif %}
-        </td>
 
         {% if module_result.reachable %}
             <td class="stddev_high good_high">Yes</td>

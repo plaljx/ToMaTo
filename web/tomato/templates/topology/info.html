@@ -114,7 +114,6 @@
 </div>
 
 <script language="JavaScript" type="text/javascript"> 
-
 	$(window).resize(function() {
 		var margin = ( $(this).width() > 1600 ) ? "{{editor.size.marginleft}}px" : "0px"
 	
@@ -142,7 +141,6 @@
 		{% else %}
 			tutorial_show:false,
 		{% endif %}
-
 		timeout_settings: {{timeout_settings|jsonify}},
 		sites: {{sites_json|safe}},
 		resources: {{res_json|safe}},

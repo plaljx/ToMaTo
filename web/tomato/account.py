@@ -40,6 +40,8 @@ from admin_common import BootstrapForm, ConfirmForm, RemoveConfirmForm, FixedLis
 from tomato.crispy_forms.layout import Layout
 from django.core.urlresolvers import reverse
 
+from django.utils.translation import ugettext_lazy as _
+
 from lib.settings import get_settings
 from . import settings as config_module
 settings = get_settings(config_module)
@@ -127,23 +129,23 @@ class AccountFlagCheckboxList(forms.widgets.CheckboxSelectMultiple):
 		self.choices = userflags.flags.items()
 	
 class AccountForm(BootstrapForm):
-	name = forms.CharField(label="Account name", max_length=50)
-	password = forms.CharField(label="Password", widget=forms.PasswordInput, required=False)
-	password2 = forms.CharField(label="Password (repeated)", widget=forms.PasswordInput, required=False)
+	name = forms.CharField(label=_("Account name"), max_length=50)
+	password = forms.CharField(label=_("Password"), widget=forms.PasswordInput, required=False)
+	password2 = forms.CharField(label=_("Password (repeated)"), widget=forms.PasswordInput, required=False)
 	organization = forms.CharField(max_length=50)
-	origin = forms.CharField(label="Origin", widget=forms.HiddenInput, required=False)
-	realname = forms.CharField(label="Full name")
+	origin = forms.CharField(label=_("Origin"), widget=forms.HiddenInput, required=False)
+	realname = forms.CharField(label=_("Full name"))
 	email = forms.EmailField()
 	flags = forms.MultipleChoiceField(required=False)
-	_reason = forms.CharField(widget = forms.Textarea, required=False, label="Reason for Registering")
-	send_mail = forms.BooleanField(label="Inform user", required=False, initial=True)
+	_reason = forms.CharField(widget = forms.Textarea, required=False, label=_("Reason for Registering"))
+	send_mail = forms.BooleanField(label=_("Inform user"), required=False, initial=True)
 	def __init__(self, api, *args, **kwargs):
 		super(AccountForm, self).__init__(*args, **kwargs)
 		self.fields["organization"].widget = forms.widgets.Select(choices=append_empty_choice(organization_name_list(api)))
 		
 	def clean_password(self):
 		if self.data.get('password') != self.data.get('password2'):
-			raise forms.ValidationError('Passwords are not the same')
+			raise forms.ValidationError(_('Passwords are not the same'))
 		return self.data.get('password')
 	
 	def clean(self, *args, **kwargs):
@@ -385,7 +387,7 @@ def register(api, request):
 					raise
 	else:
 		form = AdminAccountRegisterForm(api) if api.user else AccountRegisterForm(api) 
-	return render(request, "form.html", {"form": form, "heading":"Register New Account"})
+	return render(request, "form.html", {"form": form, "heading":_("Register New Account")})
 
 @wrap_rpc
 def reset_password(api, request, id):

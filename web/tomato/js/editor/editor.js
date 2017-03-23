@@ -238,11 +238,11 @@ var Editor = Class.extend({
 
 		var toggleGroup = new ToggleGroup();
 
-		var tab = this.menu.addTab("Home");
+		var tab = this.menu.addTab(gettext("Home"));
 
-		var group = tab.addGroup("Modes");
+		var group = tab.addGroup(gettext("Modes"));
 		this.selectBtn = Menu.button({
-			label: "Select & Move",
+			label: gettext("Select & Move"),
 			name: "Modes_SelectandMove",
 			icon: "img/select32.png",
 			toggle: true,
@@ -254,7 +254,7 @@ var Editor = Class.extend({
 		group.addElement(this.selectBtn);
 		group.addStackedElements([
 			Menu.button({
-				label: "Connect",
+				label: gettext("Connect"),
 				name: "Modes_Connect",
 				icon: "img/connect16.png",
 				toggle: true,
@@ -263,7 +263,7 @@ var Editor = Class.extend({
 				func: this.createModeFunc(Mode.connect)
 			}),
 			Menu.button({
-				label: "Delete",
+				label: gettext("Delete"),
 				name: "Modes_Delete",
 				icon: "img/eraser16.png",
 				toggle: true,
@@ -273,9 +273,9 @@ var Editor = Class.extend({
 			})
 		]);
 
-		var group = tab.addGroup("Topology control");
+		var group = tab.addGroup(gettext("Topology control"));
 		group.addElement(Menu.button({
-			label: "Start",
+			label: gettext("Start"),
 			icon: "img/start32.png",
 			toggle: false,
 			small: false,
@@ -284,7 +284,7 @@ var Editor = Class.extend({
 			}
 		}));
 		group.addElement(Menu.button({
-			label: "Stop",
+			label: gettext("Stop"),
 			icon: "img/stop32.png",
 			toggle: false,
 			small: false,
@@ -294,7 +294,7 @@ var Editor = Class.extend({
 		}));
 		group.addStackedElements([
 			Menu.button({
-				label: "Prepare",
+				label: gettext("Prepare"),
 				icon: "img/prepare16.png",
 				toggle: false,
 				small: true,
@@ -303,7 +303,7 @@ var Editor = Class.extend({
 				}
 			}),
 			Menu.button({
-				label: "Destroy",
+				label: gettext("Destroy"),
 				icon: "img/destroy16.png",
 				toggle: false,
 				small: true,
@@ -313,7 +313,7 @@ var Editor = Class.extend({
 			})
 		]);
 
-		var group = tab.addGroup("Common elements");
+		var group = tab.addGroup(gettext("Common elements"));
 		var common = t.templates.getCommon();
 		for (var i=0; i < common.length; i++) {
 			var tmpl = common[i];
@@ -352,7 +352,7 @@ var Editor = Class.extend({
 			}));
 		}
 
-		var tab = this.menu.addTab("Devices");
+		var tab = this.menu.addTab(gettext("Devices"));
 
 // <<<<<<< HEAD
 // 		var group = tab.addGroup("Linux (OpenVZ)");
@@ -431,10 +431,10 @@ var Editor = Class.extend({
 		}
 //>>>>>>> glab_origin/master
 
-		var group = tab.addGroup("Upload own images");
+		var group = tab.addGroup(gettext("Upload own images"));
 		group.addStackedElements([
 			Menu.button({
-				label: "Full Virtualization Image",
+				label: gettext("Full Virtualization Image"),
 				name: "kvm-custom",
 				icon: "img/full32.png",
 				toggle: true,
@@ -443,7 +443,7 @@ var Editor = Class.extend({
 				func: this.createPositionElementFunc(this.createUploadFunc("full"))
 			}),
 			Menu.button({
-				label: "Container-Based Virtualization Image",
+				label: gettext("Container-Based Virtualization Image"),
 				name: "openvz-custom",
 				icon: "img/container32.png",
 				toggle: true,
@@ -452,7 +452,7 @@ var Editor = Class.extend({
 				func: this.createPositionElementFunc(this.createUploadFunc("container"))
 			}),
 			Menu.button({
-				label: "Repy script",
+				label: gettext("Repy script"),
 				name: "repy-custom",
 				icon: "img/repy32.png",
 				toggle: true,
@@ -463,11 +463,11 @@ var Editor = Class.extend({
 		]);
 
 
-		var tab = this.menu.addTab("Network");
+		var tab = this.menu.addTab(gettext("Network"));
 
-		var group = tab.addGroup("VPN Elements");
+		var group = tab.addGroup(gettext("VPN Elements"));
 		group.addElement(Menu.button({
-			label: "Switch (Tinc)",
+			label: gettext("Switch (Tinc)"),
 			name: "tinc-switch",
 			icon: "img/switch32.png",
 			toggle: true,
@@ -479,7 +479,7 @@ var Editor = Class.extend({
 			}))
 		}));
 		group.addElement(Menu.button({
-			label: "Hub (Tinc)",
+			label: gettext("Hub (Tinc)"),
 			name: "tinc-hub",
 			icon: "img/hub32.png",
 			toggle: true,
@@ -491,7 +491,7 @@ var Editor = Class.extend({
 			}))
 		}));
 		group.addElement(Menu.button({
-			label: "Switch (VpnCloud)",
+			label: gettext("Switch (VpnCloud)"),
 			name: "vpncloud-switch",
 			icon: "img/switch32.png",
 			toggle: true,
@@ -502,9 +502,9 @@ var Editor = Class.extend({
 			}))
 		}));
 
-		var group = tab.addGroup("Scripts (Repy)");
+		var group = tab.addGroup(gettext("Scripts (Repy)"));
 		group.addElement(Menu.button({
-			label: "Custom script",
+			label: gettext("Custom script"),
 			name: "repy-custom",
 			icon: "img/repy32.png",
 			toggle: true,
@@ -523,7 +523,7 @@ var Editor = Class.extend({
 		}));
 		group.addStackedElements(btns);
 
-		var group = tab.addGroup("Networks");
+		var group = tab.addGroup(gettext("Networks"));
 		var common = t.networks.getAllowed();
 		var buttonstack = [];
 		for (var i=0; i < common.length; i++) {
@@ -557,10 +557,10 @@ var Editor = Class.extend({
 
 		var tab = this.menu.addTab("Topology");
 
-		var group = tab.addGroup("Functions");
+		var group = tab.addGroup(gettext("Functions"));
 
 		group.addElement(Menu.button({
-			label: "Consoles (NoVNC)",
+			label: gettext("Consoles (NoVNC)"),
 			icon: "img/console32.png",
 			toggle: false,
 			small: false,
@@ -569,7 +569,7 @@ var Editor = Class.extend({
 			}
 		}));
 		group.addElement(Menu.button({
-			label: "Notes",
+			label: gettext("Notes"),
 			icon: "img/notes32.png",
 			toggle: false,
 			small: false,
@@ -578,7 +578,7 @@ var Editor = Class.extend({
 			}
 		}));
 		group.addElement(Menu.button({
-			label: "Resource usage",
+			label: gettext("Resource usage"),
 			icon: "img/office-chart-bar.png",
 			toggle: false,
 			small: false,
@@ -588,10 +588,10 @@ var Editor = Class.extend({
 		}));
 
 
-		var group = tab.addGroup("Management");
+		var group = tab.addGroup(gettext("Management"));
 
         group.addElement(Menu.button({  // by Chang Rui
-            label: "Save As Scenario",
+            label: gettext("Save As Scenario"),
             icon: "img/export16.png",
             toggle: false,
             small: false,
@@ -600,7 +600,7 @@ var Editor = Class.extend({
             }
         }));
 		group.addElement(Menu.button({
-			label: "Renew",
+			label: gettext("Renew"),
 			icon: "img/renew.png",
 			toggle: false,
 			small: false,
@@ -610,7 +610,7 @@ var Editor = Class.extend({
 		}));
 		group.addStackedElements([
 			Menu.button({
-				label: "Rename",
+				label: gettext("Rename"),
 				icon: "img/rename.png",
 				toggle: false,
 				small: true,
@@ -619,7 +619,7 @@ var Editor = Class.extend({
 				}
 			}),
 			Menu.button({
-				label: "Export",
+				label: gettext("Export"),
 				icon: "img/export16.png",
 				toggle: false,
 				small: true,
@@ -628,7 +628,7 @@ var Editor = Class.extend({
 				}
 			}),
 			Menu.button({
-				label: "Delete",
+				label: gettext("Delete"),
 				name: "topology-remove",
 				icon: "img/cross.png",
 				toggle: false,
@@ -639,7 +639,7 @@ var Editor = Class.extend({
 			})
 		]);
 		group.addElement(Menu.button({
-			label: "Users & Permissions",
+			label: gettext("Users & Permissions"),
 			icon: "img/user32.png",
 			toggle: false,
 			small: false,
@@ -650,7 +650,7 @@ var Editor = Class.extend({
 		}));
 
 
-		var tab = this.menu.addTab("Options");
+		var tab = this.menu.addTab(gettext("Options"));
 
 		this.optionCheckboxes = {};
 		this.optionsManager.buildOptionsTab(tab);

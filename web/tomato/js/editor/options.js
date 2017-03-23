@@ -9,52 +9,52 @@ var OptionsManager = Class.extend({
 		this.topl_opts = [
 			{
 				name:"safe_mode",
-   				label:"Safe mode",
-   				tooltip:"Asks before all destructive actions",
+   				label:gettext("Safe mode"),
+   				tooltip:gettext("Asks before all destructive actions"),
    				default_value: true
    			},
    			{
    				name:"snap_to_grid",
-   				label:"Snap to grid",
-   				tooltip:"All elements snap to an invisible "+this.editor.options.grid_size+" pixel grid",
+   				label:gettext("Snap to grid"),
+   				tooltip:gettext("All elements snap to an invisible ")+this.editor.options.grid_size+gettext(" pixel grid"),
    				default_value: false
    			},
    			{
 		        name:"fixed_pos",
-		        label:"Fixed positions",
-		        tooltip:"Elements can not be moved",
+		        label:gettext("Fixed positions"),
+		        tooltip:gettext("Elements can not be moved"),
    				default_value: false
 		    },
 		    {
 		    	name:"big_editor",
-		    	label:"Big workspace",
-		    	tooltip:"Have a bigger editor workspace. Requires page reload.",
+		    	label:gettext("Big workspace"),
+		    	tooltip:gettext("Have a bigger editor workspace. Requires page reload."),
    				default_value: false
 		    }
 		];
 		this.user_opts = [
 			{
 		        name:"colorify_segments",
-		        label:"Colorify segments",
-		        tooltip:"Paint different network segments with different colors",
+		        label:gettext("Colorify segments"),
+		        tooltip:gettext("Paint different network segments with different colors"),
    				default_value: false
 		    },
 		    {
 		        name:"show_ids",
-		        label:"Show IDs",
-		        tooltip:"Show IDs in right-click menus",
+		        label:gettext("Show IDs"),
+		        tooltip:gettext("Show IDs in right-click menus"),
    				default_value: false
 		    },
 		    {
 		        name:"show_sites_on_elements",
-		        label:"Show Element Sites",
-		        tooltip:"Show the site an element is located at in its right-click menu",
+		        label:gettext("Show Element Sites"),
+		        tooltip:gettext("Show the site an element is located at in its right-click menu"),
    				default_value: false
 		    },
 		    {
 		        name:"debug_mode",
-		        label:"Debug mode",
-		        tooltip:"Displays debug messages",
+		        label:gettext("Debug mode"),
+		        tooltip:gettext("Displays debug messages"),
    				default_value: false
 		    },
 		    /*
@@ -66,8 +66,8 @@ var OptionsManager = Class.extend({
 		    },*/
 		    {
 		    	name:"show_connection_controls",
-		    	label:"Show Connection Controls",
-		    	tooltip:"Show network interfaces on elements, and a connection control handle on connections. These might be useful to hide when taking screenshots.",
+		    	label:gettext("Show Connection Controls"),
+		    	tooltip:gettext("Show network interfaces on elements, and a connection control handle on connections. These might be useful to hide when taking screenshots."),
    				default_value: true
 		    }
 		];
@@ -144,7 +144,7 @@ var OptionsManager = Class.extend({
 			this.editor.optionCheckboxes[this.topl_opts[i].name] = this.editor.optionMenuItem(this.topl_opts[i])
 			topl_options.push(this.editor.optionCheckboxes[this.topl_opts[i].name]);
 		}
-		var topl_group = tab.addGroup("Topology");
+		var topl_group = tab.addGroup(gettext("Topology"));
 		topl_group.addStackedElements(topl_options);
 
 		var user_options = [];
@@ -152,7 +152,7 @@ var OptionsManager = Class.extend({
 		this.editor.optionCheckboxes[this.user_opts[i].name] = this.editor.optionMenuItem(this.user_opts[i])
 			user_options.push(this.editor.optionCheckboxes[this.user_opts[i].name]);
 		}
-		var user_group = tab.addGroup("User");
+		var user_group = tab.addGroup(gettext("User"));
 		user_group.addStackedElements(user_options);
 	}
 });

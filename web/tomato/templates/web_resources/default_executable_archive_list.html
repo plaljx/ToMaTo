@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
@@ -9,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Default Executable Archives</h1>
+<h1>{%trans 'Default Executable Archives'%}</h1>
 
 <div class="skip-sm"></div>
 
@@ -18,10 +19,10 @@
 	<table class="sortable,filterable table table-striped">
 	  <tr>
 	  	<th class="icononly"></th>
-	  	<th>Name</th>
-	    <th>Label</th>
-	    <th>Creation Date</th>
-	    <th>Alternatives</th>
+	  	<th>{%trans 'Name'%}</th>
+	    <th>{%trans 'Label'%}</th>
+	    <th>{%trans 'Creation Date'%}</th>
+	    <th>{%trans 'Alternatives'%}</th>
 	    <th class="icononly"></th>
 	  </tr>
 	{% for archive in archive_list %}
@@ -62,10 +63,10 @@
 <div class="row">
 	<div class="alert alert-info col-xs-12 text-center" style="">
 		{% if default_executable_archives_list_url %}
-			Default executable archives are described at <a style="text-decoration:underline;" href="{{default_executable_archives_list_url}}">{{default_executable_archives_list_url}}</a><br />
-			This location can be changed in the web/web-resources settings via 'default_executable_archives_list_url'.
+			{%trans 'Default executable archives are described at'%} <a style="text-decoration:underline;" href="{{default_executable_archives_list_url}}">{{default_executable_archives_list_url}}</a><br />
+			{%trans 'This location can be changed in the web/web-resources settings via 'default_executable_archives_list_url'.'%}
 		{% else %}
-			You can describe default executable archives via the web/web-resources settings by providing a URL for the setting 'default_executable_archives_list_url'.
+			{%trans 'You can describe default executable archives via the web/web-resources settings by providing a URL for the setting 'default_executable_archives_list_url'.'%}
 		{% endif %}
 	</div>
 </div>

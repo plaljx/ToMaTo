@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Error loading custom tutorial</h1>
+<h1>{%trans 'Error loading custom tutorial'%}</h1>
 
 
 <script src="/js/jquery.js"></script>
@@ -25,14 +25,14 @@
 		window.location= "{%url "tomato.tutorial.list" %}";
 	}
 </script>
-An error occurred! Please check the URL and make sure it leads to the right direction.
+{%trans 'An error occurred! Please check the URL and make sure it leads to the right direction.'%}
 
 <div class="skip-xs"></div>
 <input type="text" id="tutorialURL" name="tutorial_url" value="{{url}}"  autofocus style="width: 100%" />
 <div class="skip-xs"></div>
 <div class="col-sm-offset-4">
 	<button type="button" onclick="cancel();" class="btn btn-danger backbutton"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-	<button type="button" onclick="submit();" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Start Tutorial</button>   
+	<button type="button" onclick="submit();" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> {%trans 'Start Tutorial'%}</button>   
 </div>
 
 

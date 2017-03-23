@@ -401,7 +401,7 @@ var Element = Component.extend({
 	},
 	remove: function(callback, ask) {
 		if (this.busy) return;
-		if (ask && this.editor.options.safe_mode && ! confirm("Do you want to delete this element?")) return;
+		if (ask && this.editor.options.safe_mode && ! confirm(gettext("Do you want to delete this element?"))) return;
 		this.setBusy(true);
 		this.triggerEvent({operation: "remove", phase: "begin"});
 		var t = this;

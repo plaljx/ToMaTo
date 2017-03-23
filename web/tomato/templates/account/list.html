@@ -22,18 +22,18 @@
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <span class="glyphicon glyphicon-filter"></span>
     {% if organization %}
-      Showing all accounts of '{{organization_label}}'
+      {%trans 'Showing all accounts of'%} '{{organization_label}}'
     {% else %}
-      {%trans "Showing all accounts"%}
+      {%trans 'Showing all accounts'%}
     {% endif %}
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="{% url "account_list_all" %}">Show all accounts</a></li>
+    <li><a href="{% url "account_list_all" %}">{%trans 'Show all accounts'%}</a></li>
     <li class="divider"></li>
     <li class="dropdown-header">{%trans "Organizations"%}</li>
     {% for orga in orgas %}
-      <li><a href="{% url "organization_accounts" organization=orga.name %}">Show all accounts of '{{orga.label}}'</a></li>
+      <li><a href="{% url "organization_accounts" organization=orga.name %}">{%trans 'Show all accounts of'%} '{{orga.label}}'</a></li>
     {% endfor %}
   </ul>
 </div>
@@ -44,9 +44,9 @@
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <span class="glyphicon glyphicon-filter"></span>
     {% if with_flag %}
-      Showing pending registrations
+      {%trans 'Showing pending registrations'%}
     {% else %}
-      Showing all accounts
+      {%trans 'Showing all accounts'%}
     {% endif %}
     <span class="caret"></span>
   </button>

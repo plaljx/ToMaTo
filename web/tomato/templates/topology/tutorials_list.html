@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Tutorials</h1>
+<h1>{%trans 'Tutorials'%}</h1>
 
 
 <script src="/js/jquery.js"></script>
@@ -38,13 +38,13 @@
                     <td style="padding-top:0.1cm;">
 
                             {% if tut.url %}
-                                <button type="buton" onclick=" loadbusy(event,'Loading Topology Editor'); window.location = '{%url "tutorial.start" %}?url={{tut.url}}&token={{tut.url|security_token:session_id}}';" class="btn btn-success"><span class="glyphicon glyphicon-user"></span>Load in Editor</button>
+                                <button type="buton" onclick=" loadbusy(event,'Loading Topology Editor'); window.location = '{%url "tutorial.start" %}?url={{tut.url}}&token={{tut.url|security_token:session_id}}';" class="btn btn-success"><span class="glyphicon glyphicon-user"></span>{%trans 'Load in Editor'%}</button>
                             {% endif %}
                             {% if tut.url and tut.screencast_url %}
                                 &nbsp;
                             {% endif %}
                             {% if tut.screencast_url %}
-                                <button type="button" onclick="window.location = '{{tut.screencast_url}}';" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> Watch Screencast</button>
+                                <button type="button" onclick="window.location = '{{tut.screencast_url}}';" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> {%trans 'Watch Screencast'%}</button>
                             {% endif %}
 
                     </td>
@@ -94,7 +94,7 @@
 </script>
 
 <form style="margin-top: 1.3cm;">
-  <button type="button" onclick="customTutorial()" class="btn btn-primary">Load Own Editor Tutorial from URL</button>
+  <button type="button" onclick="customTutorial()" class="btn btn-primary">{%trans 'Load Own Editor Tutorial from URL'%}</button>
 </form>
 
 {% endblock %}

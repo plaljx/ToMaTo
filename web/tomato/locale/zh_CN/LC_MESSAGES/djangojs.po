@@ -1,0 +1,422 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-23 17:14+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: js/editor/components/connection.js:199
+msgid "Do you want to delete this connection?"
+msgstr ""
+
+#: js/editor/components/element.js:404
+msgid "Do you want to delete this element?"
+msgstr ""
+
+#: js/editor/editor.js:241
+msgid "Home"
+msgstr ""
+
+#: js/editor/editor.js:243
+msgid "Modes"
+msgstr "模式"
+
+#: js/editor/editor.js:245
+msgid "Select & Move"
+msgstr "选择和移动"
+
+#: js/editor/editor.js:257 js/editor/menus/menus/element_menu.js:40
+msgid "Connect"
+msgstr "连接"
+
+#: js/editor/editor.js:266 js/editor/editor.js:631
+#: js/editor/menus/menus/element_menu.js:233
+#: js/editor/menus/menus/topology_menu.js:83
+msgid "Delete"
+msgstr "删除"
+
+#: js/editor/editor.js:276
+msgid "Topology control"
+msgstr "拓扑控制"
+
+#: js/editor/editor.js:278 js/editor/menus/menus/element_menu.js:47
+#: js/editor/menus/menus/topology_menu.js:15
+msgid "Start"
+msgstr "开始"
+
+#: js/editor/editor.js:287 js/editor/menus/menus/element_menu.js:54
+#: js/editor/menus/menus/topology_menu.js:22
+msgid "Stop"
+msgstr "停止"
+
+#: js/editor/editor.js:297 js/editor/menus/menus/element_menu.js:61
+#: js/editor/menus/menus/topology_menu.js:29
+msgid "Prepare"
+msgstr "准备"
+
+#: js/editor/editor.js:306 js/editor/menus/menus/element_menu.js:68
+#: js/editor/menus/menus/topology_menu.js:36
+msgid "Destroy"
+msgstr "拆除"
+
+#: js/editor/editor.js:316
+msgid "Common elements"
+msgstr "常用元素"
+
+#: js/editor/editor.js:355
+msgid "Devices"
+msgstr ""
+
+#: js/editor/editor.js:434
+msgid "Upload own images"
+msgstr "加载自定义镜像"
+
+#: js/editor/editor.js:437
+msgid "Full Virtualization Image"
+msgstr "全虚拟镜像"
+
+#: js/editor/editor.js:446
+msgid "Container-Based Virtualization Image"
+msgstr "容器基础上的虚拟镜像"
+
+#: js/editor/editor.js:455
+msgid "Repy script"
+msgstr "答复脚本"
+
+#: js/editor/editor.js:466
+#, fuzzy
+#| msgid "Networks"
+msgid "Network"
+msgstr "外网"
+
+#: js/editor/editor.js:468
+msgid "VPN Elements"
+msgstr "vpn元素"
+
+#: js/editor/editor.js:470
+msgid "Switch (Tinc)"
+msgstr "Switch (Tinc)"
+
+#: js/editor/editor.js:482
+msgid "Hub (Tinc)"
+msgstr "Hub (Tinc)"
+
+#: js/editor/editor.js:494
+msgid "Switch (VpnCloud)"
+msgstr "Switch (VpnCloud)"
+
+#: js/editor/editor.js:505
+msgid "Scripts (Repy)"
+msgstr "脚本(Repy)"
+
+#: js/editor/editor.js:507
+msgid "Custom script"
+msgstr "客户脚本"
+
+#: js/editor/editor.js:526
+msgid "Networks"
+msgstr "网络"
+
+#: js/editor/editor.js:560
+msgid "Functions"
+msgstr "功能"
+
+#: js/editor/editor.js:563
+msgid "Consoles (NoVNC)"
+msgstr "配置(NoVNC)"
+
+#: js/editor/editor.js:572 js/editor/menus/menus/topology_menu.js:53
+msgid "Notes"
+msgstr "记录"
+
+#: js/editor/editor.js:581 js/editor/menus/menus/element_menu.js:126
+#: js/editor/menus/menus/topology_menu.js:60
+msgid "Resource usage"
+msgstr "资源使用"
+
+#: js/editor/editor.js:591
+msgid "Management"
+msgstr "管理"
+
+#: js/editor/editor.js:594
+msgid "Save As Scenario"
+msgstr "作为场景保存"
+
+#: js/editor/editor.js:603
+msgid "Renew"
+msgstr "更新"
+
+#: js/editor/editor.js:613
+msgid "Rename"
+msgstr "重命名"
+
+#: js/editor/editor.js:622
+msgid "Export"
+msgstr "导出"
+
+#: js/editor/editor.js:642
+msgid "Users & Permissions"
+msgstr "用户&许可证"
+
+#: js/editor/editor.js:653
+#, fuzzy
+#| msgid "Functions"
+msgid "Options"
+msgstr "功能"
+
+#: js/editor/menus/menus/element_menu.js:29
+msgid "Please wait for the current action to finish and re-open this menu."
+msgstr "请等待当前动作完成再打开这个菜单"
+
+#: js/editor/menus/menus/element_menu.js:77
+msgid "Console"
+msgstr "配置(NoVNC)"
+
+#: js/editor/menus/menus/element_menu.js:110
+msgid "Download Log"
+msgstr "下载日志"
+
+#: js/editor/menus/menus/element_menu.js:119
+msgid "Used addresses"
+msgstr "旧的地址"
+
+#: js/editor/menus/menus/element_menu.js:133
+msgid "Disk image"
+msgstr "KVM镜像"
+
+#: js/editor/menus/menus/element_menu.js:137
+msgid "Change Template"
+msgstr "改变模板"
+
+#: js/editor/menus/menus/element_menu.js:144
+msgid "Download image"
+msgstr "加载自定义镜像"
+
+#: js/editor/menus/menus/element_menu.js:151
+msgid "Upload custom image from disk"
+msgstr "加载自定义镜像"
+
+#: js/editor/menus/menus/element_menu.js:158
+msgid "Upload custom image from URL"
+msgstr "加载自定义镜像"
+
+#: js/editor/menus/menus/element_menu.js:167
+msgid "Executable archive"
+msgstr "可执行的档案"
+
+#: js/editor/menus/menus/element_menu.js:171
+msgid "Download Archive"
+msgstr "下载档案"
+
+#: js/editor/menus/menus/element_menu.js:179
+msgid "Upload Archive from Disk"
+msgstr "从磁盘加载档案"
+
+#: js/editor/menus/menus/element_menu.js:186
+msgid "Upload Archive from URL"
+msgstr "从url加载档案"
+
+#: js/editor/menus/menus/element_menu.js:193
+msgid "Use a Default Archive"
+msgstr "使用默认档案"
+
+#: js/editor/menus/menus/element_menu.js:201
+msgid "Status"
+msgstr "状态"
+
+#: js/editor/menus/menus/element_menu.js:211
+#: js/editor/menus/menus/topology_menu.js:68
+msgid "Configure"
+msgstr "配置"
+
+#: js/editor/menus/menus/element_menu.js:218
+msgid "Traffic Customize"
+msgstr "流量定制"
+
+#: js/editor/menus/menus/element_menu.js:225
+#: js/editor/menus/menus/topology_menu.js:75
+msgid "Debug"
+msgstr "调试"
+
+#: js/editor/menus/menus/topology_menu.js:11
+msgid "Global actions"
+msgstr "全局操作"
+
+#: js/editor/menus/menus/topology_menu.js:46
+msgid "Tabbed Console (NoVNC)"
+msgstr "配置(NoVNC)"
+
+#: js/editor/options.js:12
+msgid "Safe mode"
+msgstr "安全模式"
+
+#: js/editor/options.js:13
+msgid "Asks before all destructive actions"
+msgstr "在所有删除行为之前进行询问"
+
+#: js/editor/options.js:18
+msgid "Snap to grid"
+msgstr "对齐网格"
+
+#: js/editor/options.js:19
+msgid "All elements snap to an invisible "
+msgstr "所有元素对齐到一个看不到的线"
+
+#: js/editor/options.js:19
+msgid " pixel grid"
+msgstr "像素网格"
+
+#: js/editor/options.js:24
+msgid "Fixed positions"
+msgstr "固定位置"
+
+#: js/editor/options.js:25
+msgid "Elements can not be moved"
+msgstr "元素不能移动"
+
+#: js/editor/options.js:30
+msgid "Big workspace"
+msgstr "大桌布"
+
+#: js/editor/options.js:31
+msgid "Have a bigger editor workspace. Requires page reload."
+msgstr "拥有一个更大的编辑工作空间，需要刷新页面"
+
+#: js/editor/options.js:38
+msgid "Colorify segments"
+msgstr "美化段落"
+
+#: js/editor/options.js:39
+msgid "Paint different network segments with different colors"
+msgstr "使用不同的颜色渲染不同的网络"
+
+#: js/editor/options.js:44
+msgid "Show IDs"
+msgstr "显示IDs"
+
+#: js/editor/options.js:45
+msgid "Show IDs in right-click menus"
+msgstr "在右击菜单显示id"
+
+#: js/editor/options.js:50
+msgid "Show Element Sites"
+msgstr "显示元素位置"
+
+#: js/editor/options.js:51
+msgid "Show the site an element is located at in its right-click menu"
+msgstr "在右击菜单显示元素所属的位置"
+
+#: js/editor/options.js:56
+msgid "Debug mode"
+msgstr "调试模式"
+
+#: js/editor/options.js:57
+msgid "Displays debug messages"
+msgstr "显示调试信息"
+
+#: js/editor/options.js:69
+msgid "Show Connection Controls"
+msgstr "显示连接控制"
+
+#: js/editor/options.js:70
+msgid ""
+"Show network interfaces on elements, and a connection control handle on "
+"connections. These might be useful to hide when taking screenshots."
+msgstr ""
+"在元素上显示网络接口，并且在网络连接上显示句柄。这些隐藏可能对截图有用。"
+
+#: js/editor/options.js:147
+msgid "Topology"
+msgstr "拓扑"
+
+#: js/editor/options.js:155
+msgid "User"
+msgstr "用户"
+
+#: js/editor/topology.js:382
+msgid "Are you sure you want to completely destroy this topology?"
+msgstr "你确定完全删除整个拓扑吗"
+
+#: js/editor/topology.js:390
+msgid "Are you sure you want to completely remove this topology?"
+msgstr "你确定完全移除整个拓扑吗"
+
+#: js/editor/topology.js:583
+msgid ""
+"After this time, your topology will automatically be stopped. Timeouts can "
+"be extended regularly to allow your topology to run longer without "
+"interruptions. You will receive a warning before your topology is stopped."
+msgstr ""
+"你的拓扑会被自动停止。允许你拓扑运行的时间能够被延长。你将接收到一个警告在你"
+"的拓扑被停止时。"
+
+#: js/editor/topology.js:647
+msgid "The name of your scenario"
+msgstr "你的场景名称"
+
+#: js/editor/topology.js:660
+msgid "The text description of your scenario."
+msgstr "你的场景的描述"
+
+#: js/editor/topology.js:667
+msgid "Whether other users can use the scenario."
+msgstr "其他用户是否可以使用这个场景"
+
+#: js/editor/topology.js:725
+msgid ""
+"After this time, your topology will automatically be stopped. Timeouts can "
+"be extended arbitrarily."
+msgstr "你的拓扑会被自动停止。时限可以任意延长。"
+
+#: js/editor/topology.js:730
+msgid "Description of the experiment. (Optional)"
+msgstr "实验描述"
+
+#: js/editor/topology.js:772
+msgid ""
+"Network segments must not contain multiple external network exits! This "
+"could lead to loops in the network and result in a total network crash."
+msgstr "网段不能包含多个出口。这可能导致一个环的出现，并且使得整个网络崩溃。"
+
+#: js/jquery-ui.min.js:10
+msgid "'"
+msgstr ""
+
+#~ msgid "%s Topology "
+#~ msgstr "拓扑"
+
+#~ msgid "Other (KVM)"
+#~ msgstr "其它"
+
+#~ msgid "KVM image"
+#~ msgstr "KVM镜像"
+
+#~ msgid "OpenVZ image"
+#~ msgstr "OpenVz镜像"
+
+#~ msgid "You have the permission to use this restricted template."
+#~ msgstr "你有使用被限制拓扑的权限"
+
+#~ msgid ""
+#~ "This template is restricted. Contact an administrator if you want to get "
+#~ "access to restricted templates."
+#~ msgstr "这个拓扑被限制，如果你想获得权限请联系管理员"
+
+#~ msgid "start"
+#~ msgstr "开始"
+
+#~ msgid "VNC Information"
+#~ msgstr "VNC信息"

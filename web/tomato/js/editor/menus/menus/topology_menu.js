@@ -8,32 +8,32 @@ var createTopologyMenu = function(obj) {
 				type:"html"
 			},
 			"actions": {
-				name:'Global actions',
+				name:gettext('Global actions'),
 				icon:'control',
 				items: {
 					"start": {
-						name:'Start',
+						name:gettext('Start'),
 						icon:'start',
 						callback: function(){
 							obj.action_start();
 						}
 					},
 					"stop": {
-						name:"Stop",
+						name:gettext("Stop"),
 						icon:"stop",
 						callback: function(){
 							obj.action_stop();
 						}
 					},
 					"prepare": {
-						name:"Prepare",
+						name:gettext("Prepare"),
 						icon:"prepare",
 						callback: function(){
 							obj.action_prepare();
 						}
 					},
 					"destroy": {
-						name:"Destroy",
+						name:gettext("Destroy"),
 						icon:"destroy",
 						callback:function(){
 							obj.action_destroy();
@@ -43,21 +43,21 @@ var createTopologyMenu = function(obj) {
 			},
 			"sep1": "---",
 			"tabbedConsoleWindow": {
-				name:"Tabbed Console (NoVNC)",
+				name:gettext("Tabbed Console (NoVNC)"),
 				icon:"console",
 				callback: function() {
 					obj.tabbedConsoleWindow();
 				}
 			},
 			"notes": {
-				name:"Notes",
+				name:gettext("Notes"),
 				icon:"notes",
 				callback: function(){
 					obj.notesDialog();
 				}
 			},
 			"usage": {
-				name:"Resource usage",
+				name:gettext("Resource usage"),
 				icon:"usage",
 				callback: function(){
 					obj.showUsage();
@@ -65,14 +65,14 @@ var createTopologyMenu = function(obj) {
 			},
 			"sep2": "---",
 			"configure": {
-				name:'Configure',
+				name:gettext('Configure'),
 				icon:'configure',
 				callback: function(){
 					obj.showConfigWindow();
 				}
 			},
 			"debug": obj.editor.options.debug_mode ? {
-				name:'Debug',
+				name:gettext('Debug'),
 				icon:'debug',
 				callback: function(){
 					obj.showDebugInfo();
@@ -80,7 +80,7 @@ var createTopologyMenu = function(obj) {
 			} : null,
 			"sep3": "---",
 			"remove": {
-				name:'Delete',
+				name:gettext('Delete'),
 				icon:'remove',
 				callback: function(){
 					obj.remove();

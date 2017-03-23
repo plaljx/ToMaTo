@@ -1,4 +1,5 @@
 {% extends "topology/base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
@@ -283,27 +284,27 @@
 {% endblock %}
 
 {% block content %}
-<h1>Scenarios</h1>
+<h1>{%trans 'Scenarios'%}</h1>
 
 <div class="btn-group">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="glyphicon glyphicon-filter"></span>
         {% if show == 'all' %}
-            Showing all scenarios
+            {%trans 'Showing all scenarios'%}
         {% elif show == 'my' %}
-            Showing my scenarios
+            {%trans 'Showing my scenarios'%}
         {% elif show == 'public' %}
-            Showing public scenarios
+            {%trans 'Showing public scenarios'%}
         {% else %}
-            Error...
+            {%trans 'Error...'%}
         {% endif %}
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{% url "scenario_list" %}">Show all scenarios</a></li>
+        <li><a href="{% url "scenario_list" %}">{%trans 'Show all scenarios'%}</a></li>
         <li class="divider"></li>
-        <li><a href="{% url "scenario_list_my" %}">Showing my scenarios</a></li>
-        <li><a href="{% url "scenario_list_public" %}">Showing public scenarios</a></li>
+        <li><a href="{% url "scenario_list_my" %}">{%trans 'Showing my scenarios'%}</a></li>
+        <li><a href="{% url "scenario_list_public" %}">{%trans 'Showing public scenarios'%}</a></li>
     </ul>
 </div>
 
@@ -312,7 +313,7 @@
 <form>
     <button type="submit" formaction="{%url 'scenario_add'%}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
-        Add Scenario</button>
+        {%trans 'Add Scenario'%}</button>
 </form>
 
 <script src="/js/enhancetable.js"></script>
@@ -321,15 +322,15 @@
     {% if scenario_list %}
         <thead>
             <tr>
-                {# <th>ID</th> #}
-                <th>Name</th>
-                <th>Description</th>
-                <th>Accessibility</th>
-                <th>Author</th>
-                <th>Create Time</th>
-                {#<th>Edit</th>#}
-                {#<th>Deploy</th>#}
-                {#<th>Delete</th>#}
+                {# <th>{%trans 'ID'%}</th> #}
+                <th>{%trans 'Name'%}</th>
+                <th>{%trans 'Description'%}</th>
+                <th>{%trans 'Accessibility'%}</th>
+                <th>{%trans 'Author'%}</th>
+                <th>{%trans 'Create Time'%}</th>
+                {#<th>{%trans 'Edit'%}</th>#}
+                {#<th>{%trans 'Deploy'%}</th>#}
+                {#<th>{%trans 'Delete'%}</th>#}
             </tr>
         </thead>
         <tbody>
@@ -341,16 +342,16 @@
                 <td>{{ scenario.accessibility }}</td>
                 <td>{{ scenario.author }}</td>
                 <td>{{ scenario.create_time }}</td>
-                {#<td><button class="editButton" onclick="showEditDialog('{{ scenario.id }}')">Edit</button></td>#}
-                {#<td><button class="deployButton" onclick="showDeployDialog('{{ scenario.id }}')">Deploy</button></td>#}
-                {#<td><button class="deleteButton" onclick="showDeleteDialog('{{ scenario.id }}')">Delete</button></td>#}
+                {#<td><button class="editButton" onclick="showEditDialog('{{ scenario.id }}')">{%trans 'Edit'%}</button></td>#}
+                {#<td><button class="deployButton" onclick="showDeployDialog('{{ scenario.id }}')">{%trans 'Deploy'%}</button></td>#}
+                {#<td><button class="deleteButton" onclick="showDeleteDialog('{{ scenario.id }}')">{%trans 'Delete'%}</button></td>#}
             </tr>
         {% endfor %}
         </tbody>
         <tfoot>
         </tfoot>
     {% else %}
-        No scenarios. You can save a topology as a scenario in the edit panel of the topology.
+        {%trans 'No scenarios. You can save a topology as a scenario in the edit panel of the topology.'%}
     {% endif %}
 </table>
 
