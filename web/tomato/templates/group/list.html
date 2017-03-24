@@ -15,7 +15,7 @@
 
 {% if request.session.user.isAdmin %}
 <form>
-    <button type="submit" formaction="{%url 'group_add' %}" class="btn btn-success">
+    <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
         Add group
     </button>
@@ -34,7 +34,7 @@
 
     {% for group in groups %}
     <tr>
-        <td><a href="{% url 'group_info' group.name %}">{{ group.name }}</a></td>
+        <td><a href="{% url 'admin_group_info' group.name %}">{{ group.name }}</a></td>
         <td>{{ group.organization }}</td>
         <td>{{ group.description }}</td>
     </tr>

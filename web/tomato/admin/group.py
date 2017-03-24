@@ -27,7 +27,7 @@ class GroupForm(AddEditForm):
 		)
 
 	def get_redirect_after(self):
-		return HttpResponseRedirect(reverse("group_info", kwargs={"name": self.cleaned_data['name']}))
+		return HttpResponseRedirect(reverse("admin_group_info", kwargs={"name": self.cleaned_data['name']}))
 
 
 class AddGroupForm(GroupForm):
@@ -119,6 +119,6 @@ def remove(api, request, name):
 		form = RemoveGroupForm(name=name, data=request.POST)
 		if form.is_valid():
 			api.group_remove(name)
-			return HttpResponseRedirect(reverse('group_list'))
+			return HttpResponseRedirect(reverse('admin_group_list'))
 	form = RemoveGroupForm(name=name)
 	return form.create_response(request)

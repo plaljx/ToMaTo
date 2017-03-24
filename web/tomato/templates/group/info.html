@@ -15,7 +15,7 @@
 {% load tomato %}
 
 <form>
-    <button type="submit" formaction="{%url 'group_list'%}" class="btn btn-primary" style="float:right;">
+    <button type="submit" formaction="{%url 'admin_group_list'%}" class="btn btn-primary" style="float:right;">
         <span class="glyphicon glyphicon-list"></span>
         All Groups
     </button>
@@ -46,11 +46,11 @@
 
 {% if request.session.user.isAdmin %}
 <form>
-    <button type="submit" formaction="{%url 'group_edit' group.name%}" class="btn btn-warning">
+    <button type="submit" formaction="{%url 'admin_group_edit' group.name%}" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>
         edit Group
     </button>
-    <button type="submit" formaction="{%url 'group_remove' group.name%}" class="btn btn-danger">
+    <button type="submit" formaction="{%url 'admin_group_remove' group.name%}" class="btn btn-danger">
         <span class="glyphicon glyphicon-trash"></span>
         remove Group
     </button>

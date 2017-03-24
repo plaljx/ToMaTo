@@ -44,6 +44,11 @@ While waiting for the account activation you can create and design topologies bu
 		<td><a href="{%url "admin.organization.info" account.organization%}">{{organization.label}}</a></td>
 	</tr>
 	<tr>
+		<!--TODO-->
+		<th>{%trans 'Group'%}</th>
+		<td><a href="{%url 'admin_group_info' account.group%}">{{account.group}}</a></td>
+	</tr>
+	<tr>
 		<th>{%trans 'Email'%}:</th>
 		<td>
 			{% if account.email %}
