@@ -94,6 +94,13 @@ def organization_name_list(api):
 	res.sort()
 	return res
 
+def group_name_list(api):
+	groups = api.group_list()
+	res = []
+	for group in groups:
+		res.append((group['name'], group['name']))
+	return res
+
 def help_url():
 	return settings.get_external_url("help")
 

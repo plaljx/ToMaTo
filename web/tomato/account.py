@@ -23,7 +23,7 @@ import random, string
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
-from admin_common import organization_name_list
+from admin_common import organization_name_list, group_name_list
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
@@ -65,7 +65,7 @@ def render_account_flag_fixedlist(api, value):
 					output.append('<b>' + cat['onscreentitle'] + '</b>')
 					foundOne = True
 				output.append('<li style="margin-left:20px;">' + userflags.flags.get(v, v) + '</li>')
-		
+
 	return output
 			
 			
@@ -131,6 +131,7 @@ class AccountForm(BootstrapForm):
 	password = forms.CharField(label="Password", widget=forms.PasswordInput, required=False)
 	password2 = forms.CharField(label="Password (repeated)", widget=forms.PasswordInput, required=False)
 	organization = forms.CharField(max_length=50)
+	group = forms.CharField(max_length=50, required=False)
 	origin = forms.CharField(label="Origin", widget=forms.HiddenInput, required=False)
 	realname = forms.CharField(label="Full name")
 	email = forms.EmailField()
@@ -140,7 +141,9 @@ class AccountForm(BootstrapForm):
 	def __init__(self, api, *args, **kwargs):
 		super(AccountForm, self).__init__(*args, **kwargs)
 		self.fields["organization"].widget = forms.widgets.Select(choices=append_empty_choice(organization_name_list(api)))
-		
+		self.fields["group"].widget = forms.widgets.Select(choices=append_empty_choice(group_name_list(api)))
+		self.fields["group"].required = False
+
 	def clean_password(self):
 		if self.data.get('password') != self.data.get('password2'):
 			raise forms.ValidationError('Passwords are not the same')
@@ -174,6 +177,7 @@ class AccountChangeForm(AccountForm):
 				'password',
 				'password2',
 				'organization',
+				'group',
 				'realname',
 				'email',
 				'flags'
@@ -203,6 +207,7 @@ class AccountRegisterForm(AccountForm):
 			'password',
 			'password2',
 			'organization',
+			'group',
 			'realname',
 			'email',
 			'_reason',
@@ -226,6 +231,7 @@ class AdminAccountRegisterForm(AccountForm):
 		self.helper.layout = Layout(
 			'name',
 			'organization',
+			'group',
 			'realname',
 			'email',
 			Buttons.cancel_save

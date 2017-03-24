@@ -72,7 +72,7 @@ class User(Entity, BaseDocument):
 
 	name = StringField(required=True)
 	organization = ReferenceField(Organization, required=True, reverse_delete_rule=DENY)
-	group = ReferenceField(Group,required=False ,reverse_delete_rule=DENY)
+	group = ReferenceField(Group, required=False, null=True, reverse_delete_rule=DENY)
 	password = StringField(required=True)
 	lastLogin = FloatField(db_field='last_login', required=True)
 	quota = EmbeddedDocumentField(Quota, required=True)
@@ -176,6 +176,9 @@ class User(Entity, BaseDocument):
 
 	def modify_group(self, val):
 		from .group import Group
+		if (val is None) or (len(val) == 0):
+			self.group = None
+			return
 		group = Group.get(val)
 		UserError.check(group, code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist", data={"name": val})
 		self.group = group

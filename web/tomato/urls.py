@@ -221,10 +221,10 @@ urlpatterns = patterns('',
     (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
 
 	# Group
-	url(r'^group/$', 'tomato.admin.group.list_', name='group_list'),
-	url(r'^group/add$', 'tomato.admin.group.add', name='group_add'),
-	url(r'^group/(?P<name>\w+)$', 'tomato.admin.group.info', name='group_info'),
-	url(r'^group/(?P<name>\w+)/edit$', 'tomato.admin.group.edit', name='group_edit'),
-	url(r'^group/(?P<name>\w+)/remove$', 'tomato.admin.group.remove', name='group_remove'),
+	url(r'^group/$', 'tomato.admin.group.list_', name='admin_group_list'),
+	url(r'^group/add$', 'tomato.admin.group.add', name='admin_group_add'),
+	url(r'^group/(?P<name>\w+)$', 'tomato.admin.group.info', name='admin_group_info'),
+	url(r'^group/(?P<name>\w+)/edit$', 'tomato.admin.group.edit', name='admin_group_edit'),
+	url(r'^group/(?P<name>\w+)/remove$', 'tomato.admin.group.remove', name='admin_group_remove'),
 
 )

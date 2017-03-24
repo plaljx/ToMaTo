@@ -79,7 +79,8 @@
     <th>{%trans 'Origin'%}</th>
     <th>{%trans 'Full name'%}</th>
     <th>{%trans 'Organization'%}</th>
-   	<th>{%trans 'Flags'%}</th>
+    <th>{%trans 'Group'%}</th>
+    <th>{%trans 'Flags'%}</th>
   </tr>
 {% for account in accounts %}
   <tr>
@@ -97,7 +98,8 @@
     </td>
     <td>{{account.origin}}</td>
     <td>{{account.realname}}</td>
-    <td>{{account.organization}}</td>    
+    <td>{{account.organization}}</td>
+    <td>{{account.group}}</td>
     <td>
     	<div class="hoverdescription" style="white-space:normal">
     		{{account.flags|join:", "}}
