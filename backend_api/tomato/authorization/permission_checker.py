@@ -112,10 +112,10 @@ class PermissionChecker(UserInfo):
 		"""
 		res = {'name', 'origin', 'id', 'realname'}  # needed for everyone to add a user to a topology.
 		if self.get_username() == userB.get_username():
-			res.update(['email', 'flags', 'organization', 'quota', 'notification_count', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'group','quota', 'notification_count', 'client_data', 'last_login', 'password_hash'])
 		if Flags.GlobalAdmin in self.get_flags() or \
 				Flags.OrgaAdmin in self.get_flags() and self.get_organization_name() == userB.get_organization_name():
-			res.update(['email', 'flags', 'organization', 'quota', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'group', 'quota', 'client_data', 'last_login', 'password_hash'])
 		return res
 
 	def modify_user_allowed_keys(self, userB):
@@ -132,12 +132,12 @@ class PermissionChecker(UserInfo):
 		if userB.get_username() == self.get_username():
 			result.update(("realname", "email", "password"))
 			if Flags.GlobalAdmin in self.get_flags():
-				result.add("organization")
+				result.update(["organization", "group"])
 		else:
 			if Flags.GlobalAdmin in self.get_flags():
-				result.update(["realname", "email", "organization"])
+				result.update(["realname", "email", "organization", "group"])
 			if Flags.OrgaAdmin in self.get_flags() and self.info['organization'] == userB.get_organization_name():
-				result.update(["realname", "email"])
+				result.update(["realname", "email", "group"])
 		return result
 
 	def modify_user_allowed_flags(self, userB):
