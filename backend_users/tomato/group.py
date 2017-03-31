@@ -7,16 +7,13 @@ from .lib.service import get_backend_core_proxy
 
 class Group(Entity, BaseDocument):
 	"""
-	The group is a smaller management unit, compare to organization.
-	An organization can have multiple groups.
+	The group is a management unit, which is independent to organization.
 	The group will provides filter for topology list, so that a topology could be only visible for the specified group.
 	"""
 
-	from .organization import Organization
-
 	name = StringField(unique=True, required=True)
+	label = StringField(required=True)
 	description = StringField()
-	organization = ReferenceField(Organization, reverse_delete_rule=DENY)
 
 	meta = {
 		'ordering': 'name',
@@ -44,15 +41,6 @@ class Group(Entity, BaseDocument):
 		if self.id:
 			self.delete()
 
-	def modify_organization(self, orga_name):
-		from .organization import Organization
-		orga = Organization.get(orga_name)
-		UserError.check(orga,
-						code=UserError.ENTITY_DOES_NOT_EXIST,
-						message="Organization with that name does not exist",
-						data={"name": orga_name})
-		self.organization = orga
-
 	def __str__(self):
 		return self.name
 
@@ -65,6 +53,6 @@ class Group(Entity, BaseDocument):
 
 	ATTRIBUTES = {
 		"name": Attribute(field=name, schema=schema.Identifier(minLength=3)),
+		"label": Attribute(field=label, schema=schema.String(minLength=3)),
 		"description": Attribute(field=description, schema=schema.String(null=True)),
-		"organization": Attribute(get=lambda self: self.organization.name, set=modify_organization)
 	}

@@ -28,14 +28,14 @@
 
     <tr>
         <th>Name</th>
-        <th>Organization</th>
+        <th>Label</th>
         <th>Description</th>
     </tr>
 
     {% for group in groups %}
     <tr>
         <td><a href="{% url 'admin_group_info' group.name %}">{{ group.name }}</a></td>
-        <td>{{ group.organization }}</td>
+        <td>{{ group.label }}</td>
         <td>{{ group.description }}</td>
     </tr>
     {% endfor %}
