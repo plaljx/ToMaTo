@@ -6,22 +6,21 @@ from django.http import HttpResponseRedirect
 from . import AddEditForm, RemoveConfirmForm
 from tomato.crispy_forms.layout import Layout
 from ..lib import wrap_rpc
-from ..admin_common import organization_name_list, Buttons, append_empty_choice
+from ..admin_common import Buttons
 
 
 class GroupForm(AddEditForm):
 	name = forms.CharField(max_length=50, help_text="The group's name. Must be unique.")
-	organization = forms.CharField(max_length=255, help_text="The organization this group belongs to.")
+	label = forms.CharField(max_length=255, label="Label", help_text="")
 	description = forms.CharField(widget=forms.Textarea, label="Description", required=False)
 
 	buttons = Buttons.cancel_add
 
-	def __init__(self, orga_list, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		super(GroupForm, self).__init__(*args, **kwargs)
-		self.fields["organization"].widget = forms.widgets.Select(choices=orga_list)
 		self.helper.layout = Layout(
 			'name',
-			'organization',
+			'label',
 			'description',
 			self.buttons
 		)
@@ -33,10 +32,8 @@ class GroupForm(AddEditForm):
 class AddGroupForm(GroupForm):
 	title = 'Add group'
 
-	def __init__(self, orga_list, *args, **kwargs):
-		super(AddGroupForm, self).__init__(orga_list, *args, **kwargs)
-		if orga_list is not None:
-			self.fields['organization'].initial = orga_list
+	def __init__(self, *args, **kwargs):
+		super(AddGroupForm, self).__init__(*args, **kwargs)
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
@@ -47,14 +44,10 @@ class EditGroupForm(GroupForm):
 	title = "Editing group %(name)s"
 	buttons = Buttons.cancel_save
 
-	def __init__(self, orga_list, *args, **kwargs):
-		super(EditGroupForm, self).__init__(orga_list, *args, **kwargs)
+	def __init__(self, *args, **kwargs):
+		super(EditGroupForm, self).__init__(*args, **kwargs)
 		self.fields["name"].widget = forms.TextInput(attrs={'readonly': 'readonly'})
 		self.fields["name"].help_text = None
-		# if orga_list is not None:
-		# 	self.fields['organization'].initial = orga_list
-		self.fields["organization"].widget = forms.TextInput(attrs={'readonly': 'readonly'})
-		self.fields["organization"].help_text = None
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
@@ -69,8 +62,7 @@ class RemoveGroupForm(RemoveConfirmForm):
 
 
 @wrap_rpc
-def list_(api, request, organization=None):
-	# TODO: organization filter
+def list_(api, request):
 	groups = api.group_list()
 	return render(request, "group/list.html", {'groups': groups})
 
@@ -84,32 +76,28 @@ def info(api, request, name):
 @wrap_rpc
 def add(api, request):
 	if request.method == 'POST':
-		form = AddGroupForm(data=request.POST,
-							orga_list=append_empty_choice(organization_name_list(api)))
+		form = AddGroupForm(data=request.POST,)
 		if form.is_valid():
 			form.submit(api)
 			return form.get_redirect_after()
 		else:
 			return form.create_response(request)
 	else:
-		form = AddGroupForm(
-			orga_list=append_empty_choice(organization_name_list(api)))
+		form = AddGroupForm()
 		return form.create_response(request)
 
 
 @wrap_rpc
 def edit(api, request, name=None):
 	if request.method=='POST':
-		form = EditGroupForm(data=api.group_info(name),
-							 orga_list=append_empty_choice(organization_name_list(api)))
+		form = EditGroupForm(data=api.group_info(name))
 		if form.is_valid():
 			form.submit(api)
 			return form.get_redirect_after()
 		else:
 			return form.create_response(request)
 	else:
-		form = EditGroupForm(data=api.group_info(name),
-							 orga_list=append_empty_choice(organization_name_list(api)))
+		form = EditGroupForm(data=api.group_info(name))
 		return form.create_response(request)
 
 
