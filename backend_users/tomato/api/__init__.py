@@ -11,7 +11,7 @@ from organization import organization_remove, organization_modify, organization_
 	organization_info, organization_create, organization_exists
 
 from user import user_create, user_exists, user_info, user_list, user_modify, user_modify_password,\
-	user_remove, username_list
+	user_remove, username_list, user_list_by_group
 
 from misc import statistics
 

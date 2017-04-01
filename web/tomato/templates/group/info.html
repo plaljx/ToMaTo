@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load url from future %}
 
@@ -46,6 +47,11 @@
 
 {% if request.session.user.isAdmin %}
 <form>
+
+    <button type="submit" formaction="{%url 'group_accounts' group.name%}" class="btn btn-info">
+        <span class="glyphicon glyphicon-list"></span>
+        {%trans 'Accounts'%}
+    </button>
     <button type="submit" formaction="{%url 'admin_group_edit' group.name%}" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>
         edit Group

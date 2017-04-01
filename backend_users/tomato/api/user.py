@@ -1,5 +1,5 @@
 from ..user import User
-from _shared import _getUser, _getOrganization
+from _shared import _getUser, _getOrganization, _getGroup
 from ..lib.error import UserError
 from ..lib.exceptionhandling import wrap_errors
 
@@ -16,6 +16,12 @@ def username_list(organization=None, with_flag=None):
 
 def user_list(organization=None, with_flag=None):
 	return [u.info() for u in _user_list(organization, with_flag)]
+
+# get by group
+def user_list_by_group(group=None):
+	if group is not None:
+		group = _getGroup(group)
+	return [u.info() for u in User.list_by_group(group=group)]
 
 def user_exists(name):
 	if _getUser(name, include_notifications=False):

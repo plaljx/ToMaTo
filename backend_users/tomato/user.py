@@ -168,6 +168,13 @@ class User(Entity, BaseDocument):
 			else:
 				return User.objects(organization=organization).exclude('notifications')
 
+	@classmethod
+	def list_by_group(cls, group=None):
+		if group is None:
+			return User.objects.all()
+		else:
+			return User.objects(group=group)
+
 	def modify_organization(self, val):
 		from .organization import Organization
 		orga = Organization.get(val)
