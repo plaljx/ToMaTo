@@ -822,6 +822,10 @@ def get_user_list(organization=None, with_flag=None):
 	"""
 	return get_backend_users_proxy().user_list(organization=organization, with_flag=with_flag)
 
+@cached(60)
+def get_user_list_by_group(group=None):
+	return get_backend_users_proxy().user_list_by_group(group=group)
+
 @cached(1800)
 def get_organization_info(organization_name):
 	"""

@@ -282,6 +282,15 @@ def list(api, request, with_flag=None, organization=True):
 	return render(request, "account/list.html", {'accounts': accs, 'orgas': orgas, 'with_flag': with_flag, 'organization':organization, 'organization_label':organization_label})
 
 @wrap_rpc
+def list_by_group(api, request, group=None):
+	if not api.user:
+		raise AuthError()
+	account_list = api.account_list_by_group(group=group)
+	group_list = api.group_list()
+	group = api.group_info(name=group)
+	return render(request, "account/list_by_group.html", {'accounts': account_list, 'group': group, "group_list": group_list})
+
+@wrap_rpc
 def info(api, request, id=None):
 	if not api.user:
 		raise AuthError()
