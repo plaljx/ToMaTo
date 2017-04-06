@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 17:13+0800\n"
+"POT-Creation-Date: 2017-04-06 10:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,26 @@ msgstr ""
 #: crispy_forms/tests/test_layout_objects.py:111
 msgid "Enter a valid value."
 msgstr "输入一个合法的值"
+
+#: main.py:72
+msgid "Remember me"
+msgstr ""
+
+#: main.py:82 main.py:96
+msgid "username"
+msgstr "用户"
+
+#: main.py:83 main.py:96
+msgid "password"
+msgstr "密码"
+
+#: main.py:84
+msgid "long_session"
+msgstr ""
+
+#: main.py:86
+msgid "Log in"
+msgstr "登录"
 
 #: profile.py:37
 msgid "The displayed label for this profile"
@@ -262,9 +282,53 @@ msgstr "仅仅选择你定制的模板"
 msgid "Must be unique for all profiles. Cannot be changed. Not displayed."
 msgstr "独一无二的。不能被修改，不显示。"
 
+#: template.py:177
+msgid "label"
+msgstr "标签"
+
+#: template.py:178
+msgid "subtype"
+msgstr "图表类型"
+
+#: template.py:179
+msgid "preference"
+msgstr "偏好"
+
+#: template.py:180
+msgid "restricted"
+msgstr "限制"
+
+#: template.py:181
+msgid "description"
+msgstr "描述"
+
+#: template.py:182
+msgid "nlXTP_installed"
+msgstr "nlXTP客户模块建立"
+
+#: template.py:183 templates/security_resources/malicious_code_list.html:34
+#: templates/security_resources/security_software_list.html:34
+#: templates/security_resources/vulnerability_list.html:34
+msgid "creation_date"
+msgstr "创建时间"
+
+#: template.py:184
+msgid "icon"
+msgstr "图标"
+
+#: template.py:185
+msgid "show_as_common"
+msgstr "作为常用元素显示"
+
+#: template.py:186
+msgid "urls"
+msgstr "urls"
+
+#: template.py:187
+msgid "customize"
+msgstr "定制"
+
 #: template.py:201 template.py:206
-#, fuzzy
-#| msgid "Add template"
 msgid "Add Template"
 msgstr "增加模板"
 
@@ -473,7 +537,7 @@ msgstr "外部网络"
 #: templates/base.html:211
 #: templates/web_resources/default_executable_archive_list.html:13
 msgid "Default Executable Archives"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/base.html:212
 #: templates/web_resources/custom_element_icons_list.html:13
@@ -579,7 +643,15 @@ msgstr "使用策略"
 msgid "Contact"
 msgstr "与我们联系"
 
-#: templates/base.html:271
+#: templates/base.html:272
+msgid "hide panel"
+msgstr "隐藏导航菜单"
+
+#: templates/base.html:273
+msgid "show panel"
+msgstr "显示导航菜单"
+
+#: templates/base.html:275
 msgid "Configuration"
 msgstr "配置"
 
@@ -758,7 +830,7 @@ msgstr "喜欢"
 
 #: templates/dumpmanager/list.html:35 templates/host/list.html:105
 msgid "Dumps"
-msgstr "倾倒"
+msgstr "错误次数"
 
 #: templates/dumpmanager/list.html:36
 msgid "Last Dump"
@@ -1006,7 +1078,7 @@ msgstr "定时"
 
 #: templates/host/list.html:48
 msgid "CPU"
-msgstr "核心"
+msgstr "核心数目"
 
 #: templates/host/list.html:49 templates/profile/list.html:56
 msgid "RAM"
@@ -1052,7 +1124,7 @@ msgstr "查询时间"
 #: templates/host/list.html:92 templates/profile/info.html:58
 #: templates/profile/list.html:57 templates/topology/list.html:80
 msgid "CPUs"
-msgstr "核心"
+msgstr "核心数目"
 
 #: templates/host/list.html:93
 msgid "Arch"
@@ -1148,117 +1220,114 @@ msgstr "注册"
 msgid "Visit our Homepage"
 msgstr "浏览我们的主页"
 
-#: templates/main/start.html:92
-msgid "(click to expand)"
-msgstr "(点击这里延伸)"
-
-#: templates/main/start.html:133
+#: templates/main/start.html:132
 msgid "Intuitive editor"
 msgstr "直观的编辑器"
 
-#: templates/main/start.html:134
+#: templates/main/start.html:133
 msgid ""
 "Create your virtual network topology in an intuitive web-based editor. No "
 "need to write config files or code."
 msgstr "在web端创建你的虚拟拓扑网络，不需要写入配置文件和代码"
 
-#: templates/main/start.html:146
+#: templates/main/start.html:145
 msgid "Up and running in seconds"
 msgstr "在数秒内开启运行"
 
-#: templates/main/start.html:147
+#: templates/main/start.html:146
 msgid ""
 "Even very complex topologies can be configured and started in a few seconds."
 msgstr "即使是非常复杂的网络也可以在数秒内开启"
 
-#: templates/main/start.html:159
+#: templates/main/start.html:158
 msgid "Sites worldwide"
 msgstr "全球站点"
 
-#: templates/main/start.html:160
+#: templates/main/start.html:159
 msgid ""
 "Create topologies that go around the globe, select freely from our various "
 "sites."
 msgstr "创建全球站点"
 
-#: templates/main/start.html:172
+#: templates/main/start.html:171
 msgid "Packet capturing"
 msgstr "包捕捉"
 
-#: templates/main/start.html:173
+#: templates/main/start.html:172
 msgid ""
 "Have a look at what goes over the wire. Just activate packet capturing on a "
 "link and analyze the traffic in Wireshark."
 msgstr "在wireshark中观察捕获的包，分析链路"
 
-#: templates/main/start.html:185
+#: templates/main/start.html:184
 msgid "Link emulation"
 msgstr "链路测试"
 
-#: templates/main/start.html:186
+#: templates/main/start.html:185
 msgid ""
 "Configure different properties like latency, packet loss or bandwidth on "
 "each link."
 msgstr "在链路上配置如丢包率，潜在因素和带宽等不同的属性"
 
-#: templates/main/start.html:198
+#: templates/main/start.html:197
 msgid "Graphical console"
 msgstr "图形化的控制台"
 
-#: templates/main/start.html:199
+#: templates/main/start.html:198
 msgid ""
 "Control your virtual machines directly from a web-based console viewer. "
 "Watch your VM boot or control graphical user interfaces."
 msgstr ""
-"控制你的虚拟机直接从一个基于web的控制台查看器。你的虚拟机启动或控制图形用户界"
+"从一个基于web的控制台查看器控制你的虚拟机。启动或控制你的虚拟图形用户界"
 "面。"
 
-#: templates/main/start.html:211 templates/main/statistics.html:80
+
+#: templates/main/start.html:210 templates/main/statistics.html:80
 msgid "Virtual networks"
 msgstr "虚拟网络"
 
-#: templates/main/start.html:212
+#: templates/main/start.html:211
 msgid "Use virtual switches or external networks to connect your topology."
 msgstr "使用虚拟交换机或外部网络连接拓扑。"
 
-#: templates/main/start.html:224
+#: templates/main/start.html:223
 msgid "Different virtualization technologies"
 msgstr "不同的虚拟技术"
 
-#: templates/main/start.html:225
+#: templates/main/start.html:224
 msgid ""
 "Select from full virtualization (KVM) and container virtualization (OpenVZ) "
 "for each topology component to save resources."
 msgstr "使用KVM或者OpenVZ用于对每个组件虚拟化为资源"
 
-#: templates/main/start.html:237
+#: templates/main/start.html:236
 msgid "Pre-configured templates"
 msgstr "提前配置好的拓扑"
 
-#: templates/main/start.html:238
+#: templates/main/start.html:237
 msgid ""
 "Select from a wide range of pre-configures VM images spanning from Debian, "
 "Ubuntu and other Linux systems to Windows XP."
 msgstr "选择Debian、ubuntu或者其他linux系统的预配置虚拟机镜像"
 
-#: templates/main/start.html:250
+#: templates/main/start.html:249
 msgid "Integrated monitoring"
 msgstr "综合检测"
 
-#: templates/main/start.html:251
+#: templates/main/start.html:250
 msgid ""
 "Observe the resource usage of a whole topology or individual components."
 msgstr "观察整个拓扑或单个组件的资源使用情况。"
 
-#: templates/main/start.html:274
+#: templates/main/start.html:273
 msgid "Latest news "
 msgstr "最近新闻"
 
-#: templates/main/start.html:274
+#: templates/main/start.html:273
 msgid "RSS Feed"
 msgstr "RSS订阅"
 
-#: templates/main/start.html:287
+#: templates/main/start.html:286
 msgid "Failed to load news feed!"
 msgstr "载入RSS失败"
 
@@ -1647,12 +1716,6 @@ msgstr "移除恶意代码"
 msgid "Add malicious code"
 msgstr "增加恶意代码"
 
-#: templates/security_resources/malicious_code_list.html:34
-#: templates/security_resources/security_software_list.html:34
-#: templates/security_resources/vulnerability_list.html:34
-msgid "creation_date"
-msgstr "创建时间"
-
 #: templates/security_resources/malicious_code_list.html:48
 msgid "No Malicious Code"
 msgstr "没有恶意代码"
@@ -1738,7 +1801,7 @@ msgstr "定制功能"
 
 #: templates/templates/info.html:70
 msgid "Executable archive support"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/templates/info.html:105
 msgid "Default Keyboard Layout"
@@ -1898,13 +1961,13 @@ msgstr ""
 
 #: templates/web_resources/custom_element_icons_list.html:40
 msgid "No default executable archives"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/web_resources/custom_element_icons_list.html:48
 #: templates/web_resources/default_executable_archive_info.html:108
 #: templates/web_resources/default_executable_archive_list.html:66
 msgid "Default executable archives are described at"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/web_resources/custom_element_icons_list.html:49
 #: templates/web_resources/default_executable_archive_info.html:109
@@ -1919,15 +1982,15 @@ msgid ""
 "You can describe default executable archives via the web/web-resources "
 "settings by providing a URL for the setting "
 msgstr ""
-"你可以描述默认可执行档案路径通过web/web-resources settings被URL提供的。"
+"你可以描述默认服务路径通过web/web-resources settings被URL提供的。"
 
 #: templates/web_resources/default_executable_archive_info.html:18
 msgid "All Default Executable Archives"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/web_resources/default_executable_archive_info.html:21
 msgid "Executable Archive"
-msgstr "默认可执行档案"
+msgstr "默认服务"
 
 #: templates/web_resources/default_executable_archive_info.html:56
 #: templates/web_resources/default_executable_archive_info.html:91
@@ -1975,12 +2038,6 @@ msgstr "代替文件"
 
 #~ msgid "Add Host"
 #~ msgstr "增加主机"
-
-#~ msgid "username"
-#~ msgstr "用户"
-
-#~ msgid "password"
-#~ msgstr "密码"
 
 #~ msgid "login failed"
 #~ msgstr "登录失败"

@@ -39,6 +39,7 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = patterns('',
 	(r'^$', 'tomato.main.index'),
+	url(r'^$', 'tomato.main.index', name='index'),
 	(r'^fonts/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'tomato/fonts'}),
 	(r'^img/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'tomato/img'}),
 	(r'^js/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'tomato/js'}),

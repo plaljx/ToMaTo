@@ -174,17 +174,17 @@ def add(api, request, tech=None):
 		if form.is_valid():
 			formData = form.cleaned_data
 			creation_date = formData['creation_date']
-			attrs = {	'label':formData['label'],
-						'subtype':formData['subtype'],
-						'preference':formData['preference'],
-						'restricted': formData['restricted'],
-						'description':formData['description'],
-						'nlXTP_installed':formData['nlXTP_installed'],
-						'creation_date':dateToTimestamp(creation_date) if creation_date else None,
-						'icon':formData['icon'],
-						'show_as_common':formData['show_as_common'],
-						'urls': filter(lambda x: x, formData['urls'].splitlines()),
-						'customize': formData['customize']}
+			attrs = {	_('label'):formData['label'],
+						_('subtype'):formData['subtype'],
+						_('preference'):formData['preference'],
+						_('restricted'): formData['restricted'],
+						_('description'):formData['description'],
+						_('nlXTP_installed'):formData['nlXTP_installed'],
+						_('creation_date'):dateToTimestamp(creation_date) if creation_date else None,
+						_('icon'):formData['icon'],
+						_('show_as_common'):formData['show_as_common'],
+						_('urls'): filter(lambda x: x, formData['urls'].splitlines()),
+						_('customize'): formData['customize']}
 # <<<<<<< HEAD
 # 						'urls': filter(lambda x: x, formData['urls'].splitlines()),
 # 						'customize':formData['customize']}

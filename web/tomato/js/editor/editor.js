@@ -555,7 +555,7 @@ var Editor = Class.extend({
 
 
 
-		var tab = this.menu.addTab("Topology");
+		var tab = this.menu.addTab(gettext("Topology"));
 
 		var group = tab.addGroup(gettext("Functions"));
 

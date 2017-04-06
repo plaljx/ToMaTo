@@ -69,14 +69,14 @@
 		
 	{% else %}
 		<a href="{%url "topology_list"%}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-user"></span> {%trans 'Login'%}</a>
-		<span style="margin-left:0.3cm; margin-right:0.3cm;">or</span>
+		<span style="margin-left:0.3cm; margin-right:0.3cm;"></span>
 		<a href="{%url "account.register"%}" class="btn btn-default btn-lg">{%trans 'Register'%}</a>
 	{% endif %}
 	</p>
 	<div class="skip-xs""></div>
-	<p>
+	<!-- <p>
 		<a href="{%externalurl 'project' %}" class="btn btn-primary"><span class="glyphicon glyphicon-globe"></span> {%trans 'Visit our Homepage'%}</a>
-	</p>
+	</p> -->
 </div>
 </div>
 
@@ -89,11 +89,10 @@
   	<div class="panel-heading">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          <span class="glyphicon glyphicon-info-sign"></span> {%trans 'Features'%} <small>{%trans '(click to expand)'%}</small>
+          <span class="glyphicon glyphicon-info-sign"></span> {%trans 'Features'%}
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse" style="padding:0.2cm;">
   
 		<div class="features">
 		    <div id="carousel-features-captions" class="carousel slide" data-ride="carousel">
@@ -261,7 +260,7 @@
 		      </a>
 		    </div>
 		  </div>
-</div></div></div>
+</div></div>
 
 
 
@@ -270,7 +269,7 @@
 
 <div class="skip-sm"></div> 
 
-{% if news %}
+<!-- {% if news %}
 <h2>{%trans 'Latest news '%}<a href="{%externalurl 'rss-feed'%}" class="btn btn-warning btn-sm pull-right"><span class="icomoon-rss"></span> {%trans 'RSS Feed'%}</a></h2>
 {% for item in news.items %}
 <div class="panel panel-default">
@@ -286,6 +285,6 @@
 {% else %}
 <div class="alert alert-danger"><b>{%trans 'Failed to load news feed!'%}</b></div>
 {% endif %}
-
+ -->
 </div></div>
 {% endblock %}

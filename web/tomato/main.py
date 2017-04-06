@@ -26,6 +26,8 @@ from tomato.crispy_forms.bootstrap import StrictButton, FormActions
 
 from lib import getapi, getNews, wrap_rpc
 
+from django.utils.translation import ugettext_lazy as _
+
 # to be called by index()
 # assumes that the request has a user logged in.
 def _pending_registrations(api, request):
@@ -67,7 +69,7 @@ def backend_key(api, request):
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=255)
 	password = forms.CharField(max_length=255, widget=forms.PasswordInput)
-	long_session = forms.BooleanField(required=False, label="Remember me")
+	long_session = forms.BooleanField(required=False, label=_("Remember me"))
 	def __init__(self, *args, **kwargs):
 		super(LoginForm, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()
@@ -81,7 +83,7 @@ class LoginForm(forms.Form):
 		    'password',
 		    'long_session',
 		    FormActions(
-		    	StrictButton('Log in', css_class='col-sm-offset-2 btn-primary', type="submit")
+		    	StrictButton(_('Log in'), css_class='col-sm-offset-2 btn-primary', type="submit")
 		    )
 		)
 

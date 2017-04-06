@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 17:14+0800\n"
+"POT-Creation-Date: 2017-04-06 14:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: js/editor/editor.js:241
 msgid "Home"
-msgstr ""
+msgstr "主页"
 
 #: js/editor/editor.js:243
 msgid "Modes"
@@ -78,7 +78,7 @@ msgstr "常用元素"
 
 #: js/editor/editor.js:355
 msgid "Devices"
-msgstr ""
+msgstr "设备"
 
 #: js/editor/editor.js:434
 msgid "Upload own images"
@@ -97,10 +97,8 @@ msgid "Repy script"
 msgstr "答复脚本"
 
 #: js/editor/editor.js:466
-#, fuzzy
-#| msgid "Networks"
 msgid "Network"
-msgstr "外网"
+msgstr "网络"
 
 #: js/editor/editor.js:468
 msgid "VPN Elements"
@@ -129,6 +127,10 @@ msgstr "客户脚本"
 #: js/editor/editor.js:526
 msgid "Networks"
 msgstr "网络"
+
+#: js/editor/editor.js:558 js/editor/options.js:147
+msgid "Topology"
+msgstr "拓扑"
 
 #: js/editor/editor.js:560
 msgid "Functions"
@@ -172,10 +174,8 @@ msgid "Users & Permissions"
 msgstr "用户&许可证"
 
 #: js/editor/editor.js:653
-#, fuzzy
-#| msgid "Functions"
 msgid "Options"
-msgstr "功能"
+msgstr "选项"
 
 #: js/editor/menus/menus/element_menu.js:29
 msgid "Please wait for the current action to finish and re-open this menu."
@@ -337,10 +337,6 @@ msgid ""
 "connections. These might be useful to hide when taking screenshots."
 msgstr ""
 "在元素上显示网络接口，并且在网络连接上显示句柄。这些隐藏可能对截图有用。"
-
-#: js/editor/options.js:147
-msgid "Topology"
-msgstr "拓扑"
 
 #: js/editor/options.js:155
 msgid "User"

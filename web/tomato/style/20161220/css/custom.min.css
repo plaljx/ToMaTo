@@ -180,7 +180,7 @@ body .container.body .right_col {
 }
 
 .nav-md .container.body .right_col {
-    padding: 10px 20px 0;
+    padding: 0px 20px 0;
     margin-left: 230px
 }
 
@@ -1143,5 +1143,9 @@ form:after {
     width: 100%;
     margin-bottom: 10px;
     float: left
+}
+.center_editor{
+    margin-left: 80px;
+    margin-right: 80px;
 }
 

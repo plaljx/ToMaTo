@@ -23,7 +23,7 @@ $(document).ready(function() {
 
         // normalize content
         // contentHeight -= $NAV_MENU.height() + footerHeight;
-
+        $LEFT_COL.css('min-height', contentHeight);
         $RIGHT_COL.css('min-height', contentHeight);
     };
 
