@@ -675,6 +675,8 @@ var Topology = Class.extend({
 	initialDialog: function() {
 		var t = this;
 		var dialog, name, description, timeout;
+		var owner, group, group_visible;
+		var user = this.editor.options.user;
 		dialog = new AttributeWindow({
 			title: "New Topology",
 			width: 500,
@@ -688,6 +690,7 @@ var Topology = Class.extend({
 								if (name.getValue() && timeout.getValue()) {
 									t.modify({
 										"name": name.getValue(),
+										"group_info": {"group": user.group, "group_visible": group_visible.getValue()},
 										"_notes": description.getValue(),
 										"_initialized": true
 									});
@@ -729,6 +732,23 @@ var Topology = Class.extend({
 			label: "Description",
 			help_text: "Description of the experiment. (Optional)",
 			value: t.data._notes
+		}));
+		owner = dialog.add(new TextElement({
+            name: "author",
+            label: "Author",
+            disabled: true,
+            value: user.name
+        }));
+		group = dialog.add(new TextElement({
+			name: "group",
+			label: "Group",
+			disabled: true,
+			value: user.group || "None"
+		}));
+		group_visible = dialog.add(new CheckboxElement({
+			name: "group_visible",
+			label: "Group Visible",
+			help_text: "If checked, users from same groups can access this topology"
 		}));
 		dialog.show();
 	},
