@@ -285,6 +285,9 @@ class UserInfo(InfoObj):
 	def get_organization_name(self):
 		return self.info()['organization']
 
+	def get_group_name(self):
+		return self.info()['group']
+
 	def _check_exists(self):
 		if self._info is not None:
 			return True
@@ -386,6 +389,16 @@ class TopologyInfo(ActionObj):
 			return topology_role.Role.leq(role,user_role)
 		except:
 			return False
+
+	def user_group_permission(self, user_group):
+		"""
+		Check if the user can view topl via group permission
+		:param str user_group: user's group
+		:rtype: bool
+		"""
+		return self.info() and \
+			   self.info()['group_info']['group_visible'] \
+			   and self.info()['group_info']['group'] == user_group
 
 	def _check_exists(self):
 		if self._info is not None:
@@ -866,6 +879,9 @@ def get_topology_list(full=False, organization_filter=None, username_filter=None
 	:rtype: list(dict)
 	"""
 	return get_backend_core_proxy().topology_list(full=full, organization_filter=organization_filter, username_filter=username_filter)
+@cached(10)
+def get_topology_of_group(group, full=False):
+	return get_backend_core_proxy().topology_of_group(group, full=full)
 
 @cached(1800)
 def get_site_info(site_name):

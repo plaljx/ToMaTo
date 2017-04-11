@@ -53,7 +53,8 @@ from site import site_list, site_create, site_info, site_modify, site_remove
 from templates import template_list, template_info, template_create, template_modify, template_remove
 
 from topology import topology_action, topology_create, topology_info,\
-	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage
+	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage,\
+	topology_of_group
 
 
 
