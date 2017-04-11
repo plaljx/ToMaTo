@@ -213,6 +213,13 @@ def topology_list(full=False, organization_filter=None, username_filter=None): #
 
 	return [top.info(full) for top in tops]
 
+
+def topology_of_group(group, full=False):
+	tops = topology.getGroupTopologies(group)
+	return [top.info(full) for top in tops]
+
+
+
 def topology_set_permission(id, user, role): #@ReservedAssignment
 	"""
 	Grants/changes permissions for a user on a topology. See :doc:`permissions`

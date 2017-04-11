@@ -453,6 +453,11 @@ class PermissionChecker(UserInfo):
 		if topology_info.user_has_role(self.get_username(), role):
 			return True
 
+		# if the user belongs to the target group, then user can view the topology
+		if topology_info.user_group_permission(self.get_group_name()) \
+				and role <= Role.user:
+			return True
+
 		if Role.leq(role, perm_orga):  # user has role in organization
 			if topology_info.organization_has_role(self.get_organization_name(), role):  # organization has role on topology
 				return True

@@ -43,6 +43,15 @@ class Permission(ExtDocument, EmbeddedDocument):
 	user = StringField(required=True)
 	role = StringField(choices=[Role.owner, Role.manager, Role.user], required=True)
 
+class GroupInfo(ExtDocument, EmbeddedDocument):
+	"""
+	If group_visible is true, then all users from this group can access the topology.
+	:type group: str
+	:type group_visible: bool
+	"""
+	group = StringField(required=False, null=True)
+	group_visible = BooleanField(default=False)
+
 
 class Topology(Entity, BaseDocument):
 	"""
@@ -52,6 +61,7 @@ class Topology(Entity, BaseDocument):
 	"""
 	from .host import Site
 	permissions = ListField(EmbeddedDocumentField(Permission))
+	group_info = EmbeddedDocumentField(GroupInfo)
 	timeout = FloatField(required=True)
 	timeoutStep = IntField(db_field='timeout_step', required=True, default=TimeoutStep.INITIAL)
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
@@ -153,6 +163,21 @@ class Topology(Entity, BaseDocument):
 			con.action(action)
 
 
+	def set_group_info(self, attrs):
+		"""
+		:param group: str
+		:param group_visible:  bool
+		:return:
+		"""
+		self.group_info = GroupInfo(group=attrs['group'], group_visible=attrs['group_visible'])
+		self.save()
+
+	def get_group_info(self):
+		if self.group_info:
+			info = {"group": self.group_info.group, "group_visible": self.group_info.group_visible}
+		else:
+			info = {}
+		return info
 
 
 
@@ -348,6 +373,7 @@ class Topology(Entity, BaseDocument):
 		"id": IdAttribute(),
 		"permissions": Attribute(readOnly=True, get=lambda self: {str(p.user): p.role for p in self.permissions},
 			schema=schema.StringMap(additional=True)),
+		"group_info": Attribute(get=get_group_info, set=set_group_info),
 		"site": Attribute(get=lambda self: self.site.name if self.site else None, set=modify_site),
 		"elements": Attribute(readOnly=True, schema=schema.List()),
 		"connections": Attribute(readOnly=True, schema=schema.List()),
@@ -371,6 +397,10 @@ def get(id_, **kwargs):
 
 def getAll(**kwargs):
 	return list(Topology.objects.filter(**kwargs))
+
+def getGroupTopologies(group_name):
+	group_info = GroupInfo(group=group_name, group_visible=True)
+	return list(Topology.objects.filter(group_info=group_info))
 
 def create(owner, **attrs):
 	top = Topology()

@@ -298,6 +298,7 @@ class UserObj:
 		self.name = self.data["name"]
 		self.flags = self.data["flags"]
 		self.organization = self.data["organization"]
+		self.group = self.data["group"]
 		self.realname = self.data["realname"]
 		self.id = self.data["id"]
 		self.notification_count = self.data['notification_count']

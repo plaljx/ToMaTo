@@ -17,7 +17,7 @@
 
 from api_helpers import getCurrentUserInfo, getCurrentUserName
 from ..lib.topology_role import Role
-from ..lib.remote_info import get_topology_info, get_topology_list, TopologyInfo,get_organization_info
+from ..lib.remote_info import get_topology_info, get_topology_list, TopologyInfo,get_organization_info, get_topology_of_group
 from ..lib.service import get_backend_core_proxy,get_backend_users_proxy
 from ..lib.error import UserError
 
@@ -204,6 +204,15 @@ def topology_list(full=False, showAll=False, organization=None): #@ReservedAssig
 	if showAll:
 		getCurrentUserInfo().check_may_list_all_topologies()
 	return get_topology_list(full, organization_filter=organization, username_filter=(None if showAll else getCurrentUserName()))
+
+def topology_of_group(group, full=False):
+	user = getCurrentUserInfo()
+	# TODO: Permission check
+	# UserError.check(user.group == group,
+	# 				code=UserError.DENIED,
+	# 				message="The user does not have permission to this group.",
+	# 				data={"user": user.name, "user_group": user.group, "group": group})
+	return get_topology_of_group(group)
 
 def topology_set_permission(id, user, role): #@ReservedAssignment
 	"""
