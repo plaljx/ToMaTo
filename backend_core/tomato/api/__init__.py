@@ -60,4 +60,4 @@ from security_resources.vulnerability import vulnerability_create, vulnerability
 from security_resources.security_software import security_software_create, security_software_info, \
     security_software_list, security_software_modify, security_software_remove
 
-from traffic import traffic_list, traffic_create, traffic_info, traffic_remove, traffic_modify
+from traffic import traffic_list, traffic_create, traffic_info, traffic_remove, traffic_modify, traffic_start
