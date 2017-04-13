@@ -23,6 +23,7 @@ var TrafficWindow = Window.extend({
 			text:"Start Selected",
 			id:"trawindow-start-button",
 			click:function(){
+				t.startSelected();
 				//todo
 			}
 		};
@@ -50,10 +51,29 @@ var TrafficWindow = Window.extend({
 	 		//async :false,
 	 		successFn:function(data){
 	 			res = data;
-	 			
+
 	 		}
 	 	});
 	 	this.traffics = res;
+	},
+	startSelected:function(){
+		var t = this;
+		var selected = new Array();
+		for(var temp in this.traffics){
+			if(this.traffics[temp].state == "selected"){
+				selected.push(temp);
+			}
+		}
+		ajax({
+			url:'element/' + t.compoent.id +'/traffic_start',
+			data:{selected:selected},
+			successFn:function(data){
+				//todo
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		});
 	},
 	createTrafficList:function(){
 		var t = this ;
@@ -62,7 +82,8 @@ var TrafficWindow = Window.extend({
 	 		successFn:function(data){
 	 			var res = data ;
 	 			for(var i = 0 ; i < res.length ; i++){
-	 				t.traffics[res[i].traffic_name] = res[i];
+	 				t.traffics[res[i].id] = res[i];
+	 				t.traffics[res[i].id].state = "unselected";
 	 			}
 	 			t.createTrafficListTwo();
 	 			t.show();
@@ -76,16 +97,15 @@ var TrafficWindow = Window.extend({
 		var t = this;
 		this.trafficTable =  $('<div />');
 		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-5"><h4>Name</h4></div><div class="col-sm-3"><h4>Destination IP</h4></div><div class="col-sm-3" /></div>');
-		this.trafficTable.append(tableHeader); 
+		this.trafficTable.append(tableHeader);
 		this.trafficList.empty();
 		this.trafficList.append(this.trafficTable);
 
-		var perm = this.traffics;
-		for(u in perm){
+		for(var u in this.traffics){
 			this.addTrafficToList(u);
 		}
 	},
-	addTrafficToList:function(trafficname){
+	addTrafficToList:function(trafficId){
 		var t = this;
 		var tr = $('<div class="row" />');
 		var td_name = $('<div class="col-sm-5" />');
@@ -98,7 +118,7 @@ var TrafficWindow = Window.extend({
 		tr.append(td_perm);
 		tr.append(td_buttons);
 
-		this.trafficListFinder[trafficname] = {
+		this.trafficListFinder[trafficId] = {
 				td_icon: td_icon,
 				td_name: td_name,
 				td_perm: td_perm,
@@ -106,49 +126,91 @@ var TrafficWindow = Window.extend({
 				tr: tr
 		};
 		this.trafficTable.append(tr);
-		this.drawView(trafficname);
-	
+		this.drawView(trafficId);
+
 	},
-	drawView:function(trafficname){
+	drawView:function(trafficId){
 		var t = this;
-		var dest_ip = '<div class="hoverdescription">'+this.traffics[trafficname].dest_ip+'</div>';//show the destination ip address of the traffic
-		var td_perm = this.trafficListFinder[trafficname].td_perm;
-		var td_buttons = this.trafficListFinder[trafficname].td_buttons;
-		var td_name = this.trafficListFinder[trafficname].td_name;
+		var dest_ip = '<div class="hoverdescription">'+this.traffics[trafficId].dest_ip+'</div>';//show the destination ip address of the traffic
+		var td_perm = this.trafficListFinder[trafficId].td_perm;
+		var td_buttons = this.trafficListFinder[trafficId].td_buttons;
+		var td_name = this.trafficListFinder[trafficId].td_name;
 
 		td_perm.empty();
 		td_buttons.empty();
-		td_name.append(trafficname);
+		td_name.append(this.traffics[trafficId].traffic_name);
 		td_perm.append(dest_ip);
-		var editButton = $('<img src="/img/pencil.png" title="modify traffic" style="cursor:pointer;" />');
+		var editButton = $('<img src="/img/pencil.png" title="modify the traffic" style="cursor:pointer;" />');
 		editButton.click(function(){
 				//todo
-				t.modifyTraffic(trafficname);
+				t.modifyTraffic(trafficId);
 			});
 		td_buttons.append(editButton);
 		var removeButton = $('<img src="/img/cross.png" title="remove from list" style="cursor:pointer;" />');
 		removeButton.click(function(){
 				//todo
-				t.removeTraffic(trafficname);
-			})
+				t.removeTraffic(trafficId);
+			});
 		td_buttons.append(removeButton);
+
+		var selectButton = $('<img src="/img/select.png" title="select the traffic"  style="cursor:pointer;" />');
+		selectButton.click(function(){
+			//changebutton
+			t.changeButton(trafficId);
+		});
+		td_buttons.append(selectButton);
 	},
-	modifyTraffic:function(trafficname){
+	changeButton:function(trafficId){
+		var t = this;
+		var td_buttons = this.trafficListFinder[trafficId].td_buttons;
+		td_buttons.empty();
+		var editButton = $('<img src="/img/pencil.png" title="modify the traffic" style="cursor:pointer;" />');
+		editButton.click(function(){
+				//todo
+				t.modifyTraffic(trafficId);
+			});
+		td_buttons.append(editButton);
+		var removeButton = $('<img src="/img/cross.png" title="remove from list" style="cursor:pointer;" />');
+		removeButton.click(function(){
+				//todo
+				t.removeTraffic(trafficId);
+			});
+		td_buttons.append(removeButton);
+
+		if (t.traffics[trafficId].state == "unselected") {
+			t.traffics[trafficId].state = "selected";
+			var unselectButton = $('<img src="/img/unselect.png" title="unselect the traffic"  style="cursor:pointer;" />');
+			unselectButton.click(function(){
+				//changebutton
+				t.changeButton(trafficId);
+			});
+			td_buttons.append(unselectButton);
+		}
+		else{
+			t.traffics[trafficId].state ="unselected";
+			var selectButton = $('<img src="/img/select.png" title="select the traffic"  style="cursor:pointer;" />');
+			selectButton.click(function(){
+			//changebutton
+				t.changeButton(trafficId);
+			});
+			td_buttons.append(selectButton);
+		}
+	},
+	modifyTraffic:function(trafficId){
 		var t = this;
 		t.addNewTraffic();
 	},
-	removeTraffic:function(trafficname){
-		this.trafficListFinder[trafficname].tr.remove();
+	removeTraffic:function(trafficId){
+		this.trafficListFinder[trafficId].tr.remove();
 		ajax({
-			url:'element/'+this.traffics[trafficname].id+'/traffic_remove',
+			url:'element/'+this.traffics[trafficId].id+'/traffic_remove',
 			successFn:function(data){
 				//todo
 			}
 		});
-		delete this.traffics[trafficname];
-		delete this.userListFinder[trafficname];  
+		delete this.traffics[trafficId];
+		delete this.userListFinder[trafficId];
 	},
-
 	addNewTraffic:function(){
 		var t = this;
 		var traffic;
@@ -157,7 +219,7 @@ var TrafficWindow = Window.extend({
 			width: 500,
 			height: 700,
             buttons: [
-						{ 
+						{
 							text:"Save",
 							click: function() {
 								var values =  traffic.getValues();
@@ -169,8 +231,9 @@ var TrafficWindow = Window.extend({
 									url:'element/'+t.compoent.id+'/traffic_create',
 									data:values,
 									successFn:function(data){
-										t.traffics[data.traffic_name] = data;
-										t.addTrafficToList(data.traffic_name);
+										t.traffics[data.id] = data;
+										t.traffics[data.id].state ="unselected";
+										t.addTrafficToList(data.id);
 									}
 								});
 								traffic.remove();
@@ -183,8 +246,8 @@ var TrafficWindow = Window.extend({
 							}
 						}
 					],
-			
-		
+
+
 		});
 		traffic.add(new TextElement({
 			label:"Name",
@@ -197,11 +260,10 @@ var TrafficWindow = Window.extend({
 			value:"10.0"
 		}));
 
-		var choices = {"10.109.241.100":"10.109.241.100","10.109.241.66":"10.109.241.100"};
-		traffic.add(new ChoiceElement({
+		traffic.add(new TextElement({
 			label:"Dstination IP",
 			name:"dest_ip",
-			choices: choices
+			value:""
 			//value:"10.109.241.66"
 		}));
 		traffic.add(new TextElement({
