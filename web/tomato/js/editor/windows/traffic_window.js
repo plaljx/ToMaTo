@@ -202,13 +202,13 @@ var TrafficWindow = Window.extend({
 		modifyWindow = new AttributeWindow({
 			title :"Attributes",
 			width:500,
-			height:700,
-			bottons:[{
+			height:600,
+			buttons:[{
 				text:"Modify",
 				click:function(){
 					//todo:modify
 					modifyWindow.remove();
-				}
+					}
 				},
 				{
 					text:"Close",
