@@ -67,8 +67,8 @@ def backend_key(api, request):
 	return HttpResponse(api.server_info()['public_key'], content_type='text/plain')
 
 class LoginForm(forms.Form):
-	username = forms.CharField(max_length=255)
-	password = forms.CharField(max_length=255, widget=forms.PasswordInput)
+	username = forms.CharField(max_length=255, label = _('username'))
+	password = forms.CharField(max_length=255, widget=forms.PasswordInput, label=_('password'))
 	long_session = forms.BooleanField(required=False, label=_("Remember me"))
 	def __init__(self, *args, **kwargs):
 		super(LoginForm, self).__init__(*args, **kwargs)

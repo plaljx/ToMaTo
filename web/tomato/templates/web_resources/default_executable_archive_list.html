@@ -44,7 +44,7 @@
 				{% if archive.description %}
 					<td>{{ archive.description|linebreaks|escape|simpletags:"b i em strong"|safe }}</td>
 				{% else %}
-					<td>No description available.</td>
+					<td>{%trans 'No description available.'%}</td>
 				{%endif%}
 			</tr>
 			
@@ -55,7 +55,7 @@
 	{% endfor %}
 	</table>
 {% else %}
-	<p>No default executable archives.</p>
+	<p>{%trans 'No default executable archives.'%}</p>
 {% endif %}
 
 {% if request.session.user.isGlobalHostManager %}

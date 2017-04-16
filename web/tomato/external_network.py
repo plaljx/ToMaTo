@@ -25,16 +25,18 @@ from django.core.urlresolvers import reverse
 
 from tomato.crispy_forms.layout import Layout
 
+from django.utils.translation import ugettext_lazy as _
+
 from lib.error import UserError #@UnresolvedImport
 
 
 class NetworkForm(BootstrapForm):
-	kind = forms.CharField(label="Kind",max_length=255)
-	label = forms.CharField(max_length=255,label="Label",help_text="Visible Name")
-	preference = forms.IntegerField(label="Preference", help_text="Sort networks in the editor (higher preference first). The item with the highest preference will be the default one. An integer number.")
-	description = forms.CharField(widget = forms.Textarea, required=False)
-	big_icon = forms.BooleanField(label="Show as a big icon in the editor", required=False)
-	show_as_common = forms.BooleanField(label="Show in Common Elements", help_text="Show this network in the common elements section in the editor", required=False)
+	kind = forms.CharField(label=_("Kind"),max_length=255)
+	label = forms.CharField(max_length=255,label=_("Label"),help_text=_("Visible Name"))
+	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort networks in the editor (higher preference first). The item with the highest preference will be the default one. An integer number."))
+	description = forms.CharField(widget = forms.Textarea, required=False, label = _('description'))
+	big_icon = forms.BooleanField(label=_("Show as a big icon in the editor"), required=False)
+	show_as_common = forms.BooleanField(label=_("Show in Common Elements"), help_text=_("Show this network in the common elements section in the editor"), required=False)
 	def __init__(self, *args, **kwargs):
 		super(NetworkForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(add)
@@ -79,17 +81,17 @@ def add(api, request):
 		if form.is_valid():
 			formData = form.cleaned_data
 			api.network_create(formData['kind'], {
-										   'label':formData['label'],
-										   'preference':formData['preference'],
-										   'description':formData['description'],
-										   'big_icon':formData['big_icon'],
-										   'show_as_common': formData['show_as_common']})
+										   _('label'):formData['label'],
+										   _('preference'):formData['preference'],
+										   _('description'):formData['description'],
+										   _('big_icon'):formData['big_icon'],
+										   _('show_as_common'): formData['show_as_common']})
 			return HttpResponseRedirect(reverse("tomato.external_network.list"))
 		else:
-			return render(request, "form.html", {'form': form, 'heading':"Add External Network"})
+			return render(request, "form.html", {'form': form, 'heading':_("Add External Network")})
 	else:
 		form = NetworkForm
-		return render(request, "form.html", {'form': form, 'heading':"Add External Network"})
+		return render(request, "form.html", {'form': form, 'heading':_("Add External Network")})
 
 @wrap_rpc
 def remove(api, request, res_id=None):
