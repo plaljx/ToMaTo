@@ -36,9 +36,10 @@ action_use = "rextfv_upload_use"
 
 
 def traffic_start(element_id, trafficIds):
-	pack_dir = make_pack(trafficIds[0])
-	send_result=send_pack(element_id, pack_dir)
-	action_result = element_action(element_id,action_use)
+	for trafficId in trafficIds:
+		pack_dir = make_pack(trafficId)
+		send_result=send_pack(element_id, pack_dir)
+		action_result = element_action(element_id,action_use)
 	return action_result
 
 def get_element(id):
@@ -55,8 +56,7 @@ def make_pack(traffic_id):
 		os.system("rm  /work/%s/*" % traffic_id)
 	else:
 		os.mkdir("/work/%s" % traffic_id)
-	pattern = "PERIODIC [1 1024]"
-	on_event = "0.0 ON 1 UDP DST %s/%s %s" % (traffic_info.dest_ip , traffic_info.dest_port , pattern)
+	on_event = "0.0 ON 1 UDP DST %s/%s %s" % (traffic_info.dest_ip , traffic_info.dest_port , traffic_info.pattern)
 	print "pattern" + on_event + "\n"
 	off_event  = "20.0 OFF 1"
 	f = open("/work/%s/auto_exec.sh" % traffic_id, "w")
