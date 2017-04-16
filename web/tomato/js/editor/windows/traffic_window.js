@@ -276,10 +276,14 @@ var TrafficWindow = Window.extend({
 			name:"protocol",
 			choices:{"TCP":"TCP" , "UDP":"UDP"}
 		}));
-		traffic.add(new TextElement({
+		var patternChoices = {"PERIODIC [1.0 125]":"1kbps" , "PERIODIC [10.0 125]":"10kbps",
+		"PERIODIC [10.0 1250]":"100kbps" ,"PERIODIC [50.0 1280]":"512kbps",
+		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
+		"JITTER [10.0 125 0.5]":"JITTER 10kbps 0.05-0.15s"};
+		traffic.add(new ChoiceElement({
 			label:"Pattern",
 			name:"pattern",
-			value:"PERIODIC [1 1024]"
+			choices:patternChoices
 		}));
 		traffic.show();
 	}
