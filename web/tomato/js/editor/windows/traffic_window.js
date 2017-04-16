@@ -198,7 +198,59 @@ var TrafficWindow = Window.extend({
 	},
 	modifyTraffic:function(trafficId){
 		var t = this;
-		t.addNewTraffic();
+		var modifyWindow;
+		modifyWindow = new AttributeWindow({
+			title :"Attributes",
+			width:500,
+			height:600,
+			buttons:[{
+				text:"Modify",
+				click:function(){
+					//todo:modify
+					modifyWindow.remove();
+					}
+				},
+				{
+					text:"Close",
+					click:function(){
+						modifyWindow.remove();
+					}
+				}
+			],
+
+		});
+		modifyWindow.add(new TextElement({
+			label:"Off time",
+			name:"off_time",
+			value:this.traffics[trafficId].off_time
+		}));
+
+		modifyWindow.add(new TextElement({
+			label:"Destination IP",
+			name:"dest_ip",
+			value:this.traffics[trafficId].dest_ip
+		}));
+		modifyWindow.add(new TextElement({
+			label:"Destination Port",
+			name:"dest_port",
+			value:this.traffics[trafficId].dest_port
+		}));
+		var protocolChoices = {"TCP":"TCP", "UDP":"UDP"};
+		modifyWindow.add(new ChoiceElement({
+			label:"Protocal",
+			name:"protocol",
+			choices:protocolChoices
+		}));
+		var patternChoices = {"PERIODIC [1.0 125]":"1kbps" , "PERIODIC [10.0 125]":"10kbps",
+		"PERIODIC [10.0 1250]":"100kbps" ,"PERIODIC [50.0 1280]":"512kbps",
+		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
+		"JITTER [10.0 125 0.5]":"JITTER 10kbps 0.05-0.15s"};
+		modifyWindow.add(new ChoiceElement({
+			label:"Pattern",
+			name:"pattern",
+			choices:patternChoices
+		}));
+		modifyWindow.show();
 	},
 	removeTraffic:function(trafficId){
 		this.trafficListFinder[trafficId].tr.remove();
@@ -261,7 +313,7 @@ var TrafficWindow = Window.extend({
 		}));
 
 		traffic.add(new TextElement({
-			label:"Dstination IP",
+			label:"Destination IP",
 			name:"dest_ip",
 			value:""
 			//value:"10.109.241.66"
