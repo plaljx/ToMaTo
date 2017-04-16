@@ -75,5 +75,6 @@ from security_resources.security_software import security_software_create, secur
 
 
 #traffic
-from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, traffic_modify
+from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, traffic_modify,traffic_start
+
 

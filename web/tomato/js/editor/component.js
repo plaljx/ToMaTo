@@ -256,9 +256,9 @@ var Component = Class.extend({
 	},
 	trafficAvailable:function(){
 		var t = this;
-		if(this.data.type != "openvz"){
+		/*if(this.data.type != "openvz"){
 			return false
-		}
+		}*/
 		var settings = this.configWindowSettings();
 		if(settings.special.template.template.customize == "mgen") {
 			return true;

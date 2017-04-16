@@ -24,3 +24,8 @@ def traffic_modify(id, attrs=None):
 		attrs = {}
 	res = get_backend_core_proxy().traffic_modify(id, attrs)
 	return res
+
+def traffic_start(element_id , trafficIds):
+	print trafficIds[0]
+	res = get_backend_core_proxy().traffic_start(element_id,trafficIds)
+	return res
