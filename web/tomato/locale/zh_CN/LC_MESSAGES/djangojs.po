@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 11:47+0800\n"
+"POT-Creation-Date: 2017-04-16 14:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,7 +160,7 @@ msgstr "资源使用"
 msgid "Management"
 msgstr "管理"
 
-#: js/editor/editor.js:594 js/editor/topology.js:678
+#: js/editor/editor.js:594 js/editor/topology.js:600
 msgid "Save As Scenario"
 msgstr "作为场景保存"
 
@@ -371,6 +371,19 @@ msgstr ""
 msgid "User"
 msgstr "用户"
 
+#: js/editor/topology.js:107
+msgid "Attributes"
+msgstr "属性"
+
+#: js/editor/topology.js:135 js/editor/topology.js:646
+#: js/editor/topology.js:707
+msgid "Name"
+msgstr "名称"
+
+#: js/editor/topology.js:141
+msgid "Site"
+msgstr "站点"
+
 #: js/editor/topology.js:382
 msgid "Are you sure you want to completely destroy this topology?"
 msgstr "你确定完全删除整个拓扑吗"
@@ -379,25 +392,35 @@ msgstr "你确定完全删除整个拓扑吗"
 msgid "Are you sure you want to completely remove this topology?"
 msgstr "你确定完全移除整个拓扑吗"
 
-#: js/editor/topology.js:480
-msgid "Notes for Topology"
-msgstr "拓扑笔记"
+#: js/editor/topology.js:499
+msgid "Rename Topology"
+msgstr "重命名拓扑"
 
-#: js/editor/topology.js:541
-#, fuzzy
-#| msgid "Topology control"
-msgid "Topology Timeout"
-msgstr "拓扑控制"
+#: js/editor/topology.js:502
+msgid "New Name:"
+msgstr "新的名称"
 
-#: js/editor/topology.js:546 js/editor/topology.js:684
-#: js/editor/topology.js:762
+#: js/editor/topology.js:513 js/editor/topology.js:546
+#: js/editor/topology.js:606 js/editor/topology.js:684
 msgid "Save"
 msgstr "保存"
 
+#: js/editor/topology.js:524
+msgid "Cancel"
+msgstr "取消"
+
+#: js/editor/topology.js:541
+msgid "Topology Timeout"
+msgstr "拓扑时限"
+
 #: js/editor/topology.js:555 js/editor/topology.js:562
-#: js/editor/topology.js:702
+#: js/editor/topology.js:624
 msgid "Close"
 msgstr "关闭"
+
+#: js/editor/topology.js:580
+msgid "New timeout"
+msgstr "新的时限"
 
 #: js/editor/topology.js:583
 msgid ""
@@ -408,57 +431,53 @@ msgstr ""
 "到时后你的拓扑会被自动停止。随后你可以将拓扑运行的时间延长。你将接收到一个警"
 "告在你的拓扑被停止运行时。"
 
-#: js/editor/topology.js:718
+#: js/editor/topology.js:640
 msgid "Author"
 msgstr "作者"
 
-#: js/editor/topology.js:724 js/editor/topology.js:785
-msgid "Name"
-msgstr "名称"
-
-#: js/editor/topology.js:725
+#: js/editor/topology.js:647
 msgid "The name of your scenario"
 msgstr "你的场景名称"
 
-#: js/editor/topology.js:737 js/editor/topology.js:807
+#: js/editor/topology.js:659 js/editor/topology.js:729
 msgid "Description"
 msgstr "描述"
 
-#: js/editor/topology.js:738
+#: js/editor/topology.js:660
 msgid "The text description of your scenario."
 msgstr "你的场景的描述"
 
-#: js/editor/topology.js:742
+#: js/editor/topology.js:664
 msgid "Accessibility"
 msgstr "权限"
 
-#: js/editor/topology.js:745
+#: js/editor/topology.js:667
 msgid "Whether other users can use the scenario."
 msgstr "其他用户是否可以使用这个场景"
 
-#: js/editor/topology.js:757
+#: js/editor/topology.js:679
 msgid "New Topology"
 msgstr "创建新的拓扑"
 
-#: js/editor/topology.js:786
+#: js/editor/topology.js:708
 msgid "The name for your topology"
 msgstr "你的拓扑名称"
 
-#: js/editor/topology.js:800
+#: js/editor/topology.js:722
 msgid "Timeout"
 msgstr "时限"
 
-#: js/editor/topology.js:803
+#: js/editor/topology.js:725
 msgid ""
 "After this time, your topology will automatically be stopped. Timeouts can "
 "be extended arbitrarily."
 msgstr "你的拓扑会被自动停止。时限可以任意延长。"
 
-#: js/editor/topology.js:808
+#: js/editor/topology.js:730
 msgid "Description of the experiment. (Optional)"
 msgstr "实验描述（可选）"
 
-#: js/editor/topology.js:850
+#: js/editor/topology.js:772
 msgid ""
 "Network segments must not contain multiple external network exits! This "
 "could lead to loops in the network and result in a total network crash."
@@ -468,8 +487,8 @@ msgstr "网段不能包含多个出口。这可能导致一个环的出现，并
 msgid "'"
 msgstr ""
 
-#~ msgid "New timeout"
-#~ msgstr "新的时限"
+#~ msgid "Notes for Topology"
+#~ msgstr "拓扑笔记"
 
 #~ msgid ""
 #~ "<div>You do not have permissions to renew this topology. Please contact a "

@@ -104,7 +104,7 @@ var Topology = Class.extend({
 		var settings = this.configWindowSettings();
 
 		this.configWindow = new AttributeWindow({
-			title: "Attributes",
+			title: gettext("Attributes"),
 			width: 600,
 			height: 600,
 			maxHeight:800,
@@ -132,13 +132,13 @@ var Topology = Class.extend({
 			}
 		});
         this.configWindow.add(new TextElement({
-				label: "Name",
+				label: gettext("Name"),
 				name: "name",
 				value: this.data.name,
 				disabled: false
 		}));
 		this.configWindow.add(new ChoiceElement({
-			label: "Site",
+			label: gettext("Site"),
 			name: "site",
 			choices: createMap(this.editor.sites, "name", function(site) {
 				return (site.label || site.name) + (site.location ? (", " + site.location) : "");
@@ -496,10 +496,10 @@ var Topology = Class.extend({
 	renameDialog: function() {
 		var t = this;
 		windowOptions = {
-			title: "Rename Topology",
+			title: gettext("Rename Topology"),
 			width: 550,
 			inputname: "newname",
-			inputlabel: "New Name:",
+			inputlabel: gettext("New Name:"),
 			inputvalue: t.data.name,
 			onChangeFct: function () {
 				if(this.value == '') {
@@ -510,7 +510,7 @@ var Topology = Class.extend({
 			},
 			buttons: [
 				{
-					text: "Save",
+					text: gettext("Save"),
 					id: "rename_topology_window_save",
 					click: function() {
 						t.rename.hide();
@@ -521,7 +521,7 @@ var Topology = Class.extend({
 					}
 				},
 				{
-					text: "Cancel",
+					text: gettext("Cancel"),
 					click: function() {
 						t.rename.hide();
 						t.rename = null;
@@ -538,12 +538,12 @@ var Topology = Class.extend({
 		var may_renew = this.data.permissions[this.editor.options.user.name] == "owner" || this.data.permissions[this.editor.options.user.name] == "manager"
 
 		dialog = new AttributeWindow({
-			title: "Topology Timeout",
+			title: gettext("Topology Timeout"),
 			width: 500,
 			height: 400,
 			buttons: may_renew ? [
 						{
-							text: "Save",
+							text: gettext("Save"),
 							click: function() {
 								t.action("renew", {params:{
 									"timeout": parseFloat(timeout.getValue())
@@ -552,14 +552,14 @@ var Topology = Class.extend({
 							}
 						},
 						{
-							text: "Close",
+							text: gettext("Close"),
 							click: function() {
 								dialog.remove();
 							}
 						}
 					] : [
 						{
-							text: "Close",
+							text: gettext("Close"),
 							click: function() {
 								dialog.remove();
 							}
@@ -577,7 +577,7 @@ var Topology = Class.extend({
 			// if user is allowed to renew
 			timeout = dialog.add(new ChoiceElement({
 				name: "timeout",
-				label: "New timeout",
+				label: gettext("New timeout"),
 				choices: choices,
 				value: timeout_settings["default"],
 				help_text: gettext("After this time, your topology will automatically be stopped. Timeouts can be extended regularly to allow your topology to run longer without interruptions. You will receive a warning before your topology is stopped.")
@@ -597,13 +597,13 @@ var Topology = Class.extend({
         };
         // , name, description, timeout;
         dialog = new AttributeWindow({
-            title: "Save As Scenario",
+            title: gettext("Save As Scenario"),
             width: 500,
             // height: 400,
             // closable: false,
             buttons: [
                 {
-                    text: "Save",
+                    text: gettext("Save"),
                     id: "scenario_dialog_save",
                     click: function() {
                         var data = {
@@ -621,7 +621,7 @@ var Topology = Class.extend({
                     }
                 },
                 {
-                    text: "Close",
+                    text: gettext("Close"),
                     click: function() {
                         dialog.remove();
                     }
@@ -637,13 +637,13 @@ var Topology = Class.extend({
         }));
         author = dialog.add(new TextElement({
             name: "author",
-            label: "Author",
+            label: gettext("Author"),
             disabled: true,
             value: this.editor.options.user.name,
         }));
         name = dialog.add(new TextElement({
             name: "name",
-            label: "Name",
+            label: gettext("Name"),
             help_text: gettext("The name of your scenario"),
             onChangeFct: function() {
                 // TODO: name inspection ineffective?
@@ -656,12 +656,12 @@ var Topology = Class.extend({
         }));
         description = dialog.add(new TextAreaElement({
             name: "description",
-            label: "Description",
+            label: gettext("Description"),
             help_text: gettext("The text description of your scenario."),
         }));
         accessibility = dialog.add(new ChoiceElement({
             name: "accessibility",
-            label: "Accessibility",
+            label: gettext("Accessibility"),
             // value: choices[0],
             choices: choices,
             help_text: gettext("Whether other users can use the scenario.")
@@ -676,12 +676,12 @@ var Topology = Class.extend({
 		var t = this;
 		var dialog, name, description, timeout;
 		dialog = new AttributeWindow({
-			title: "New Topology",
+			title: gettext("New Topology"),
 			width: 500,
 			closable: false,
 			buttons: [
 						{
-							text: "Save",
+							text: gettext("Save"),
 							disabled: true,
 							id: "new_topology_window_save",
 							click: function() {
@@ -704,8 +704,8 @@ var Topology = Class.extend({
 		});
 		name = dialog.add(new TextElement({
 			name: "name",
-			label: "Name",
-			help_text: "The name for your topology",
+			label: gettext("Name"),
+			help_text: gettext("The name for your topology"),
 			onChangeFct:  function () {
 				if(this.value == '') {
 					$('#new_topology_window_save').button('disable');
@@ -719,14 +719,14 @@ var Topology = Class.extend({
 		for (var i = 0; i < timeout_settings.options.length; i++) choices[timeout_settings.options[i]] = formatDuration(timeout_settings.options[i]);
 		timeout = dialog.add(new ChoiceElement({
 			name: "timeout",
-			label: "Timeout",
+			label: gettext("Timeout"),
 			choices: choices,
 			value: timeout_settings["default"],
 			help_text: gettext("After this time, your topology will automatically be stopped. Timeouts can be extended arbitrarily.")
 		}));
 		description = dialog.add(new TextAreaElement({
 			name: "description",
-			label: "Description",
+			label: gettext("Description"),
 			help_text: gettext("Description of the experiment. (Optional)"),
 			value: t.data._notes
 		}));
