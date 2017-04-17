@@ -45,6 +45,7 @@ def custom_element_icons(ignore_errors=True):
 
 def executable_archives(split_alternatives=True, ignore_errors=True):
 	default_executable_archives_list_url = settings.get_web_resource_location(Config.WEB_RESOURCE_DEFAULT_EXECUTABLE_ARCHIVE_LIST)
+#	default_executable_archives_list_url = "http://10.117.2.40/static/archives/index.json"
 	try:
 		default_archive_list = []
 		default_archive_list_imported = json.load(urllib2.urlopen(default_executable_archives_list_url))
@@ -103,15 +104,15 @@ def executable_archives(split_alternatives=True, ignore_errors=True):
 
 
 			default_archive_list.append(entry)
-
+                print "default_archive_list:"
+                print default_archive_list
 		return default_archive_list
 	except:
 		if ignore_errors:
-			return ()
-		else:
+#			return 1
 			raise
-
-
+		else: 	
+                	raise
 @wrap_rpc
 def executable_archive_list(api, request):
 	default_executable_archives_list_url = settings.get_web_resource_location(Config.WEB_RESOURCE_DEFAULT_EXECUTABLE_ARCHIVE_LIST)

@@ -271,7 +271,6 @@ var Element = Component.extend({
 				iframe.off("load");
 				iframe.load(function(){
 					iframe.remove();
-					this.info.remove();
 					this.info = null;	
 					el.action(use_action);
 					$('#upload_from').remove();

@@ -13,9 +13,13 @@ def tech_to_label(tech):
 def type_to_label(type_):
 	return TypeName.ONSCREEN.get(type_, type_)
 
-@deprecated('new constant in constants.py')
+#@deprecated('new constant in constants.py')
+#def techs():
+#	return [TypeName.KVM, TypeName.KVMQM, TypeName.OPENVZ, TypeName.REPY]
+
+#@deprecated('new constant in constants.py')
 def techs():
-	return [TypeName.KVM, TypeName.KVMQM, TypeName.OPENVZ, TypeName.REPY]
+	return [TechName.KVM, TechName.KVMQM, TechName.OPENVZ, TechName.REPY]
 
 @deprecated('Reference.ONSCREEN')
 def entity_to_label(entity):

@@ -259,11 +259,11 @@ var Component = Class.extend({
 		/*if(this.data.type != "openvz"){
 			return false
 		}*/
-		var settings = this.configWindowSettings();
-		if(settings.special.template.template.customize == "mgen") {
-			return true;
-		}
-		return false;
+		//var settings = this.configWindowSettings();
+		//if(settings.special.template.template.customize == "mgen") {
+		return true;
+		//}
+		//return false;
 	},
 	//add at 2017/1/21   
 	showTrafficWindow:function(){

@@ -100,7 +100,7 @@ backend_core:
     update-interval: 60
     availability-halftime: 7776000  # 90 days
     resource-sync-interval: 600
-    component-timeout: 31104000  # 12 months
+    component-timeout: 30*24*60*60  # change from 12 months=31104000 to 30 days
     availability-factor: 0.9999946516564278  # (1/2) ^ (update_interval / availability_halftime)
   tasks:
     max-workers: 25
@@ -171,9 +171,10 @@ web:
     size:    25
 
   web-resources:
-    tutorial-list:        http://packages.tomato-lab.org/tutorials/index.json
-    default-executable-archive-list:
-    custom-element-icons:
+    tutorial-list:        http://10.117.2.40/tutorials/index.json
+    default-executable-archive-list: http://10.117.2.40/static/archives/index.json
+    #default-executable-archive-list:
+    custom-element-icons: http://10.117.2.40/static/custom_icons/index.json
 
   # specify how often user information is updated (seconds between updates).
   # a longer interval improves performance for webfrontend and backend,
