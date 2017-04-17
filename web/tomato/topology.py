@@ -69,6 +69,11 @@ def list(api, request, show_all=False, organization=None):
 
 		top['processed'] = {
 		'timeout_critical': top['timeout'] - time.time() < serverInfo()['topology_timeout']['warning']}
+
+	# for topgroup
+	# topgrouplist = api.topgroup_list()
+
+	
 	return render(request, "topology/list.html",
 		{'top_list': toplist, 'organization': organization, 'orgas': orgas, 'show_all': show_all})
 

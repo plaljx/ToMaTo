@@ -463,7 +463,7 @@ var Topology = Class.extend({
 		var ta = $('<textarea cols=60 rows=20 class="notes"></textarea>');
 		ta.text(this.data._notes || "");
 		dialog.append(ta);
-		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">Open Window with Editor</input>');
+		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">' + gettext('Open Window with Editor') + '</input>');
 		var openWithEditor = openWithEditor_html[0];
 		if (this.data._notes_autodisplay) {
 			openWithEditor.checked = true;
@@ -477,7 +477,7 @@ var Topology = Class.extend({
 			resizable: true,
 			height: "auto",
 			width: 550,
-			title: "Notes for Topology",
+			title: gettext("Notes for Topology"),
 			show: "slide",
 			hide: "slide",
 			modal: true,
@@ -531,6 +531,106 @@ var Topology = Class.extend({
 		};
 		this.rename = new InputWindow(windowOptions);
 		this.rename.show();
+	},
+	topgroup_createDialog:function(){
+		var t = this;
+		var dialog;
+		var name, 
+		dialog = new AttributeWindow({
+			title: gettext('Create Topgroup'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					var data = {
+						'name': name.getValue(),
+						'id':t.id,
+					}
+					t.topgroup_create(data)
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+
+		})
+		name = dialog.add(new TextElement({
+            name: "name",
+            label: gettext("Name"),
+            help_text: gettext("The name of your topgroup(unique)"),
+        }));
+		dialog.show()
+	},
+	topgroup_adddDialog:function(){
+		var t = this;
+		var dialog;
+		var name, 
+		dialog = new AttributeWindow({
+			title: gettext('Add to Topgroup'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					var data = {
+						'name': name.getValue(),
+						'id':t.id,
+					}
+					t.topgroup_add(data)
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+
+		})
+		name = dialog.add(new TextElement({
+            name: "name",
+            label: gettext("Name"),
+            help_text: gettext("The name of your topgroup(unique)"),
+        }));
+		dialog.show()
+	},
+	topgroup_create: function(data){
+		var t = this;
+		ajax({
+			url: 'topgroup/'+ t.id + '/create',
+			data: data,
+			successFn:function(result){
+				console.log('success')
+				console.log(result)
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		})
+
+	},
+	topgroup_add: function(data){
+		var t = this;
+		ajax({
+			url: 'topgroup/'+ t.id + '/add',
+			data: data,
+			successFn:function(result){
+				console.log('success')
+				console.log(result)
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		})
+
 	},
 	renewDialog: function() {
 		var t = this;

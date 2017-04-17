@@ -655,6 +655,38 @@ var Editor = Class.extend({
 		this.optionCheckboxes = {};
 		this.optionsManager.buildOptionsTab(tab);
 
+		// for topgroup
+		var tab = this.menu.addTab(gettext("Topgroup"));
+		var group = tab.addGroup(gettext("Manager"));
+
+		group.addElement(Menu.button({ 
+            label: gettext("Add to topgroup"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.topgroup_adddDialog();
+            }
+        }));
+        group.addElement(Menu.button({  
+            label: gettext("Create a Topgroup"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.topgroup_createDialog();
+            }
+        }));
+        group.addElement(Menu.button({  
+            label: gettext("Remove from Topgroup"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.topgroupDialog();
+            }
+        }));
+
 		this.menu.paint();
 	}
 });

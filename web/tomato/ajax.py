@@ -164,4 +164,14 @@ def traffic_start(api, request,element_id,selected):
 	return res
 
 
+# topgroup
+@wrap_json
+def topgroup_create(api, request, top_id = None, **data):
+	res = api.topgroup_create(top_id, **data)
+	return res
 
+
+@wrap_json
+def topgroup_add(api, request, top_id = None, **data):
+	res = api.topgroup_add(top_id, **data)
+	return res

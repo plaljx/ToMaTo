@@ -61,3 +61,8 @@ from security_resources.security_software import security_software_create, secur
     security_software_list, security_software_modify, security_software_remove
 
 from traffic import traffic_list, traffic_create, traffic_info, traffic_remove, traffic_modify, traffic_start
+
+
+# topgroup
+
+from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info, topgroup_topology

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 14:24+0800\n"
+"POT-Creation-Date: 2017-04-17 14:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,14 +38,12 @@ msgstr "模式"
 msgid "Select & Move"
 msgstr "选择和移动"
 
-#: js/editor/editor.js:257 js/editor/menus/menus/element_menu.js:36
-#: js/editor/menus/menus/element_menu_.js:40
+#: js/editor/editor.js:257 js/editor/menus/menus/element_menu.js:40
 msgid "Connect"
 msgstr "连接"
 
-#: js/editor/editor.js:266 js/editor/editor.js:640
-#: js/editor/menus/menus/element_menu.js:229
-#: js/editor/menus/menus/element_menu_.js:233
+#: js/editor/editor.js:266 js/editor/editor.js:631
+#: js/editor/menus/menus/element_menu.js:233
 #: js/editor/menus/menus/topology_menu.js:83
 msgid "Delete"
 msgstr "删除"
@@ -54,29 +52,25 @@ msgstr "删除"
 msgid "Topology control"
 msgstr "拓扑控制"
 
-#: js/editor/editor.js:278 js/editor/menus/menus/element_menu.js:43
-#: js/editor/menus/menus/element_menu_.js:47
+#: js/editor/editor.js:278 js/editor/menus/menus/element_menu.js:47
 #: js/editor/menus/menus/topology_menu.js:15
 msgid "Start"
 msgstr "开始"
 
-#: js/editor/editor.js:287 js/editor/menus/menus/element_menu.js:50
-#: js/editor/menus/menus/element_menu_.js:54
+#: js/editor/editor.js:287 js/editor/menus/menus/element_menu.js:54
 #: js/editor/menus/menus/topology_menu.js:22
 msgid "Stop"
 msgstr "停止"
 
-#: js/editor/editor.js:297 js/editor/menus/menus/element_menu.js:57
-#: js/editor/menus/menus/element_menu_.js:61
+#: js/editor/editor.js:297 js/editor/menus/menus/element_menu.js:61
 #: js/editor/menus/menus/topology_menu.js:29
 msgid "Prepare"
 msgstr "准备"
 
-#: js/editor/editor.js:306 js/editor/menus/menus/element_menu.js:64
-#: js/editor/menus/menus/element_menu_.js:68
+#: js/editor/editor.js:306 js/editor/menus/menus/element_menu.js:68
 #: js/editor/menus/menus/topology_menu.js:36
 msgid "Destroy"
-msgstr "拆除"
+msgstr "销毁"
 
 #: js/editor/editor.js:316
 msgid "Common elements"
@@ -150,8 +144,7 @@ msgstr "配置(NoVNC)"
 msgid "Notes"
 msgstr "记录"
 
-#: js/editor/editor.js:581 js/editor/menus/menus/element_menu.js:122
-#: js/editor/menus/menus/element_menu_.js:126
+#: js/editor/editor.js:581 js/editor/menus/menus/element_menu.js:126
 #: js/editor/menus/menus/topology_menu.js:60
 msgid "Resource usage"
 msgstr "资源使用"
@@ -160,7 +153,7 @@ msgstr "资源使用"
 msgid "Management"
 msgstr "管理"
 
-#: js/editor/editor.js:594 js/editor/topology.js:600
+#: js/editor/editor.js:594 js/editor/topology.js:700
 msgid "Save As Scenario"
 msgstr "作为场景保存"
 
@@ -168,114 +161,114 @@ msgstr "作为场景保存"
 msgid "Renew"
 msgstr "更新"
 
-#: js/editor/editor.js:612
-msgid "addSubtopology"
-msgstr "增加拓扑"
-
-#: js/editor/editor.js:622
+#: js/editor/editor.js:613
 msgid "Rename"
 msgstr "重命名"
 
-#: js/editor/editor.js:631
+#: js/editor/editor.js:622
 msgid "Export"
 msgstr "导出"
 
-#: js/editor/editor.js:651
+#: js/editor/editor.js:642
 msgid "Users & Permissions"
 msgstr "用户&许可证"
 
-#: js/editor/editor.js:662
+#: js/editor/editor.js:653
 msgid "Options"
 msgstr "选项"
 
-#: js/editor/menus/menus/element_menu.js:25
-#: js/editor/menus/menus/element_menu_.js:29
+#: js/editor/editor.js:659
+msgid "Topgroup"
+msgstr ""
+
+#: js/editor/editor.js:660
+#, fuzzy
+#| msgid "Management"
+msgid "Manager"
+msgstr "管理"
+
+#: js/editor/editor.js:663
+msgid "Add to topgroup"
+msgstr ""
+
+#: js/editor/editor.js:672
+msgid "Create a Topgroup"
+msgstr ""
+
+#: js/editor/editor.js:681
+msgid "Remove from Topgroup"
+msgstr ""
+
+#: js/editor/menus/menus/element_menu.js:29
 msgid "Please wait for the current action to finish and re-open this menu."
 msgstr "请等待当前动作完成再打开这个菜单"
 
-#: js/editor/menus/menus/element_menu.js:73
-#: js/editor/menus/menus/element_menu_.js:77
+#: js/editor/menus/menus/element_menu.js:77
 msgid "Console"
 msgstr "配置(NoVNC)"
 
-#: js/editor/menus/menus/element_menu.js:106
-#: js/editor/menus/menus/element_menu_.js:110
+#: js/editor/menus/menus/element_menu.js:110
 msgid "Download Log"
 msgstr "下载日志"
 
-#: js/editor/menus/menus/element_menu.js:115
-#: js/editor/menus/menus/element_menu_.js:119
+#: js/editor/menus/menus/element_menu.js:119
 msgid "Used addresses"
 msgstr "旧的地址"
 
-#: js/editor/menus/menus/element_menu.js:129
-#: js/editor/menus/menus/element_menu_.js:133
+#: js/editor/menus/menus/element_menu.js:133
 msgid "Disk image"
 msgstr "KVM镜像"
 
-#: js/editor/menus/menus/element_menu.js:133
-#: js/editor/menus/menus/element_menu_.js:137
+#: js/editor/menus/menus/element_menu.js:137
 msgid "Change Template"
 msgstr "改变模板"
 
-#: js/editor/menus/menus/element_menu.js:140
-#: js/editor/menus/menus/element_menu_.js:144
+#: js/editor/menus/menus/element_menu.js:144
 msgid "Download image"
 msgstr "加载自定义镜像"
 
-#: js/editor/menus/menus/element_menu.js:147
-#: js/editor/menus/menus/element_menu_.js:151
+#: js/editor/menus/menus/element_menu.js:151
 msgid "Upload custom image from disk"
 msgstr "加载自定义镜像"
 
-#: js/editor/menus/menus/element_menu.js:154
-#: js/editor/menus/menus/element_menu_.js:158
+#: js/editor/menus/menus/element_menu.js:158
 msgid "Upload custom image from URL"
 msgstr "加载自定义镜像"
 
-#: js/editor/menus/menus/element_menu.js:163
-#: js/editor/menus/menus/element_menu_.js:167
+#: js/editor/menus/menus/element_menu.js:167
 msgid "Executable archive"
 msgstr "可执行的档案"
 
-#: js/editor/menus/menus/element_menu.js:167
-#: js/editor/menus/menus/element_menu_.js:171
+#: js/editor/menus/menus/element_menu.js:171
 msgid "Download Archive"
 msgstr "下载档案"
 
-#: js/editor/menus/menus/element_menu.js:175
-#: js/editor/menus/menus/element_menu_.js:179
+#: js/editor/menus/menus/element_menu.js:179
 msgid "Upload Archive from Disk"
 msgstr "从磁盘加载档案"
 
-#: js/editor/menus/menus/element_menu.js:182
-#: js/editor/menus/menus/element_menu_.js:186
+#: js/editor/menus/menus/element_menu.js:186
 msgid "Upload Archive from URL"
 msgstr "从url加载档案"
 
-#: js/editor/menus/menus/element_menu.js:189
-#: js/editor/menus/menus/element_menu_.js:193
+#: js/editor/menus/menus/element_menu.js:193
 msgid "Use a Default Archive"
 msgstr "使用默认档案"
 
-#: js/editor/menus/menus/element_menu.js:197
-#: js/editor/menus/menus/element_menu_.js:201
+#: js/editor/menus/menus/element_menu.js:201
 msgid "Status"
 msgstr "状态"
 
-#: js/editor/menus/menus/element_menu.js:207
-#: js/editor/menus/menus/element_menu_.js:211
+#: js/editor/menus/menus/element_menu.js:211
 #: js/editor/menus/menus/topology_menu.js:68
 msgid "Configure"
 msgstr "配置"
 
-#: js/editor/menus/menus/element_menu.js:214
-#: js/editor/menus/menus/element_menu_.js:218
+#: js/editor/menus/menus/element_menu.js:218
 msgid "Traffic Customize"
 msgstr "流量定制"
 
-#: js/editor/menus/menus/element_menu.js:221
-#: js/editor/menus/menus/element_menu_.js:225
+#: js/editor/menus/menus/element_menu.js:225
 #: js/editor/menus/menus/topology_menu.js:75
 msgid "Debug"
 msgstr "调试"
@@ -375,8 +368,9 @@ msgstr "用户"
 msgid "Attributes"
 msgstr "属性"
 
-#: js/editor/topology.js:135 js/editor/topology.js:646
-#: js/editor/topology.js:707
+#: js/editor/topology.js:135 js/editor/topology.js:565
+#: js/editor/topology.js:600 js/editor/topology.js:746
+#: js/editor/topology.js:807
 msgid "Name"
 msgstr "名称"
 
@@ -392,6 +386,14 @@ msgstr "你确定完全删除整个拓扑吗"
 msgid "Are you sure you want to completely remove this topology?"
 msgstr "你确定完全移除整个拓扑吗"
 
+#: js/editor/topology.js:466
+msgid "Open Window with Editor"
+msgstr "在拓扑内打开该窗口"
+
+#: js/editor/topology.js:480
+msgid "Notes for Topology"
+msgstr "拓扑笔记"
+
 #: js/editor/topology.js:499
 msgid "Rename Topology"
 msgstr "重命名拓扑"
@@ -400,29 +402,45 @@ msgstr "重命名拓扑"
 msgid "New Name:"
 msgstr "新的名称"
 
-#: js/editor/topology.js:513 js/editor/topology.js:546
-#: js/editor/topology.js:606 js/editor/topology.js:684
+#: js/editor/topology.js:513 js/editor/topology.js:544
+#: js/editor/topology.js:579 js/editor/topology.js:646
+#: js/editor/topology.js:706 js/editor/topology.js:784
 msgid "Save"
 msgstr "保存"
 
-#: js/editor/topology.js:524
+#: js/editor/topology.js:524 js/editor/topology.js:555
+#: js/editor/topology.js:590
 msgid "Cancel"
 msgstr "取消"
 
-#: js/editor/topology.js:541
+#: js/editor/topology.js:540
+msgid "Create Topgroup"
+msgstr ""
+
+#: js/editor/topology.js:566 js/editor/topology.js:601
+#, fuzzy
+#| msgid "The name for your topology"
+msgid "The name of your topgroup(unique)"
+msgstr "你的拓扑名称"
+
+#: js/editor/topology.js:575
+msgid "Add to Topgroup"
+msgstr ""
+
+#: js/editor/topology.js:641
 msgid "Topology Timeout"
 msgstr "拓扑时限"
 
-#: js/editor/topology.js:555 js/editor/topology.js:562
-#: js/editor/topology.js:624
+#: js/editor/topology.js:655 js/editor/topology.js:662
+#: js/editor/topology.js:724
 msgid "Close"
 msgstr "关闭"
 
-#: js/editor/topology.js:580
+#: js/editor/topology.js:680
 msgid "New timeout"
 msgstr "新的时限"
 
-#: js/editor/topology.js:583
+#: js/editor/topology.js:683
 msgid ""
 "After this time, your topology will automatically be stopped. Timeouts can "
 "be extended regularly to allow your topology to run longer without "
@@ -431,53 +449,53 @@ msgstr ""
 "到时后你的拓扑会被自动停止。随后你可以将拓扑运行的时间延长。你将接收到一个警"
 "告在你的拓扑被停止运行时。"
 
-#: js/editor/topology.js:640
+#: js/editor/topology.js:740
 msgid "Author"
 msgstr "作者"
 
-#: js/editor/topology.js:647
+#: js/editor/topology.js:747
 msgid "The name of your scenario"
 msgstr "你的场景名称"
 
-#: js/editor/topology.js:659 js/editor/topology.js:729
+#: js/editor/topology.js:759 js/editor/topology.js:829
 msgid "Description"
 msgstr "描述"
 
-#: js/editor/topology.js:660
+#: js/editor/topology.js:760
 msgid "The text description of your scenario."
 msgstr "你的场景的描述"
 
-#: js/editor/topology.js:664
+#: js/editor/topology.js:764
 msgid "Accessibility"
 msgstr "权限"
 
-#: js/editor/topology.js:667
+#: js/editor/topology.js:767
 msgid "Whether other users can use the scenario."
 msgstr "其他用户是否可以使用这个场景"
 
-#: js/editor/topology.js:679
+#: js/editor/topology.js:779
 msgid "New Topology"
 msgstr "创建新的拓扑"
 
-#: js/editor/topology.js:708
+#: js/editor/topology.js:808
 msgid "The name for your topology"
 msgstr "你的拓扑名称"
 
-#: js/editor/topology.js:722
+#: js/editor/topology.js:822
 msgid "Timeout"
 msgstr "时限"
 
-#: js/editor/topology.js:725
+#: js/editor/topology.js:825
 msgid ""
 "After this time, your topology will automatically be stopped. Timeouts can "
 "be extended arbitrarily."
 msgstr "你的拓扑会被自动停止。时限可以任意延长。"
 
-#: js/editor/topology.js:730
+#: js/editor/topology.js:830
 msgid "Description of the experiment. (Optional)"
 msgstr "实验描述（可选）"
 
-#: js/editor/topology.js:772
+#: js/editor/topology.js:872
 msgid ""
 "Network segments must not contain multiple external network exits! This "
 "could lead to loops in the network and result in a total network crash."
@@ -487,8 +505,8 @@ msgstr "网段不能包含多个出口。这可能导致一个环的出现，并
 msgid "'"
 msgstr ""
 
-#~ msgid "Notes for Topology"
-#~ msgstr "拓扑笔记"
+#~ msgid "addSubtopology"
+#~ msgstr "增加拓扑"
 
 #~ msgid ""
 #~ "<div>You do not have permissions to renew this topology. Please contact a "
