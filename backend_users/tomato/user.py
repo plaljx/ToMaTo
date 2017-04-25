@@ -294,7 +294,8 @@ class User(Entity, BaseDocument):
 		"quota": Attribute(get=lambda self: self.quota.info(), set=modify_quota),
 		"notification_count": Attribute(get=lambda self: len(filter(lambda n: not n.read, self.notifications))),
 		"last_login": Attribute(get=lambda self: self.lastLogin),
-		"password_hash": Attribute(field=password)
+		"password_hash": Attribute(field=password),
+		"password": Attribute(set=modify_password)
 	}
 
 
