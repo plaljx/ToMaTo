@@ -36,3 +36,6 @@ cli/tests/backend/old
 # docker
 # docker.bak
 # web/tomato/static
+
+docker/run/tomato-ctl.conf
+
