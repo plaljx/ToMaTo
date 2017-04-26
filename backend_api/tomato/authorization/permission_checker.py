@@ -135,7 +135,7 @@ class PermissionChecker(UserInfo):
 				result.add("organization")
 		else:
 			if Flags.GlobalAdmin in self.get_flags():
-				result.update(["realname", "email", "organization"])
+				result.update(["realname", "email", "organization", "password"])
 			if Flags.OrgaAdmin in self.get_flags() and self.info['organization'] == userB.get_organization_name():
 				result.update(["realname", "email"])
 		return result
