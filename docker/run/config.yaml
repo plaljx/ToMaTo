@@ -235,4 +235,4 @@ dumpmanager:
 # this disables active debugging, i.e., executing internal commands via the API.
 # this may be a security issue if enabled!
 debugging:
-  enabled: false
+  enabled: true

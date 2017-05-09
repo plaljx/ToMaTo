@@ -35,6 +35,11 @@ class TimeoutStep:
 	STOPPED = 10
 	DESTROYED = 20
 
+
+class GroupInfo(ExtDocument, EmbeddedDocument):
+	group = StringField(required=False, null=True)
+
+
 class Permission(ExtDocument, EmbeddedDocument):
 	"""
 	:type user: str

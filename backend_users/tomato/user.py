@@ -58,9 +58,15 @@ class Notification(EmbeddedDocument):
 	def set_read(self, read):
 		self.read = read
 
+class GroupRole(EmbeddedDocument):
+
+	group = StringField(required=True, unique=True)
+	role = StringField(choices=["owner", "manager", "user"], required=True)
+
 class User(Entity, BaseDocument):
 	"""
 	:type organization: organization.Organization
+	:type groups: list of GroupRole
 	:type quota: quota.Quota
 	:type flags: list
 	:type clientData: dict
@@ -71,6 +77,8 @@ class User(Entity, BaseDocument):
 
 	name = StringField(required=True)
 	organization = ReferenceField(Organization, required=True, reverse_delete_rule=DENY)
+	groups = ListField(EmbeddedDocumentField(GroupRole))
+	# groups = EmbeddedDocumentListField(GroupRole)
 	password = StringField(required=True)
 	lastLogin = FloatField(db_field='last_login', required=True)
 	quota = EmbeddedDocumentField(Quota, required=True)
@@ -165,6 +173,35 @@ class User(Entity, BaseDocument):
 				return User.objects(organization=organization)
 			else:
 				return User.objects(organization=organization).exclude('notifications')
+
+	@classmethod
+	def list_by_group(cls, group=None):
+		if group is None:
+			return User.objects.all()
+		else:
+			return User.objects(groups__group__exact=group)
+
+	def set_group_role(self, group, role=None):
+		"""
+		Update the [group, role] pair info.
+		If role is None, this will ensure no entity current group
+		:param group: Group name in str
+		:param role: Role, choice=["owner", "manager", "user"]
+		"""
+		for group_role in self.groups:
+			if group_role.group == group:
+				if role is None:
+					self.groups.remove(group_role)
+				else:
+					group_role.role = role
+				self.save()
+				break
+		else:
+			if role is None:
+				pass
+			else:
+				self.groups.append(GroupRole(group=group, role=role))
+				self.save()
 
 	def modify_organization(self, val):
 		from .organization import Organization
@@ -295,7 +332,8 @@ class User(Entity, BaseDocument):
 		"notification_count": Attribute(get=lambda self: len(filter(lambda n: not n.read, self.notifications))),
 		"last_login": Attribute(get=lambda self: self.lastLogin),
 		"password_hash": Attribute(field=password),
-		"password": Attribute(set=modify_password)
+		"password": Attribute(set=modify_password),
+		"groups": Attribute(get=lambda self: self.groups)
 	}
 
 
