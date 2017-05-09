@@ -17,6 +17,9 @@ def username_list(organization=None, with_flag=None):
 def user_list(organization=None, with_flag=None):
 	return [u.info() for u in _user_list(organization, with_flag)]
 
+def user_list_by_group(group=None):
+	return [u.info() for u in User.list_by_group(group)]
+
 def user_exists(name):
 	if _getUser(name, include_notifications=False):
 		return True
