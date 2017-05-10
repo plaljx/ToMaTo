@@ -175,16 +175,22 @@ class User(Entity, BaseDocument):
 				return User.objects(organization=organization).exclude('notifications')
 
 	@classmethod
-	def list_by_group(cls, group=None):
+	def list_by_group(cls, group=None, role=None):
 		if group is None:
-			return User.objects.all()
+			if role is None:
+				return User.objects.all()
+			else:
+				return User.objects(groups__role__exact=role)
 		else:
-			return User.objects(groups__group__exact=group)
+			if role is None:
+				return User.objects(groups__group__exact=group)
+			else:
+				return User.objects(Q(groups__group__exact=group) & Q(groups__role__exact=role))
 
 	def set_group_role(self, group, role=None):
 		"""
 		Update the [group, role] pair info.
-		If role is None, this will ensure no entity current group
+		If role is None, this will keep no group role info of current group
 		:param group: Group name in str
 		:param role: Role, choice=["owner", "manager", "user"]
 		"""

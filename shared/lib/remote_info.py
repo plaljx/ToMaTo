@@ -822,6 +822,16 @@ def get_user_list(organization=None, with_flag=None):
 	"""
 	return get_backend_users_proxy().user_list(organization=organization, with_flag=with_flag)
 
+@cached(60)
+def get_user_list_by_group(group=None, role=None):
+	"""
+	get the list of users of a given group
+	:param str group: group filter
+	:param str role: role filter, eg. if role is 'owner', then only owner will be listed
+	:return: list(dict)
+	"""
+	return get_backend_users_proxy().user_list_by_group(group=group, role=role)
+
 @cached(1800)
 def get_organization_info(organization_name):
 	"""

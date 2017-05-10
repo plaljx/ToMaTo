@@ -17,7 +17,7 @@
 
 from ..authorization import PermissionChecker, get_pseudo_user_info
 from api_helpers import getCurrentUserInfo, getCurrentUserName
-from ..lib.remote_info import get_user_info, get_user_list, UserInfo
+from ..lib.remote_info import get_user_info, get_user_list, UserInfo, get_user_list_by_group
 
 def account_info(name=None):
 	"""
@@ -82,6 +82,14 @@ def account_list(organization=None, with_flag=None):
 		getCurrentUserInfo().check_may_list_organization_users(organization)
 	#fixme: restrict keys to allowed ones (like in info)
 	return get_user_list(organization, with_flag)
+
+def account_list_by_group(group=None, role=None):
+	if group is None and role is None:
+		getCurrentUserInfo().check_may_list_all_users()
+	else:
+		# TODO: may need permission to check group users
+		pass
+	return get_user_list_by_group(group=group, role=role)
 
 def account_modify(name=None, attrs=None, ignore_key_on_unauthorized=False, ignore_flag_on_unauthorized=False):
 	"""
