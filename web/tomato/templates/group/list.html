@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% load tomato %}
+
+{% block title %}
+<title>Group - ProviSec Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>Group</h1>
+
+<div class="skip-sm"></div>
+
+{# Every user is able to create group #}
+{#{% if request.session.user.isAdmin %}#}
+<form>
+    <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add group
+    </button>
+</form>
+{#{% endif %}#}
+
+{% if groups %}
+<script src="/js/enhancetable.js"></script>
+<table class="sortable,filterable table table-striped">
+
+    <tr>
+        <th>Name</th>
+        <th>Label</th>
+        {# <th>Description</th> #}
+        <th>Role</th>
+    </tr>
+
+    {% for group in groups %}
+    <tr>
+        <td><a href="{% url 'admin_group_info' group.name %}">{{ group.name }}</a></td>
+        <td>{{ group.label }}</td>
+        {# <td>{{ group.description }}</td> #}
+        <td>{{ group.role }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% else %}
+<p>No Group</p>
+{% endif %}
+{% endblock %}

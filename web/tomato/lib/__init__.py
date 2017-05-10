@@ -302,6 +302,7 @@ class UserObj:
 		self.id = self.data["id"]
 		self.notification_count = self.data['notification_count']
 		self.data_time = time.time()
+		self.groups = self.data["groups"]
 
 	def hasGlobalToplFlags(self):
 		for flag in ["global_topl_owner", "global_topl_manager", "global_topl_user"]:
@@ -338,3 +339,17 @@ class UserObj:
 
 	def hasDebugFlag(self):
 		return "debug" in self.flags
+
+	def hasGroupRole(self, groupName):
+		for group_role in self.groups:
+			if group_role.group == groupName:
+				return True
+		else:
+			return False
+
+	def getGroupRole(self, groupName):
+		for group_role in self.groups:
+			if group_role == groupName:
+				return group_role.role
+		else:
+			return None
