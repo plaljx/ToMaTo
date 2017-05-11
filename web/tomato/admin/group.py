@@ -78,7 +78,7 @@ def list_(api, request, show_all=True):
 def info(api, request, group):
 	# TODO: permission, need login
 	group = api.group_info(group)
-	role = api.user.getGroupRole(group)
+	role = api.user.getGroupRole(group['name'])
 	return render(request, "group/info.html", {"group": group, "role": role})
 
 

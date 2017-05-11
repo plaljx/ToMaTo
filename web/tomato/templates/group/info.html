@@ -15,7 +15,7 @@
 {% load tomato %}
 
 <form>
-    <button type="submit" formaction="{%url 'admin_group_list'%}" class="btn btn-primary" style="float:right;">
+    <button type="submit" formaction="{%url "admin_group_list"%}" class="btn btn-primary" style="float:right;">
         <span class="glyphicon glyphicon-list"></span>
         All Groups
     </button>
@@ -46,34 +46,34 @@
 
 
 {# User List #}
-<button type="submit" formaction="{%url 'group_accounts' group.name%}" class="btn btn-info">
+<button type="submit" formaction="{%url "group_accounts" group.name None%}" class="btn btn-info">
     <span class="glyphicon glyphicon-list"></span>
     {%trans 'Accounts'%}
 </button>
 
 {# Invite #}
-{% if role == "owner" or role =="manager" %}
+{% if role == "owner" or role == "manager" %}
     {# TODO: Invite #}
 {% endif %}
 
 {# Apply to Join #}
-{% if role is None %}
+{% if role == None %}
     {# TODO: Apply to Join #}
 {% endif %}
 
 {# Edit #}
 {% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
-    <button type="submit" formaction="{%url 'admin_group_edit' group.name%}" class="btn btn-warning">
+    <button type="submit" formaction="{%url "admin_group_edit" group.name%}" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>
-        edit Group
+        {% trans 'edit Group' %}
     </button>
 {% endif %}
 
 {# Remove #}
 {% if request.session.user.isAdmin or role == "owner" %}
-    <button type="submit" formaction="{%url 'admin_group_remove' group.name%}" class="btn btn-danger">
+    <button type="submit" formaction="{%url "admin_group_remove" group.name%}" class="btn btn-danger">
         <span class="glyphicon glyphicon-trash"></span>
-        remove Group
+        {% trans 'remove Group' %}
     </button>
 {% endif %}
 
