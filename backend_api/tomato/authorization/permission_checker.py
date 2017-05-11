@@ -457,6 +457,8 @@ class PermissionChecker(UserInfo):
 			if topology_info.organization_has_role(self.get_organization_name(), role):  # organization has role on topology
 				return True
 
+		# TODO: Group Permissions
+
 		return False
 
 	def _check_has_topology_role(self, topology_info, role):

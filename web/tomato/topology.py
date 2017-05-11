@@ -73,6 +73,16 @@ def list(api, request, show_all=False, organization=None):
 		{'top_list': toplist, 'organization': organization, 'orgas': orgas, 'show_all': show_all})
 
 
+@wrap_rpc
+def list_by_group(api, request, group=None):
+	if not api.user:
+		raise AuthError()
+	toplist = api.topology_list_by_group(group=group)
+	# for top in toplist:
+	# 	top["tutorial_enabled"] = top.has_key('_tutorial_state') and top['_tutorial_state'].get('enabled', False)
+	# 	top['processed'] = {'timeout_critical': top['timeout'] - time.time() < serverInfo()['topology_timeout']['warning']}
+	return render(request, "topology/list_by_group.html", {'top_list': toplist, 'group': group})
+
 
 def _display(api, request, info, tutorial_state):
 	caps = api.capabilities()

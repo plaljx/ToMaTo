@@ -1,0 +1,102 @@
+{% extends "topology/base.html" %}
+{% load i18n %}
+
+{% load url from future %}
+{% load tomato %}
+
+{% block title %}
+<title>{%trans 'Topology list'%} - ProviSec Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>{%trans 'Topologies'%}</h1>
+
+
+<div class="skip-sm"></div>
+
+{% if 'new_account' in request.session.user.flags %}
+<div class="alert alert-warning">
+<strong>{%trans 'Note'%}:</strong> {%trans 'Your account is new and needs to be activated first.
+Administrators have been informed about your pending registration and will handle it soon. You will be informed when your registration has been processed.'%}
+<br/>
+While waiting for the account activation you can create and design topologies but not prepare or start them. (Most tutorials will not work.) 
+</div>
+<div class="skip-sm"></div>
+{% endif %}
+
+{% if top_list %}
+
+{% if top_list|length > 10 and not 'no_topology_create' in request.session.user.flags %}
+    <form>
+    <button type="submit" formaction="{%url "topology.create"%}" onClick="loadbusy(event,'Loading Topology Editor')" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new Topology'%}</button>
+	<button type="submit" formaction="{%url "tutorial.list"%}" class="btn btn-default"><img src="/img/tutorial.png" /> {%trans 'Tutorials'%}</button>
+	<button type="submit" formaction="{%url "topology.import_"%}" class="btn btn-default"><span class="glyphicon glyphicon-import"></span> {%trans 'Import from file'%}</button>
+    </form>
+{% endif %}
+
+<script src="/js/enhancetable.js"></script>
+
+<script src="/js/jquery.js"></script>
+
+
+
+
+<table class="sortable,filterable,stddevcolor, table table-striped">
+  <tr>
+    <th></th>
+    <th></th>
+    <th>{%trans 'Name'%}</th>
+    <th>{%trans 'Owner'%}</th>
+    <th>{%trans 'Timeout'%}</th>
+    <th>{%trans 'Elements'%}</th>
+    <th stddev_column_class="good_low">{%trans 'CPUs'%}</th>
+    <th stddev_column_class="good_low">{%trans 'Traffic'%}</th>
+    <th stddev_column_class="good_low">{%trans 'Memory'%}</th>
+    <th stddev_column_class="good_low">{%trans 'Disk'%}</th>
+    <th class="icononly"></th>
+  </tr>  
+{% for top in top_list %}
+  <tr>
+    <td>{% if top.state_max == "started" %}<img src="/img/started.png" title="has started elements"/>{%else%}{% if top.state_max == "prepared" %}<img src="/img/prepared.png" title="has prepared elements, no started elements"/>{%endif%}{%endif%}</td>
+    <td>{% if top.tutorial_enabled %}<img src="/img/tutorial.png" title="Tutorial in progress"/>{% endif %}</td>
+    <td><a href="{% url "topology.info" top.id %}" onclick="loadbusy(event,'Loading Topology Editor');">{{top.name}}</a></td>
+    <td>
+    	{% for user, role in top.permissions.items %}
+    		{% if role == "owner" %}
+    			<a href="{%url "account.info" user%}">{{user}}</a>{% if forloop.revcounter0 %}, {% endif %}
+    		{% endif %}
+    	{% endfor %}
+    </td>
+    <td {% if top.processed.timeout_critical %}class="critical-timeout"{%endif%}>{{top.timeout|todate|timeuntil}}</td>
+    <td>{{top.elements|length}}</td>
+    <td enhancetable_customkey="{{top.usage.usage.cputime}}">{{top.usage.usage.cputime|div:300|floatformat}} CPUs</td>
+    <td enhancetable_customkey="{{top.usage.usage.traffic}}">{{top.usage.usage.traffic|div:300|filesizeformat}}/s</td>
+    <td enhancetable_customkey="{{top.usage.usage.memory}}">{{top.usage.usage.memory|filesizeformat}}</td>
+    <td enhancetable_customkey="{{top.usage.usage.diskspace}}">{{top.usage.usage.diskspace|filesizeformat}}</td>
+    <td class="icononly">
+    	<a href="javascript:window.open('{%url "usage.topology" top.id%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><img src="/img/chart_bar.png"/></a>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+{% else %}
+  {% if not group %}
+  <p>{%trans 'You do not own or have access to any group yet.'%}</p>
+  {% else %}
+  <p>{%trans 'There are not topologies yet.'%}</p>
+  {% endif %}
+{% endif %}
+
+
+<br />
+{% if 'no_topology_create' in request.session.user.flags %}
+	<p>{%trans 'You may not create any topologies. Contact the administrator for more information.'%}</p>
+{% else %}
+    <form>
+    <button type="submit" formaction="{%url "topology.create"%}" onClick="loadbusy(event,'Loading Topology Editor')" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new Topology'%}</button>
+	<button type="submit" formaction="{%url "tutorial.list"%}" class="btn btn-default"><img src="/img/tutorial.png" /> {%trans 'Tutorials'%}</button>
+	<button type="submit" formaction="{%url "topology.import_"%}" class="btn btn-default"><span class="glyphicon glyphicon-import"></span> {%trans 'Import from file'%}</button>
+    </form>
+{% endif %}
+
+{% endblock %}
