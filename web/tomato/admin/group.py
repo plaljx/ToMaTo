@@ -38,7 +38,7 @@ class AddGroupForm(GroupForm):
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
-		api.group_create(formData)
+		api.group_create({k: v for k, v in formData.iteritems()})
 
 
 class EditGroupForm(GroupForm):
@@ -77,9 +77,9 @@ def list_(api, request, show_all=True):
 @wrap_rpc
 def info(api, request, group):
 	# TODO: permission, need login
-	group = api.group_info(group)
-	role = api.user.getGroupRole(group['name'])
-	return render(request, "group/info.html", {"group": group, "role": role})
+	group_info = api.group_info(group)
+	role = api.user.getGroupRole(group_info['name'])
+	return render(request, "group/info.html", {"group": group_info, "role": role})
 
 
 @wrap_rpc

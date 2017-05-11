@@ -13,11 +13,11 @@ def group_exists(name):
 def group_list():
 	return [g.info() for g in Group.objects.all()]
 
-def group_create(args):
-	UserError.check(not group_exists(args.name),
+def group_create(**args):
+	UserError.check(not group_exists(args['name']),
 	                code=UserError.ALREADY_EXISTS,
 	                message="Group with that name already exists",
-	                data={"name": args.name})
+	                data={"name": args['name']})
 	group = Group.create(**args)
 	return group.info()
 
@@ -27,7 +27,7 @@ def group_info(name):
 	return group.info()
 
 
-def group_modify(name, args):
+def group_modify(name, **args):
 	group = _getGroup(name)
 	group.modify(**args)
 	return group.info()

@@ -15,7 +15,7 @@ def group_create(attrs=None):
 	Create a group with provided info (name, label, description)
 	:return: Info of the group
 	"""
-	return get_backend_users_proxy().group_create(attrs)
+	return get_backend_users_proxy().group_create(**attrs)
 
 def group_info(name):
 	"""
@@ -33,7 +33,7 @@ def group_modify(name, attrs):
 	:param attrs: Info of the group
 	:return: Info of the group
 	"""
-	return get_backend_users_proxy().group_modify(name, attrs)
+	return get_backend_users_proxy().group_modify(name, **attrs)
 
 
 def group_remove(name):
