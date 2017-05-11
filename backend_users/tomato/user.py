@@ -209,6 +209,10 @@ class User(Entity, BaseDocument):
 				self.groups.append(GroupRole(group=group, role=role))
 				self.save()
 
+	def get_group_roles(self):
+		group_roles = [{"group": group_role.group, "role": group_role.role} for group_role in self.groups]
+		return group_roles
+
 	def modify_organization(self, val):
 		from .organization import Organization
 		orga = Organization.get(val)
@@ -339,7 +343,7 @@ class User(Entity, BaseDocument):
 		"last_login": Attribute(get=lambda self: self.lastLogin),
 		"password_hash": Attribute(field=password),
 		"password": Attribute(set=modify_password),
-		"groups": Attribute(get=lambda self: self.groups)
+		"groups": Attribute(get=get_group_roles)
 	}
 
 

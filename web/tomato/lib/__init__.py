@@ -349,7 +349,7 @@ class UserObj:
 
 	def getGroupRole(self, groupName):
 		for group_role in self.groups:
-			if group_role == groupName:
-				return group_role.role
+			if group_role['group'] == groupName:
+				return group_role['role']
 		else:
 			return None

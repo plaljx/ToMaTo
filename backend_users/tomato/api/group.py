@@ -10,6 +10,9 @@ def group_exists(name):
 	return False
 
 
+def group_list():
+	return [g.info() for g in Group.objects.all()]
+
 def group_create(args):
 	UserError.check(not group_exists(args.name),
 	                code=UserError.ALREADY_EXISTS,

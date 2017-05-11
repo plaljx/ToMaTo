@@ -17,4 +17,4 @@ from misc import statistics
 
 from hierarchy import object_exists, object_parents, objects_available
 
-from group import group_create, group_exists, group_info, group_modify, group_remove
+from group import group_list, group_create, group_exists, group_info, group_modify, group_remove

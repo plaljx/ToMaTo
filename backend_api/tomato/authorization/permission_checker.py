@@ -110,12 +110,14 @@ class PermissionChecker(UserInfo):
 		:return: keys of user_info() which this user may see
 		:rtype: list(str)
 		"""
-		res = {'name', 'origin', 'id', 'realname'}  # needed for everyone to add a user to a topology.
+		res = {'name', 'origin', 'id', 'realname', 'groups'}  # needed for everyone to add a user to a topology.
 		if self.get_username() == userB.get_username():
-			res.update(['email', 'flags', 'organization', 'quota', 'notification_count', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'quota', 'notification_count', 'client_data', 'last_login', 'password_hash',
+			            'groups'])
 		if Flags.GlobalAdmin in self.get_flags() or \
 				Flags.OrgaAdmin in self.get_flags() and self.get_organization_name() == userB.get_organization_name():
-			res.update(['email', 'flags', 'organization', 'quota', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'quota', 'client_data', 'last_login', 'password_hash',
+			            'groups'])
 		return res
 
 	def modify_user_allowed_keys(self, userB):

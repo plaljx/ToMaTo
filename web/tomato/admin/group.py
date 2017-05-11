@@ -67,9 +67,9 @@ def list_(api, request, show_all=True):
 	groups = api.group_list()
 
 	# Add group role info about the current user
-	for group_role in groups:
+	for group in groups:
 		# 'owner', 'manager', 'user', or None
-		group_role.role = api.user.getGroupRole(group_role.group)
+		group['role'] = api.user.getGroupRole(group['name'])
 
 	return render(request, "group/list.html", {'groups': groups})
 
