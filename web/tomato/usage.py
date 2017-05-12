@@ -56,6 +56,7 @@ def connection(api, request, id): #@ReservedAssignment
     if not api.user:
         raise AuthError()
     usage=api.connection_usage(id)
+    print usage
     return render(request, "main/usage.html", {'usage': json.dumps(usage), 'name': 'Connection #%s' % id})
 
 @wrap_rpc
