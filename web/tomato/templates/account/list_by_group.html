@@ -28,7 +28,7 @@
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="{% url "group_accounts" group=group.name role=None %}">{%trans 'Show all accounts'%}</a></li>
+    <li><a href="{% url "group_accounts_all" group=group.name %}">{%trans 'Show all accounts'%}</a></li>
     <li class="divider"></li>
     <li class="dropdown-header">{%trans "Role"%}</li>
     <li><a href="{% url "group_accounts" group=group.name role="owner" %}">{%trans 'Owner'%}</a></li>
@@ -49,6 +49,7 @@
     <th>{%trans 'Organization'%}</th>
     <th>{%trans 'Role'%}</th>
     <th>{%trans 'Flags'%}</th>
+    <th>{% trans "Operations" %}</th>
   </tr>
 {% for account in accounts %}
   <tr>
@@ -76,21 +77,34 @@
             </div>
         </div>
     </td>
+    <td>
+        <div>
+            {# TODO #}
+            <button>Quit Group</button>
+            {% if "global_admin" in account.flags %}
+            {% endif %}
+        </div>
+    </td>
   </tr>
 {% endfor %}
 </table>
 {% else %}
-{#
-{% ifequal with_flag 'new_account' %}
-<p>{%trans 'There are no pending registrations.'%}</p>
-{% else %}
-<p>{%trans 'There are no accounts yet.'%}</p>
-{% endifequal %}
-#}
+
+<p>{%trans 'There are no adequate accounts yet.'%}</p>
+
 {% endif %}
 
+{#<form>#}
+{#  <button type="submit" formaction="{%url "account.register"%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new Account'%}</button>#}
+{#</form>#}
+
+{# TODO: Set acctount #}
 <form>
-  <button type="submit" formaction="{%url "account.register"%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new Account'%}</button>
+    {# TODO: Add account to current group #}
+    <button type="submit" formaction="{% url "group_account_add" group.name%}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        {% trans "Add Account" %}
+    </button>
 </form>
 
 {% endblock %}

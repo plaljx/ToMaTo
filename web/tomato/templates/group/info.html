@@ -44,7 +44,7 @@
 
 {% load tomato %}
 
-
+<form>
 {# User List #}
 <button type="submit" formaction="{%url "group_accounts_all" group.name%}" class="btn btn-info">
     <span class="glyphicon glyphicon-list"></span>
@@ -81,6 +81,6 @@
 {% if role == "owner" %}
     {# TODO: Change Owner #}
 {% endif %}
-
+</form>
 
 {% endblock %}

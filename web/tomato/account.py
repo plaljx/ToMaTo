@@ -258,6 +258,34 @@ class AnnouncementForm(BootstrapForm):
 			)
 		)
 
+class GroupAddAccountForm(BootstrapForm):
+
+	choices = (
+		('owner', 'Owner'),
+		('manager', 'Manager'),
+		('user', 'User'),
+	)
+
+	account = forms.CharField(label=_("Account name"), max_length=50, required=True)
+	group = forms.CharField(label=_("Group name"), max_length=50, required=True)
+	role = forms.ChoiceField(label=_("Role"), choices=choices)
+
+	def __init__(self, api, data, *args, **kwargs):
+		super(GroupAddAccountForm, self).__init__(*args, **kwargs)
+		if 'group' in data:
+			self.fields['group'].initial = data['group']
+			self.fields['group'].widget.attrs['readonly'] = True
+		self.helper.form_action = reverse("group_account_add", kwargs={"group": data['group']})
+		self.helper.layout = Layout(
+			'account',
+			'group',
+			'role',
+			Buttons.cancel_save,
+		)
+
+
+
+
 @wrap_rpc
 def list(api, request, with_flag=None, organization=True):
 	if not api.user:
@@ -279,12 +307,14 @@ def list(api, request, with_flag=None, organization=True):
 def list_by_group(api, request, group=None, role=None):
 	if not api.user:
 		raise AuthError()
+	if role not in ['owner', 'manager', 'user', None]:
+		raise Exception('Unknown role %s' % role)
 	account_list = api.account_list_by_group(group=group, role=role)
 	# add account role info about the group
 	for account in account_list:
-		for group_role in account.groups:
-			if group_role == group:
-				account.role = group_role.role
+		for group_role in account['groups']:
+			if group_role['group'] == group:
+				account['role'] = group_role['role']
 	group_list = api.group_list()
 	group = api.group_info(name=group)
 
@@ -296,6 +326,26 @@ def list_by_group(api, request, group=None, role=None):
 		              'group_list': group_list
 	              })
 
+@wrap_rpc
+def group_account_add(api, request, group=None):
+	# TODO: Check if global_admin
+	if not api.user:
+		raise AuthError()
+	if request.method == 'POST':
+		form = GroupAddAccountForm(api, request.REQUEST)
+		if form.is_valid():
+			data = form.cleaned_data
+			# api.________(attrs=data)
+			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": data['group']}))
+		else:   # form is not valid
+			# TODO: remove this
+			print "Group is Not valid!"
+	else:
+		data = {}
+		if group:
+			data['group'] = group
+		form = GroupAddAccountForm(api, data)
+		return render(request, "form.html", {"form": form, "heading": "Add account to group"})
 
 @wrap_rpc
 def info(api, request, id=None):
