@@ -27,7 +27,7 @@ class GroupForm(AddEditForm):
 		)
 
 	def get_redirect_after(self):
-		return HttpResponseRedirect(reverse("admin_group_info", kwargs={"name": self.cleaned_data['name']}))
+		return HttpResponseRedirect(reverse("admin_group_info", kwargs={"group": self.cleaned_data['name']}))
 
 
 class AddGroupForm(GroupForm):

@@ -270,20 +270,18 @@ class GroupAddAccountForm(BootstrapForm):
 	group = forms.CharField(label=_("Group name"), max_length=50, required=True)
 	role = forms.ChoiceField(label=_("Role"), choices=choices)
 
-	def __init__(self, api, data, *args, **kwargs):
+	def __init__(self, api, *args, **kwargs):
 		super(GroupAddAccountForm, self).__init__(*args, **kwargs)
-		if 'group' in data:
-			self.fields['group'].initial = data['group']
-			self.fields['group'].widget.attrs['readonly'] = True
-		self.helper.form_action = reverse("group_account_add", kwargs={"group": data['group']})
+		if 'group' in self.data:
+			# self.fields['group'].initial = self.data['group']
+			self.fields['group'].widget.attrs['readonly'] = 'True'
+		self.helper.form_action = reverse("group_account_add", kwargs={"group": self.data['group']})
 		self.helper.layout = Layout(
 			'account',
 			'group',
 			'role',
 			Buttons.cancel_save,
 		)
-
-
 
 
 @wrap_rpc
@@ -328,24 +326,48 @@ def list_by_group(api, request, group=None, role=None):
 
 @wrap_rpc
 def group_account_add(api, request, group=None):
+	"""
+	Admin access only
+	add a user to a specified group and set a role.
+	"""
 	# TODO: Check if global_admin
 	if not api.user:
 		raise AuthError()
 	if request.method == 'POST':
-		form = GroupAddAccountForm(api, request.REQUEST)
+		form = GroupAddAccountForm(api, data=request.REQUEST)
 		if form.is_valid():
 			data = form.cleaned_data
-			# api.________(attrs=data)
+			api.account_set_group_role(data['account'], data['group'], data['role'])
 			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": data['group']}))
-		else:   # form is not valid
-			# TODO: remove this
-			print "Group is Not valid!"
+		else:
+			pass
 	else:
 		data = {}
 		if group:
 			data['group'] = group
 		form = GroupAddAccountForm(api, data)
 		return render(request, "form.html", {"form": form, "heading": "Add account to group"})
+
+@wrap_rpc
+def group_account_remove(api, request, user, group):
+	"""
+	Admin access only
+	remove a user role from a specified group
+	"""
+	# TODO: Check if global_admin
+	if request.method == 'POST':
+		form = RemoveConfirmForm(request.POST)
+		if form.is_valid():
+			api.account_set_group_role(user, group, None)
+			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": group}))
+	else:
+		form = RemoveConfirmForm.build(reverse("tomato.account.group_account_remove",
+		                                       kwargs={"user": user, "group": group}))
+		return render(request,
+		              "form.html",
+		              {"heading": "Remove Account from group",
+		               "message_before": "Are you sure to remove account %s from group %s?" % (user, group),
+		               'form': form})
 
 @wrap_rpc
 def info(api, request, id=None):

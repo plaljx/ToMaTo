@@ -33,7 +33,7 @@ class Group(Document):
 	}
 
 class GroupRole(EmbeddedDocument):
-	group = StringField(required=True, unique=True)
+	group = StringField(required=True)
 	role = StringField(choices=["owner", "manager", "user"], required=True)
 
 class Quota(EmbeddedDocument):

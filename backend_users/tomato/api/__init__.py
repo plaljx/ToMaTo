@@ -11,10 +11,10 @@ from organization import organization_remove, organization_modify, organization_
 	organization_info, organization_create, organization_exists
 
 from user import user_create, user_exists, user_info, user_list, user_modify, user_modify_password,\
-	user_remove, username_list, user_list_by_group
+	user_remove, username_list, user_list_by_group, user_set_group_role
 
 from misc import statistics
 
 from hierarchy import object_exists, object_parents, objects_available
 
-from group import group_list, group_create, group_exists, group_info, group_modify, group_remove
+from group import group_list, group_create, group_exists, group_info, group_modify, group_remove, group_has_owner

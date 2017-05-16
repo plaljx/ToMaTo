@@ -80,7 +80,11 @@
     <td>
         <div>
             {# TODO #}
-            <button>Quit Group</button>
+            <form>
+                <button type="submit" formaction="{% url "group_account_remove" user=account.name group=group.name%}">
+                    {% trans 'Remove' %}
+                </button>
+            </form>
             {% if "global_admin" in account.flags %}
             {% endif %}
         </div>

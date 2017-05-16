@@ -45,3 +45,7 @@ def user_remove(name):
 def user_modify(name, attrs):
 	user = _getUser(name, include_notifications=False)
 	user.modify(**attrs)
+
+def user_set_group_role(name, group, role=None):
+	user = _getUser(name, include_notifications=False)
+	user.set_group_role(group, role)

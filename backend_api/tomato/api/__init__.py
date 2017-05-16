@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from account import account_create, account_info, account_list, account_modify, account_remove, account_usage,\
-	account_list_by_group
+	account_list_by_group, account_set_group_role
 
 from account_notification import account_notifications, account_notification_set_read, account_send_notification,\
 	broadcast_announcement, notifyAdmins, account_notification_set_all_read

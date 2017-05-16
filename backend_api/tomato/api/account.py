@@ -18,6 +18,8 @@
 from ..authorization import PermissionChecker, get_pseudo_user_info
 from api_helpers import getCurrentUserInfo, getCurrentUserName
 from ..lib.remote_info import get_user_info, get_user_list, UserInfo, get_user_list_by_group
+from ..lib.error import UserError
+from ..lib.service import get_backend_users_proxy, get_backend_core_proxy
 
 def account_info(name=None):
 	"""
@@ -90,6 +92,20 @@ def account_list_by_group(group=None, role=None):
 		# TODO: may need permission to check group users
 		pass
 	return get_user_list_by_group(group=group, role=role)
+
+def account_set_group_role(name, group, role=None):
+	if name is None:
+		name = getCurrentUserName()
+	target_account = get_user_info(name)
+	# Check: user exists, group exists, cannot have more than 1 owner
+	UserError.check(target_account.exists(),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Account with that name does not exist")
+	UserError.check(get_backend_users_proxy().group_exists(group),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
+	if role == "owner":
+		UserError.check(not (get_backend_users_proxy().group_has_owner(group)),
+		                code=UserError.INVALID_CONFIGURATION, message="The group already has a owner")
+	return target_account.set_group_role(group, role)
 
 def account_modify(name=None, attrs=None, ignore_key_on_unauthorized=False, ignore_flag_on_unauthorized=False):
 	"""
