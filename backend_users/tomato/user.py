@@ -213,6 +213,9 @@ class User(Entity, BaseDocument):
 		group_roles = [{"group": group_role.group, "role": group_role.role} for group_role in self.groups]
 		return group_roles
 
+	def quit_group(self, group):
+		self.set_group_role(group, None)
+
 	def modify_organization(self, val):
 		from .organization import Organization
 		orga = Organization.get(val)

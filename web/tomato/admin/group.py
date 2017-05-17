@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 
 from . import AddEditForm, RemoveConfirmForm
 from ..crispy_forms.layout import Layout
-from ..lib import wrap_rpc
+from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
 
 
@@ -14,17 +14,19 @@ class GroupForm(AddEditForm):
 	name = forms.CharField(max_length=64, label="Name", help_text="The group's name. Must be unique.")
 	label = forms.CharField(max_length=255, label="Label", help_text="")
 	description = forms.CharField(widget=forms.Textarea, label="Description", required=False)
+	owner = forms.CharField(label="Owner", required=False)
 
 	buttons = Buttons.cancel_add
 
 	def __init__(self, *args, **kwargs):
 		super(GroupForm, self).__init__(*args, **kwargs)
-		self.helper.layout = Layout(
-			'name',
-			'label',
-			'description',
-			self.buttons
-		)
+		# self.helper.layout = Layout(
+		# 	'name',
+		# 	'label',
+		# 	'description',
+		# 	'owner',
+		# 	self.buttons
+		# )
 
 	def get_redirect_after(self):
 		return HttpResponseRedirect(reverse("admin_group_info", kwargs={"group": self.cleaned_data['name']}))
@@ -35,6 +37,13 @@ class AddGroupForm(GroupForm):
 
 	def __init__(self, *args, **kwargs):
 		super(AddGroupForm, self).__init__(*args, **kwargs)
+		self.helper.layout = Layout(
+			'name',
+			'label',
+			'description',
+			'owner',
+			self.buttons
+		)
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
@@ -47,6 +56,13 @@ class EditGroupForm(GroupForm):
 
 	def __init__(self, *args, **kwargs):
 		super(EditGroupForm, self).__init__(*args, **kwargs)
+		self.helper.layout = Layout(
+			'name',
+			'label',
+			'description',
+			'owner',
+			self.buttons
+		)
 		self.fields["name"].widget = forms.TextInput(attrs={'readonly': 'readonly'})
 		self.fields["name"].help_text = None
 
@@ -62,10 +78,14 @@ class RemoveGroupForm(RemoveConfirmForm):
 
 @wrap_rpc
 def list_(api, request, show_all=True):
-	# TODO: permission, need login
-	# TODO: show_all
-	groups = api.group_list()
+	if not api.user:
+		raise AuthError()
 
+	# TODO: show_all filter
+	# Design: there can have a filter in the group list page
+	# when filter is set "Show all", list all the groups
+	# when filter is set "Participated", or show_all=False, list only the groups that user has a role of it
+	groups = api.group_list()
 	# Add group role info about the current user
 	for group in groups:
 		# 'owner', 'manager', 'user', or None
@@ -76,7 +96,8 @@ def list_(api, request, show_all=True):
 
 @wrap_rpc
 def info(api, request, group):
-	# TODO: permission, need login
+	if not api.user:
+		raise AuthError()
 	group_info = api.group_info(group)
 	role = api.user.getGroupRole(group_info['name'])
 	return render(request, "group/info.html", {"group": group_info, "role": role})
@@ -84,6 +105,8 @@ def info(api, request, group):
 
 @wrap_rpc
 def add(api, request):
+	if not api.user:
+		raise AuthError()
 	if request.method == 'POST':
 		form = AddGroupForm(data=request.POST)
 		if form.is_valid():
@@ -92,12 +115,16 @@ def add(api, request):
 		else:
 			return form.create_response(request)
 	else:
-		form = AddGroupForm()
+		data = {'user': api.user.name}
+		form = AddGroupForm(data=data)
 		return form.create_response(request)
 
 
 @wrap_rpc
 def edit(api, request, group):
+	# TODO: only global_admin, or owner and manager can edit the group info
+	if not api.user:
+		raise AuthError()
 	if request.method == 'POST':
 		form = EditGroupForm(data=request.POST)
 		if form.is_valid():
@@ -112,6 +139,9 @@ def edit(api, request, group):
 
 @wrap_rpc
 def remove(api, request, group):
+	# TODO: only global_admin, or owner of the group can remove the group
+	if not api.user:
+		raise AuthError()
 	if request.method == 'POST':
 		form = RemoveGroupForm(name=group, data=request.POST)
 		if form.is_valid():
