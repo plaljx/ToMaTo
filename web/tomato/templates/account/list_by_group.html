@@ -104,11 +104,12 @@
 
 {# TODO: Set acctount #}
 <form>
-    {# TODO: Add account to current group #}
+    {% if request.session.user.isGlobalAdmin %}
     <button type="submit" formaction="{% url "group_account_add" group.name%}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
-        {% trans "Add Account" %}
+        {% trans "Set Account" %}
     </button>
+    {% endif %}
 </form>
 
 {% endblock %}

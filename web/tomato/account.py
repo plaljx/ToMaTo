@@ -330,8 +330,7 @@ def group_account_add(api, request, group=None):
 	Admin access only
 	add a user to a specified group and set a role.
 	"""
-	# TODO: Check if global_admin
-	if not api.user:
+	if not api.user.isGlobalAdmin:
 		raise AuthError()
 	if request.method == 'POST':
 		form = GroupAddAccountForm(api, data=request.REQUEST)
@@ -351,10 +350,12 @@ def group_account_add(api, request, group=None):
 @wrap_rpc
 def group_account_remove(api, request, user, group):
 	"""
-	Admin access only
-	remove a user role from a specified group
+	Admin, group owner, group manager can directly remove a user role from the group
 	"""
-	# TODO: Check if global_admin
+	# TODO: can only remove roles lower than current use have
+	# e.g. Manager can remove users, but cannot remove a manager
+	if not api.user.isGlobalAdmin or api.user.canManageGroup(group):
+		raise AuthError()
 	if request.method == 'POST':
 		form = RemoveConfirmForm(request.POST)
 		if form.is_valid():

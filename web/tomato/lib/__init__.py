@@ -340,16 +340,18 @@ class UserObj:
 	def hasDebugFlag(self):
 		return "debug" in self.flags
 
-	def hasGroupRole(self, groupName):
-		for group_role in self.groups:
-			if group_role.group == groupName:
-				return True
-		else:
-			return False
-
 	def getGroupRole(self, groupName):
 		for group_role in self.groups:
 			if group_role['group'] == groupName:
 				return group_role['role']
 		else:
 			return None
+
+	def hasGroupRole(self, groupName):
+		if self.getGroupRole(groupName):
+			return True
+		else:
+			return False
+
+	def canManageGroup(self, groupName):
+		return self.getGroupRole(groupName) in ['owner', 'manager']
