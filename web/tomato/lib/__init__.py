@@ -355,3 +355,6 @@ class UserObj:
 
 	def canManageGroup(self, groupName):
 		return self.getGroupRole(groupName) in ['owner', 'manager']
+
+	def isGroupOwner(self, group):
+		return self.getGroupRole(group) == 'owner'

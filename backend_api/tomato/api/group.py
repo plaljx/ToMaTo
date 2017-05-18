@@ -1,6 +1,6 @@
 from ..lib.error import InternalError, UserError
 from ..lib.service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
-
+from api_helpers import getCurrentUserInfo
 
 def group_list():
 	"""
@@ -15,6 +15,7 @@ def group_create(attrs=None):
 	Create a group with provided info (name, label, description)
 	:return: Info of the group
 	"""
+	getCurrentUserInfo().check_may_create_group()
 	return get_backend_users_proxy().group_create(**attrs)
 
 def group_info(name):
@@ -33,6 +34,7 @@ def group_modify(name, attrs):
 	:param attrs: Info of the group
 	:return: Info of the group
 	"""
+	getCurrentUserInfo().check_may_modify_group(name)
 	return get_backend_users_proxy().group_modify(name, **attrs)
 
 
@@ -43,5 +45,6 @@ def group_remove(name):
 	:param name: Name of the group
 	:return: True if remove successful
 	"""
+	getCurrentUserInfo().check_may_remove_group(name)
 	return get_backend_users_proxy().group_remove(name)
 

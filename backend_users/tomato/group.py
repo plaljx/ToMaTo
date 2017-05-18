@@ -23,6 +23,12 @@ class Group(Entity, BaseDocument):
 		except cls.DoesNotExist:
 			return None
 
+	def modify(self, **attrs):
+		# save basic info first, then save owner info
+		owner = attrs.pop('owner', None)
+		super(Group, self).modify(**attrs)
+		self.owner = owner
+
 	@property
 	def users(self):
 		from .user import User
@@ -31,8 +37,11 @@ class Group(Entity, BaseDocument):
 	@property
 	def owner(self):
 		from.user import User
-		owner = User.objects.get(Q(groups__group__exact=self.name) & Q(groups__role__exact='owner'))
-		return owner.name
+		try:
+			owner = User.objects.get(Q(groups__group=self.name) & Q(groups__role='owner'))
+			return owner.name
+		except DoesNotExist:
+			return None
 
 	@owner.setter
 	def owner(self, new=None):

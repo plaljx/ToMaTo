@@ -795,3 +795,41 @@ class PermissionChecker(UserInfo):
 	def check_may_execute_tasks(self):
 		#fixme: this is what was checked in api before. I think this should check for debug permissions...
 		auth_check(Flags.GlobalAdmin in self.get_flags(), "you don't have permissions to execute tasks")
+
+
+
+
+
+
+	# group
+
+	def check_may_create_group(self):
+		"""
+		Check whether user can create a group
+		At present, every user can create group
+		"""
+		return True
+
+	def check_may_modify_group(self, group):
+		"""
+		Check whether user can modify the basic information of a group
+		At present, global_admin and the owner, manager can modify the group
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) in ['owner', 'manager']:
+			return True
+		auth_fail("operation requires global admin, group owner, group manager")
+
+
+
+	def check_may_remove_group(self, group):
+		"""
+		Check whether user can remove a group
+		At present, global_admin and the owner can modify the group
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) == 'owner':
+			return True
+		auth_fail("operation requires global admin or group owner")

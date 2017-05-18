@@ -44,6 +44,7 @@ class AddGroupForm(GroupForm):
 			'owner',
 			self.buttons
 		)
+		self.fields['owner'].widget.attrs['readonly'] = 'True'
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
@@ -63,8 +64,9 @@ class EditGroupForm(GroupForm):
 			'owner',
 			self.buttons
 		)
-		self.fields["name"].widget = forms.TextInput(attrs={'readonly': 'readonly'})
+		self.fields["name"].widget.attrs['readonly'] = 'True'
 		self.fields["name"].help_text = None
+		self.fields["owner"].widget.attrs['readonly'] = 'True'
 
 	def submit(self, api):
 		formData = self.get_optimized_data()
@@ -115,14 +117,13 @@ def add(api, request):
 		else:
 			return form.create_response(request)
 	else:
-		data = {'user': api.user.name}
+		data = {'owner': api.user.name}
 		form = AddGroupForm(data=data)
 		return form.create_response(request)
 
 
 @wrap_rpc
 def edit(api, request, group):
-	# TODO: only global_admin, or owner and manager can edit the group info
 	if not api.user:
 		raise AuthError()
 	if request.method == 'POST':
@@ -139,7 +140,6 @@ def edit(api, request, group):
 
 @wrap_rpc
 def remove(api, request, group):
-	# TODO: only global_admin, or owner of the group can remove the group
 	if not api.user:
 		raise AuthError()
 	if request.method == 'POST':

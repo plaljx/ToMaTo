@@ -285,8 +285,16 @@ class UserInfo(InfoObj):
 	def get_organization_name(self):
 		return self.info()['organization']
 
-	def get_group_role(self):
-		return self.info()['group']
+	def get_group_role(self, group=None):
+		if group is None:
+			return self.info()['group']
+		else:
+			group_roles = self.info()['group']
+			for group_role in group_roles:
+				if group_role.group == group:
+					return group_role.role
+			else:
+				return None
 
 	def set_group_role(self, group, role):
 		res = get_backend_users_proxy().user_set_group_role(self.name, group, role)
