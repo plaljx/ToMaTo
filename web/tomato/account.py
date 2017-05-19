@@ -292,8 +292,9 @@ class GroupInviteAccountForm(GroupAddAccountForm):
 	"""
 	def __init__(self, api, *args, **kwargs):
 		super(GroupInviteAccountForm, self).__init__(api, *args, **kwargs)
-		self.fields['role'].widget.attrs['readonly'] = 'True'
-		self.helper.form_action = reverse("admin_group_info", kwargs={"group": self.data['group']})
+		# self.fields['role'].widget.attrs['readonly'] = 'True'
+		self.fields['role'].widget.attrs['disabled'] = 'disabled'
+		self.helper.form_action = reverse("group_accounts_all", kwargs={"group": self.data['group']})
 
 @wrap_rpc
 def list(api, request, with_flag=None, organization=True):
@@ -386,7 +387,7 @@ def group_account_remove(api, request, user, group):
 		               'form': form})
 
 @wrap_rpc
-def group_account_invite(api, request, group):
+def group_account_invite(api, request, group=None):
 	"""
 	Invite a user to specified group, set user's role to 'invited'
 	"""

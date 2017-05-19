@@ -34,7 +34,7 @@ class Group(Document):
 
 class GroupRole(EmbeddedDocument):
 	group = StringField(required=True)
-	role = StringField(choices=["owner", "manager", "user"], required=True)
+	role = StringField(choices=["owner", "manager", "user", "invited"], required=True)
 
 class Quota(EmbeddedDocument):
 	monthly = EmbeddedDocumentField(Usage, required=True)

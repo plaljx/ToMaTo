@@ -108,7 +108,7 @@
     {% endif %}
 
     {# Invite #}
-    {% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
+    {% if request.session.user.isGlobalAdmin or role == "owner" or role == "manager" %}
         <button type="submit" formaction="{%url "group_account_invite" group.name%}" class="btn btn-primary">
             <span class="glyphicon glyphicon-send"></span>
             {% trans 'Invite User' %}
