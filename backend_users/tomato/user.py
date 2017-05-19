@@ -61,7 +61,7 @@ class Notification(EmbeddedDocument):
 class GroupRole(EmbeddedDocument):
 
 	group = StringField(required=True)
-	role = StringField(choices=["owner", "manager", "user"], required=True)
+	role = StringField(choices=["owner", "manager", "user", "invited"], required=True)
 
 class User(Entity, BaseDocument):
 	"""
@@ -214,6 +214,9 @@ class User(Entity, BaseDocument):
 		return group_roles
 
 	def quit_group(self, group):
+		"""
+		Quit the specified group, actually removing the related GroupRole info from db.
+		"""
 		self.set_group_role(group, None)
 
 	def modify_organization(self, val):

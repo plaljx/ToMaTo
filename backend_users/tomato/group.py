@@ -31,6 +31,9 @@ class Group(Entity, BaseDocument):
 
 	@property
 	def users(self):
+		"""
+		Current including the user who has been invited to the group
+		"""
 		from .user import User
 		return User.objects(groups__group__exact=self.name)
 
@@ -45,6 +48,11 @@ class Group(Entity, BaseDocument):
 
 	@owner.setter
 	def owner(self, new=None):
+		"""
+		This will remove the owner role of the old group owner
+		:param str new: The name of the new owner
+		:return: None
+		"""
 		from .user import User
 		old = self.owner
 		if new == old:
