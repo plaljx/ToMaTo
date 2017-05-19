@@ -316,7 +316,7 @@ def list(api, request, with_flag=None, organization=True):
 def list_by_group(api, request, group=None, role=None):
 	if not api.user:
 		raise AuthError()
-	if role not in ['owner', 'manager', 'user', None]:
+	if role not in ['owner', 'manager', 'user', 'invited', None]:
 		raise Exception('Unknown role %s' % role)
 	account_list = api.account_list_by_group(group=group, role=role)
 	# add account role info about the group
@@ -386,7 +386,7 @@ def group_account_remove(api, request, user, group):
 		               'form': form})
 
 @wrap_rpc
-def group_account_invite(api, request, user, group):
+def group_account_invite(api, request, group):
 	"""
 	Invite a user to specified group, set user's role to 'invited'
 	"""

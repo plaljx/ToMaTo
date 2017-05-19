@@ -55,16 +55,6 @@
     {%trans 'Accounts'%}
 </button>
 
-{# Invite #}
-{% if role == "owner" or role == "manager" %}
-    {# TODO: Invite #}
-{% endif %}
-
-{# Apply to Join #}
-{% if role == None %}
-    {# TODO: Apply to Join #}
-{% endif %}
-
 {# Edit #}
 {% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
     <button type="submit" formaction="{%url "admin_group_edit" group.name%}" class="btn btn-warning">

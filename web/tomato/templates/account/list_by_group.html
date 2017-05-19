@@ -98,17 +98,21 @@
 
 {% endif %}
 
-{#<form>#}
-{#  <button type="submit" formaction="{%url "account.register"%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new Account'%}</button>#}
-{#</form>#}
-
-{# TODO: Set acctount #}
 <form>
+    {# Set Account #}
     {% if request.session.user.isGlobalAdmin %}
     <button type="submit" formaction="{% url "group_account_add" group.name%}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
         {% trans "Set Account" %}
     </button>
+    {% endif %}
+
+    {# Invite #}
+    {% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
+        <button type="submit" formaction="{%url "group_account_invite" group.name%}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-send"></span>
+            {% trans 'Invite User' %}
+        </button>
     {% endif %}
 </form>
 
