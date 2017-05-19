@@ -292,9 +292,10 @@ class GroupInviteAccountForm(GroupAddAccountForm):
 	"""
 	def __init__(self, api, *args, **kwargs):
 		super(GroupInviteAccountForm, self).__init__(api, *args, **kwargs)
-		# self.fields['role'].widget.attrs['readonly'] = 'True'
-		self.fields['role'].widget.attrs['disabled'] = 'disabled'
-		self.helper.form_action = reverse("group_accounts_all", kwargs={"group": self.data['group']})
+		# TODO: Make role field cannot changed, but not disabled
+		self.fields['role'].widget.attrs['readonly'] = 'True'
+		# self.fields['role'].widget.attrs['disabled'] = 'disabled'
+		self.helper.form_action = reverse("group_account_invite", kwargs={"group": self.data['group']})
 
 @wrap_rpc
 def list(api, request, with_flag=None, organization=True):
