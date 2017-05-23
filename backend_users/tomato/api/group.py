@@ -1,6 +1,6 @@
 from ..group import Group
 from ..user import User
-from _shared import _getGroup
+from _shared import _getGroup, _getUser
 from ..lib.error import UserError
 
 
@@ -10,8 +10,16 @@ def group_exists(name):
 	return False
 
 
-def group_list():
-	return [g.info() for g in Group.objects.all()]
+def group_list(user=None, role=None):
+	"""
+	Get group list. If user is None, the role will be omitted
+	"""
+	if user is None:
+		return [g.info() for g in Group.objects.all()]
+	else:
+		user = _getUser(user)
+		return [g.info() for g in user.get_account_group(role)]
+
 
 def group_create(**attrs):
 	UserError.check(not group_exists(attrs['name']),

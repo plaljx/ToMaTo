@@ -79,15 +79,15 @@ class RemoveGroupForm(RemoveConfirmForm):
 
 
 @wrap_rpc
-def list_(api, request, show_all=True):
+def list_(api, request, user=None, role=None):
+	"""
+	List the groups.
+	If 'user' is None, this will show all groups, and 'role' will be omitted
+	Else, 'role' will be checked, if 'role' is not specified, this will show all groups that current user has a role
+	"""
 	if not api.user:
 		raise AuthError()
-
-	# TODO: show_all filter
-	# Design: there can have a filter in the group list page
-	# when filter is set "Show all", list all the groups
-	# when filter is set "Participated", or show_all=False, list only the groups that user has a role of it
-	groups = api.group_list()
+	groups = api.group_list(user=user, role=role)
 	# Add group role info about the current user
 	for group in groups:
 		# 'owner', 'manager', 'user', or None

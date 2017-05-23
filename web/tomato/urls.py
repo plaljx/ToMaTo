@@ -246,8 +246,9 @@ urlpatterns = patterns('',
     # (r'^fight/$', 'tomato.finght.start'),
 
 	# Group
-	url(r'^group/$', 'tomato.admin.group.list_', {"show_all": False}, name='admin_group_list'),
-	url(r'^group/all$', 'tomato.admin.group.list_', {"show_all": True}, name='admin_group_list_all'),
+	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all
+	url(r'^account/(?P<user>[^/]+)/groups', 'tomato.admin.group.list_', name='admin_account_groups'),
+	url(r'^account/(?P<user>[^/]+)/groups/(?P<role>\w+)$', 'tomato.admin.group.list_', name='admin_account_groups_role'),
 	url(r'^group/add$', 'tomato.admin.group.add', name='admin_group_add'),
 	url(r'^group/(?P<group>\w+)$', 'tomato.admin.group.info', name='admin_group_info'),
 	url(r'^group/(?P<group>\w+)/edit$', 'tomato.admin.group.edit', name='admin_group_edit'),

@@ -2,12 +2,16 @@ from ..lib.error import InternalError, UserError
 from ..lib.service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
 from api_helpers import getCurrentUserInfo
 
-def group_list():
+def group_list(user=None, role=None):
 	"""
 	Return a list of groups
+	:param user: if not None, only groups that user has a role will be list.
+	:param role: role filter. If user is not None, this will be omitted
 	:return: list of group info
 	"""
-	return get_backend_users_proxy().group_list()
+	if user is not None:
+		getCurrentUserInfo().check_may_list_group(user=user, role=role)
+	return get_backend_users_proxy().group_list(user=user, role=role)
 
 
 def group_create(attrs=None):

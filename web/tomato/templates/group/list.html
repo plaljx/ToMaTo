@@ -13,15 +13,28 @@
 
 <div class="skip-sm"></div>
 
-{# Every user is able to create group #}
-{#{% if request.session.user.isAdmin %}#}
-<form>
-    <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span>
-        Add group
-    </button>
-</form>
-{#{% endif %}#}
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-filter"></span>
+    {% if role %}
+      {% trans 'Showing '%} {{ role }} {% trans ' groups' %}
+    {% else %}
+      {% trans 'Showing all groups' %}
+    {% endif %}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="{% url "admin_group_list"%}">{%trans 'Show all groups'%}</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-header">{%trans "My Groups"%}</li>
+    <li><a href="{% url "admin_account_groups" user=request.session.user.name %}">{%trans 'My Groups'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="owner" %}">{%trans 'Owing'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="manager" %}">{%trans 'Managing'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="user" %}">{%trans 'User'%}</a></li>
+
+  </ul>
+</div>
+
 
 {% if groups %}
 <script src="/js/enhancetable.js"></script>
@@ -47,4 +60,15 @@
 {% else %}
 <p>No Group</p>
 {% endif %}
+
+{# Every user is able to create group #}
+{#{% if request.session.user.isAdmin %}#}
+<form>
+    <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add group
+    </button>
+</form>
+{#{% endif %}#}
+
 {% endblock %}

@@ -213,6 +213,14 @@ class User(Entity, BaseDocument):
 		group_roles = [{"group": group_role.group, "role": group_role.role} for group_role in self.groups]
 		return group_roles
 
+	def get_account_group(self, role=None):
+		from .group import Group
+		if role is None:
+			target_groups = [group_role.group for group_role in self.groups]
+		else:
+			target_groups = [group_role.group for group_role in self.groups if group_role.role == role]
+		return Group.objects(name__in=target_groups)
+
 	def quit_group(self, group):
 		"""
 		Quit the specified group, actually removing the related GroupRole info from db.

@@ -803,6 +803,19 @@ class PermissionChecker(UserInfo):
 
 	# group
 
+	def check_may_list_group(self, user=None, role=None):
+		"""
+		Check whether user can view the list of groups.
+		"""
+		if user is None:
+			return True
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_username() == user:
+			return True
+		auth_fail("you may not view other's groups")
+
+
 	def check_may_create_group(self):
 		"""
 		Check whether user can create a group
