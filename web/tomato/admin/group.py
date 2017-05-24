@@ -87,13 +87,14 @@ def list_(api, request, user=None, role=None):
 	"""
 	if not api.user:
 		raise AuthError()
+	if role not in ['owner', 'manager', 'user', 'invited', None]:
+		raise Exception('Invalid parameter \'role\': %s' % role)
 	groups = api.group_list(user=user, role=role)
 	# Add group role info about the current user
 	for group in groups:
-		# 'owner', 'manager', 'user', or None
 		group['role'] = api.user.getGroupRole(group['name'])
 
-	return render(request, "group/list.html", {'groups': groups})
+	return render(request, "group/list.html", {'groups': groups, 'role': role})
 
 
 @wrap_rpc
