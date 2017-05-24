@@ -815,7 +815,6 @@ class PermissionChecker(UserInfo):
 			return True
 		auth_fail("you may not view other's groups")
 
-
 	def check_may_create_group(self):
 		"""
 		Check whether user can create a group
@@ -834,8 +833,6 @@ class PermissionChecker(UserInfo):
 			return True
 		auth_fail("operation requires global admin, group owner, group manager")
 
-
-
 	def check_may_remove_group(self, group):
 		"""
 		Check whether user can remove a group
@@ -846,3 +843,20 @@ class PermissionChecker(UserInfo):
 		if self.get_group_role(group) == 'owner':
 			return True
 		auth_fail("operation requires global admin or group owner")
+
+	def check_may_set_group_role(self, name, group, role=None):
+		"""
+		Check whether user can directly set a group role to a user
+		Only global admin should be permitted to do this
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		auth_fail("operation requires global admin")
+
+	def check_may_invite_users(self, group):
+		"""
+		Check whether user can invite a user to a specified group
+		"""
+		if self.get_group_role(group) in ['owner', 'manager']:
+			return True
+		auth_fail("operations requires group owner or manager")

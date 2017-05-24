@@ -1,6 +1,7 @@
 from ..lib.error import InternalError, UserError
 from ..lib.service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
 from api_helpers import getCurrentUserInfo
+from ..lib.remote_info import get_user_info, get_user_list_by_group
 
 def group_list(user=None, role=None):
 	"""
@@ -12,7 +13,6 @@ def group_list(user=None, role=None):
 	if user is not None:
 		getCurrentUserInfo().check_may_list_group(user=user, role=role)
 	return get_backend_users_proxy().group_list(user=user, role=role)
-
 
 def group_create(attrs=None):
 	"""
@@ -30,7 +30,6 @@ def group_info(name):
 	"""
 	return get_backend_users_proxy().group_info(name)
 
-
 def group_modify(name, attrs):
 	"""
 	Modify the attributes of an existing group
@@ -40,7 +39,6 @@ def group_modify(name, attrs):
 	"""
 	getCurrentUserInfo().check_may_modify_group(name)
 	return get_backend_users_proxy().group_modify(name, **attrs)
-
 
 def group_remove(name):
 	"""
@@ -52,3 +50,39 @@ def group_remove(name):
 	getCurrentUserInfo().check_may_remove_group(name)
 	return get_backend_users_proxy().group_remove(name)
 
+def account_list_by_group(group=None, role=None):
+	if group is None and role is None:
+		getCurrentUserInfo().check_may_list_all_users()
+	else:
+		# TODO: may need permission to check group users
+		pass
+	return get_user_list_by_group(group=group, role=role)
+
+def account_set_group_role(user, group, role=None):
+	"""
+	Direct set a group role of a user.
+	Only global admin should use this
+	"""
+	getCurrentUserInfo().check_may_set_group_role(user, group, role)
+	target_account = get_user_info(user)
+	UserError.check(target_account.exists(),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Account with that name does not exist")
+	UserError.check(get_backend_users_proxy().group_exists(group),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
+	if role == "owner":
+		UserError.check(not (get_backend_users_proxy().group_has_owner(group)),
+		                code=UserError.INVALID_CONFIGURATION, message="The group already has a owner")
+	return target_account.set_group_role(group, role)
+
+def group_invite(user, group):
+	"""
+	Invite a user to group
+	If success, the target user will have a 'invited' role on target group
+	"""
+	getCurrentUserInfo().check_may_invite_users(group)
+	target_account = get_user_info(user)
+	UserError.check(target_account.exists(),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Account with that name does not exist")
+	UserError.check(get_backend_users_proxy().group_exists(group),
+	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
+	return target_account.set_group_role(group, 'invited')

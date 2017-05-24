@@ -292,10 +292,14 @@ class GroupInviteAccountForm(GroupAddAccountForm):
 	"""
 	def __init__(self, api, *args, **kwargs):
 		super(GroupInviteAccountForm, self).__init__(api, *args, **kwargs)
-		# TODO: Make role field cannot changed, but not disabled
-		self.fields['role'].widget.attrs['readonly'] = 'True'
+		# self.fields['role'].widget.attrs['readonly'] = 'True'
 		# self.fields['role'].widget.attrs['disabled'] = 'disabled'
 		self.helper.form_action = reverse("group_account_invite", kwargs={"group": self.data['group']})
+		self.helper.layout = Layout(
+			'account',
+			'group',
+			Buttons.cancel_save
+		)
 
 @wrap_rpc
 def list(api, request, with_flag=None, organization=True):
@@ -400,7 +404,7 @@ def group_account_invite(api, request, group=None):
 		form = GroupInviteAccountForm(api, data=request.REQUEST)
 		if form.is_valid():
 			data = form.cleaned_data
-			api.account_set_group_role(data['account'], data['group'], data['role'])
+			api.group_invite(data['account'], data['group'])
 			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": data['group']}))
 		else:
 			raise Exception('Form is not valid')
