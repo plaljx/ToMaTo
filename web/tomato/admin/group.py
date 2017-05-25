@@ -3,7 +3,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-from . import AddEditForm, RemoveConfirmForm
+from . import AddEditForm, RemoveConfirmForm, ConfirmForm
 from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
@@ -76,6 +76,19 @@ class EditGroupForm(GroupForm):
 class RemoveGroupForm(RemoveConfirmForm):
 	message = "Are you sure you want to remove the group '%(name)s'?"
 	title = "Remove Group '%(name)s'"
+
+class HandleInviteForm(ConfirmForm):
+	message = None
+	title = None
+
+	def __init__(self, operation, *args, **kwargs):
+		if operation is True or operation == 'accept':
+			self.message = "Are you sure you want to accept the invite to group '%(name)s'?"
+			self.title = "Accept invite to group '%(name)s'?"
+		elif operation is False or operation == 'decline':
+			self.message = "Are you sure you want to decline the invite to group '%(name)s'?"
+			self.title = "Decline invite to group '%(name)s'?"
+		super(HandleInviteForm, self).__init__(*args, **kwargs)
 
 
 @wrap_rpc
@@ -150,3 +163,22 @@ def remove(api, request, group):
 			return HttpResponseRedirect(reverse('admin_group_list'))
 	form = RemoveGroupForm(name=group)
 	return form.create_response(request)
+
+@wrap_rpc
+def handle_invite(api, request, user, group, operation):
+	if operation not in ['accept', 'decline']:
+		raise Exception("Invalid parameter 'operation'")
+	if not api.user:
+		raise AuthError()
+	if user != api.user.name:
+		raise Exception("You are not allowed to handle other's invites.")
+	if request.method == 'POST':
+		form = HandleInviteForm(operation, name=group, data=request.POST)
+		if form.is_valid():
+			api.account_handle_invite(group, operation)
+			return HttpResponseRedirect(reverse('admin_group_list'))
+		else:
+			raise Exception('Form is not valid')
+	else:
+		form = HandleInviteForm(operation, name=group)
+		return form.create_response(request)

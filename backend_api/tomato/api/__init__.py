@@ -75,6 +75,6 @@ from security_resources.security_software import security_software_create, secur
 #traffic
 from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, traffic_modify,traffic_start
 
-#group
+# group
 from group import group_remove, group_modify, group_info, group_list, group_create,\
-	account_list_by_group, account_set_group_role, group_invite
+	account_list_by_group, account_set_group_role, group_invite, account_handle_invite

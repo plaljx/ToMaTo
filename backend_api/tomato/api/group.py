@@ -86,3 +86,18 @@ def group_invite(user, group):
 	UserError.check(get_backend_users_proxy().group_exists(group),
 	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
 	return target_account.set_group_role(group, 'invited')
+
+def account_handle_invite(group, operation):
+	"""
+	Handle the group inviting
+	if accept, set the role to 'user'
+	if decline, remove the group role info
+	"""
+	user = getCurrentUserInfo()
+	user.check_may_handle_invite(group)
+	if operation is True or operation == 'accept':
+		user.set_group_role(group, 'user')
+	elif operation is False or operation == 'decline':
+		user.set_group_role(group, None)
+	else:
+		raise Exception("Invalid parameter")

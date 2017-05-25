@@ -249,6 +249,7 @@ urlpatterns = patterns('',
 	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all
 	url(r'^account/(?P<user>[^/]+)/groups$', 'tomato.admin.group.list_', name='admin_account_groups'),
 	url(r'^account/(?P<user>[^/]+)/groups/(?P<role>\w+)$', 'tomato.admin.group.list_', name='admin_account_groups_role'),
+	url(r'^account/(?P<user>[^/]+)/invite/(?P<group>\w+)/(?P<operation>\w+)$', 'tomato.admin.group.handle_invite', name='admin_account_handle_invite'),
 	url(r'^group/add$', 'tomato.admin.group.add', name='admin_group_add'),
 	url(r'^group/(?P<group>\w+)$', 'tomato.admin.group.info', name='admin_group_info'),
 	url(r'^group/(?P<group>\w+)/edit$', 'tomato.admin.group.edit', name='admin_group_edit'),

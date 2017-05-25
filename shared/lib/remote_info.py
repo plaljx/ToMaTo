@@ -287,12 +287,12 @@ class UserInfo(InfoObj):
 
 	def get_group_role(self, group=None):
 		if group is None:
-			return self.info()['group']
+			return self.info()['groups']
 		else:
-			group_roles = self.info()['group']
+			group_roles = self.info()['groups']
 			for group_role in group_roles:
-				if group_role.group == group:
-					return group_role.role
+				if group_role['group'] == group:
+					return group_role['role']
 			else:
 				return None
 

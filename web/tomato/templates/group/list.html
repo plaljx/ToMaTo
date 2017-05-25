@@ -31,10 +31,11 @@
     <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="owner" %}">{%trans 'Owing'%}</a></li>
     <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="manager" %}">{%trans 'Managing'%}</a></li>
     <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="user" %}">{%trans 'User'%}</a></li>
-
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="invited" %}">{%trans 'Invited'%}</a></li>
   </ul>
 </div>
 
+<div class="skip-sm"></div>
 
 {% if groups %}
 <script src="/js/enhancetable.js"></script>
@@ -45,6 +46,7 @@
         <th>Label</th>
         {# <th>Description</th> #}
         <th>Role</th>
+        <th>Operations</th>
     </tr>
 
     {% for group in groups %}
@@ -53,22 +55,31 @@
         <td>{{ group.label }}</td>
         {# <td>{{ group.description }}</td> #}
         <td>{{ group.role }}</td>
+        <td>
+            <span>
+                {% if group.role == 'invited' %}
+                    <a class="btn btn-xs btn-primary" role="button"
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='accept' %}">
+                        <span class="glyphicon glyphicon-ok"></span>Accept</a>
+                    <a class="btn btn-xs btn-danger" role="button"
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='decline' %}">
+                        <span class="glyphicon glyphicon-remove"></span>Decline</a>
+                {% endif %}
+            </span>
+        </td>
     </tr>
     {% endfor %}
 
 </table>
 {% else %}
-<p>No Group</p>
+<p>No Eligible Group</p>
 {% endif %}
 
-{# Every user is able to create group #}
-{#{% if request.session.user.isAdmin %}#}
 <form>
     <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
         Add group
     </button>
 </form>
-{#{% endif %}#}
 
 {% endblock %}

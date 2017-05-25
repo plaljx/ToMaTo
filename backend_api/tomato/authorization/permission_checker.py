@@ -860,3 +860,12 @@ class PermissionChecker(UserInfo):
 		if self.get_group_role(group) in ['owner', 'manager']:
 			return True
 		auth_fail("operations requires group owner or manager")
+
+	def check_may_handle_invite(self, group):
+		"""
+		Check whether user can handle the invite
+		If the role of target group is 'invited', this will be allowed
+		"""
+		if self.get_group_role(group) == 'invited':
+			return True
+		auth_fail("you are not been invited to group %s" % group)
