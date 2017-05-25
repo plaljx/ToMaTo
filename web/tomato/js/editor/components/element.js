@@ -169,7 +169,7 @@ var Element = Component.extend({
 		}
 	},
 	getAbsPos: function() {
-		return this.canvas.absPos(this.getPos());
+		return this.canvas.workspace.absPos(this.getPos());
 	},
 	setAbsPos: function(pos) {
 		var grid = this.editor.options.grid_size;

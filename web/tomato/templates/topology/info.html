@@ -10,6 +10,9 @@
 <link type="text/css" href="style/jquery.contextMenu.css" rel="stylesheet" />
 <link type="text/css" href="style/editor.css" rel="stylesheet" />
 <link type="text/css" href="/style/pretty-json.css" rel="stylesheet" />
+<link type="text/css" href="style/button.css" rel = "stylesheet">
+
+
 <script language="JavaScript" type="text/javascript" src="js/jquery-ui.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/ui.ribbon.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/jquery.contextMenu.js"></script>
@@ -111,6 +114,19 @@
 	<h1 id="topology_name">{%trans 'Topology'%} '{{top.name}}'</h1>
 	<div id="menu" style="width:100%;"></div>
 	<div id="workspace" style="width:100%; height:{{editor.size.height}}px;"></div>
+	<div id="tab_menu">
+		<!-- <a href="http://www.bootcss.com/" class="button button-tiny">Go</a>
+  		<a href="http://www.bootcss.com/" class="button button-rounded button-tiny">Go</a>
+  		<a href="http://www.bootcss.com/" class="button button-pill button-tiny">Go</a>
+  		<button class="button button-square button-tiny"><i class="fa fa-plus"></i></button>
+  		<button class="button button-box button-tiny"><i class="fa fa-plus"></i></button>
+  		<button class="button button-circle button-tiny"><i class="fa fa-plus"></i></button> -->
+  		<div class="button-group" id="subtopology_tab"><!-- 
+   			<button type="button" class="button button-pill button-action">Option 1</button>
+    		<button type="button" class="button button-pill button-action">Option 2</button>
+    		<button type="button" class="button button-pill button-action">Option 3</button> -->
+  		</div>
+	</div>
 </div>
 
 <script language="JavaScript" type="text/javascript"> 
@@ -133,6 +149,7 @@
 	{% endif %}
 	
 	var editor = new Editor({
+		tab_menu_container: $('#tab_menu'),
 		menu_container: $('#menu'),
 		workspace_container: $('#workspace'),
 		{% if tutorial_info.state.enabled %}

@@ -175,3 +175,13 @@ def topgroup_create(api, request, top_id = None, **data):
 def topgroup_add(api, request, top_id = None, **data):
 	res = api.topgroup_add(top_id, **data)
 	return res
+# subtopology
+@wrap_json
+def subtopology_add(api, request, top_id, **data):
+	res = api.subtopology_add(top_id, **data)
+	return res
+
+@wrap_json
+def subtopology_get(api, request, top_id, **data):
+	res = api.subtopology_get(top_id, **data)
+	return res

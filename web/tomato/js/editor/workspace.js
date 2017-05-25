@@ -5,18 +5,68 @@ var Workspace = Class.extend({
 		container.addClass("ui-widget-content").addClass("ui-corner-all")
 		container.addClass("tomato").addClass("workspace");
 		container[0].obj = editor.topology;
+		// console.log(container[0])
 		this.container.click(function(){});
     	this.size = {x: this.container.width(), y: this.container.height()};
-    	this.canvas = Raphael(this.container[0], this.size.x, this.size.y);
-    	var c = this.canvas;
-		var fs = this.editor.options.frame_size;
-    	this.canvas.absPos = function(pos) {
-    		return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
-    	}
-    	this.canvas.relPos = function(pos) {
-    		return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
-    	}
+
     	
+    	this.subtopologyList = [];
+    	this.canvas_dict = {};
+    	this.workspace_dict = {};
+
+    	var t = this;
+    	
+    	ajax({
+			url:'topology/'+ this.editor.options.topology + '/getsubtopology',
+			synchronous: true,
+			successFn:function(result){
+				// console.log(result)
+				t.subtopologyList = result
+				for (var i = 0; i < t.subtopologyList.length; i++){
+					// t.workspace_dict[t.subtopologyList[i]] = $("#workspace").clone(true);
+    				t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
+    				t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i]
+    				t.canvas_dict[t.subtopologyList[i]].workspace = t;
+    				// var c = t.canvas_dict[t.subtopologyList[i]]
+    				// var fs = t.editor.options.frame_size
+    				// t.canvas_dict[t.subtopologyList[i]].absPos = function(pos) {
+    				// 	// console.log({x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)})
+    				// 	return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+    				// }
+    				// t.canvas_dict[t.subtopologyList[i]].relPos = function(pos) {
+    				// 	return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+    				// }
+
+    				// $('#workspace svg:eq(0)').attr('id', t.subtopologyList[i])
+    				t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
+    			}
+    // 			t.canvas = t.canvas_dict[t.subtopologyList[0]]
+    // 			t.connectPath = t.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    // 			t.container.click(function(evt){
+				// 	t.onClicked(evt);
+				// });
+				// t.container.mousemove(function(evt){
+				// 	t.onMouseMove(evt);
+				// });
+				// t.busyIcon = t.canvas.image("img/loading_big.gif", t.size.x/2, t.size.y/2, 32, 32);
+				// t.busyIcon.attr({opacity: 0.0});
+    			$('#workspace>svg').hide()
+    			$('#main').show()
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		});
+
+		var c = this.canvas_dict[t.subtopologyList[0]];
+    	var fs = t.editor.options.frame_size;
+		this.absPos = function(pos){
+    		return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+    	};
+    	this.relPos = function(pos){
+    		return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
+    	};
+
     	//tutorial UI
     	this.tutorialWindow = new TutorialWindow({ 
 			autoOpen: false, 
@@ -45,24 +95,75 @@ var Workspace = Class.extend({
     		ownUserId: this.editor.options.user.id,
     		permissions: this.editor.options.permission_list
     	});
-    	
+
     	var t = this;
+
+    	this.canvas = this.canvas_dict[t.subtopologyList[0]]
     	this.editor.listeners.push(function(obj){
     		t.tutorialWindow.triggerProgress(obj);
     	});
     	
-    	
-		this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    	this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
 		this.container.click(function(evt){
 			t.onClicked(evt);
 		});
 		this.container.mousemove(function(evt){
 			t.onMouseMove(evt);
 		});
+		// console.log(this.container.click)
 		this.busyIcon = this.canvas.image("img/loading_big.gif", this.size.x/2, this.size.y/2, 32, 32);
 		this.busyIcon.attr({opacity: 0.0});
+
+
+		
+		
 	},
 	
+	addCanvas:function(canvasname){
+		var t = this;
+		this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
+    	// t.connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+
+		this.canvas_dict[canvasname].canvas.id = canvasname
+		this.canvas_dict[canvasname].workspace = this
+		
+		$("#" + canvasname).hide()
+		// this.tabCanvas(canvasname)
+		var data = {
+			'name': canvasname,
+		}
+		ajax({
+			url:'topology/'+ this.editor.topology.id + '/addsubtopology',
+			data:data,
+			successFn:function(){
+				// console.log('success')
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		})
+
+
+	},
+
+	tabCanvas:function(canvasname){
+
+		var t = this;
+		// console.log(canvasname)
+		// console.log(this);
+		this.canvas = this.canvas_dict[canvasname]
+    	this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    	$('#workspace>svg').hide();
+    	$('#' + canvasname).show();
+
+	},
+	
+	hideCanvas:function(){
+		$('#workspace>svg').hide()
+	},
+
+	
+
 	setBusy: function(busy) {
 		this.busyIcon.attr({opacity: busy ? 1.0 : 0.0});
 	},
@@ -79,17 +180,24 @@ var Workspace = Class.extend({
 		this.connectPath.attr({path: "M"+pos.x+" "+pos.y+"L"+mousePos.x+" "+mousePos.y});
 	},
 	onClicked: function(evt) {
+		console.log(this.editor.mode)
 		switch (this.editor.mode) {
 			case Mode.position:
 				var pos;
-				if (evt.offsetX) pos = this.canvas.relPos({x: evt.offsetX, y: evt.offsetY});
+				if (evt.offsetX) {
+					console.log(evt.offsetX)
+					pos = this.relPos({x: evt.offsetX, y: evt.offsetY});
+					console.log(pos)
+				}
 				else {
 					var objPos = this.container.offset();
-					pos = this.canvas.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
+					pos = this.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
+					console.log(pos)
 				}
 				this.editor.positionElement(pos);
 				break;
 			default:
+			// console.log('defult')
 				break;
 		}
 	},
@@ -105,7 +213,7 @@ var Workspace = Class.extend({
 		var t = editor.topology;
 		var new_name="Topology '"+t.data.name+"'"+(editor.options.show_ids ? " ["+t.id+"]" : "");
 		$('#topology_name').text(new_name);
-		document.title = new_name+" - G-Lab ToMaTo";
+		document.title = new_name+" - Provisec";
 	}
 });
 

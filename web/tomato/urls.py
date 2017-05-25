@@ -248,6 +248,11 @@ urlpatterns = patterns('',
     # topgroup
     (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
     (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
+    # subtopology
+    (r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
+    (r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
+    # (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
+
 )
 urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )
 

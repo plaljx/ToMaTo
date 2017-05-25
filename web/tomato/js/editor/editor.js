@@ -210,8 +210,13 @@ var Editor = Class.extend({
 	createElementFunc: function(el) {
 		var t = this;
 		return function(pos) {
+			// console.log(pos)
 			var data = copy(el, true);
 			data._pos = pos;
+
+			data._pos['canvas'] = this.workspace.canvas.canvas.id;
+			console.log(data._pos['canvas'])
+			console.log(data)
 			t.topology.createElement(data);
 			t.selectBtn.click();
 		}
@@ -220,6 +225,7 @@ var Editor = Class.extend({
 		var t = this;
 		return function(pos) {
 			var data = {type: type, _pos: pos};
+			data._pos['canvas'] = $('svg:visible').attr('id')
 			t.topology.createElement(data, function(el1) {
 					el1.showConfigWindow(false, function (el2) {
 							el2.action("prepare", { callback: function(el3) {el3.uploadImage_fromFile();} });
@@ -233,6 +239,9 @@ var Editor = Class.extend({
 	createTemplateFunc: function(tmpl) {
 		return this.createElementFunc({type: tmpl.type, template: tmpl.name});
 	},
+	// addSubtopology: function(subtopologyname){
+
+	// },
 	buildMenu: function(editor) {
 		var t = this;
 
@@ -684,6 +693,18 @@ var Editor = Class.extend({
             small: false,
             func: function () {
                 t.topology.topgroupDialog();
+            }
+        }));
+
+        var tab = this.menu.addTab(gettext("Canvas"));
+		var group = tab.addGroup(gettext("Manager"));
+		group.addElement(Menu.button({  
+            label: gettext("add subtopology"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.subtopolgy_addDialog();
             }
         }));
 

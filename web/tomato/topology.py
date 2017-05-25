@@ -104,6 +104,9 @@ def _display(api, request, info, tutorial_state):
 	}
 	editor_size['marginleft'] = int( (800-editor_size['width']) / 2 )
 
+	# for subtopology
+	# subtopology_list = api.subtopology_list(info['id'])
+
 	res = render(request, "topology/info.html", {
 		'top': info,
 		'timeout_settings': serverInfo()["topology_timeout"],
@@ -147,6 +150,8 @@ def create(api, request):
 		raise AuthError()
 	info = api.topology_create()
 	api.topology_modify(info['id'], {'_initialized': False})
+	# for subtopology
+	# api.subtopology_init(info['id'])
 	return redirect("tomato.topology.info", id=info["id"])
 
 
