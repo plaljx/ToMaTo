@@ -15,7 +15,7 @@
 
 <h1>{%trans 'User Accounts'%}</h1>
 <h2>{%trans 'Group:'%}{{ group.name }}</h2>
-<h3>{%trans 'Role:'%}{{ role }}</h3>
+{#<h3>{%trans 'Role:'%}{{ role }}</h3>#}
 
 <div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -82,12 +82,12 @@
         <div>
             {# TODO #}
             <form>
+            {% if request.session.user.isGlobalAdmin %}
                 <button type="submit" formaction="{% url "group_account_remove" user=account.name group=group.name%}">
                     {% trans 'Remove' %}
                 </button>
-            </form>
-            {% if "global_admin" in account.flags %}
             {% endif %}
+            </form>
         </div>
     </td>
   </tr>

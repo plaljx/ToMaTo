@@ -375,7 +375,7 @@ def group_account_remove(api, request, user, group):
 	# e.g. Manager can remove users, but cannot remove a manager
 	if not api.user:
 		raise AuthError()
-	if not api.user.isGlobalAdmin or api.user.canManageGroup(group):
+	if not api.user.isGlobalAdmin or not api.user.canManageGroup(group):
 		raise Exception("Need global admin, or group owner or manager")
 	if request.method == 'POST':
 		form = RemoveConfirmForm(request.POST)
