@@ -869,3 +869,12 @@ class PermissionChecker(UserInfo):
 		if self.get_group_role(group) == 'invited':
 			return True
 		auth_fail("you are not been invited to group %s" % group)
+
+	def check_may_apply_for_group(self, group):
+		"""
+		Check whether user can apply to join a group
+		"""
+		current_role = self.get_group_role(group)
+		if current_role is None:
+			return True
+		auth_fail("you are already has a role \'%s\' on group %s" % (current_role, group))

@@ -49,3 +49,5 @@ def group_remove(name):
 def group_has_owner(name):
 	if len(User.list_by_group(name, "owner")) != 0:
 		return True
+	else:
+		return False

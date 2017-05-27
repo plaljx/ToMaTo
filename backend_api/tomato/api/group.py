@@ -93,6 +93,7 @@ def account_handle_invite(group, operation):
 	if accept, set the role to 'user'
 	if decline, remove the group role info
 	"""
+	# TODO: may add 'user' as parameter, since URL contains user's name
 	user = getCurrentUserInfo()
 	user.check_may_handle_invite(group)
 	if operation is True or operation == 'accept':
@@ -101,3 +102,15 @@ def account_handle_invite(group, operation):
 		user.set_group_role(group, None)
 	else:
 		raise Exception("Invalid parameter")
+
+def group_apply(user, group):
+	"""
+	User apply to join a group
+	If success, the target user will have a 'applying' role on target group
+	"""
+	current_user = getCurrentUserInfo()
+	target_account = get_user_info(user)
+	UserError.check(current_user.name == target_account.name,
+	                code=UserError.DIFFERENT_USER, message="You are not user %s" % target_account.name)
+	current_user.check_may_apply_for_group(group)
+	return target_account.set_group_role('applying')

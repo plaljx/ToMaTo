@@ -61,7 +61,7 @@ class Notification(EmbeddedDocument):
 class GroupRole(EmbeddedDocument):
 
 	group = StringField(required=True)
-	role = StringField(choices=["owner", "manager", "user", "invited"], required=True)
+	role = StringField(choices=["owner", "manager", "user", "invited", "applying"], required=True)
 
 class User(Entity, BaseDocument):
 	"""
