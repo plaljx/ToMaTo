@@ -292,12 +292,14 @@ class GroupInviteAccountForm(GroupAddAccountForm):
 	"""
 	def __init__(self, api, *args, **kwargs):
 		super(GroupInviteAccountForm, self).__init__(api, *args, **kwargs)
-		# self.fields['role'].widget.attrs['readonly'] = 'True'
+		# TODO: May remove 'role' field
+		self.fields['role'].widget.attrs['readonly'] = 'True'
 		# self.fields['role'].widget.attrs['disabled'] = 'disabled'
 		self.helper.form_action = reverse("group_account_invite", kwargs={"group": self.data['group']})
 		self.helper.layout = Layout(
 			'account',
 			'group',
+			'role',
 			Buttons.cancel_save
 		)
 
@@ -372,10 +374,11 @@ def group_account_remove(api, request, user, group):
 	Admin, group owner, group manager can directly remove a user role from the group
 	"""
 	# TODO: can only remove roles lower than current use have
+	# TODO: Move the permission checking to backend_api, need adjust APIs
 	# e.g. Manager can remove users, but cannot remove a manager
 	if not api.user:
 		raise AuthError()
-	if not api.user.isGlobalAdmin or not api.user.canManageGroup(group):
+	if not api.user.isGlobalAdmin and not api.user.canManageGroup(group):
 		raise Exception("Need global admin, or group owner or manager")
 	if request.method == 'POST':
 		form = RemoveConfirmForm(request.POST)
