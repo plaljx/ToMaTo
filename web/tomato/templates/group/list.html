@@ -59,11 +59,19 @@
             <span>
                 {% if group.role == 'invited' %}
                     <a class="btn btn-xs btn-primary" role="button"
-                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='accept' %}">
-                        <span class="glyphicon glyphicon-ok"></span>Accept</a>
-                    <a class="btn btn-xs btn-danger" role="button"
-                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='decline' %}">
-                        <span class="glyphicon glyphicon-remove"></span>Decline</a>
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='accept'%}">
+                        <span class="glyphicon glyphicon-ok"></span>{% trans 'Accept' %}
+                    </a>
+                    <a class="btn btn-xs btn-warning" role="button"
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='decline'%}">
+                        <span class="glyphicon glyphicon-remove"></span>{% trans 'Decline' %}
+                    </a>
+                {% endif %}
+                {% if group.role == None %}
+                    <a class="btn btn-xs btn-default" role="button"
+                        href="{%url 'admin_account_group_apply' user=request.session.user.name group=group.name %}">
+                        <span class="glyphicon glyphicon-send"></span>{% trans 'Apply' %}
+                    </a>
                 {% endif %}
             </span>
         </td>

@@ -3,7 +3,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-from . import AddEditForm, RemoveConfirmForm, ConfirmForm
+from . import AddEditForm, RemoveConfirmForm, ConfirmForm, RenderableForm
 from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
@@ -77,6 +77,7 @@ class RemoveGroupForm(RemoveConfirmForm):
 	message = "Are you sure you want to remove the group '%(name)s'?"
 	title = "Remove Group '%(name)s'"
 
+
 class HandleInviteForm(ConfirmForm):
 	message = None
 	title = None
@@ -89,6 +90,28 @@ class HandleInviteForm(ConfirmForm):
 			self.message = "Are you sure you want to decline the invite to group '%(name)s'?"
 			self.title = "Decline invite to group '%(name)s'?"
 		super(HandleInviteForm, self).__init__(*args, **kwargs)
+
+
+class ApplyGroupForm(ConfirmForm):
+	message = "Are you sure you want to apply joining group '%(name)s'?"
+	title = "Apply Group %(name)s'"
+
+
+class HandleApplicationForm(RenderableForm):
+	message = None
+	title = None
+	buttons = Buttons.cancel_continue
+	formaction_haskeys = True
+
+	def __init__(self, user, group, operation, *args, **kwargs):
+		super(HandleApplicationForm, self).__init__(*args, **kwargs)
+		self.helper.layout = Layout(self.buttons)
+		if operation is True or operation == 'accept':
+			self.message = "Are you sure you want to accept the application from user %s to group %s?" % (user, group)
+			self.title = "Accept group application"
+		elif operation is False or operation == 'decline':
+			self.message = "Are you sure you want to decline the application from user %s to group %s?" % (user, group)
+			self.title = "Decline group application"
 
 
 @wrap_rpc
@@ -164,6 +187,7 @@ def remove(api, request, group):
 	form = RemoveGroupForm(name=group)
 	return form.create_response(request)
 
+
 @wrap_rpc
 def handle_invite(api, request, user, group, operation):
 	if operation not in ['accept', 'decline']:
@@ -181,4 +205,36 @@ def handle_invite(api, request, user, group, operation):
 			raise Exception('Form is not valid')
 	else:
 		form = HandleInviteForm(operation, name=group)
+		return form.create_response(request)
+
+
+@wrap_rpc
+def apply_(api, request, user, group):
+	if not api.user:
+		raise AuthError()
+	if request.method == 'POST':
+		form = ApplyGroupForm(name=group, data=request.POST)
+		if form.is_valid():
+			api.group_apply(user, group)
+			return HttpResponseRedirect(reverse('admin_group_list'))
+		else:
+			raise Exception('form is not valid')
+	else:
+		form = ApplyGroupForm(name=group)
+		return form.create_response(request)
+
+
+@wrap_rpc
+def handle_application(api, request, user, group, operation=None):
+	if not api.user:
+		raise AuthError()
+	if request.method == 'POST':
+		form = HandleApplicationForm(user, group, operation, data=request.POST)
+		if form.is_valid():
+			api.handle_application(user, group, operation)
+			return HttpResponseRedirect(reverse('admin_group_list'))
+		else:
+			raise Exception('Form is not valid')
+	else:
+		form = HandleApplicationForm(user, group, operation)
 		return form.create_response(request)

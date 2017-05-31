@@ -878,3 +878,11 @@ class PermissionChecker(UserInfo):
 		if current_role is None:
 			return True
 		auth_fail("you are already has a role \'%s\' on group %s" % (current_role, group))
+
+	def check_may_handle_application(self, group):
+		"""
+		Check whether user can handle a group application from a user
+		"""
+		if self.get_group_role(group) in ['owner', 'manager']:
+			return True
+		auth_fail("operations requires group owner or manager")

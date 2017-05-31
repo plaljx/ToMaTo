@@ -399,6 +399,8 @@ def group_account_invite(api, request, group=None):
 	"""
 	Invite a user to specified group, set user's role to 'invited'
 	"""
+	# TODO: Move the permission checking to backend_api
+	# TODO: May move group related things to group.py
 	if not api.user:
 		raise AuthError()
 	if not api.user.isGlobalAdmin and not api.user.canManageGroup(group):

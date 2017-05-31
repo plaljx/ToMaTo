@@ -111,6 +111,24 @@ def group_apply(user, group):
 	current_user = getCurrentUserInfo()
 	target_account = get_user_info(user)
 	UserError.check(current_user.name == target_account.name,
-	                code=UserError.DIFFERENT_USER, message="You are not user %s" % target_account.name)
+	                code=UserError.DENIED, message="You are not user %s" % target_account.name)
 	current_user.check_may_apply_for_group(group)
-	return target_account.set_group_role('applying')
+	return target_account.set_group_role(group, 'applying')
+
+def handle_application(user, group, operation):
+	"""
+	Handle the group application from a user
+	If accept, set the role to 'user'
+	If decline, remove the group role info
+	"""
+	current_user = getCurrentUserInfo()
+	target_account = get_user_info(user)
+	current_user.check_may_handle_application(group)
+	UserError.check(target_account.get_group_role(group) == 'applying',
+	                code=UserError.DENIED, message="The user %s is not applying for the group" % target_account.name)
+	if operation is True or operation == 'accept':
+		target_account.set_group_role(group, 'user')
+	elif operation is False or operation == 'decline':
+		target_account.set_group_role(group, None)
+	else:
+		raise Exception("Invalid parameter")

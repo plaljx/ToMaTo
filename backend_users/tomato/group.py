@@ -39,12 +39,15 @@ class Group(Entity, BaseDocument):
 
 	@property
 	def owner(self):
-		from.user import User
+		from.user import User, GroupRole
 		try:
-			owner = User.objects.get(Q(groups__group=self.name) & Q(groups__role='owner'))
+			# owner = User.objects.get(__raw__={"groups": {"$elemMatch": {"group": self.name, "role": 'owner'}}})
+			owner = User.objects.get(groups__match=GroupRole(group=self.name, role='owner'))
 			return owner.name
 		except DoesNotExist:
 			return None
+		except MultipleObjectsReturned:
+			raise
 
 	@owner.setter
 	def owner(self, new=None):
