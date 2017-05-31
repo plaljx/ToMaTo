@@ -17,6 +17,7 @@ docs_build
 *.torrent
 *.qcow2
 *.tar.gz
+*.conf
 .idea
 __pycache__
 

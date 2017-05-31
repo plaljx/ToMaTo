@@ -28,6 +28,13 @@ def traffic_modify(id, attrs=None):
 	res = traffic.modify(**attrs)
 	return res
 
+def traffic_start(element_id, traffic_ids):
+    for traffic_id in traffic_ids:
+        res = traffic.Traffic.traffic_start(element_id, traffic_id)
+    return res
+
+'''
+
 import os
 import requests
 from .elements import element_action, element_info
@@ -77,4 +84,5 @@ def send_pack(element_id , pack_dir):
 	upload = {"file":open(pack_dir, "rb")}
 	r = requests.post(url, files=upload)
 	print r.text
-	return r.text
+    return r.text
+'''

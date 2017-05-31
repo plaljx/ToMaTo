@@ -202,7 +202,7 @@ var TrafficWindow = Window.extend({
 		modifyWindow = new AttributeWindow({
 			title :"Attributes",
 			width:500,
-			height:600,
+			height:800,
 			buttons:[{
 				text:"Modify",
 				click:function(){
@@ -220,11 +220,20 @@ var TrafficWindow = Window.extend({
 
 		});
 		modifyWindow.add(new TextElement({
+			label:"Start time",
+			name:"start_time",
+			value:this.traffics[trafficId].start_time
+		}));
+		modifyWindow.add(new TextElement({
 			label:"Off time",
 			name:"off_time",
 			value:this.traffics[trafficId].off_time
 		}));
-
+		modifyWindow.add(new TextElement({
+			label:"Source port",
+			name:"src_port",
+			value:this.traffics[trafficId].src_port
+		}));
 		modifyWindow.add(new TextElement({
 			label:"Destination IP",
 			name:"dest_ip",
@@ -234,6 +243,11 @@ var TrafficWindow = Window.extend({
 			label:"Destination Port",
 			name:"dest_port",
 			value:this.traffics[trafficId].dest_port
+		}));
+		modifyWindow.add(new TextElement({
+			label:"Type of Server",
+			name:"tos",
+			value:this.traffics[trafficId].tos
 		}));
 		var protocolChoices = {"TCP":"TCP", "UDP":"UDP"};
 		modifyWindow.add(new ChoiceElement({
@@ -249,6 +263,11 @@ var TrafficWindow = Window.extend({
 			label:"Pattern",
 			name:"pattern",
 			choices:patternChoices
+		}));
+		modifyWindow.add(new TextElement({
+			label:"Extra Param",
+			name:"extra_param",
+			value:this.traffics[trafficId].extra_param
 		}));
 		modifyWindow.show();
 	},
@@ -269,7 +288,7 @@ var TrafficWindow = Window.extend({
 		traffic = new AttributeWindow({
 			title:"Attributes",
 			width: 500,
-			height: 700,
+			height: 800,
             buttons: [
 						{
 							text:"Save",
@@ -307,11 +326,20 @@ var TrafficWindow = Window.extend({
 			value:"instance"
 		}));
 		traffic.add(new TextElement({
+			label:"Start time",
+			name:"start_time",
+			value:"0"
+		}));
+		traffic.add(new TextElement({
 			label:"Off time",
 			name:"off_time",
-			value:"10.0"
+			value:"20.0"
 		}));
-
+		traffic.add(new TextElement({
+			label:"Source port",
+			name:"src_port",
+			value:"5001"
+		}));
 		traffic.add(new TextElement({
 			label:"Destination IP",
 			name:"dest_ip",
@@ -326,7 +354,12 @@ var TrafficWindow = Window.extend({
 		traffic.add(new ChoiceElement({
 			label:"Protocal",
 			name:"protocol",
-			choices:{"TCP":"TCP" , "UDP":"UDP"}
+			choices:{"UDP":"UDP" , "TCP":"TCP","SINK":"SINK"}
+		}));
+		traffic.add(new TextElement({
+			label:"Type of Server",
+			name:"tos",
+			value:"0"
 		}));
 		var patternChoices = {"PERIODIC [1.0 125]":"1kbps" , "PERIODIC [10.0 125]":"10kbps",
 		"PERIODIC [10.0 1250]":"100kbps" ,"PERIODIC [50.0 1280]":"512kbps",
@@ -336,6 +369,11 @@ var TrafficWindow = Window.extend({
 			label:"Pattern",
 			name:"pattern",
 			choices:patternChoices
+		}));
+		traffic.add(new TextElement({
+			label:"Extra Param",
+			name:"extra_param",
+			value:""
 		}));
 		traffic.show();
 	}
