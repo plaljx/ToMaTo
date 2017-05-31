@@ -58,7 +58,7 @@ class Topology(Entity, BaseDocument):
 	"""
 	from .host import Site
 	permissions = ListField(EmbeddedDocumentField(Permission))
-	group_info = ListField(EmbeddedDocumentListField(GroupInfo))
+	group_info = ListField(EmbeddedDocumentField(GroupInfo))
 	timeout = FloatField(required=True)
 	timeoutStep = IntField(db_field='timeout_step', required=True, default=TimeoutStep.INITIAL)
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)

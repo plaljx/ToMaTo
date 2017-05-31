@@ -218,7 +218,7 @@ def topology_list_by_group(group=None, full=False):
 		tops = topology.getAll()
 	else:
 		tops = topology.getAll(group_info__group=group)
-	return  [top.info(full) for top in tops]
+	return [top.info(full) for top in tops]
 
 
 def topology_set_permission(id, user, role): #@ReservedAssignment

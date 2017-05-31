@@ -141,6 +141,14 @@ def info(api, request, group):
 	role = api.user.getGroupRole(group_info['name'])
 	return render(request, "group/info.html", {"group": group_info, "role": role})
 
+@wrap_rpc
+def topology(api, request, group):
+	"""
+	The topology list of a group
+	"""
+	if not api.user:
+		raise AuthError()
+	# TODO
 
 @wrap_rpc
 def add(api, request):

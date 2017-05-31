@@ -132,3 +132,12 @@ def handle_application(user, group, operation):
 		target_account.set_group_role(group, None)
 	else:
 		raise Exception("Invalid parameter")
+
+def group_topology_list(group):
+	"""
+	Return the group topology list
+	"""
+	if group is None:
+		raise UserError(code=UserError.DENIED, message="Need specify a group.")
+	getCurrentUserInfo().check_may_list_group_topologies(group)
+	return get_backend_core_proxy().topology_list_by_group(group)

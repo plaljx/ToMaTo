@@ -886,3 +886,10 @@ class PermissionChecker(UserInfo):
 		if self.get_group_role(group) in ['owner', 'manager']:
 			return True
 		auth_fail("operations requires group owner or manager")
+
+	def check_may_list_group_topologies(self, group):
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) in ['owner', 'manager', 'user']:
+			return True
+		auth_fail("operations requires GlobalAdmin or a member role of the group")
