@@ -148,7 +148,9 @@ def topology(api, request, group):
 	"""
 	if not api.user:
 		raise AuthError()
-	# TODO
+	topology_list = api.group_topology_list(group)
+	return render(request, "group/group_topology_list.html",
+		{'top_list': topology_list, 'group': group})
 
 @wrap_rpc
 def add(api, request):

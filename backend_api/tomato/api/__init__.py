@@ -78,4 +78,4 @@ from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, 
 # group
 from group import group_remove, group_modify, group_info, group_list, group_create,\
 	account_list_by_group, account_set_group_role, group_invite, account_handle_invite,\
-	handle_application, group_apply
+	handle_application, group_apply, group_topology_list

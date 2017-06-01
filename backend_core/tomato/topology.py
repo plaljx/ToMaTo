@@ -37,7 +37,7 @@ class TimeoutStep:
 
 
 class GroupInfo(ExtDocument, EmbeddedDocument):
-	group = StringField(required=False, null=True)
+	group = StringField(required=True)
 
 
 class Permission(ExtDocument, EmbeddedDocument):

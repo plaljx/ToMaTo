@@ -425,6 +425,22 @@ class TopologyInfo(ActionObj):
 
 		return (organization in organizations_with_role)
 
+	# def group_has_role(self, group, role):
+	# 	"""
+	# 	Check if the group has the group
+	# 	Currently a group provides a max role of 'user'
+	# 	"""
+	# 	if role != 'user':  # FIXME: may use something like 'Role.leq'
+	# 		return False
+	# 	for _group in self.info()['group_info']:
+	# 		if group == _group:
+	# 			return True
+	# 	else:
+	# 		return False
+
+	def get_group_info_list(self):
+		return self.info()['group_info']
+
 	def set_permission(self, user, role):
 		"""
 		set the permission of a user

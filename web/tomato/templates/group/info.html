@@ -55,6 +55,12 @@
     {%trans 'Accounts'%}
 </button>
 
+{# Topology List #}
+<button type="submit" formaction="{%url "admin_group_topology" group.name%}" class="btn btn-info">
+    <span class="glyphicon glyphicon-list-alt"></span>
+    {%trans 'Topologies'%}
+</button>
+
 {# Edit #}
 {% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
     <button type="submit" formaction="{%url "admin_group_edit" group.name%}" class="btn btn-warning">

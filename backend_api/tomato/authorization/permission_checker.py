@@ -459,7 +459,12 @@ class PermissionChecker(UserInfo):
 			if topology_info.organization_has_role(self.get_organization_name(), role):  # organization has role on topology
 				return True
 
-		# TODO: Group Permissions
+		# group has role on topology, currently group only provides a max role of user
+		if role == 'user':  # FIXME: may change this hard code
+			top_group_info = topology_info.get_group_info_list()
+			for _group, _role in self.get_group_role():
+				if _group in top_group_info and _role in ['owner', 'manager', 'user']:
+					return True
 
 		return False
 
