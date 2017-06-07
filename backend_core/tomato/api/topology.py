@@ -255,5 +255,13 @@ def topology_usage(id): #@ReservedAssignment
 	top = _getTopology(id)
 	return top.totalUsage.info()
 
+def topology_add_group(id, group):
+	top = _getTopology(id)
+	top.add_group_info(group)
+
+def topology_remove_group(id, group):
+	top = _getTopology(id)
+	top.remove_group_info(group)
+
 from .. import topology
 from ..lib.error import UserError

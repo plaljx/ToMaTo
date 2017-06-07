@@ -263,6 +263,9 @@ urlpatterns = patterns('',
 	url(r'^group/(?P<group>\w+)/accounts/invite$', 'tomato.account.group_account_invite', name="group_account_invite"),
 	url(r'^group/(?P<group>\w+)/accounts/(?P<role>\w+)$', 'tomato.account.list_by_group', name="group_accounts"),
 	# url(r'^group/(?P<group>\w+)/topologies$', 'tomato.topology.list_of_group', name="group_topologies"),
+	url(r'^ajax/topology/(?P<topl_id>\w{24})/group_info/(?P<group>\w+)/add$', 'tomato.ajax.topology_add_group'),
+	url(r'^ajax/topology/(?P<topl_id>\w{24})/group_info/(?P<group>\w+)/remove$', 'tomato.ajax.topology_remove_group'),
+	url(r'^ajax/group/(?P<group>\w+)/info$', 'tomato.ajax.group_info'),
 
 )
 urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )

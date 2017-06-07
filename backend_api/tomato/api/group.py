@@ -1,7 +1,7 @@
 from ..lib.error import InternalError, UserError
 from ..lib.service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
 from api_helpers import getCurrentUserInfo
-from ..lib.remote_info import get_user_info, get_user_list_by_group
+from ..lib.remote_info import get_user_info, get_user_list_by_group, get_topology_info
 
 def group_list(user=None, role=None):
 	"""
@@ -141,3 +141,19 @@ def group_topology_list(group):
 		raise UserError(code=UserError.DENIED, message="Need specify a group.")
 	getCurrentUserInfo().check_may_list_group_topologies(group)
 	return get_backend_core_proxy().topology_list_by_group(group)
+
+def topology_add_group(topl_id, group):
+	topl = get_topology_info(topl_id)
+	UserError.check(topl.exists(), code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that name does not exist")
+	UserError.check(get_backend_users_proxy().group_exists(group), code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
+	# TODO
+	# getCurrentUserInfo().check_may_modify_group_info_for_topologies(topl)
+	return topl.add_group(group)
+
+def topology_remove_group(topl_id, group):
+	topl = get_topology_info(topl_id)
+	UserError.check(topl.exists(), code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that name does not exist")
+	UserError.check(get_backend_users_proxy().group_exists(group), code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
+	# TODO
+	# getCurrentUserInfo().check_may_modify_group_info_for_topologies(topl)
+	return topl.remove_group(group)

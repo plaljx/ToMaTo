@@ -648,6 +648,16 @@ var Editor = Class.extend({
 				t.workspace.permissionsWindow.show();
 			}
 		}));
+		group.addElement(Menu.button({
+			label: gettext("Group Settings"),
+			icon: "img/user32.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.workspace.groupWindow.createGroupList();
+				t.workspace.groupWindow.show();
+			}
+		}));
 
 
 		var tab = this.menu.addTab(gettext("Options"));

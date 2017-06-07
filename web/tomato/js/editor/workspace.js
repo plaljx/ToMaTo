@@ -45,6 +45,17 @@ var Workspace = Class.extend({
     		ownUserId: this.editor.options.user.id,
     		permissions: this.editor.options.permission_list
     	});
+
+		this.groupWindow = new GroupWindow({
+			autoOpen: false,
+			draggable: true,
+			resizable: false,
+			title: "Group Settings",
+			modal: false,
+			width: 500,
+			topology: this.editor.topology,
+			ownUserId: this.editor.options.user.id
+		});
     	
     	var t = this;
     	this.editor.listeners.push(function(obj){

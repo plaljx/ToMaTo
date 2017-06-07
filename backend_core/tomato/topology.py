@@ -224,7 +224,7 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
-	def set_group_info(self, group):
+	def add_group_info(self, group):
 		"""
 		Set group relation info of the topology
 		:param str group: group name
@@ -236,6 +236,7 @@ class Topology(Entity, BaseDocument):
 				break
 		else:
 			self.group_info.append(GroupInfo(group=group))
+			self.save()
 
 	def remove_group_info(self, group):
 		"""
@@ -246,6 +247,7 @@ class Topology(Entity, BaseDocument):
 		for info in self.group_info:
 			if info.group == group:
 				self.group_info.remove(info)
+				self.save()
 
 
 
@@ -378,7 +380,7 @@ class Topology(Entity, BaseDocument):
 		"id": IdAttribute(),
 		"permissions": Attribute(readOnly=True, get=lambda self: {str(p.user): p.role for p in self.permissions},
 			schema=schema.StringMap(additional=True)),
-		"group_info": Attribute(field=group_info),
+		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
 		"site": Attribute(get=lambda self: self.site.name if self.site else None, set=modify_site),
 		"elements": Attribute(readOnly=True, schema=schema.List()),
 		"connections": Attribute(readOnly=True, schema=schema.List()),

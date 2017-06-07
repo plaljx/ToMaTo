@@ -163,5 +163,14 @@ def traffic_start(api, request,element_id,selected):
 	res = api.traffic_start(element_id, selected)
 	return res
 
+@wrap_json
+def group_info(api, request, group):
+	return api.group_info(group)
 
+@wrap_json
+def topology_add_group(api, request, topl_id, group):
+	return api.topology_add_group(topl_id, group)
 
+@wrap_json
+def topology_remove_group(api, request, topl_id, group):
+	return api.topology_remove_group(topl_id, group)

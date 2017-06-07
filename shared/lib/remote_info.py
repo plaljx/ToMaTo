@@ -441,6 +441,18 @@ class TopologyInfo(ActionObj):
 	def get_group_info_list(self):
 		return self.info()['group_info']
 
+	def add_group(self, group):
+		res = get_backend_core_proxy().topology_add_group(self.topology_id, group)
+		if self._info is not None:
+			self._info['group_info'].append(group)
+		return res
+
+	def remove_group(self, group):
+		res = get_backend_core_proxy().topology_remove_group(self.topology_id, group)
+		if self._info is not None:
+			self._info['group_info'].remove(group)
+		return res
+
 	def set_permission(self, user, role):
 		"""
 		set the permission of a user
