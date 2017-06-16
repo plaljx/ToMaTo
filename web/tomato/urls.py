@@ -231,6 +231,8 @@ urlpatterns = patterns('',
     (r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
     (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
 	(r'^ajax/element/(?P<element_id>\w{24})/traffic_start$' , 'tomato.ajax.traffic_start'),
+	(r'^ajax/element/(?P<element_id>\w{24})/ditg_traffic_start$' , 'tomato.ajax.ditg_start'),
+
 
 
     url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),

@@ -29,3 +29,9 @@ def traffic_start(element_id , trafficIds):
 	print trafficIds[0]
 	res = get_backend_core_proxy().traffic_start(element_id,trafficIds)
 	return res
+
+def ditg_start(element_id , attrs = None):
+	if not attrs:
+		return None;
+	res = get_backend_core_proxy().ditg_start(element_id , attrs);
+	return res

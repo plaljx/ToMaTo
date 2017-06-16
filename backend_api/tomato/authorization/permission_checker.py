@@ -769,8 +769,7 @@ class PermissionChecker(UserInfo):
 		:param dict params: action params
 		"""
 		# step 1: make sure the user doesn't run any action that is not recognized by this.
-		UserError.check(action in (ActionName.START, ActionName.STOP, ActionName.PREPARE, ActionName.DESTROY),
-										code=UserError.UNSUPPORTED_ACTION, message="Unsupported action", data={"action": action})
+		UserError.check(action in (ActionName.START, ActionName.STOP, ActionName.PREPARE, ActionName.DESTROY,ActionName.DOWNLOAD_GRANT),code=UserError.UNSUPPORTED_ACTION, message="Unsupported action", data={"action": action})
 
 		# step 2: for each action, check permissions.
 		self._check_has_topology_role(connection_info.get_topology_info(), Role.manager)

@@ -214,13 +214,37 @@ var createElementMenu = function(obj) {
 						obj.showConfigWindow(true);
 					}
 				},
+
+				traffic_customize:obj.trafficAvailable() ? {
+					name:gettext("Traffic Customize"),
+					icon:"configure",
+					items:{
+						"Mutil-Generator":{
+							name:gettext("Mutil-Generator"),
+							icon:"configure",
+							callback:function () {
+								obj.showTrafficWindow("1");
+                            }
+						},
+						"D-ITG":{
+							name:gettext("D-ITG"),
+							icon:"configure",
+							callback:function () {
+								obj.showTrafficWindow("2");
+                            }
+						}
+					}
+				}:null,
+
+				/*
 				"traffic_customize" : obj.trafficAvailable() ? {
 					name:gettext("Traffic Customize"),
 					icon:"configure",
 					callback:function(){
 						obj.showTrafficWindow();
 					}
-				}:null,
+				}:null,*/
+
 				"debug": obj.editor.options.debug_mode ? {
 					name:gettext('Debug'),
 					icon:'debug',

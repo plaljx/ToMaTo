@@ -266,10 +266,60 @@ var Component = Class.extend({
 		//return false;
 	},
 	//add at 2017/1/21   
-	showTrafficWindow:function(){
-		this.trafficWindow.createTrafficList();
+	showTrafficWindow:function(choice){
+		if(choice == 1) {
+            this.trafficWindow.createTrafficList();
+        }
+        else if(choice ==2){
+			//todo
+			this.showDitgWindow();
+		}
 		//this.checkTrafficWindow();
 		//this.trafficWindow.createTrafficList();
 		//this.trafficWindow.show();
+	},
+	showDitgWindow:function(){
+		var absPos = this.getAbsPos();
+		var wsPos = this.editor.workspace.container.position();
+		var t = this;
+		this.ditgWindow = new DitgWindow({
+            title: "Attributes",
+            width: 500,
+            buttons: {
+                Apply: function () {
+                	var values = t.ditgWindow.getValues();
+                	values.target_host= t.ipToId(values.target_host);
+                	console.log(values);
+                    //start traffic
+					ajax({
+						url:'element/'+t.id+'/ditg_traffic_start',
+						data:values,
+						successFn:function(data){
+							//to
+						}
+					});
+					t.ditgWindow.remove();
+					t.ditgWindow = null;
+                },
+                Cancel: function () {
+                    //remove the window
+                    t.ditgWindow.remove();
+                    t.ditgWindow = null;
+                }
+            }
+        },
+        this);
+		this.ditgWindow.show();
+	},
+	ipToId:function(ip){ //change the input ip to element's id
+		for(var i = 0 ; i < this.topology.data.elements.length; i++){
+			var order = this.topology.data.elements[i];
+			if(order.tech == "openvz_interface"){
+				if(order.ip4address == ip||order.ip4address == (ip+"/24")){
+					return order.parent;
+				}
+			}
+		}
+		alert("Not available target host!");
 	}
 });

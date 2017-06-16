@@ -163,5 +163,10 @@ def traffic_start(api, request,element_id,selected):
 	res = api.traffic_start(element_id, selected)
 	return res
 
-
+#start the configured D-ITG traffic
+@wrap_json
+def ditg_start(api, request, element_id , **attrs):
+	print attrs
+	res = api.ditg_start(element_id,attrs)
+	return res
 
