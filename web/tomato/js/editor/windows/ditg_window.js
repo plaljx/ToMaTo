@@ -8,13 +8,9 @@ var DitgWindow = AttributeWindow.extend({
 		var tab_content = $('<div class="tab-content" />');
         var t = this;
         var common_setting = $('<div class="tab-pane active" id="Common_Setting" />');
-
-        common_setting.append($('<div class="form-group" />')
-				.append($('<label class="col-sm-4 control-label">Stream Options</label>'))
-
-        );
         //simple fields
-        var order = ["Duration", "Start Delay", "Random Seed"];
+        var order = ["Duration", "Start Delay","Target Host" , "TTL","Protocol", "Destination Port", "Source Port",
+					  "Packets Per Sec", "Packet's Size"];
         for (var i = 0; i < order.length; i++) {
         	var el = new TextElement({label: order[i], name: order[i], value: ""});
         	if(order[i] == "Duration"){
@@ -23,21 +19,7 @@ var DitgWindow = AttributeWindow.extend({
 			else if(order[i] == "Start Delay"){
         		el.name = "start_delay";
 			}
-            this.elements.push(el)
-            common_setting.append($('<div class="form-group" />')
-					.append($('<label class="col-sm-4 control-label" style="padding: 0;" />').append(el.label))
-					.append($('<div class="col-sm-6" style="padding: 0;" />').append(el.getElement()))
-				);
-        }
-
-        common_setting.append($('<div class="form-group" />')
-				.append($('<label class="col-sm-4 control-label">Header Options</label>'))
-        );
-
-        var order = ["Target Host" , "TTL","Protocol", "Destination Port", "Source Port"];
-		for (var i = 0; i < order.length; i++) {
-            var el = new TextElement({label:order[i],name:order[i],value:""});
-            if(order[i] == "Target Host"){
+            else if(order[i] == "Target Host"){
             	el.name = "target_host";
 			}
 			else if(order[i] == "TTL"){
@@ -52,6 +34,12 @@ var DitgWindow = AttributeWindow.extend({
 			}
 			else if(order[i] == "Source Port"){
 				el.name ="source_port";
+			}
+			else if(order[i] == "Packets Per Sec"){
+				el.name = "pps";
+            }
+            else if(order[i] == "Packet's Size"){
+				el.name = "packet_size";
 			}
             this.elements.push(el)
             common_setting.append($('<div class="form-group" />')
