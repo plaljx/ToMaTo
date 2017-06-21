@@ -7,6 +7,7 @@ from . import AddEditForm, RemoveConfirmForm, ConfirmForm, RenderableForm
 from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
+from ..lib.group_role import GroupRole
 
 
 class GroupForm(AddEditForm):
@@ -123,7 +124,7 @@ def list_(api, request, user=None, role=None):
 	"""
 	if not api.user:
 		raise AuthError()
-	if role not in ['owner', 'manager', 'user', 'invited', None]:
+	if role is not None and role not in GroupRole.CHOICES:
 		raise Exception('Invalid parameter \'role\': %s' % role)
 	groups = api.group_list(user=user, role=role)
 	# Add group role info about the current user

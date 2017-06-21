@@ -3,7 +3,7 @@ from .lib import logging
 from .lib.error import UserError
 from .generic import *
 from .lib.service import get_backend_core_proxy
-
+from .lib.group_role import GroupRole as GROUP_ROLE
 
 class Group(Entity, BaseDocument):
 
@@ -25,7 +25,7 @@ class Group(Entity, BaseDocument):
 
 	def modify(self, **attrs):
 		# save basic info first, then save owner info
-		owner = attrs.pop('owner', None)
+		owner = attrs.pop(GROUP_ROLE.owner, None)
 		super(Group, self).modify(**attrs)
 		self.owner = owner
 
@@ -42,7 +42,7 @@ class Group(Entity, BaseDocument):
 		from.user import User, GroupRole
 		try:
 			# owner = User.objects.get(__raw__={"groups": {"$elemMatch": {"group": self.name, "role": 'owner'}}})
-			owner = User.objects.get(groups__match=GroupRole(group=self.name, role='owner'))
+			owner = User.objects.get(groups__match=GroupRole(group=self.name, role=GROUP_ROLE.owner))
 			return owner.name
 		except DoesNotExist:
 			return None
@@ -71,7 +71,7 @@ class Group(Entity, BaseDocument):
 			_old = User.objects.get(name=old) if old is not None else None
 			if _old:
 				_old.quit_group(self.name)
-			_new.set_group_role(self.name, 'owner')
+			_new.set_group_role(self.name, GROUP_ROLE.owner)
 
 	def _remove(self):
 		# logging.logMessage("remove", category="group", name=self.name)

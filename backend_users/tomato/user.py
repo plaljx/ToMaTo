@@ -22,8 +22,8 @@ from .lib import logging, util, mail #@UnresolvedImport
 from . import scheduler
 from .lib.settings import settings, Config
 from .lib.error import UserError, InternalError
-
 from .lib.userflags import Flags
+from .lib.group_role import GroupRole as GROUP_ROLE
 
 
 USER_ATTRS = ["realname", "email", "password"]
@@ -61,7 +61,7 @@ class Notification(EmbeddedDocument):
 class GroupRole(EmbeddedDocument):
 
 	group = StringField(required=True)
-	role = StringField(choices=["owner", "manager", "user", "invited", "applying"], required=True)
+	role = StringField(choices=GROUP_ROLE.CHOICES, required=True)
 
 class User(Entity, BaseDocument):
 	"""

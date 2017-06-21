@@ -5,6 +5,7 @@ from ..lib.topology_role import Role
 from ..lib.error import UserError
 from ..lib.service import get_backend_users_proxy
 from ..lib.constants import ActionName
+from ..lib.group_role import GroupRole
 
 import time
 
@@ -460,10 +461,11 @@ class PermissionChecker(UserInfo):
 				return True
 
 		# group has role on topology, currently group only provides a max role of user
-		if role == 'user':  # FIXME: may change this hard code
+		if role == GroupRole.user:
 			top_group_info = topology_info.get_group_info_list()
 			for group_role_dict in self.get_group_role():
-				if group_role_dict['group'] in top_group_info and group_role_dict['role'] in ['owner', 'manager', 'user']:
+				if group_role_dict['group'] in top_group_info \
+						and group_role_dict['role'] in [GroupRole.owner, GroupRole.manager, GroupRole.user]:
 					return True
 
 		return False
@@ -834,7 +836,7 @@ class PermissionChecker(UserInfo):
 		"""
 		if Flags.GlobalAdmin in self.get_flags():
 			return True
-		if self.get_group_role(group) in ['owner', 'manager']:
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
 			return True
 		auth_fail("operation requires global admin, group owner, group manager")
 
@@ -845,7 +847,7 @@ class PermissionChecker(UserInfo):
 		"""
 		if Flags.GlobalAdmin in self.get_flags():
 			return True
-		if self.get_group_role(group) == 'owner':
+		if self.get_group_role(group) == GroupRole.owner:
 			return True
 		auth_fail("operation requires global admin or group owner")
 
@@ -862,7 +864,7 @@ class PermissionChecker(UserInfo):
 		"""
 		Check whether user can invite a user to a specified group
 		"""
-		if self.get_group_role(group) in ['owner', 'manager']:
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
 			return True
 		auth_fail("operations requires group owner or manager")
 
@@ -871,7 +873,7 @@ class PermissionChecker(UserInfo):
 		Check whether user can handle the invite
 		If the role of target group is 'invited', this will be allowed
 		"""
-		if self.get_group_role(group) == 'invited':
+		if self.get_group_role(group) == GroupRole.invited:
 			return True
 		auth_fail("you are not been invited to group %s" % group)
 
@@ -888,13 +890,13 @@ class PermissionChecker(UserInfo):
 		"""
 		Check whether user can handle a group application from a user
 		"""
-		if self.get_group_role(group) in ['owner', 'manager']:
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
 			return True
 		auth_fail("operations requires group owner or manager")
 
 	def check_may_list_group_topologies(self, group):
 		if Flags.GlobalAdmin in self.get_flags():
 			return True
-		if self.get_group_role(group) in ['owner', 'manager', 'user']:
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager, GroupRole.user):
 			return True
 		auth_fail("operations requires GlobalAdmin or a member role of the group")

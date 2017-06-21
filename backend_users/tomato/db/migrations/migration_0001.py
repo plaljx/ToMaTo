@@ -2,6 +2,7 @@ from mongoengine import *
 import string, random, crypt, time
 from mongoengine.errors import NotUniqueError
 
+from ...lib.group_role import GroupRole as GROUP_ROLE
 
 class Usage(EmbeddedDocument):
 	memory = FloatField(default=0.0) #unit: bytes
@@ -34,7 +35,7 @@ class Group(Document):
 
 class GroupRole(EmbeddedDocument):
 	group = StringField(required=True)
-	role = StringField(choices=["owner", "manager", "user", "invited"], required=True)
+	role = StringField(choices=GROUP_ROLE.CHOICES, required=True)
 
 class Quota(EmbeddedDocument):
 	monthly = EmbeddedDocumentField(Usage, required=True)

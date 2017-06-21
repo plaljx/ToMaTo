@@ -2,7 +2,7 @@ from ..group import Group
 from ..user import User
 from _shared import _getGroup, _getUser
 from ..lib.error import UserError
-
+from ..lib.group_role import GroupRole
 
 def group_exists(name):
 	if Group.get(name):
@@ -47,7 +47,8 @@ def group_remove(name):
 	return True
 
 def group_has_owner(name):
-	if len(User.list_by_group(name, "owner")) != 0:
+	if len(User.list_by_group(name, GroupRole.owner)) != 0:
 		return True
 	else:
 		return False
+

@@ -2,6 +2,7 @@ from ..lib.error import InternalError, UserError
 from ..lib.service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
 from api_helpers import getCurrentUserInfo
 from ..lib.remote_info import get_user_info, get_user_list_by_group, get_topology_info
+from ..lib.group_role import GroupRole
 
 def group_list(user=None, role=None):
 	"""
@@ -69,7 +70,7 @@ def account_set_group_role(user, group, role=None):
 	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Account with that name does not exist")
 	UserError.check(get_backend_users_proxy().group_exists(group),
 	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
-	if role == "owner":
+	if role == GroupRole.owner:
 		UserError.check(not (get_backend_users_proxy().group_has_owner(group)),
 		                code=UserError.INVALID_CONFIGURATION, message="The group already has a owner")
 	return target_account.set_group_role(group, role)
@@ -85,7 +86,7 @@ def group_invite(user, group):
 	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Account with that name does not exist")
 	UserError.check(get_backend_users_proxy().group_exists(group),
 	                code=UserError.ENTITY_DOES_NOT_EXIST, message="Group with that name does not exist")
-	return target_account.set_group_role(group, 'invited')
+	return target_account.set_group_role(group, GroupRole.invited)
 
 def account_handle_invite(group, operation):
 	"""
@@ -96,9 +97,9 @@ def account_handle_invite(group, operation):
 	# TODO: may add 'user' as parameter, since URL contains user's name
 	user = getCurrentUserInfo()
 	user.check_may_handle_invite(group)
-	if operation is True or operation == 'accept':
-		user.set_group_role(group, 'user')
-	elif operation is False or operation == 'decline':
+	if operation is True or operation == GroupRole.accept:
+		user.set_group_role(group, GroupRole.user)
+	elif operation is False or operation == GroupRole.decline:
 		user.set_group_role(group, None)
 	else:
 		raise Exception("Invalid parameter")
@@ -113,7 +114,7 @@ def group_apply(user, group):
 	UserError.check(current_user.name == target_account.name,
 	                code=UserError.DENIED, message="You are not user %s" % target_account.name)
 	current_user.check_may_apply_for_group(group)
-	return target_account.set_group_role(group, 'applying')
+	return target_account.set_group_role(group, GroupRole.applying)
 
 def handle_application(user, group, operation):
 	"""
@@ -124,11 +125,11 @@ def handle_application(user, group, operation):
 	current_user = getCurrentUserInfo()
 	target_account = get_user_info(user)
 	current_user.check_may_handle_application(group)
-	UserError.check(target_account.get_group_role(group) == 'applying',
+	UserError.check(target_account.get_group_role(group) == GroupRole.applying,
 	                code=UserError.DENIED, message="The user %s is not applying for the group" % target_account.name)
-	if operation is True or operation == 'accept':
-		target_account.set_group_role(group, 'user')
-	elif operation is False or operation == 'decline':
+	if operation is True or operation == GroupRole.accept:
+		target_account.set_group_role(group, GroupRole.user)
+	elif operation is False or operation == GroupRole.decline:
 		target_account.set_group_role(group, None)
 	else:
 		raise Exception("Invalid parameter")

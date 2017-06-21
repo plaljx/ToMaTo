@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Group</h1>
+<h1>{% trans 'Group' %}</h1>
 
 <div class="skip-sm"></div>
 
@@ -17,7 +17,8 @@
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <span class="glyphicon glyphicon-filter"></span>
     {% if role %}
-      {% trans 'Showing '%} {{ role }} {% trans ' groups' %}
+        {#{% trans 'Showing '%} {{ role }} {% trans ' groups' %}#}
+        {% trans 'Showing groups ' %}
     {% else %}
       {% trans 'Showing all groups' %}
     {% endif %}
@@ -26,12 +27,14 @@
   <ul class="dropdown-menu" role="menu">
     <li><a href="{% url "admin_group_list"%}">{%trans 'Show all groups'%}</a></li>
     <li class="divider"></li>
-    <li class="dropdown-header">{%trans "My Groups"%}</li>
     <li><a href="{% url "admin_account_groups" user=request.session.user.name %}">{%trans 'My Groups'%}</a></li>
-    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="owner" %}">{%trans 'Owing'%}</a></li>
-    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="manager" %}">{%trans 'Managing'%}</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-header">{%trans "My groups with role of..."%}</li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="owner" %}">{%trans 'Owner'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="manager" %}">{%trans 'Manager'%}</a></li>
     <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="user" %}">{%trans 'User'%}</a></li>
     <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="invited" %}">{%trans 'Invited'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="applying" %}">{%trans 'Applying'%}</a></li>
   </ul>
 </div>
 
@@ -42,11 +45,11 @@
 <table class="sortable,filterable table table-striped">
 
     <tr>
-        <th>Name</th>
-        <th>Label</th>
+        <th>{% trans 'Name' %}</th>
+        <th>{% trans 'Label' %}</th>
         {# <th>Description</th> #}
-        <th>Role</th>
-        <th>Operations</th>
+        <th>{% trans 'Role' %}</th>
+        <th>{% trans 'Operations' %}</th>
     </tr>
 
     {% for group in groups %}
@@ -80,13 +83,13 @@
 
 </table>
 {% else %}
-<p>No Eligible Group</p>
+<p>{% trans 'No Eligible Group' %}</p>
 {% endif %}
 
 <form>
     <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span>
-        Add group
+        {% trans 'Add group' %}
     </button>
 </form>
 
