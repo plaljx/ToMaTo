@@ -57,7 +57,13 @@
         <td><a href="{% url 'admin_group_info' group.name %}">{{ group.name }}</a></td>
         <td>{{ group.label }}</td>
         {# <td>{{ group.description }}</td> #}
-        <td>{{ group.role }}</td>
+        <td>
+            {% if group.role != None %}
+                {% trans group.role %}
+            {% else %}
+                {% trans 'None' %}
+            {% endif %}
+        </td>
         <td>
             <span>
                 {% if group.role == 'invited' %}

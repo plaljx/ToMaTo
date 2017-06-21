@@ -522,3 +522,22 @@ msgstr ""
 
 #~ msgid "VNC Information"
 #~ msgstr "VNC信息"
+
+#: js/editor/editor.js: 652
+msgid "Group Settings"
+msgstr "小组设置"
+
+msgid "Group"
+msgstr "小组"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Add Group"
+msgstr "添加小组"
+
+msgid "New Group"
+msgstr "新的小组"
+
+msgid "None"
+msgstr "无"
