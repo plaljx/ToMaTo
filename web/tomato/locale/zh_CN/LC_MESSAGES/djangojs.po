@@ -541,3 +541,34 @@ msgstr "新的小组"
 
 msgid "None"
 msgstr "无"
+
+msgid "Group:"
+msgstr "小组名"
+
+msgid "Please enter the group's name:"
+msgstr "请输入小组名称"
+
+msgid "Found the group:"
+msgstr "找到小组:"
+
+msgid "Name:"
+msgstr "名称:"
+
+msgid "Label:"
+msgstr "标签:"
+
+msgid "Is this correct?"
+msgstr "是否正确?"
+
+msgid "This group is already in the list."
+msgstr "此小组已经在列表中"
+
+msgid "Are you sure to remove the group permission of"
+msgstr "你是否确定删除此小组的权限:"
+
+msgid "Group with that name does not exist"
+msgstr "指定名称的小组不存在"
+
+msgid "Entity not found"
+msgstr "实例没有找到"
+

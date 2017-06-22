@@ -12,14 +12,14 @@ var GroupWindow = Window.extend({
         this.options.allowChange = this.options.isGlobalOwner;
 
         var closeButton = {
-            text: "Close",
+            text: gettext("Close"),
             id: "groupwindow-close-button",
             click: function () {
                 t.hide();
             }
         };
         var addButton = {
-            text: "Add Group",
+            text: gettext("Add Group"),
             id: "groupwindow-add-button",
             click: function () {
                 t.addNewGroup();
@@ -45,17 +45,17 @@ var GroupWindow = Window.extend({
     addNewGroup: function () {
         var t = this;
         this.groupName = new InputWindow({
-            title: "New Group",
+            title: gettext("New Group"),
             width: 550,
             height: 200,
             zIndex: 1000,
             inputname: "newgroup",
-            inputlabel: "Group:",
-            infotext: "Please enter the group's name:",
+            inputlabel: gettext("Group:"),
+            infotext: gettext("Please enter the group's name:"),
             inputvalue: "",
             buttons: [
                 {
-                    text: "Add Group",
+                    text: gettext("Add Group"),
                     click: function() {
                         t.groupName.hide();
                         if (t.groupName.element.getValue() !== '')
@@ -63,16 +63,19 @@ var GroupWindow = Window.extend({
                                 url:	'group/' + t.groupName.element.getValue() + '/info',
                                 successFn: function(data) {
                                     if (!(data.name in t.groupListFinder)) {
-                                        if (window.confirm("Found the group: \n\tName:"
-                                                + data.name + '\n\tLabel:' + data.label
-                                                + "\nIs this correct?"))
+                                        if (window.confirm(
+                                            gettext("Found the group:") + "\n\t" +
+                                            gettext("Name:") + data.name + "\n\t" +
+                                            gettext("Label:") + data.label + "\n" +
+                                            gettext("Is this correct?"))
+                                        )
                                         {
                                             t.addGroupToList(data.name);
                                             t.addGroup(data.name);
                                         }
                                     }
                                     else {
-                                        showError("This group is already in the list.");
+                                        showError(gettext("This group is already in the list."));
                                     }
                                 },
                                 errorFn: function(error) {
@@ -83,7 +86,7 @@ var GroupWindow = Window.extend({
                     }
                 },
                 {
-                    text: "Cancel",
+                    text: gettext("Cancel"),
                     click: function() {
                         t.groupName.hide();
                         t.groupName = null;
@@ -108,8 +111,8 @@ var GroupWindow = Window.extend({
         var tableHeader = $(
             '<div class="row">' +
             // '   <div class="col-sm-1" />' +
-            '   <div class="col-sm-5"><h4>Group</h4></div>' +
-            '   <div class="col-sm-3"><h4>Edit</h4><div/>' +
+            '   <div class="col-sm-5"><h4>' + gettext('Group') + '</h4></div>' +
+            '   <div class="col-sm-3"><h4>' + gettext('Edit') + '</h4><div/>' +
             '</div>');
         this.groupTable.append(tableHeader);
         this.groupList.empty();
@@ -164,7 +167,7 @@ var GroupWindow = Window.extend({
         // td_buttons.append(editButton);
         var removeButton = $('<img src="/img/cross.png" title="remove from list" style="cursor:pointer;" />');
         removeButton.click(function(){
-            if (window.confirm("Are you sure to remove the group " + groupName + " ?")) {
+            if (window.confirm(gettext("Are you sure to remove the group permission of ") + groupName + " ?")) {
                 // t.removeGroupFromList(groupName);    // This is done in the func 'removeGroup'
                 t.removeGroup(groupName);
             }
@@ -214,7 +217,6 @@ var GroupWindow = Window.extend({
         })
     },
 
-    // TODO
     backToView: function(groupName) {
         if ($.inArray(groupName, this.topology.data.group_info) && this.topology.data.group_info !== null) {
             this.drawView(groupName);
@@ -223,14 +225,13 @@ var GroupWindow = Window.extend({
         }
     },
 
-    // TODO
     // Remove the group row on the dialog
     removeGroupFromList: function(groupName) {
         this.groupListFinder[groupName].tr.remove();
         delete this.groupListFinder[groupName];
     },
 
-    toType: function (obj) {
-        return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
-    }
+    // toType: function (obj) {
+    //     return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    // }
 });

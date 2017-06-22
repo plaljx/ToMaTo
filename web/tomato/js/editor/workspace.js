@@ -50,7 +50,7 @@ var Workspace = Class.extend({
 			autoOpen: false,
 			draggable: true,
 			resizable: false,
-			title: "Group Settings",
+			title: gettext("Group Settings"),
 			modal: false,
 			width: 500,
 			topology: this.editor.topology,
