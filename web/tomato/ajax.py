@@ -156,12 +156,14 @@ def traffic_modify(api, request,element_id, **attrs):
 @wrap_json
 def traffic_start(api, request,element_id,selected):
 	#selected:The Array of traffics' id which are selected to start
-	print element_id
-	print selected
 	if not selected:
 		return 	None
 	res = api.traffic_start(element_id, selected)
 	return res
 
-
+#start the configured D-ITG traffic
+@wrap_json
+def ditg_start(api, request, element_id , **attrs):
+	res = api.ditg_start(element_id,attrs)
+	return res
 
