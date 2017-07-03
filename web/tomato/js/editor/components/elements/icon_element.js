@@ -81,6 +81,7 @@ var IconElement = Element.extend({
 		return this.rect[0];
 	},
 	paint: function() {
+		console.log(this.canvas)
 		var pos = this.canvas.workspace.absPos(this.getPos());
 		// console.log(this)
 		// console.log(this.canvas)

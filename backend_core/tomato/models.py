@@ -38,4 +38,5 @@ from .resources.profile import Profile
 from .db import DataEntry
 from .traffic import Traffic
 from .topgroup import Topgroup
+from .groupconnection import Groupconnection
 from .subtopology import Subtopology

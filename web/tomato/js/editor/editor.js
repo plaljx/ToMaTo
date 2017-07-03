@@ -58,6 +58,7 @@ var Editor = Class.extend({
 		ajax ({
 			url: "topology/"+options.topology+"/info",
 			successFn: function(data){
+				console.log(data)
 				t.topology.load(data);
 				t.workspace.setBusy(false);
 				if (t.topology.data._initialized) {
@@ -154,14 +155,21 @@ var Editor = Class.extend({
 		this.connectElement = el;
 	},
 	onElementSelected: function(el) {
+		console.log(el)
 		switch (this.mode) {
 			case Mode.connectOnce:
-				if (! el.isConnectable()) return;
+				console.log(this.mode);
+				if (! el.isConnectable()) {
+					return;
+				}
 				this.topology.createConnection(el, this.connectElement);
+				console.log("create connection")
 				this.setMode(Mode.select);
 				break;
 			case Mode.connect:
+				console.log(this.mode);
 				if (! el.isConnectable()) return;
+				// console.log("create connection")
 				if (this.connectElement) {
 					this.topology.createConnection(el, this.connectElement);
 					this.connectElement = null;
@@ -210,15 +218,16 @@ var Editor = Class.extend({
 	createElementFunc: function(el) {
 		var t = this;
 		return function(pos) {
-			// console.log(pos)
 			var data = copy(el, true);
 			data._pos = pos;
-
+			if(this.workspace.canvas){
 			data._pos['canvas'] = this.workspace.canvas.canvas.id;
-			console.log(data._pos['canvas'])
-			console.log(data)
 			t.topology.createElement(data);
 			t.selectBtn.click();
+		}
+		else{
+			alert("no canvas");
+		}
 		}
 	},
 	createUploadFunc: function(type) {
@@ -665,36 +674,36 @@ var Editor = Class.extend({
 		this.optionsManager.buildOptionsTab(tab);
 
 		// for topgroup
-		var tab = this.menu.addTab(gettext("Topgroup"));
-		var group = tab.addGroup(gettext("Manager"));
+		// var tab = this.menu.addTab(gettext("Topgroup"));
+		// var group = tab.addGroup(gettext("Manager"));
 
-		group.addElement(Menu.button({ 
-            label: gettext("Add to topgroup"),
-            icon: "img/repy32.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.topgroup_adddDialog();
-            }
-        }));
-        group.addElement(Menu.button({  
-            label: gettext("Create a Topgroup"),
-            icon: "img/repy32.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.topgroup_createDialog();
-            }
-        }));
-        group.addElement(Menu.button({  
-            label: gettext("Remove from Topgroup"),
-            icon: "img/repy32.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.topgroupDialog();
-            }
-        }));
+		// group.addElement(Menu.button({ 
+  //           label: gettext("Add to topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroup_adddDialog();
+  //           }
+  //       }));
+  //       group.addElement(Menu.button({  
+  //           label: gettext("Create a Topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroup_createDialog();
+  //           }
+  //       }));
+  //       group.addElement(Menu.button({  
+  //           label: gettext("Remove from Topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroupDialog();
+  //           }
+  //       }));
 
         var tab = this.menu.addTab(gettext("Canvas"));
 		var group = tab.addGroup(gettext("Manager"));

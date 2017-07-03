@@ -1,2 +1,0 @@
-::sysinit:/init.sh >/dev/stdout 2>/dev/stderr
-::respawn:/code/server.sh >/dev/stdout 2>/dev/stderr

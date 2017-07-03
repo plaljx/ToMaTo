@@ -1,26 +1,36 @@
 from db import *
 import datetime
+from .host import Host
 
 
 class Topgroup(BaseDocument):
-	main_top = StringField()
+	# main_top = StringField() remove main_top
 	tops = ListField()
 	create_time = DateTimeField()
 	name = StringField(unique = True)
 
+
+	@property
+	def topology(self):
+		return topology.Topology.objects(topgroup = self)
+
+	@property
+	def groupconnection(self):
+		return groupconnection.Groupconnetion.object(topgroup = self)
 
 	@classmethod
 	def create(cls , top_id = None, **data):
 		group = Topgroup()
 		group.name = data['name']
 		group.create_time = datetime.datetime.now()
-		group.main_top = top_id
-		group.tops.append(top_id)
 		group.save()
 		return group
 
-	def add(self, id):
-		self.tops.append(id)
+	def add(self, top_id, name):
+		self.tops.append(top_id)
+		top = topology.Topology.objects.get(id = top_id)
+		top.topgroup = self
+		top.save()
 		self.save()
 
 	@classmethod
@@ -28,6 +38,13 @@ class Topgroup(BaseDocument):
 		topgroup = cls.objects.get(name = name)
 		return topgroup
 
+	@classmethod
+	def get_bytop(cls, top_id = None, **data):
+		topgroup = topology.Topology.objects.get(id = top_id).topgroup
+		# topgroup = cls.objects.get(name = topgroup_name)
+		return topgroup
+
+	# todo change logic
 	def remove_top(self, id):
 		self.tops.remove(id)
 		self.save()
@@ -38,10 +55,17 @@ class Topgroup(BaseDocument):
 		topgroup.delete()
 
 	def info(self):
+		tops = self.topology
+		tops_info = [top.info() for top in tops]
+		
+		# tops_info = {top.name:{el.name: el.info() for el in top.elements}for top in tops}
+		# # tops_info[top.name]['id'] = 
+		# for top in tops:
+		# 	tops_info[top.name]['id'] = top.idStr
 		return {
 		'tops': self.tops,
 		'name': self.name,
-		# 'create_time':self.create_time
+		'info': tops_info,
 		}
 	
 	@classmethod
@@ -50,16 +74,9 @@ class Topgroup(BaseDocument):
 		return len(topgroup.tops)
 
 	@classmethod
-	def list(cls):
-		return list(cls.objects.all())
-
-	@property
-	def topology(self):
-		# return a list made by topgroup's topology info
-		topology_list = []
-		for topology_id in self.tops:
-			topology_list.append(Topology.objects.get(idStr = topology_id).info())
-		return topology_list
+	def list(cls,top_id = None,  **data):
+		return [topgroup.name for topgroup in list(cls.objects.all())]
 
 
-from .topology import Topology
+import topology
+import groupconnection

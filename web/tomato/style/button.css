@@ -257,8 +257,8 @@
 
 .button-action,
 .button-action-flat {
-  background-color: #A5DE37;
-  border-color: #A5DE37;
+  background-color: #2A3F54;
+  border-color: #2A3F54;
   color: #FFF; }
   .button-action:visited,
   .button-action-flat:visited {
@@ -268,7 +268,7 @@
   .button-action-flat:focus {
     background-color: #b9e563;
     border-color: #b9e563;
-    color: #FFF; }
+    color: #000; }
   .button-action:active, .button-action.active, .button-action.is-active,
   .button-action-flat:active,
   .button-action-flat.active,

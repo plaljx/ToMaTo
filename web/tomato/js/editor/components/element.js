@@ -24,7 +24,11 @@ var Element = Component.extend({
 		return (!this.editor.options.fixed_pos) && this.editor.mode == Mode.select;
 	},
 	isConnectable: function() {
-		if (this.connection) return false;
+		if (this.connection) {
+			console.log(this.connection)
+			console.log("this.connection")
+			return false;
+		}
 		if (! this.caps.children) return false;
 		for (var ch in this.caps.children)
 			if (this.caps.children[ch].indexOf(this.data.state) >= 0)
@@ -146,6 +150,7 @@ var Element = Component.extend({
 		}, this, this, this);
 	},
 	getConnectTarget: function() {
+		console.log("getConnectionTarget")
 		return this;
 	},
 	getPos: function() {
@@ -174,7 +179,7 @@ var Element = Component.extend({
 	setAbsPos: function(pos) {
 		var grid = this.editor.options.grid_size;
 		if (this.editor.options.snap_to_grid) pos = {x: Math.round(pos.x/grid)*grid, y: Math.round(pos.y/grid)*grid};
-		this.setPos(this.canvas.relPos(pos));
+		this.setPos(this.canvas.workspace.relPos(pos));
 	},
 	openConsole: function() {
 	    window.open('../element/'+this.id+'/console', '_blank', "innerWidth=745,innerheight=400,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");

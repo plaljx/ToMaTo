@@ -1,18 +1,22 @@
 from .db import *
+from .lib import traffic
+from .elements import Element
 
 
 class Traffic(BaseDocument):
 
 	element_id = StringField(required=True)
-	traffic_name = StringField(required=True,unique=True)
+	traffic_name = StringField(required=True)
 	flow_number = IntField(default=1)#@unresolved
 	start_time = StringField(default='0')#@unresolved
 	off_time = StringField()
+	src_port = StringField()
 	dest_ip = StringField()
 	dest_port = StringField()
 	protocol = StringField()
 	pattern = StringField()
 	tos = StringField(default='0') #@unresolved
+	extra_param = StringField()
 
 	def init(self,element_id, **attrs):
 		self.element_id = element_id
@@ -32,22 +36,32 @@ class Traffic(BaseDocument):
 		return {
 			"id":self.id.__str__(),
 			"element_id":self.element_id,
+			"src_port":self.src_port,
+			"tos":self.tos,
+			"start_time":self.start_time,
 			"traffic_name":self.traffic_name,
 			"off_time":self.off_time,
 			"dest_ip":self.dest_ip,
 			"dest_port":self.dest_port,
 			"protocol":self.protocol,
 			"pattern":self.pattern,
+			"extra_param":self.extra_param,
 		}
 
 	def remove(self):
 		self.delete()
 
+	def modify_extra_param(self, val):
+		self.extra_param = val
+		
 	def modify_element_id(self, val):
 		self.element_id = val
 
 	def modify_traffic_name(self, val):
 		self.traffic_name = val
+
+	def modify_src_port(self, val):
+		self.src_port = val
 
 	def modify_flow_number(self, val):
 		self.flow_number = val
@@ -72,6 +86,19 @@ class Traffic(BaseDocument):
 
 	def modify_tos(self, val):
 		self.tos = val
+
+	@classmethod
+	def traffic_start(cls, element_id, traffic_id):
+		action = "rextfv_upload_grant"
+		action_use = "rextfv_upload_use"
+		traffic_info = get(traffic_id).info()
+		pack_dir = traffic.make_pack(traffic_info)
+		element_info = Element.get(element_id).info()
+		key = Element.get(element_id).action(action)
+		upload = traffic.send_pack(element_info ,pack_dir, key)
+		action = Element.get(element_id).action(action_use)
+		return action
+
 
 def get(id_, **kwargs):
 	try:

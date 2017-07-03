@@ -173,8 +173,30 @@ def topgroup_create(api, request, top_id = None, **data):
 
 @wrap_json
 def topgroup_add(api, request, top_id = None, **data):
-	res = api.topgroup_add(top_id, **data)
+	res = api.topgroup_addtop(top_id, **data)
 	return res
+
+@wrap_json
+def topgroup_delete(api, request, top_id = None, **data):
+	res = api.topgroup_delete(**data)
+	return res
+
+@wrap_json
+def topgroup_list(api, requset, top_id = None, **data):
+	res = api.topgroup_list(top_id ,**data)
+	return res
+
+@wrap_json
+def topgroup_info(api, request, top_id = None, **data):
+	res = api.topgroup_info(top_id, **data)
+	return res
+
+@wrap_json
+def groupconnection_create(api, request, elements, **data):
+	res = api.groupconnection_create(elements[0], elements[1], data)
+	return res
+
+
 # subtopology
 @wrap_json
 def subtopology_add(api, request, top_id, **data):

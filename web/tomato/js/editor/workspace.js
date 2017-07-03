@@ -12,7 +12,6 @@ var Workspace = Class.extend({
     	
     	this.subtopologyList = [];
     	this.canvas_dict = {};
-    	this.workspace_dict = {};
 
     	var t = this;
     	
@@ -20,36 +19,14 @@ var Workspace = Class.extend({
 			url:'topology/'+ this.editor.options.topology + '/getsubtopology',
 			synchronous: true,
 			successFn:function(result){
-				// console.log(result)
 				t.subtopologyList = result
 				for (var i = 0; i < t.subtopologyList.length; i++){
-					// t.workspace_dict[t.subtopologyList[i]] = $("#workspace").clone(true);
     				t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
     				t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i]
-    				t.canvas_dict[t.subtopologyList[i]].workspace = t;
-    				// var c = t.canvas_dict[t.subtopologyList[i]]
-    				// var fs = t.editor.options.frame_size
-    				// t.canvas_dict[t.subtopologyList[i]].absPos = function(pos) {
-    				// 	// console.log({x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)})
-    				// 	return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
-    				// }
-    				// t.canvas_dict[t.subtopologyList[i]].relPos = function(pos) {
-    				// 	return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
-    				// }
-
-    				// $('#workspace svg:eq(0)').attr('id', t.subtopologyList[i])
+    				t.canvas_dict[t.subtopologyList[i]].workspace = t
+    				t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
     				t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
     			}
-    // 			t.canvas = t.canvas_dict[t.subtopologyList[0]]
-    // 			t.connectPath = t.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-    // 			t.container.click(function(evt){
-				// 	t.onClicked(evt);
-				// });
-				// t.container.mousemove(function(evt){
-				// 	t.onMouseMove(evt);
-				// });
-				// t.busyIcon = t.canvas.image("img/loading_big.gif", t.size.x/2, t.size.y/2, 32, 32);
-				// t.busyIcon.attr({opacity: 0.0});
     			$('#workspace>svg').hide()
     			$('#main').show()
 			},
@@ -102,8 +79,11 @@ var Workspace = Class.extend({
     	this.editor.listeners.push(function(obj){
     		t.tutorialWindow.triggerProgress(obj);
     	});
+
+    	this.connectPath = this.canvas.connectPath
     	
-    	this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    	// this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    	// console.log(this.connectPath)
 		this.container.click(function(evt){
 			t.onClicked(evt);
 		});
@@ -114,7 +94,7 @@ var Workspace = Class.extend({
 		this.busyIcon = this.canvas.image("img/loading_big.gif", this.size.x/2, this.size.y/2, 32, 32);
 		this.busyIcon.attr({opacity: 0.0});
 
-
+		console.log(this.canvas)
 		
 		
 	},
@@ -126,7 +106,10 @@ var Workspace = Class.extend({
 
 		this.canvas_dict[canvasname].canvas.id = canvasname
 		this.canvas_dict[canvasname].workspace = this
+
+		this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
 		
+		// this.connectPath = this.cnavas.connectPath
 		$("#" + canvasname).hide()
 		// this.tabCanvas(canvasname)
 		var data = {
@@ -142,17 +125,13 @@ var Workspace = Class.extend({
 				new errorWindow({error:error});
 			}
 		})
-
-
 	},
 
 	tabCanvas:function(canvasname){
 
 		var t = this;
-		// console.log(canvasname)
-		// console.log(this);
 		this.canvas = this.canvas_dict[canvasname]
-    	this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+    	this.connectPath = this.canvas.connectPath
     	$('#workspace>svg').hide();
     	$('#' + canvasname).show();
 
@@ -185,14 +164,14 @@ var Workspace = Class.extend({
 			case Mode.position:
 				var pos;
 				if (evt.offsetX) {
-					console.log(evt.offsetX)
+					// console.log(evt.offsetX)
 					pos = this.relPos({x: evt.offsetX, y: evt.offsetY});
-					console.log(pos)
+					// console.log(pos)
 				}
 				else {
 					var objPos = this.container.offset();
 					pos = this.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
-					console.log(pos)
+					// console.log(pos)
 				}
 				this.editor.positionElement(pos);
 				break;

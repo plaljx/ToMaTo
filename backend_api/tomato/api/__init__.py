@@ -79,4 +79,7 @@ from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, 
 
 
 # topgroup
-from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_infofrom subtopology import *
+from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info
+from groupconnection import *
+
+from subtopology import *

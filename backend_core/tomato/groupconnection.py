@@ -1,32 +1,13 @@
-# -*- coding: utf-8 -*-
-# ToMaTo (Topology management software) 
-# Copyright (C) 2010 Dennis Schwerdel, University of Kaiserslautern
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 import time
 
 from .db import *
-from .generic import *
-from .topology import Topology
 from .host import Host
-from .lib import logging #@UnresolvedImport
-from .lib.error import UserError, InternalError
-from .lib.cache import cached #@UnresolvedImport
+from .generic import *
+
+from .topgroup import Topgroup
+# from .topology import Topology
+
 from .lib.constants import ActionName, StateName, TypeName, ConnectionDistance
-from .lib.exceptionhandling import wrap_and_handle_current_exception
-from .link import getStatistics
 
 REMOVE_ACTION = "(remove)"
 
@@ -52,38 +33,34 @@ starting_list_lock = threading.RLock()
 stopping_list = set()
 stopping_list_lock = threading.RLock()
 
-class Connection(LockedStatefulEntity, BaseDocument):
-	"""
-	:type topology: Topology
-	:type clientData: dict
-	:type directData: dict
-	:type elementFrom: elements.Element
-	:type elementTo: elements.Element
-	:type connectionFrom: host.HostConnection
-	:type connectionTo: host.HostConnection
-	:type connectionElementFrom: host.HostElement
-	:type connectionElementTo: host.HostElement
-	"""
-	topology = ReferenceField(Topology, required=True, reverse_delete_rule=DENY)
-	topologyId = ReferenceFieldId(topology)
-	state = StringField(choices=['default', 'created', 'prepared', 'started'], required=True)
+
+
+class Groupconnection(LockedStatefulEntity, BaseDocument):
+	topgroup = ReferenceField(Topgroup, required=True)
+	topgroupId =ReferenceFieldId(topgroup)
+	topologyFrom = ReferenceField('Topology', db_field = 'topology_from')
+	topologyFromId = ReferenceFieldId(topologyFrom)
+	topologyTo = ReferenceField('Topology', db_field = 'topology_to')
+	topologyToId = ReferenceFieldId(topologyTo)
+	state = StringField(choices=['default', 'created', 'prepared', 'started'])
 	elementFrom = ReferenceField('Element', db_field='element_from', required=True) #reverse_delete_rule=DENY defined at bottom of element/__init__.py
 	elementFromId = ReferenceFieldId(elementFrom)
 	elementTo = ReferenceField('Element', db_field='element_to', required=True) #reverse_delete_rule=DENY defined at bottom of element/__init__.py
 	elementToId = ReferenceFieldId(elementTo)
+
 	from .host.connection import HostConnection, HostElement
 	connectionFrom = ReferenceField(HostConnection, db_field='connection_from', reverse_delete_rule=NULLIFY)
 	connectionTo = ReferenceField(HostConnection, db_field='connection_to', reverse_delete_rule=NULLIFY)
 	connectionElementFrom = ReferenceField(HostElement, db_field='connection_element_from', reverse_delete_rule=NULLIFY)
 	connectionElementTo = ReferenceField(HostElement, db_field='connection_element_to', reverse_delete_rule=NULLIFY)
-	clientData = DictField(db_field='client_data')
-	directData = DictField(db_field='direct_data')
-	meta = {
-		'allow_inheritance': True,
-		'indexes': [
-			'topology', 'state', 'elementFrom', 'elementTo'
-		]
-	}
+	# clientData = DictField(db_field='client_data')
+	# directData = DictField(db_field='direct_data')
+	# meta = {
+	# 	'allow_inheritance': True,
+	# 	'indexes': [
+	# 		'topology', 'state', 'elementFrom', 'elementTo'
+	# 	]
+	# }
 
 	DIRECT_ACTIONS = True
 	DIRECT_ACTIONS_EXCLUDE = [ActionName.START, ActionName.STOP, ActionName.PREPARE, ActionName.DESTROY, REMOVE_ACTION]
@@ -98,10 +75,12 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	DOC=""
 
 	# noinspection PyMethodOverriding
-	def init(self, topology , el1, el2, **attrs):
+	def init(self, topgroup, topology1, topology2, el1, el2, **attrs):
 		if not attrs: attrs = {}
-		self.topology = topology
+		self.topgroup = topgroup
 		self.state = ST_CREATED
+		self.topologyFrom = topology1
+		self.topologyTo = topology2
 		self.elementFrom = el1
 		self.elementTo = el2
 		Entity.init(self, **attrs)
@@ -169,12 +148,13 @@ class Connection(LockedStatefulEntity, BaseDocument):
 		if self.mainConnection:
 			self.mainConnection.modify(**self._remoteAttrs)
 
-	def checkTopologyTimeout(self):
-		self.topology.checkTimeout()
+	# def checkTopologyTimeout(self):
+	# 	self.topology.checkTimeout()
 
 	def checkUnknownAction(self, action, params=None):
 		if action in [ActionName.PREPARE, ActionName.START, ActionName.UPLOAD_GRANT, ActionName.REXTFV_UPLOAD_GRANT]:
-			self.checkTopologyTimeout()
+			# self.checkTopologyTimeout()
+			pass
 		UserError.check(self.DIRECT_ACTIONS and not action in self.DIRECT_ACTIONS_EXCLUDE,
 			code=UserError.UNSUPPORTED_ACTION, message="Unsupported action")
 		UserError.check(self.mainConnection, code=UserError.UNSUPPORTED_ACTION, message="Unsupported action")
@@ -392,28 +372,28 @@ class Connection(LockedStatefulEntity, BaseDocument):
 			with stopping_list_lock:
 				stopping_list.remove(self)
 
-	@classmethod
-	@cached(timeout=3600, maxSize=None)
-	def getCapabilities(cls, type_):
-		caps = cls.capabilities()
-		if cls.DIRECT_ATTRS or cls.DIRECT_ACTIONS:
-			host_cap = Host.getConnectionCapabilities(type_)
-		if cls.DIRECT_ACTIONS:
-			# noinspection PyUnboundLocalVariable
-			for action, params in host_cap["actions"].iteritems():
-				if not action in cls.DIRECT_ACTIONS_EXCLUDE:
-					if action == '__remove__':
-						action = Entity.REMOVE_ACTION
-					if action in caps["actions"]:
-						continue
-					if isinstance(params, list):
-						params = {'state_change': None, 'param_schema': None, 'description': None, 'allowed_states': params}
-					caps["actions"][action] = params
-		if cls.DIRECT_ATTRS:
-			for attr, params in host_cap["attributes"].iteritems():
-				if not attr in cls.DIRECT_ATTRS_EXCLUDE:
-					caps["attributes"][attr] = params
-		return caps
+	# @classmethod
+	# @cached(timeout=3600, maxSize=None)
+	# def getCapabilities(cls, type_):
+	# 	caps = cls.capabilities()
+	# 	if cls.DIRECT_ATTRS or cls.DIRECT_ACTIONS:
+	# 		host_cap = Host.getConnectionCapabilities(type_)
+	# 	if cls.DIRECT_ACTIONS:
+	# 		# noinspection PyUnboundLocalVariable
+	# 		for action, params in host_cap["actions"].iteritems():
+	# 			if not action in cls.DIRECT_ACTIONS_EXCLUDE:
+	# 				if action == '__remove__':
+	# 					action = Entity.REMOVE_ACTION
+	# 				if action in caps["actions"]:
+	# 					continue
+	# 				if isinstance(params, list):
+	# 					params = {'state_change': None, 'param_schema': None, 'description': None, 'allowed_states': params}
+	# 				caps["actions"][action] = params
+	# 	if cls.DIRECT_ATTRS:
+	# 		for attr, params in host_cap["attributes"].iteritems():
+	# 			if not attr in cls.DIRECT_ATTRS_EXCLUDE:
+	# 				caps["attributes"][attr] = params
+	# 	return caps
 
 	@property
 	def type(self):
@@ -519,23 +499,23 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	ACTIONS = {
 		Entity.REMOVE_ACTION: StatefulAction(_remove, check=checkRemove)
 	}
-	ATTRIBUTES = {
-		"id": IdAttribute(),
-		"type": Attribute(field=type, readOnly=True, schema=schema.Identifier()),
-		"topology": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
-		"state": Attribute(field=state, readOnly=True, schema=schema.Identifier()),
-		"elements": Attribute(get=lambda obj: [obj.elementFromId, obj.elementToId], readOnly=True, schema=schema.List(items=schema.Identifier())),
-		"debug": Attribute(get=lambda obj: {
-			"host_elements": [(o.host.name, o.num) for o in obj.hostElements],
-			"host_connections": [(o.host.name, o.num) for o in obj.hostConnections],
-		}, readOnly=True, schema=schema.StringMap(items={
-			'host_elements': schema.List(items=schema.List(minLength=2, maxLength=2)),
-			'host_connections': schema.List(items=schema.List(minLength=2, maxLength=2))
-		}, required=['host_elements', 'host_connections'])),
-		"link_statistics": Attribute(get=link_stats, readOnly=True),
-		"host": Attribute(get=lambda self: self.host.name if self.host else None, readOnly=True),
-		"host_info": Attribute(field=host_info, readOnly=True)
-	}
+	# ATTRIBUTES = {
+	# 	"id": IdAttribute(),
+	# 	"type": Attribute(field=type, readOnly=True, schema=schema.Identifier()),
+	# 	"topology": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
+	# 	"state": Attribute(field=state, readOnly=True, schema=schema.Identifier()),
+	# 	"elements": Attribute(get=lambda obj: [obj.elementFromId, obj.elementToId], readOnly=True, schema=schema.List(items=schema.Identifier())),
+	# 	"debug": Attribute(get=lambda obj: {
+	# 		"host_elements": [(o.host.name, o.num) for o in obj.hostElements],
+	# 		"host_connections": [(o.host.name, o.num) for o in obj.hostConnections],
+	# 	}, readOnly=True, schema=schema.StringMap(items={
+	# 		'host_elements': schema.List(items=schema.List(minLength=2, maxLength=2)),
+	# 		'host_connections': schema.List(items=schema.List(minLength=2, maxLength=2))
+	# 	}, required=['host_elements', 'host_connections'])),
+	# 	"link_statistics": Attribute(get=link_stats, readOnly=True),
+	# 	"host": Attribute(get=lambda self: self.host.name if self.host else None, readOnly=True),
+	# 	"host_info": Attribute(field=host_info, readOnly=True)
+	# }
 		
 	@classmethod
 	def get(cls, id_, **kwargs):
@@ -547,30 +527,33 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	@classmethod
 	def create(cls, el1, el2, **attrs):
 		if not attrs: attrs = {}
-		UserError.check(el1 != el2, code=UserError.INVALID_CONFIGURATION, message="Cannot connect element with itself")
-		UserError.check(not el1.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
-			data={"element": el1.id})
-		UserError.check(not el2.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
-			data={"element": el2.id})
-		UserError.check(el1.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
-			data={"element": el1.id})
-		UserError.check(el2.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
-			data={"element": el2.id})
-		UserError.check(el1.topology == el2.topology, code=UserError.INVALID_VALUE,
-			message="Can only connect elements from same topology")
-		con = cls()
-		con.init(el1.topology, el1, el2, **attrs)
-		con.save()
-		el1.connection = con
+		# UserError.check(el1 != el2, code=UserError.INVALID_CONFIGURATION, message="Cannot connect element with itself")
+		# UserError.check(not el1.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
+		# 	data={"element": el1.id})
+		# UserError.check(not el2.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
+		# 	data={"element": el2.id})
+		# UserError.check(el1.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
+		# 	data={"element": el1.id})
+		# UserError.check(el2.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
+		# 	data={"element": el2.id})
+		# UserError.check(el1.topology == el2.topology, code=UserError.INVALID_VALUE,
+		# 	message="Can only connect elements from same topology")
+		groupcon = cls()
+		groupcon.init(el1.topology.topgroup, el1.topology, el2.topology, el1, el2, **attrs)
+		groupcon.save()
+		el1.groupconnection = groupcon
 		el1.save()
-		el2.connection = con
+		el2.groupconnection = groupcon
 		el2.save()
-		con.triggerStart()
-		logging.logMessage("create", category="connection", id=con.idStr)
-		logging.logMessage("info", category="connection", id=con.idStr, info=con.info())
-		return con
+		groupcon.triggerStart()
+		# logging.logMessage("create", category="connection", id=con.idStr)
+		# logging.logMessage("info", category="connection", id=con.idStr, info=con.info())
+		return groupcon
 
 from .host.connection import HostConnection
 from .host import HostObject
 
-Connection.register_delete_rule(HostObject, "topologyConnection", NULLIFY)
+# Connection.register_delete_rule(HostObject, "topologyConnection", NULLIFY)
+
+import elements
+import topology

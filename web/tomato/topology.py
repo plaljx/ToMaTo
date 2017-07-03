@@ -151,7 +151,7 @@ def create(api, request):
 	info = api.topology_create()
 	api.topology_modify(info['id'], {'_initialized': False})
 	# for subtopology
-	# api.subtopology_init(info['id'])
+	api.subtopology_init(info['id'])
 	return redirect("tomato.topology.info", id=info["id"])
 
 

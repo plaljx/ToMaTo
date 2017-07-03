@@ -6,8 +6,13 @@ var Topology = Class.extend({
 		this.pendingNames = [];
 	},
 	_getCanvas: function(canvasname) {
-		this.editor.workspace.tabCanvas(canvasname)
-		return this.editor.workspace.canvas_dict[canvasname];
+		// this.editor.workspace.tabCanvas(canvasname)
+		if(canvasname){
+			return this.editor.workspace.canvas_dict[canvasname];
+		}else{
+			return this.editor.workspace.canvas;
+		}
+		
 		// console.log(this.editor.workspace.canvas)
 		// return this.editor.workspace.canvas;
 	},
@@ -18,40 +23,39 @@ var Topology = Class.extend({
 			case "full":
 			case "container":
 			case "repy":
-				// elObj = new VMElement(this, el, this._getCanvas(el.canvasnum));
 				elObj = new VMElement(this, el, this._getCanvas(el._pos['canvas']));
-				console.log(el._pos['canvas'])
 				break;
+			
 			case "full_interface":
 			case "repy_interface":
-				elObj = new VMInterfaceElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
 				break;
 			case "container_interface":
-				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
 				break;
 			case "external_network":
-				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "external_network_endpoint":
 				//hide external network endpoints with external_network parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(el._pos['canvas'])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos['canvas'])) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos["canvas"])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			case "tinc_vpn":
-				elObj = new VPNElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "tinc_endpoint":
 				//hide tinc endpoints with tinc_vpn parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(el._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos['canvas'])) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			case "vpncloud":
-				elObj = new VPNElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "vpncloud_endpoint":
 				//hide vpncloud endpoints with vpcloud parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(el._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos['canvas'])) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			default:
-				elObj = new UnknownElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new UnknownElement(this, el, this._getCanvas());
 				break;
 		}
 		if (el.id) this.elements[el.id] = elObj;
@@ -64,7 +68,14 @@ var Topology = Class.extend({
 		return elObj;
 	},
 	loadConnection: function(con, elements) {
-		var conObj = new Connection(this, con, this._getCanvas());
+		// var conObj = new Connection(this, con, this._getCanvas());
+		var tmp_canvas;
+		if(con.elements){
+			tmp_canvas = this.elements[con.elements[0]].canvas;
+		}else{
+			tmp_canvas = elements[0].canvas;
+		}
+		var conObj = new Connection(this, con, tmp_canvas);
 		if (con.id) this.connections[con.id] = conObj;
 		if (con.elements) { //elements are given by id
 			for (var j=0; j<con.elements.length; j++) {
@@ -88,6 +99,7 @@ var Topology = Class.extend({
 		data.elements.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);});
 		for (var i=0; i<data.elements.length; i++) this.loadElement(data.elements[i]);
 		this.connections = {};
+		// console.log(data.connections)
 		for (var i=0; i<data.connections.length; i++) this.loadConnection(data.connections[i]);
 
 		this.editor.optionsManager.loadOpts();
@@ -257,6 +269,10 @@ var Topology = Class.extend({
 		obj.setBusy(true);
 		this.pendingNames.push(data.name);
 
+		// if(!data._pos['canvas'] && !data.parent){
+		// 	console.log("no canvas");
+		// 	data._pos['canvas'] = this.workspace.canvas.canvas.id;
+		// }
 		var t = this;
 		console.log(data)
 		ajax({
@@ -285,19 +301,27 @@ var Topology = Class.extend({
 		if (el1 == el2) return;
 		if (! el1.isConnectable()) return;
 		if (! el2.isConnectable()) return;
+		console.log(data);
 		var ids = 0;
 		var t = this;
 		var obj;
 		var callback = function(ready) {
+			console.log("callback")
+			console.log(ready)
 			ids++;
 			if (ids < 2) return;
 			t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "begin", attrs: data});
 			data.elements = [el1.id, el2.id];
+			// data.canvas = this.editor.workspace.canvas.canvas.id;
+			console.log(el1)
+			// data.canvas = el1.
+			console.log(data)
 			ajax({
 				url: "connection/create",
 				data: data,
 				successFn: function(data) {
 					t.connections[data.id] = obj;
+					console.log(obj)
 					obj.updateData(data);
 					t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "end", attrs: data});
 					t.onUpdate();
@@ -311,6 +335,7 @@ var Topology = Class.extend({
 				}
 			});
 		};
+
 		el1 = el1.getConnectTarget(callback);
 		el2 = el2.getConnectTarget(callback);
 		data = data || {};

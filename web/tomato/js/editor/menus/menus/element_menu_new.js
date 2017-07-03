@@ -19,6 +19,22 @@ var createElementMenu = function(obj) {
 		type:"html"
 	}
 	var menu;
+
+	var topgroup_info = {}
+	ajax({
+		url: 'topgroup/'+ obj.topology.id+'/gettopgroupinfo',
+		data: {},
+		synchronous: true,
+		successFn: function(result){
+			// console.log(result)
+			// console.log(result)
+			topgroup_info = result['info']
+			console.log(topgroup_info)
+		},
+		errorFn: function(error){
+			new errorWindow({error:error});
+		}
+	})
 	
 	if (obj.busy) {
 		menu={
@@ -43,11 +59,6 @@ var createElementMenu = function(obj) {
 						obj.editor.onElementConnectTo(obj);
 					}
 				} : null,
-				"connect to other topology":obj.isConnectable()?{
-					name:gettext("connect to other topology"),
-					icon:"connect",
-					items:{}
-				}:null,
 				"start": obj.actionEnabled("start") ? {
 					name:gettext('Start'),
 					icon:'start',
@@ -241,53 +252,73 @@ var createElementMenu = function(obj) {
 						obj.remove(null, true);
 					}
 				} : null,
-				"move":{
-					name : gettext("Move to other topology"),
-					icon : "remove",
-					// callback : function(){
-					//
-					// }
-					items:{}
-				}
+				"sep5": "---",
+				// "connect to brother topology": {
+				// 	name : gettext("link to topgroup"),
+				// 	icon : 'remove',
+				// 	callback: function(){
+				// 		obj.showConnectionWindow()
+				// 	},
+				// },
 			}
 		};
 	}
-	console.log(obj.editor.topology.elements)
-	if(obj.isConnectable()) {
-        for (var element in obj.editor.topology.elements) {
-            if (element != obj.id && !obj.editor.topology.elements[element].parent && obj.editor.topology.elements[element].canvas !== obj.canvas) {
-                var tmp = {
-                    name: obj.editor.topology.elements[element].data.name + "(" + obj.editor.topology.elements[element].canvas.canvas.id + ")",
-                    icon: "connect",
-                    callback: function () {
-                        obj.editor.onElementConnectTo(obj)
-                        obj.editor.onElementSelected(obj.editor.topology.elements[element])
-						// var moni = document.getElementsById("tab_鼠标")
+	// for topgroup
+	var Build_elements = function(name, icon, callback){
+		this.name = name
+		this.icon = icon
+		this.callback = callback
+	}
 
-                    }
-                }
-                menu.items["connect to other topology"].items[element] = tmp;
-            }
-        }
-    }
-	// for (var n = 0; n < obj.editor.workspace.subtopologyList.length; n++){            // var tmp = {
-	// 	var tmp = {
-	// 		name : obj.editor.workspace.subtopologyList[n],
-	// 		icon: "debug",
-	// 		callback: function () {
-	// 			console.log(obj)
-	// 			obj.data._pos["canvas"] = obj.editor.workspace.subtopologyList[n]
-	// 		}
-	// 	}
-	// 	menu.items["move"].items[obj.editor.workspace.subtopologyList[n]] = tmp;
-	// }
+	var Build_tops = function(name, icon, elements){
+		this.name = name
+		this.icon = icon
+		this.items = elements
+	}
+
+	var create_connection= function(name){
+		var id = name;
+		var data = {};
+		console.log(obj.id)
+		data.elements = [obj.id, id]
+		ajax({
+			url: "groupconnection/create",
+			data: data,
+			synchronous: true,
+			successFn: function(data) {
+				// t.connections[data.id] = obj;
+				// obj.updateData(data);
+				// t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "end", attrs: data});
+				// t.onUpdate();
+				// el1.onConnected();
+				console.log('success')
+				// el2.onConnected();
+			},
+			errorFn: function(error) {
+			 	new errorWindow({error:error});
+				// obj.paintRemove();
+				// t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "error", attrs: data});
+			}
+		});
+	};
+
+	for (var n = 0; n < topgroup_info.length; n++){
+		var elements = {}
+		for(var i = 0; i < topgroup_info[n].elements.length; i++){
+			elements[topgroup_info[n].elements[i]] = new Build_elements(topgroup_info[n].elements[i], 'configure', create_connection)
+		}
+		menu.items[topgroup_info[n].name] = new Build_tops(topgroup_info[n].name, 'configure', elements)
+	}
+
+	// menu.callback = function(key, options) {}
+	
 	for (var name in menu.items) {
 		if (! menu.items[name]) {
 			delete menu.items[name];
 			continue;
 		}
 		var menu2 = menu.items[name];
-		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2];
+		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2]; 
 	}
 	return menu;
 };
