@@ -653,9 +653,18 @@ var Editor = Class.extend({
 			icon: "img/user32.png",
 			toggle: false,
 			small: false,
-			func: function () {
+			func: function() {
 				t.workspace.groupWindow.createGroupList();
 				t.workspace.groupWindow.show();
+			}
+		}));
+		group.addElement(Menu.button({
+			label: gettext("Sub-Topology Settings"),
+			icon: "img/user32.png",
+			toggle: false,
+			small: false,
+			func: function() {
+
 			}
 		}));
 

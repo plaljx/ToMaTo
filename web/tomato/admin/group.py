@@ -8,14 +8,14 @@ from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
 from ..lib.group_role import GroupRole
-
+from django.utils.translation import ugettext_lazy as _
 
 class GroupForm(AddEditForm):
 
-	name = forms.CharField(max_length=64, label="Name", help_text="The group's name. Must be unique.")
-	label = forms.CharField(max_length=255, label="Label", help_text="")
-	description = forms.CharField(widget=forms.Textarea, label="Description", required=False)
-	owner = forms.CharField(label="Owner", required=False)
+	name = forms.CharField(max_length=64, label=_("Name"), help_text=_("The group's name. Must be unique."))
+	label = forms.CharField(max_length=255, label=_("Label"), help_text="")
+	description = forms.CharField(widget=forms.Textarea, label=_("Description"), required=False)
+	owner = forms.CharField(label=_("Owner"), required=False)
 
 	buttons = Buttons.cancel_add
 
@@ -34,7 +34,7 @@ class GroupForm(AddEditForm):
 
 
 class AddGroupForm(GroupForm):
-	title = 'Add group'
+	title = _('Add group')
 
 	def __init__(self, *args, **kwargs):
 		super(AddGroupForm, self).__init__(*args, **kwargs)
@@ -53,7 +53,7 @@ class AddGroupForm(GroupForm):
 
 
 class EditGroupForm(GroupForm):
-	title = "Editing group %(name)s"
+	title = _("Editing group %(name)s")
 	buttons = Buttons.cancel_save
 
 	def __init__(self, *args, **kwargs):
@@ -75,8 +75,8 @@ class EditGroupForm(GroupForm):
 
 
 class RemoveGroupForm(RemoveConfirmForm):
-	message = "Are you sure you want to remove the group '%(name)s'?"
-	title = "Remove Group '%(name)s'"
+	message = _("Are you sure you want to remove the group '%(name)s'?")
+	title = _("Remove Group '%(name)s'")
 
 
 class HandleInviteForm(ConfirmForm):
@@ -85,17 +85,17 @@ class HandleInviteForm(ConfirmForm):
 
 	def __init__(self, operation, *args, **kwargs):
 		if operation is True or operation == 'accept':
-			self.message = "Are you sure you want to accept the invite to group '%(name)s'?"
-			self.title = "Accept invite to group '%(name)s'?"
+			self.message = _("Are you sure you want to accept the invite to group '%(name)s'?")
+			self.title = _("Accept invite to group '%(name)s'?")
 		elif operation is False or operation == 'decline':
-			self.message = "Are you sure you want to decline the invite to group '%(name)s'?"
-			self.title = "Decline invite to group '%(name)s'?"
+			self.message = _("Are you sure you want to decline the invite to group '%(name)s'?")
+			self.title = _("Decline invite to group '%(name)s'?")
 		super(HandleInviteForm, self).__init__(*args, **kwargs)
 
 
 class ApplyGroupForm(ConfirmForm):
-	message = "Are you sure you want to apply joining group '%(name)s'?"
-	title = "Apply Group %(name)s'"
+	message = _("Are you sure you want to apply joining group '%(name)s'?")
+	title = _("Apply Group %(name)s'")
 
 
 class HandleApplicationForm(RenderableForm):
@@ -108,10 +108,10 @@ class HandleApplicationForm(RenderableForm):
 		super(HandleApplicationForm, self).__init__(*args, **kwargs)
 		self.helper.layout = Layout(self.buttons)
 		if operation is True or operation == 'accept':
-			self.message = "Are you sure you want to accept the application from user %s to group %s?" % (user, group)
+			self.message = _("Are you sure you want to accept the application from user %s to group %s?") % (user, group)
 			self.title = "Accept group application"
 		elif operation is False or operation == 'decline':
-			self.message = "Are you sure you want to decline the application from user %s to group %s?" % (user, group)
+			self.message = _("Are you sure you want to decline the application from user %s to group %s?") % (user, group)
 			self.title = "Decline group application"
 
 
@@ -124,8 +124,8 @@ def list_(api, request, user=None, role=None):
 	"""
 	if not api.user:
 		raise AuthError()
-	if role is not None and role not in GroupRole.CHOICES:
-		raise Exception('Invalid parameter \'role\': %s' % role)
+	if role is not None and role not in GroupRole.CHOICES:  # TODO: May remove this check?
+		raise Exception(_('Invalid parameter \'role\': %s') % role)
 	groups = api.group_list(user=user, role=role)
 	# Add group role info about the current user
 	for group in groups:
@@ -201,12 +201,8 @@ def remove(api, request, group):
 
 @wrap_rpc
 def handle_invite(api, request, user, group, operation):
-	if operation not in ['accept', 'decline']:
-		raise Exception("Invalid parameter 'operation'")
 	if not api.user:
 		raise AuthError()
-	if user != api.user.name:
-		raise Exception("You are not allowed to handle other's invites.")
 	if request.method == 'POST':
 		form = HandleInviteForm(operation, name=group, data=request.POST)
 		if form.is_valid():
@@ -229,7 +225,7 @@ def apply_(api, request, user, group):
 			api.group_apply(user, group)
 			return HttpResponseRedirect(reverse('admin_group_list'))
 		else:
-			raise Exception('form is not valid')
+			raise Exception('Form is not valid')
 	else:
 		form = ApplyGroupForm(name=group)
 		return form.create_response(request)

@@ -265,6 +265,7 @@ class GroupAddAccountForm(BootstrapForm):
 		('manager', 'Manager'),
 		('user', 'User'),
 		('invited', 'Invited'),
+		('applying', 'Applying'),
 	)
 
 	account = forms.CharField(label=_("Account name"), max_length=50, required=True)
@@ -366,7 +367,7 @@ def group_account_add(api, request, group=None):
 		if group:
 			data['group'] = group
 		form = GroupAddAccountForm(api, data)
-		return render(request, "form.html", {"form": form, "heading": "Add account to group"})
+		return render(request, "form.html", {"form": form, "heading": _("Add account to group")})
 
 @wrap_rpc
 def group_account_remove(api, request, user, group):
