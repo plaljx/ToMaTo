@@ -4,9 +4,90 @@
 {% load url from future %}
 {% load tomato %}
 
+
 {% block title %}
 <title>{%trans 'Topology list'%} - ProviSec Testbed</title>
 {% endblock %}
+
+{% block header %}
+<base href="/"/>
+<link type="text/css" href="/style/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="/style/ui.ribbon.css" rel="stylesheet" />
+<link type="text/css" href="/style/jquery.contextMenu.css" rel="stylesheet" />
+<link type="text/css" href="/style/editor.css" rel="stylesheet" />
+<link type="text/css" href="/style/pretty-json.css" rel="stylesheet" />
+
+<script language="JavaScript" type="text/javascript" src="/js/jquery-ui.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/ui.ribbon.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/jquery.contextMenu.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/raphael.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/util.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/browser_issues.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/underscore-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/backbone-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/pretty-json-min.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="js/editor/settings.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/ajax.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="js/editor/form_element.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/checkbox_element.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/choice_element.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/template_element.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/textarea_element.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/text_element.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="js/editor/window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/attribute_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/connection_attribute_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/error_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/input_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/permissions_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/template_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/default_executable_archive_window.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/editor/windows/default_executable_archive_detail_window.js"></script>
+
+<script type="text/javascript">
+  var $create_topgroup = $('#create_topgroup')
+  $create_topgroup.click(function(){
+  var dialog = new AttributeWindow({
+            title: gettext("Save As Scenario"),
+            width: 500,
+            // height: 400,
+            // closable: false,
+            buttons: [
+                {
+                    text: gettext("Save"),
+                    id: "scenario_dialog_save",
+                    click: function() {
+                        var data = {
+                            "topology_id": t.id,
+                            "name": name.getValue(),
+                            "description": description.getValue(),
+                            "accessibility": accessibility.getValue(),
+                            "author": author.getValue()
+                        };
+                        t.saveAsScenario(data);
+                        if (dialog != null) {
+                            dialog.remove()
+                        }
+                        dialog = null;
+                    }
+                },
+                {
+                    text: gettext("Close"),
+                    click: function() {
+                        dialog.remove();
+                    }
+                }
+            ]
+        });
+  dialog.show()
+})
+</script>
+
+{%endblock%}
 
 {% block content %}
 <h1>{%trans 'Topologies'%}</h1>
@@ -126,5 +207,26 @@ While waiting for the account activation you can create and design topologies bu
 	<button type="submit" formaction="{%url "topology.import_"%}" class="btn btn-default"><span class="glyphicon glyphicon-import"></span> {%trans 'Import from file'%}</button>
     </form>
 {% endif %}
+
+<!-- topgroup -->
+
+<table class="sortable,filterable,stddevcolor, table table-striped">
+  <tr>
+    <th></th>
+    <th></th>
+    <th>{%trans 'Name'%}</th>
+    <th>{%trans 'Toplogy'%}</th>
+  </tr>
+<!-- {%if topgrouplist%}
+{%for topgroup in topgrouplist%}
+  <tr>
+    <td>{{topgroup.name}}</td>
+    <td>{{topgroup.tops}}</td>
+  </tr>
+{%endfor%}
+{%endif%}
+</table>
+<button class="btn btn-success" id = 'create_topgroup'><span class="glyphicon glyphicon-plus"></span> {%trans 'Create new topgroup'%}</button> -->
+
 
 {% endblock %}

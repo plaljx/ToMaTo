@@ -5,44 +5,52 @@ var Topology = Class.extend({
 		this.connections = {};
 		this.pendingNames = [];
 	},
-	_getCanvas: function() {
-		return this.editor.workspace.canvas;
+	_getCanvas: function(canvasname) {
+		// this.editor.workspace.tabCanvas(canvasname)
+		if(canvasname){
+			return this.editor.workspace.canvas_dict[canvasname];
+		}else{
+			return this.editor.workspace.canvas;
+		}
+
 	},
 	loadElement: function(el) {
+		console.log(el)
 		var elObj;
 		switch (el.type) {
 			case "full":
 			case "container":
 			case "repy":
-				elObj = new VMElement(this, el, this._getCanvas());
+				elObj = new VMElement(this, el, this._getCanvas(el._pos['canvas']));
 				break;
+			
 			case "full_interface":
 			case "repy_interface":
-				elObj = new VMInterfaceElement(this, el, this._getCanvas());
+				elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
 				break;
 			case "container_interface":
-				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas());
+				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
 				break;
 			case "external_network":
-				elObj = new ExternalNetworkElement(this, el, this._getCanvas());
+				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "external_network_endpoint":
 				//hide external network endpoints with external_network parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new ExternalNetworkElement(this, el, this._getCanvas()) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos["canvas"])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			case "tinc_vpn":
-				elObj = new VPNElement(this, el, this._getCanvas());
+				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "tinc_endpoint":
 				//hide tinc endpoints with tinc_vpn parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new VPNElement(this, el, this._getCanvas()) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			case "vpncloud":
-				elObj = new VPNElement(this, el, this._getCanvas());
+				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
 				break;
 			case "vpncloud_endpoint":
 				//hide vpncloud endpoints with vpcloud parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new VPNElement(this, el, this._getCanvas()) ;
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
 				break;
 			default:
 				elObj = new UnknownElement(this, el, this._getCanvas());
@@ -58,7 +66,14 @@ var Topology = Class.extend({
 		return elObj;
 	},
 	loadConnection: function(con, elements) {
-		var conObj = new Connection(this, con, this._getCanvas());
+		// var conObj = new Connection(this, con, this._getCanvas());
+		var tmp_canvas;
+		if(con.elements){
+			tmp_canvas = this.elements[con.elements[0]].canvas;
+		}else{
+			tmp_canvas = elements[0].canvas;
+		}
+		var conObj = new Connection(this, con, tmp_canvas);
 		if (con.id) this.connections[con.id] = conObj;
 		if (con.elements) { //elements are given by id
 			for (var j=0; j<con.elements.length; j++) {
@@ -88,6 +103,7 @@ var Topology = Class.extend({
 
 		this.onUpdate();
 	},
+	
 	setBusy: function(busy) {
 		this.busy = busy;
 	},
@@ -250,7 +266,12 @@ var Topology = Class.extend({
 		obj.setBusy(true);
 		this.pendingNames.push(data.name);
 
+		// if(!data._pos['canvas'] && !data.parent){
+		// 	console.log("no canvas");
+		// 	data._pos['canvas'] = this.workspace.canvas.canvas.id;
+		// }
 		var t = this;
+		console.log(data)
 		ajax({
 			url: "topology/" + this.id + "/create_element",
 			data: data,
@@ -277,19 +298,27 @@ var Topology = Class.extend({
 		if (el1 == el2) return;
 		if (! el1.isConnectable()) return;
 		if (! el2.isConnectable()) return;
+		console.log(data);
 		var ids = 0;
 		var t = this;
 		var obj;
 		var callback = function(ready) {
+			console.log("callback")
+			console.log(ready)
 			ids++;
 			if (ids < 2) return;
 			t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "begin", attrs: data});
 			data.elements = [el1.id, el2.id];
+			// data.canvas = this.editor.workspace.canvas.canvas.id;
+			console.log(el1)
+			// data.canvas = el1.
+			console.log(data)
 			ajax({
 				url: "connection/create",
 				data: data,
 				successFn: function(data) {
 					t.connections[data.id] = obj;
+					console.log(obj)
 					obj.updateData(data);
 					t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "end", attrs: data});
 					t.onUpdate();
@@ -303,6 +332,7 @@ var Topology = Class.extend({
 				}
 			});
 		};
+
 		el1 = el1.getConnectTarget(callback);
 		el2 = el2.getConnectTarget(callback);
 		data = data || {};
@@ -463,7 +493,7 @@ var Topology = Class.extend({
 		var ta = $('<textarea cols=60 rows=20 class="notes"></textarea>');
 		ta.text(this.data._notes || "");
 		dialog.append(ta);
-		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">Open Window with Editor</input>');
+		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">' + gettext('Open Window with Editor') + '</input>');
 		var openWithEditor = openWithEditor_html[0];
 		if (this.data._notes_autodisplay) {
 			openWithEditor.checked = true;
@@ -477,7 +507,7 @@ var Topology = Class.extend({
 			resizable: true,
 			height: "auto",
 			width: 550,
-			title: "Notes for Topology",
+			title: gettext("Notes for Topology"),
 			show: "slide",
 			hide: "slide",
 			modal: true,
@@ -531,6 +561,171 @@ var Topology = Class.extend({
 		};
 		this.rename = new InputWindow(windowOptions);
 		this.rename.show();
+	},
+	subtopolgy_addDialog:function(){
+		var t = this
+		var name;
+		dialog = new AttributeWindow({
+			title: gettext('add subtopology'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					canvasname = name.getValue()
+					// t.editor.addSubtopology(canvasname)
+					t.editor.workspace.addCanvas(canvasname)
+					t.subtopology_tabMenu(canvasname)
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+
+		})
+		name = dialog.add(new TextElement({
+            name: "name",
+            label: gettext("Name"),
+            help_text: gettext("The name of your subtopology"),
+        }));
+        dialog.show()
+	},
+	subtopology_tabMenu:function(name){
+		var t = this;
+		// var name;
+		$("#subtopology_tab").append('<button type="button" class="button button-pill button-action" id ="tab_' + name + '" >' + name +'</button>')
+		$('#tab_' + name).click(function(){
+			var canvasname = $('#tab_' + name).text()
+			console.log(canvasname)
+			t.editor.workspace.hideCanvas();
+			t.editor.workspace.tabCanvas(canvasname);	
+		})
+	},
+	// subtopology_tabDialog: function(){
+	// 	var t = this
+	// 	var name
+	// },
+	topgroup_createDialog:function(){
+		var t = this;
+		var dialog;
+		var name, 
+		dialog = new AttributeWindow({
+			title: gettext('Create Topgroup'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					var data = {
+						'name': name.getValue(),
+						'id':t.id,
+					}
+					t.topgroup_create(data)
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+
+		})
+		name = dialog.add(new TextElement({
+            name: "name",
+            label: gettext("Name"),
+            help_text: gettext("The name of your topgroup(unique)"),
+        }));
+		dialog.show()
+	},
+	// topgroup_remove:function(){
+
+	// },
+	topgroup_adddDialog:function(){
+		var t = this;
+		var dialog;
+		var name;
+		var choices = {};
+		ajax({
+			url : 'topgroup/' + this.id + '/list',
+			// data : data,
+			synchronous: true,
+			successFn: function(result){
+				// console.log(choices)
+				for (var i = 0; i  < result.length; i ++){
+					choices[result[i]] = result[i]
+				}
+				console.log(choices)
+				console.log(result)
+			},
+			errorFn:function(error){
+				new errorWindow({error:error})
+			}
+		})
+		dialog = new AttributeWindow({
+			title: gettext('Add to Topgroup'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					var data = {
+						'name': choice.getValue(),
+						'id':t.id,
+					}
+					t.topgroup_add(data)
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+
+		})
+		// name = dialog.add(new TextElement({
+        choice = dialog.add(new ChoiceElement({
+        	name: gettext('topgroupname'),
+        	label: gettext('topgroupname'),
+        	choices: choices,
+        }))
+		dialog.show()
+	},
+	topgroup_create: function(data){
+		var t = this;
+		ajax({
+			url: 'topgroup/'+ t.id + '/create',
+			data: data,
+			successFn:function(result){
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		})
+
+	},
+	topgroup_add: function(data){
+		var t = this;
+		ajax({
+			url: 'topgroup/'+ t.id + '/add',
+			data: data,
+			successFn:function(result){
+			},
+			errorFn:function(error){
+				new errorWindow({error:error});
+			}
+		})
+
 	},
 	renewDialog: function() {
 		var t = this;

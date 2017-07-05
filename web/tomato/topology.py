@@ -69,6 +69,11 @@ def list(api, request, show_all=False, organization=None):
 
 		top['processed'] = {
 		'timeout_critical': top['timeout'] - time.time() < serverInfo()['topology_timeout']['warning']}
+
+	# for topgroup
+	# topgrouplist = api.topgroup_list()
+
+
 	return render(request, "topology/list.html",
 		{'top_list': toplist, 'organization': organization, 'orgas': orgas, 'show_all': show_all})
 
@@ -108,8 +113,10 @@ def _display(api, request, info, tutorial_state):
 		'height':int(600 * editor_size_scale)
 	}
 	editor_size['marginleft'] = int( (800-editor_size['width']) / 2 )
-        print "web_resources():"
-        print web_resources()
+
+	# for subtopology
+	# subtopology_list = api.subtopology_list(info['id'])
+
 	res = render(request, "topology/info.html", {
 		'top': info,
 		'timeout_settings': serverInfo()["topology_timeout"],
@@ -153,6 +160,8 @@ def create(api, request):
 		raise AuthError()
 	info = api.topology_create()
 	api.topology_modify(info['id'], {'_initialized': False})
+	# for subtopology
+	api.subtopology_init(info['id'])
 	return redirect("tomato.topology.info", id=info["id"])
 
 

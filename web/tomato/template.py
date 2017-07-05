@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# ToMaTo (Topology management software) 
+# ToMaTo (Topology management software)
 # Copyright (C) 2012 Integrated Communication Systems Lab, University of Kaiserslautern
 #
 # This file is part of the ToMaTo project
@@ -240,4 +238,4 @@ def edit(api, request, res_id=None):
 		res_inf['creation_date'] = datetime.date.fromtimestamp(float(res_inf['creation_date'] or "0.0"))
 		res_inf['urls'] = "\n".join(res_inf['urls'])
 		form = EditTemplateForm(res_id, (res_inf['tech']==TypeName.FULL_VIRTUALIZATION), res_inf)
-		return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['tech']+")"})
+	return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['tech']+")"})

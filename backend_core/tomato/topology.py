@@ -29,6 +29,8 @@ from .lib.constants import StateName, ActionName
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 from .lib.references import Reference
 
+from .topgroup import Topgroup
+
 class TimeoutStep:
 	INITIAL = 0
 	WARNED = 9
@@ -64,6 +66,10 @@ class Topology(Entity, BaseDocument):
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
 	name = StringField()
 	clientData = DictField(db_field='client_data')
+	# topgroup
+	topgroup = ReferenceField(Topgroup,reverse_delete_rule=DENY)
+	topgroupId = ReferenceFieldId(topgroup)
+	
 	meta = {
 		'ordering': ['name'],
 		'indexes': [

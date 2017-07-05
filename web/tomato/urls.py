@@ -243,7 +243,21 @@ urlpatterns = patterns('',
     url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
     url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
     url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
-    # (r'^fight/$', 'tomato.finght.start'),
+    
+
+    # topgroup
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/list$', 'tomato.ajax.topgroup_list'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/gettopgroupinfo$', 'tomato.ajax.topgroup_info'),
+
+    (r'^ajax/groupconnection/create$', 'tomato.ajax.groupconnection_create'),
+
+
+    # subtopology
+    (r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
+    (r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
+    # (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
 
 	# Group
 	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all

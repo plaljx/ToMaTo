@@ -79,3 +79,9 @@ from traffic import traffic_create, traffic_list, traffic_info, traffic_remove, 
 from group import group_remove, group_modify, group_info, group_list, group_create,\
 	account_list_by_group, account_set_group_role, group_invite, account_handle_invite,\
 	handle_application, group_apply, group_topology_list, topology_add_group, topology_remove_group
+
+# topgroup
+from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info
+from groupconnection import *
+
+from subtopology import *
