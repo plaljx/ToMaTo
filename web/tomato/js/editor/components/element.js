@@ -25,8 +25,6 @@ var Element = Component.extend({
 	},
 	isConnectable: function() {
 		if (this.connection) {
-			console.log(this.connection)
-			console.log("this.connection")
 			return false;
 		}
 		if (! this.caps.children) return false;
@@ -150,12 +148,11 @@ var Element = Component.extend({
 		}, this, this, this);
 	},
 	getConnectTarget: function() {
-		console.log("getConnectionTarget")
 		return this;
 	},
 	getPos: function() {
 		if (! this.data._pos) {
-			this.data._pos = {x: Math.random(), y: Math.random()};
+			this.data._pos = {x: Math.random(), y: Math.random(), canvas:this.editor.workspace.canvas.canvas.id};
 			this.modify_value("_pos", this.data._pos);
 		}
 		return this.data._pos;

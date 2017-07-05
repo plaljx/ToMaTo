@@ -5,7 +5,6 @@ var Workspace = Class.extend({
 		container.addClass("ui-widget-content").addClass("ui-corner-all")
 		container.addClass("tomato").addClass("workspace");
 		container[0].obj = editor.topology;
-		// console.log(container[0])
 		this.container.click(function(){});
     	this.size = {x: this.container.width(), y: this.container.height()};
 
@@ -81,20 +80,14 @@ var Workspace = Class.extend({
     	});
 
     	this.connectPath = this.canvas.connectPath
-    	
-    	// this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-    	// console.log(this.connectPath)
 		this.container.click(function(evt){
 			t.onClicked(evt);
 		});
 		this.container.mousemove(function(evt){
 			t.onMouseMove(evt);
 		});
-		// console.log(this.container.click)
 		this.busyIcon = this.canvas.image("img/loading_big.gif", this.size.x/2, this.size.y/2, 32, 32);
 		this.busyIcon.attr({opacity: 0.0});
-
-		console.log(this.canvas)
 		
 		
 	},
@@ -102,16 +95,13 @@ var Workspace = Class.extend({
 	addCanvas:function(canvasname){
 		var t = this;
 		this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
-    	// t.connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
 
 		this.canvas_dict[canvasname].canvas.id = canvasname
 		this.canvas_dict[canvasname].workspace = this
 
 		this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-		
-		// this.connectPath = this.cnavas.connectPath
+
 		$("#" + canvasname).hide()
-		// this.tabCanvas(canvasname)
 		var data = {
 			'name': canvasname,
 		}
@@ -119,7 +109,6 @@ var Workspace = Class.extend({
 			url:'topology/'+ this.editor.topology.id + '/addsubtopology',
 			data:data,
 			successFn:function(){
-				// console.log('success')
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});
@@ -159,24 +148,19 @@ var Workspace = Class.extend({
 		this.connectPath.attr({path: "M"+pos.x+" "+pos.y+"L"+mousePos.x+" "+mousePos.y});
 	},
 	onClicked: function(evt) {
-		console.log(this.editor.mode)
 		switch (this.editor.mode) {
 			case Mode.position:
 				var pos;
 				if (evt.offsetX) {
-					// console.log(evt.offsetX)
 					pos = this.relPos({x: evt.offsetX, y: evt.offsetY});
-					// console.log(pos)
 				}
 				else {
 					var objPos = this.container.offset();
 					pos = this.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
-					// console.log(pos)
 				}
 				this.editor.positionElement(pos);
 				break;
 			default:
-			// console.log('defult')
 				break;
 		}
 	},

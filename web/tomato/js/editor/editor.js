@@ -58,7 +58,6 @@ var Editor = Class.extend({
 		ajax ({
 			url: "topology/"+options.topology+"/info",
 			successFn: function(data){
-				console.log(data)
 				t.topology.load(data);
 				t.workspace.setBusy(false);
 				if (t.topology.data._initialized) {
@@ -155,21 +154,16 @@ var Editor = Class.extend({
 		this.connectElement = el;
 	},
 	onElementSelected: function(el) {
-		console.log(el)
 		switch (this.mode) {
 			case Mode.connectOnce:
-				console.log(this.mode);
 				if (! el.isConnectable()) {
 					return;
 				}
 				this.topology.createConnection(el, this.connectElement);
-				console.log("create connection")
 				this.setMode(Mode.select);
 				break;
 			case Mode.connect:
-				console.log(this.mode);
 				if (! el.isConnectable()) return;
-				// console.log("create connection")
 				if (this.connectElement) {
 					this.topology.createConnection(el, this.connectElement);
 					this.connectElement = null;

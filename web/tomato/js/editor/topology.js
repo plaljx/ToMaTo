@@ -12,9 +12,7 @@ var Topology = Class.extend({
 		}else{
 			return this.editor.workspace.canvas;
 		}
-		
-		// console.log(this.editor.workspace.canvas)
-		// return this.editor.workspace.canvas;
+
 	},
 	loadElement: function(el) {
 		console.log(el)
@@ -99,7 +97,6 @@ var Topology = Class.extend({
 		data.elements.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);});
 		for (var i=0; i<data.elements.length; i++) this.loadElement(data.elements[i]);
 		this.connections = {};
-		// console.log(data.connections)
 		for (var i=0; i<data.connections.length; i++) this.loadConnection(data.connections[i]);
 
 		this.editor.optionsManager.loadOpts();
@@ -710,8 +707,6 @@ var Topology = Class.extend({
 			url: 'topgroup/'+ t.id + '/create',
 			data: data,
 			successFn:function(result){
-				console.log('success')
-				console.log(result)
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});
@@ -725,8 +720,6 @@ var Topology = Class.extend({
 			url: 'topgroup/'+ t.id + '/add',
 			data: data,
 			successFn:function(result){
-				console.log('success')
-				console.log(result)
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});

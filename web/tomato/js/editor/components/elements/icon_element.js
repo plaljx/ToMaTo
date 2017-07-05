@@ -83,11 +83,6 @@ var IconElement = Element.extend({
 	paint: function() {
 		console.log(this.canvas)
 		var pos = this.canvas.workspace.absPos(this.getPos());
-		// console.log(this)
-		// console.log(this.canvas)
-		// console.log(this.getPos())
-		// console.log(pos)
-		// console.log('paint...')
 		this.icon = this.canvas.image(this.iconUrl(), pos.x-this.iconSize.x/2, pos.y-this.iconSize.y/2-5, this.iconSize.x, this.iconSize.y);
 		if(editor.options.element_name_on_top) {
 			

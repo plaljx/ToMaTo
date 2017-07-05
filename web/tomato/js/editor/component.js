@@ -212,7 +212,7 @@ var Component = Class.extend({
 	},
 	modify_value: function(name, value) {
 		var attrs = {};
-		//fiexd the element's pos modify for subtopology
+		//fiexd the element's postion's modify for subtopology
 		attrs[name] = value;
 		if(name == "_pos"){
 			attrs[name].canvas = this.editor.workspace.canvas.canvas.id;

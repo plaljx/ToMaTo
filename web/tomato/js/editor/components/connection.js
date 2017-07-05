@@ -72,7 +72,6 @@ var Connection = Component.extend({
 			var width = settings.connectionHandleWidth;
 			this.path.hide()
 			var pos = this.elements[0].getPos()
-			console.log(pos)
 			// this.handle = this.canvas.rect(pos.x-(width/2), pos.y-(width/2), width, width).attr({fill: this.getHandleColor(), transform: "R"+this.getAngle()});
 			this.handle = this.canvas.rect(pos.x, pos.y, width, width).attr({fill: this.getHandleColor(), transform: "R"+this.getAngle()});
 
@@ -89,7 +88,6 @@ var Connection = Component.extend({
 
 		}else{
 			this.path = this.canvas.path(this.getPath());
-			console.log(this.path)
 			this.path.toBack();
 			var pos = this.getAbsPos();
 			var width = settings.connectionHandleWidth;
