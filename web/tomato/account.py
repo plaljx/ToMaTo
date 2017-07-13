@@ -258,6 +258,52 @@ class AnnouncementForm(BootstrapForm):
 			)
 		)
 
+class GroupAddAccountForm(BootstrapForm):
+
+	choices = (
+		('owner', 'Owner'),
+		('manager', 'Manager'),
+		('user', 'User'),
+		('invited', 'Invited'),
+		('applying', 'Applying'),
+	)
+
+	account = forms.CharField(label=_("Account name"), max_length=50, required=True)
+	group = forms.CharField(label=_("Group name"), max_length=50, required=True)
+	role = forms.ChoiceField(label=_("Role"), choices=choices)
+
+	def __init__(self, api, *args, **kwargs):
+		super(GroupAddAccountForm, self).__init__(*args, **kwargs)
+		if 'group' in self.data:
+			# self.fields['group'].initial = self.data['group']
+			self.fields['group'].widget.attrs['readonly'] = 'True'
+		self.helper.form_action = reverse("group_account_add", kwargs={"group": self.data['group']})
+		self.helper.layout = Layout(
+			'account',
+			'group',
+			'role',
+			Buttons.cancel_save,
+		)
+
+class GroupInviteAccountForm(GroupAddAccountForm):
+	"""
+	Group invite operation is just a group_account_add operation
+	with role be restricted to 'invited'
+	Thus, inherit GroupAddAccountForm
+	"""
+	def __init__(self, api, *args, **kwargs):
+		super(GroupInviteAccountForm, self).__init__(api, *args, **kwargs)
+		# TODO: May remove 'role' field
+		self.fields['role'].widget.attrs['readonly'] = 'True'
+		# self.fields['role'].widget.attrs['disabled'] = 'disabled'
+		self.helper.form_action = reverse("group_account_invite", kwargs={"group": self.data['group']})
+		self.helper.layout = Layout(
+			'account',
+			'group',
+			'role',
+			Buttons.cancel_save
+		)
+
 @wrap_rpc
 def list(api, request, with_flag=None, organization=True):
 	if not api.user:
@@ -274,6 +320,107 @@ def list(api, request, with_flag=None, organization=True):
 	for acc in accs:
 		acc['flags_name'] = mark_safe(u'\n'.join(render_account_flag_fixedlist(api, acc['flags'])))
 	return render(request, "account/list.html", {'accounts': accs, 'orgas': orgas, 'with_flag': with_flag, 'organization':organization, 'organization_label':organization_label})
+
+@wrap_rpc
+def list_by_group(api, request, group=None, role=None):
+	if not api.user:
+		raise AuthError()
+	if role not in ['owner', 'manager', 'user', 'invited', None]:
+		raise Exception('Unknown role %s' % role)
+	account_list = api.account_list_by_group(group=group, role=role)
+	# add account role info about the group
+	for account in account_list:
+		for group_role in account['groups']:
+			if group_role['group'] == group:
+				account['role'] = group_role['role']
+	group_list = api.group_list()
+	group = api.group_info(name=group)
+
+	return render(request, "account/list_by_group.html",
+	              {
+		              'accounts': account_list,
+		              'group': group,
+		              'role': role,
+		              'group_list': group_list
+	              })
+
+@wrap_rpc
+def group_account_add(api, request, group=None):
+	"""
+	Admin access only
+	add a user to a specified group and set a role.
+	"""
+	if not api.user:
+		raise AuthError()
+	if not api.user.isGlobalAdmin:
+		raise Exception('Need global admin')
+	if request.method == 'POST':
+		form = GroupAddAccountForm(api, data=request.REQUEST)
+		if form.is_valid():
+			data = form.cleaned_data
+			api.account_set_group_role(data['account'], data['group'], data['role'])
+			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": data['group']}))
+		else:
+			raise Exception('Form is not valid')
+	else:
+		data = {}
+		if group:
+			data['group'] = group
+		form = GroupAddAccountForm(api, data)
+		return render(request, "form.html", {"form": form, "heading": _("Add account to group")})
+
+@wrap_rpc
+def group_account_remove(api, request, user, group):
+	"""
+	Admin, group owner, group manager can directly remove a user role from the group
+	"""
+	# TODO: can only remove roles lower than current use have
+	# TODO: Move the permission checking to backend_api, need adjust APIs
+	# e.g. Manager can remove users, but cannot remove a manager
+	if not api.user:
+		raise AuthError()
+	if not api.user.isGlobalAdmin and not api.user.canManageGroup(group):
+		raise Exception("Need global admin, or group owner or manager")
+	if request.method == 'POST':
+		form = RemoveConfirmForm(request.POST)
+		if form.is_valid():
+			api.account_set_group_role(user, group, None)
+			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": group}))
+	else:
+		form = RemoveConfirmForm.build(reverse("tomato.account.group_account_remove",
+		                                       kwargs={"user": user, "group": group}))
+		return render(request,
+		              "form.html",
+		              {"heading": "Remove Account from group",
+		               "message_before": "Are you sure to remove account %s from group %s?" % (user, group),
+		               'form': form})
+
+@wrap_rpc
+def group_account_invite(api, request, group=None):
+	"""
+	Invite a user to specified group, set user's role to 'invited'
+	"""
+	# TODO: Move the permission checking to backend_api
+	# TODO: May move group related things to group.py
+	if not api.user:
+		raise AuthError()
+	if not api.user.isGlobalAdmin and not api.user.canManageGroup(group):
+		raise Exception('Need owner or manager of the group, or global admin')
+	if request.method == 'POST':
+		form = GroupInviteAccountForm(api, data=request.REQUEST)
+		if form.is_valid():
+			data = form.cleaned_data
+			api.group_invite(data['account'], data['group'])
+			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": data['group']}))
+		else:
+			raise Exception('Form is not valid')
+	else:
+		data = {}
+		if group:
+			data['group'] = group
+		data['role'] = 'invited'
+		form = GroupInviteAccountForm(api, data)
+		return render(request, "form.html", {"form": form, "heading": "Invite account to group"})
 
 @wrap_rpc
 def info(api, request, id=None):
