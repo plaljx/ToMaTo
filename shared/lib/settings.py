@@ -171,10 +171,12 @@ web:
     size:    25
 
   web-resources:
-    tutorial-list:        http://10.117.2.40/tutorials/index.json
-    default-executable-archive-list: http://10.117.2.40/static/archives/index.json
-    #default-executable-archive-list:
-    custom-element-icons: http://10.117.2.40/static/custom_icons/index.json
+    tutorial-list:
+    #tutorial-list: http://localhost/tutorials/index.json
+    default-executable-archive-list:
+    #default-executable-archive-list: http://localhost/static/archives/index.json
+    custom-element-icons:
+    #custom-element-icons: http://localhost/static/custom_icons/index.json
 
   # specify how often user information is updated (seconds between updates).
   # a longer interval improves performance for webfrontend and backend,

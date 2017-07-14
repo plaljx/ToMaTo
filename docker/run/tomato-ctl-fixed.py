@@ -298,7 +298,7 @@ def generate_default_config():
 		'web': {
 			'enabled': True,
 			'image': 'tomato_web',
-			'ports': [(80, 80)],
+			'ports': [(80, 80), (443, 443)],
 			'timezone': 'Europe/Berlin',
 			'additional_args': [],
 			'additional_directories': [

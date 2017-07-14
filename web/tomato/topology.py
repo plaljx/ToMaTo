@@ -99,8 +99,6 @@ def _display(api, request, info, tutorial_state):
 		'height':int(600 * editor_size_scale)
 	}
 	editor_size['marginleft'] = int( (800-editor_size['width']) / 2 )
-        print "web_resources():"
-        print web_resources()
 	res = render(request, "topology/info.html", {
 		'top': info,
 		'timeout_settings': serverInfo()["topology_timeout"],
@@ -120,7 +118,7 @@ def _display(api, request, info, tutorial_state):
 		},
 		'vm_element_config': TypeTechTrans.TECH_DICT,
 		'tech_names': TechName.ONSCREEN
-	})	
+	})
 	return res
 
 
