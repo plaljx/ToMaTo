@@ -58,13 +58,13 @@ def dateToTimestamp(date):
 	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 class TemplateForm(BootstrapForm):
-	label = forms.CharField(max_length=255, help_text=_("The displayed label for this template"))
-	subtype = forms.CharField(max_length=255, required=False)
-	description = forms.CharField(widget = forms.Textarea, required=False)
+	label = forms.CharField(label=_("Label"), max_length=255, help_text=_("The displayed label for this template"))
+	subtype = forms.CharField(label=_("Subtype"), max_length=255, required=False)
+	description = forms.CharField(label=_("Description"), widget = forms.Textarea, required=False)
 	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort templates in the editor (higher preference first). The template with highest preference will be the default. Must be an integer number."))
 	restricted = forms.BooleanField(label=_("Restricted"), help_text=_("Restrict usage of this template to administrators"), required=False)
 	nlXTP_installed = forms.BooleanField(label=_("nlXTP Guest Modules installed"), help_text=_("Ignore this for Repy devices."), required=False)
-	creation_date = forms.DateField(required=False,widget=forms.TextInput(attrs={'class': 'datepicker'}))
+	creation_date = forms.DateField(label=_("Creation Date"), required=False,widget=forms.TextInput(attrs={'class': 'datepicker'}))
 	show_as_common = forms.BooleanField(label=_("Show in Common Elements"), help_text=_("Show this template in the common elements section in the editor"), required=False)
 	icon = forms.URLField(label=_("Icon"), help_text=_("URL of a 32x32 icon to use for elements of this template, leave empty to use the default icon"), required=False)
 	kblang = forms.CharField(max_length=50,label=_("Keyboard Layout"),widget = forms.widgets.Select(choices=kblang_options), help_text=_("Only for full-virtualization templates"), required=False)
@@ -76,8 +76,8 @@ class TemplateForm(BootstrapForm):
 		self.fields['kblang'].initial="en_US"
 	
 class AddTemplateForm(TemplateForm):
-	name = forms.CharField(max_length=50,label=_("Internal Name"), help_text=_("Must be unique for all profiles. Cannot be changed. Not displayed."))
-	tech = forms.CharField(max_length=255,widget = forms.widgets.Select(choices=techs_choices()))
+	name = forms.CharField(max_length=50, label=_("Internal Name"), help_text=_("Must be unique for all profiles. Cannot be changed. Not displayed."))
+	tech = forms.CharField(max_length=255, label=_("Tech"), widget = forms.widgets.Select(choices=techs_choices()))
 	def __init__(self, *args, **kwargs):
 		super(AddTemplateForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(add)

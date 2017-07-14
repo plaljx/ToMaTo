@@ -45,11 +45,11 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class HostForm(AddEditForm):
-	name = forms.CharField(max_length=255, help_text=_("The host's name. This is also its unique id."))
-	address = forms.CharField(max_length=255, help_text=_("The host's IP address."))
-	rpcurl = forms.CharField(max_length=255, help_text=_("The host's RPC url."))
-	site = forms.CharField(max_length=50, help_text=_("The site this host belongs to."))
-	enabled = forms.BooleanField(initial=True, required=False, help_text=_("Whether this host is enabled."))
+	name = forms.CharField(max_length=255, label=_("Name"), help_text=_("The host's name. This is also its unique id."))
+	address = forms.CharField(max_length=255, label=_("Address"), help_text=_("The host's IP address."))
+	rpcurl = forms.CharField(max_length=255, label=("Rpcurl"), help_text=_("The host's RPC url."))
+	site = forms.CharField(max_length=50, label=_("Stie"), help_text=_("The site this host belongs to."))
+	enabled = forms.BooleanField(initial=True, required=False, label=_("Enabled"), help_text=_("Whether this host is enabled."))
 	description = forms.CharField(widget=forms.Textarea, label=_("Description"), required=False)
 
 	buttons = Buttons.cancel_add
@@ -71,7 +71,7 @@ class HostForm(AddEditForm):
 		return HttpResponseRedirect(reverse("tomato.admin.host.info", kwargs={"name": self.cleaned_data['name']}))
 
 class AddHostForm(HostForm):
-	title = "Add Host"
+	title = _("Add Host")
 
 	def __init__(self, site=None, publickey=None, *args, **kwargs):
 		super(AddHostForm, self).__init__(*args, **kwargs)
@@ -106,7 +106,7 @@ class AddHostForm(HostForm):
 
 class EditHostForm(HostForm):
 	buttons = Buttons.cancel_save
-	title = "Editing Host '%(name)s'"
+	title = _("Editing Host '%(name)s'")
 
 	def __init__(self, *args, **kwargs):
 		super(EditHostForm, self).__init__(*args, **kwargs)
@@ -118,8 +118,8 @@ class EditHostForm(HostForm):
 		api.host_modify(formData['name'], {k: v for k, v in formData.iteritems() if k not in ('name',)})
 
 class RemoveHostForm(RemoveConfirmForm):
-	message = "Are you sure you want to remove the host '%(name)s'?"
-	title = "Remove Host '%(name)s'"
+	message = _("Are you sure you want to remove the host '%(name)s'?")
+	title = _("Remove Host '%(name)s'")
 
 
 @wrap_rpc

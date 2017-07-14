@@ -18,6 +18,7 @@
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 from django import forms
 from lib import wrap_rpc
 from admin_common import RemoveConfirmForm, BootstrapForm, Buttons, append_empty_choice
@@ -29,9 +30,9 @@ from django.core.urlresolvers import reverse
 from lib.error import UserError #@UnresolvedImport
 
 class NetworkInstanceForm(BootstrapForm):
-	host = forms.CharField(label="Host")
-	bridge = forms.CharField(max_length=255,label="Bridge",help_text="TODO: write a useful help text here...")
-	network = forms.CharField(label="Network")
+	host = forms.CharField(label=_("Host"))
+	bridge = forms.CharField(max_length=255, label=_("Bridge"), help_text=_("TODO: write a useful help text here..."))
+	network = forms.CharField(label=_("Network"))
 	def __init__(self, api, *args, **kwargs):
 		super(NetworkInstanceForm, self).__init__(*args, **kwargs)
 		self.fields["network"].widget = forms.widgets.Select(choices=append_empty_choice(external_network_list(api)))

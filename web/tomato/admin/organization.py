@@ -28,6 +28,7 @@ from django.shortcuts import render
 from django import forms
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
 
 from tomato.crispy_forms.layout import Layout
 from ..admin_common import Buttons
@@ -38,11 +39,11 @@ from . import AddEditForm, RemoveConfirmForm
 
 class OrganizationForm(AddEditForm):
     
-    name = forms.CharField(max_length=50, help_text="The name of the organization. Must be unique to all organizations. e.g.: ukl")
-    label = forms.CharField(max_length=255, label="Label", help_text="e.g.: Technische Universit&auml;t Kaiserslautern")
-    homepage_url = forms.URLField(max_length=255, required=False, help_text="must start with protocol, i.e. http://www.tomato-testbed.org")
-    image_url = forms.URLField(max_length=255, required=False, help_text="must start with protocol, i.e. http://www.tomato-testbed.org/logo.png")
-    description = forms.CharField(widget = forms.Textarea, label="Description", required=False)
+    name = forms.CharField(max_length=50, label=_("Name"), help_text=_("The name of the organization. Must be unique to all organizations. e.g.: ukl"))
+    label = forms.CharField(max_length=255, label=_("Label"), help_text=_("e.g.: Technische Universit&auml;t Kaiserslautern"))
+    homepage_url = forms.URLField(max_length=255, label=_("Homepage Url"), required=False, help_text=_("must start with protocol, i.e. http://www.tomato-testbed.org"))
+    image_url = forms.URLField(max_length=255, required=False, label=_("Image Url"), help_text=_("must start with protocol, i.e. http://www.tomato-testbed.org/logo.png"))
+    description = forms.CharField(widget = forms.Textarea, label=_("Description"), required=False)
     
     buttons = Buttons.cancel_add
 
@@ -62,7 +63,7 @@ class OrganizationForm(AddEditForm):
 
         
 class AddOrganizationForm(OrganizationForm):
-    title = "Add Organization"
+    title = _("Add Organization")
 
     def __init__(self, *args, **kwargs):
         super(AddOrganizationForm, self).__init__(*args, **kwargs)
@@ -74,7 +75,7 @@ class AddOrganizationForm(OrganizationForm):
 
 class EditOrganizationForm(OrganizationForm):
     buttons = Buttons.cancel_save
-    title = "Editing Organization '%(name)s'"
+    title = _("Editing Organization '%(name)s'")
     formaction = "tomato.admin.organization.edit"
     def __init__(self, *args, **kwargs):
         super(EditOrganizationForm, self).__init__(*args, **kwargs)
@@ -88,8 +89,8 @@ class EditOrganizationForm(OrganizationForm):
 
     
 class RemoveOrganizationForm(RemoveConfirmForm):
-    message="Are you sure you want to remove the organization '%(name)s'?"
-    title="Remove Organization '%(name)s'"
+    message = _("Are you sure you want to remove the organization '%(name)s'?")
+    title = _("Remove Organization '%(name)s'")
 
 @wrap_rpc
 def list(api, request):

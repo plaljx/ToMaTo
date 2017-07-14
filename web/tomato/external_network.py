@@ -34,8 +34,8 @@ class NetworkForm(BootstrapForm):
 	kind = forms.CharField(label=_("Kind"),max_length=255)
 	label = forms.CharField(max_length=255,label=_("Label"),help_text=_("Visible Name"))
 	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort networks in the editor (higher preference first). The item with the highest preference will be the default one. An integer number."))
-	description = forms.CharField(widget = forms.Textarea, required=False, label = _('description'))
-	big_icon = forms.BooleanField(label=_("Show as a big icon in the editor"), required=False)
+	description = forms.CharField(widget=forms.Textarea, required=False, label=_('Description'))
+	big_icon = forms.BooleanField(label=("Big Icon"), help_text=_("Show as a big icon in the editor"), required=False)
 	show_as_common = forms.BooleanField(label=_("Show in Common Elements"), help_text=_("Show this network in the common elements section in the editor"), required=False)
 	def __init__(self, *args, **kwargs):
 		super(NetworkForm, self).__init__(*args, **kwargs)

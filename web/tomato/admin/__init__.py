@@ -24,6 +24,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
 from tomato.crispy_forms.layout import Layout
 from tomato.crispy_forms.bootstrap import FormActions, StrictButton
@@ -75,10 +76,10 @@ class Buttons:
 	def default(**kwargs):
 		return createButtons(**kwargs)
 
-	cancel_save = createButtons()
-	cancel_add = createButtons(label="Add")
-	cancel_continue = createButtons(label="Continue")
-	cancel_remove = createButtons(icon="trash", label="Remove", class_="btn-warning")
+	cancel_save = createButtons(label=_("Save"))
+	cancel_add = createButtons(label=_("Add"))
+	cancel_continue = createButtons(label=_("Continue"))
+	cancel_remove = createButtons(icon="trash", label=_("Remove"), class_="btn-warning")
 
 
 class BootstrapForm(forms.Form):
@@ -93,7 +94,7 @@ class BootstrapForm(forms.Form):
 
 
 class RenderableForm(BootstrapForm):
-	title = "Untitled Form"
+	title = _("Untitled Form")
 	message = None
 	message_after = None
 

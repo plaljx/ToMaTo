@@ -19,6 +19,7 @@
 from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
 
 import re, time
 
@@ -36,13 +37,13 @@ from tomato.crispy_forms.layout import Layout
 
 
 class ImportTopologyForm(BootstrapForm):
-	topologyfile = forms.FileField(label="Topology File")
+	topologyfile = forms.FileField(label=_("Topology File"))
 
 	def __init__(self, *args, **kwargs):
 		super(ImportTopologyForm, self).__init__(*args, **kwargs)
 		self.helper.layout = Layout(
 			'topologyfile',
-			Buttons.default(label="Import")
+			Buttons.default(label=_("Import"))
 		)
 
 
@@ -167,9 +168,11 @@ def import_(api, request):
 				api.topology_modify(id_, {'_notes': note, '_notes_autodisplay': True})
 			return redirect("tomato.topology.info", id=id_)
 		else:
+			# TODO: i18n
 			return render(request, "form.html", {'form': form, "heading": "Import Topology",
 			'message_before': "Here you can import a topology file which you have previously exported from the Editor."})
 	else:
+		# TODO: i18n
 		form = ImportTopologyForm()
 		return render(request, "form.html", {'form': form, "heading": "Import Topology",
 		'message_before': "Here you can import a topology file which you have previously exported from the Editor."})

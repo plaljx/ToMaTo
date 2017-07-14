@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 12:12+0800\n"
+"POT-Creation-Date: 2017-07-14 11:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,2078 +17,2609 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: account.py:132
+#: tomato/account.py:132 tomato/account.py:271
 msgid "Account name"
 msgstr "账户名称"
 
-#: account.py:133
+#: tomato/account.py:133
 msgid "Password"
 msgstr "重置密码"
 
-#: account.py:134
+#: tomato/account.py:134
 msgid "Password (repeated)"
 msgstr "密码（重复）"
 
-#: account.py:136 templates/account/info.html:39 templates/account/list.html:79
+#: tomato/account.py:135 tomato/admin/site.py:81
+#: tomato/templates/account/info.html:43 tomato/templates/account/list.html:81
+#: tomato/templates/account/list_by_group.html:51
+#: tomato/templates/host/info.html:53 tomato/templates/organization/info.html:7
+#: tomato/templates/organization/info.html:16
+msgid "Organization"
+msgstr "组织"
+
+#: tomato/account.py:136 tomato/templates/account/info.html:39
+#: tomato/templates/account/list.html:79
+#: tomato/templates/account/list_by_group.html:49
 msgid "Origin"
 msgstr "缘由"
 
-#: account.py:137 templates/account/info.html:35 templates/account/list.html:80
+#: tomato/account.py:137 tomato/templates/account/info.html:35
+#: tomato/templates/account/list.html:80
+#: tomato/templates/account/list_by_group.html:50
 msgid "Full name"
 msgstr "全名"
 
-#: account.py:140
+#: tomato/account.py:138 tomato/templates/account/info.html:47
+msgid "Email"
+msgstr "邮箱"
+
+#: tomato/account.py:139
+msgid "flags"
+msgstr "标记"
+
+#: tomato/account.py:140
 msgid "Reason for Registering"
 msgstr "注册原因"
 
-#: account.py:141
+#: tomato/account.py:141
 msgid "Inform user"
 msgstr "通知用户"
 
-#: account.py:148
+#: tomato/account.py:148
 msgid "Passwords are not the same"
 msgstr "密码（重复）"
 
-#: account.py:390
+#: tomato/account.py:237
+msgid "Title"
+msgstr "标题"
+
+#: tomato/account.py:238
+msgid "Message"
+msgstr "消息"
+
+#: tomato/account.py:239
+msgid "Include Reference to:"
+msgstr "包括参考"
+
+#: tomato/account.py:240
+msgid "Referenced Object ID"
+msgstr "参考对象ID"
+
+#: tomato/account.py:240
+msgid "Usually ID or name of the entity to be referenced."
+msgstr "通常要引用的名称或ID"
+
+#: tomato/account.py:241
+msgid "Show Sender"
+msgstr "显示发送人"
+
+#: tomato/account.py:241
+msgid "Show your name as sender in the notification"
+msgstr "接收通知"
+
+#: tomato/account.py:272
+msgid "Group name"
+msgstr "小组名称"
+
+#: tomato/account.py:273 tomato/templates/account/list_by_group.html:33
+#: tomato/templates/account/list_by_group.html:52
+msgid "Role"
+msgstr "角色"
+
+#: tomato/account.py:370
+msgid "Add account to group"
+msgstr "添加用户到小组"
+
+#: tomato/account.py:393
+msgid "Remove Account from group"
+msgstr "移除账户"
+
+#: tomato/account.py:394
+#, python-format
+msgid "Are you sure to remove account %(user)s from group %(group)s?"
+msgstr "你确定要接受来自用户%(user)s加入小组%(group)s的申请吗?"
+
+#: tomato/account.py:422
+msgid "Invite account to group"
+msgstr "邀请用户到小组"
+
+#: tomato/account.py:494
+msgid "Edit Account "
+msgstr "编辑账户"
+
+#: tomato/account.py:536
 msgid "Register New Account"
 msgstr "创建一个新的账户"
 
-#: admin/host.py:48
-msgid "The host's name. This is also its unique id."
-msgstr "主机名字，独一无二的。"
+#: tomato/account.py:548
+msgid "Reset Password"
+msgstr "重置密码"
 
-#: admin/host.py:49
-msgid "The host's IP address."
-msgstr "主机的IP地址"
+#: tomato/account.py:548
+msgid "Are you sure you want to reset the password of the account '"
+msgstr "你确定要重置此账户的密码吗?"
 
-#: admin/host.py:50
-msgid "The host's RPC url."
-msgstr "主机的RPC url"
+#: tomato/account.py:558 tomato/templates/account/info.html:101
+msgid "Remove Account"
+msgstr "移除账户"
 
-#: admin/host.py:51
-msgid "The site this host belongs to."
-msgstr "主机隶属站点"
+#: tomato/account.py:558
+msgid "Are you sure you want to remove the account '"
+msgstr "你确定要删除此账户吗?"
 
-#: admin/host.py:52
-msgid "Whether this host is enabled."
-msgstr "主机是否可用"
+#: tomato/account.py:639
+msgid "Broadcast Announcement"
+msgstr "广播消息"
 
-#: admin/host.py:53 templates/dumpmanager/info.html:101
-#: templates/dumpmanager/list.html:34 templates/error/backend_trouble.html:28
-#: templates/error/exception.html:32 templates/error/fault.html:16
-#: templates/external_networks/list.html:52 templates/host/info.html:177
-#: templates/organization/info.html:50 templates/organization/info.html:120
-#: templates/profile/info.html:63 templates/scenario/info.html:66
-#: templates/scenario/list.html:327 templates/security/info.html:85
-#: templates/security_resources/malicious_code_info.html:51
-#: templates/security_resources/security_software_info.html:51
-#: templates/security_resources/vulnerability_info.html:52
-#: templates/templates/info.html:150
-#: templates/web_resources/default_executable_archive_info.html:51
-#: templates/web_resources/default_executable_archive_info.html:86
-msgid "Description"
-msgstr "描述"
+#: tomato/admin/__init__.py:79 tomato/admin_common.py:71
+msgid "Save"
+msgstr "保存"
 
-#: crispy_forms/tests/test_form_helper.py:129
-#: crispy_forms/tests/test_form_helper.py:139
-msgid "This field is required."
-msgstr "必须填写"
+#: tomato/admin/__init__.py:80 tomato/admin_common.py:72
+msgid "Add"
+msgstr "地址"
 
-#: crispy_forms/tests/test_layout.py:467
-msgid "i18n text"
-msgstr ""
+#: tomato/admin/__init__.py:81 tomato/admin_common.py:73
+msgid "Continue"
+msgstr "继续"
 
-#: crispy_forms/tests/test_layout.py:469
-msgid "i18n legend"
-msgstr ""
+#: tomato/admin/__init__.py:82 tomato/admin_common.py:74
+#: tomato/templates/account/list_by_group.html:98
+msgid "Remove"
+msgstr "移除"
 
-#: crispy_forms/tests/test_layout_objects.py:111
-msgid "Enter a valid value."
-msgstr "输入一个合法的值"
+#: tomato/admin/__init__.py:97
+msgid "Untitled Form"
+msgstr "未命名表单"
 
-#: external_network.py:34
-msgid "Kind"
-msgstr "类型"
+#: tomato/admin/group.py:15 tomato/admin/host.py:48
+#: tomato/admin/organization.py:42 tomato/admin/site.py:78
+#: tomato/templates/account/list.html:78
+#: tomato/templates/account/list_by_group.html:48
+#: tomato/templates/host/info.html:37 tomato/templates/host/list.html:80
+#: tomato/templates/profile/info.html:25 tomato/templates/profile/list.html:53
+#: tomato/templates/scenario/info.html:62
+#: tomato/templates/scenario/list.html:55
+#: tomato/templates/security/info.html:29
+#: tomato/templates/security/list.html:53
+#: tomato/templates/security_resources/malicious_code_info.html:35
+#: tomato/templates/security_resources/malicious_code_list.html:31
+#: tomato/templates/security_resources/security_software_info.html:35
+#: tomato/templates/security_resources/security_software_list.html:31
+#: tomato/templates/security_resources/vulnerability_info.html:36
+#: tomato/templates/security_resources/vulnerability_list.html:31
+#: tomato/templates/templates/info.html:29
+#: tomato/templates/templates/list.html:53
+#: tomato/templates/topology/list.html:76
+#: tomato/templates/web_resources/default_executable_archive_info.html:29
+#: tomato/templates/web_resources/default_executable_archive_list.html:22
+msgid "Name"
+msgstr "名称"
 
-#: external_network.py:35 templates/external_networks/list.html:28
-#: templates/profile/info.html:29 templates/profile/list.html:54
-#: templates/security/info.html:33 templates/security/list.html:54
-#: templates/templates/info.html:33 templates/templates/list.html:54
-#: templates/web_resources/custom_element_icons_list.html:26
-#: templates/web_resources/default_executable_archive_info.html:33
-#: templates/web_resources/default_executable_archive_list.html:23
+#: tomato/admin/group.py:15
+msgid "The group's name. Must be unique."
+msgstr "小组名字，必须唯一。"
+
+#: tomato/admin/group.py:16 tomato/admin/organization.py:43
+#: tomato/admin/site.py:79 tomato/external_network.py:35 tomato/profile.py:37
+#: tomato/template.py:61 tomato/templates/external_networks/list.html:28
+#: tomato/templates/profile/info.html:29 tomato/templates/profile/list.html:54
+#: tomato/templates/security/info.html:33
+#: tomato/templates/security/list.html:54
+#: tomato/templates/templates/info.html:33
+#: tomato/templates/templates/list.html:54
+#: tomato/templates/web_resources/custom_element_icons_list.html:26
+#: tomato/templates/web_resources/default_executable_archive_info.html:33
+#: tomato/templates/web_resources/default_executable_archive_list.html:23
 msgid "Label"
 msgstr "标签"
 
-#: external_network.py:35
+#: tomato/admin/group.py:17 tomato/admin/host.py:53
+#: tomato/admin/organization.py:46 tomato/admin/site.py:80
+#: tomato/external_network.py:37 tomato/template.py:63
+#: tomato/templates/dumpmanager/info.html:101
+#: tomato/templates/dumpmanager/list.html:34
+#: tomato/templates/error/backend_trouble.html:28
+#: tomato/templates/error/exception.html:32
+#: tomato/templates/error/fault.html:16
+#: tomato/templates/external_networks/list.html:52
+#: tomato/templates/host/info.html:177
+#: tomato/templates/organization/info.html:57
+#: tomato/templates/organization/info.html:127
+#: tomato/templates/profile/info.html:63 tomato/templates/scenario/info.html:66
+#: tomato/templates/scenario/list.html:56
+#: tomato/templates/security/info.html:85
+#: tomato/templates/security_resources/malicious_code_info.html:51
+#: tomato/templates/security_resources/security_software_info.html:51
+#: tomato/templates/security_resources/vulnerability_info.html:52
+#: tomato/templates/templates/info.html:150
+#: tomato/templates/web_resources/default_executable_archive_info.html:51
+#: tomato/templates/web_resources/default_executable_archive_info.html:86
+msgid "Description"
+msgstr "描述"
+
+#: tomato/admin/group.py:18 tomato/templates/account/list_by_group.html:34
+#: tomato/templates/topology/list.html:77
+msgid "Owner"
+msgstr "拥有者"
+
+#: tomato/admin/group.py:37
+msgid "Add group"
+msgstr "创建小组"
+
+#: tomato/admin/group.py:56
+#, python-format
+msgid "Editing group %(name)s"
+msgstr "编辑小组%(name)s"
+
+#: tomato/admin/group.py:78
+#, python-format
+msgid "Are you sure you want to remove the group '%(name)s'?"
+msgstr "你确定要删除小组'%(name)s'吗?"
+
+#: tomato/admin/group.py:79
+#, python-format
+msgid "Remove Group '%(name)s'"
+msgstr "删除小组'%(name)s'"
+
+#: tomato/admin/group.py:88
+#, python-format
+msgid "Are you sure you want to accept the invite to group '%(name)s'?"
+msgstr "你确定要同意对小组'%(name)s'的申请吗?"
+
+#: tomato/admin/group.py:89
+#, python-format
+msgid "Accept invite to group '%(name)s'?"
+msgstr "接受对小组'%(name)s'的申请?"
+
+#: tomato/admin/group.py:91
+#, python-format
+msgid "Are you sure you want to decline the invite to group '%(name)s'?"
+msgstr "你确定要拒绝对小组'%(name)s'的申请吗?"
+
+#: tomato/admin/group.py:92
+#, python-format
+msgid "Decline invite to group '%(name)s'?"
+msgstr "拒绝对小组'%(name)s'的申请?"
+
+#: tomato/admin/group.py:97
+#, python-format
+msgid "Are you sure you want to apply joining group '%(name)s'?"
+msgstr "你确定要申请加入小组'%(name)s'吗?"
+
+#: tomato/admin/group.py:98
+#, python-format
+msgid "Apply Group %(name)s'"
+msgstr "申请加入小组%(name)s"
+
+#: tomato/admin/group.py:111
+#, python-format
+msgid ""
+"Are you sure you want to accept the application from user %(user)s to group "
+"%(group)s?"
+msgstr "你确定要接受来自用户%(user)s加入小组%(group)s的申请吗?"
+
+#: tomato/admin/group.py:113
+msgid "Accept group application"
+msgstr "同意加入小组申请"
+
+#: tomato/admin/group.py:115
+#, python-format
+msgid ""
+"Are you sure you want to decline the application from user %(user)s to group "
+"%(group)s?"
+msgstr "你确定要拒绝来自用户%(user)s加入小组%(group)s的申请吗?"
+
+#: tomato/admin/group.py:117
+msgid "Decline group application"
+msgstr "拒绝加入小组申请"
+
+#: tomato/admin/group.py:130
+#, python-format
+msgid "Invalid parameter 'role': %s"
+msgstr "非法参数'role': %s"
+
+#: tomato/admin/host.py:48
+msgid "The host's name. This is also its unique id."
+msgstr "主机名字，独一无二的。"
+
+#: tomato/admin/host.py:49 tomato/templates/host/info.html:41
+#: tomato/templates/host/list.html:81
+msgid "Address"
+msgstr "地址"
+
+#: tomato/admin/host.py:49
+msgid "The host's IP address."
+msgstr "主机的IP地址"
+
+#: tomato/admin/host.py:50
+msgid "The host's RPC url."
+msgstr "主机的RPC url"
+
+#: tomato/admin/host.py:51
+msgid "Stie"
+msgstr "站点"
+
+#: tomato/admin/host.py:51
+msgid "The site this host belongs to."
+msgstr "主机隶属站点"
+
+#: tomato/admin/host.py:52
+msgid "Enabled"
+msgstr "启用"
+
+#: tomato/admin/host.py:52
+msgid "Whether this host is enabled."
+msgstr "主机是否启用"
+
+#: tomato/admin/host.py:74
+msgid "Add Host"
+msgstr "增加主机"
+
+#: tomato/admin/host.py:109
+#, python-format
+msgid "Editing Host '%(name)s'"
+msgstr "编辑主机 '%(name)s'"
+
+#: tomato/admin/host.py:121
+#, python-format
+msgid "Are you sure you want to remove the host '%(name)s'?"
+msgstr "你确定要删除主机'%(name)s'吗?"
+
+#: tomato/admin/host.py:122
+#, python-format
+msgid "Remove Host '%(name)s'"
+msgstr "删除主机'%(name)s'"
+
+#: tomato/admin/organization.py:42
+msgid ""
+"The name of the organization. Must be unique to all organizations. e.g.: ukl"
+msgstr "组织的名称，必须唯一。例如: url"
+
+#: tomato/admin/organization.py:43 tomato/admin/site.py:79
+msgid "e.g.: Technische Universit&auml;t Kaiserslautern"
+msgstr "例如: Technische Universit&auml;t Kaiserslautern"
+
+#: tomato/admin/organization.py:44
+msgid "Homepage Url"
+msgstr "主页"
+
+#: tomato/admin/organization.py:44
+msgid "must start with protocol, i.e. http://www.tomato-testbed.org"
+msgstr "必须以协议名称开头，例如 http://www.tomato-testbed.org"
+
+#: tomato/admin/organization.py:45
+msgid "Image Url"
+msgstr "图标Url"
+
+#: tomato/admin/organization.py:45
+msgid "must start with protocol, i.e. http://www.tomato-testbed.org/logo.png"
+msgstr "必须以协议名称开头，例如 http://www.tomato-testbed.org/logo.png"
+
+#: tomato/admin/organization.py:66
+msgid "Add Organization"
+msgstr "增加组织"
+
+#: tomato/admin/organization.py:78
+#, python-format
+msgid "Editing Organization '%(name)s'"
+msgstr "编辑组织 '%(name)s'"
+
+#: tomato/admin/organization.py:92
+#, python-format
+msgid "Are you sure you want to remove the organization '%(name)s'?"
+msgstr "你确定要删除组织'%(name)s'吗?"
+
+#: tomato/admin/organization.py:93
+#, python-format
+msgid "Remove Organization '%(name)s'"
+msgstr "移除组织 '%(name)s'"
+
+#: tomato/admin/site.py:78
+msgid "The name of the site. Must be unique to all sites. e.g.: ukl"
+msgstr "站点的名称，必须唯一。例如: ukl。"
+
+#: tomato/admin/site.py:82
+msgid "e.g.: Germany"
+msgstr "例如: Germany"
+
+#: tomato/admin/site.py:83
+msgid "Float Number. >0 if East, <0 if West"
+msgstr "浮点数。东>0，西<0"
+
+#: tomato/admin/site.py:84
+msgid "Geolocation: Longitude"
+msgstr "地理位置:经度"
+
+#: tomato/admin/site.py:85
+msgid "Float Number. >0 if North, <0 if South"
+msgstr "浮点数。北>0，南<0"
+
+#: tomato/admin/site.py:86
+msgid "Geolocation: Latitude"
+msgstr "地理位置:纬度"
+
+#: tomato/admin/site.py:110 tomato/templates/organization/info.html:79
+msgid "Add Site"
+msgstr "增加站点"
+
+#: tomato/admin/site.py:129
+#, python-format
+msgid "Editing Site '%(name)s'"
+msgstr "编辑站点'%(name)s'"
+
+#: tomato/admin/site.py:149
+#, python-format
+msgid "Are you sure you want to remove the site '%(name)s'?"
+msgstr "你确定要删除站点'%(name)s'吗?"
+
+#: tomato/admin/site.py:150
+#, python-format
+msgid "Remove Site '%(name)s'"
+msgstr "删除站点'%(name)s'"
+
+#: tomato/crispy_forms/tests/test_form_helper.py:129
+#: tomato/crispy_forms/tests/test_form_helper.py:139
+msgid "This field is required."
+msgstr "必须填写"
+
+#: tomato/crispy_forms/tests/test_layout.py:467
+msgid "i18n text"
+msgstr "i18n text"
+
+#: tomato/crispy_forms/tests/test_layout.py:469
+msgid "i18n legend"
+msgstr "i18n legend"
+
+#: tomato/crispy_forms/tests/test_layout_objects.py:111
+msgid "Enter a valid value."
+msgstr "输入一个合法的值"
+
+#: tomato/external_network.py:34
+msgid "Kind"
+msgstr "类型"
+
+#: tomato/external_network.py:35
 msgid "Visible Name"
 msgstr "可视名称"
 
-#: external_network.py:36 profile.py:39 template.py:64
-#: templates/external_networks/list.html:32 templates/profile/info.html:37
-#: templates/profile/list.html:58 templates/templates/info.html:49
-#: templates/templates/list.html:57
+#: tomato/external_network.py:36 tomato/profile.py:39 tomato/template.py:64
+#: tomato/templates/external_networks/list.html:32
+#: tomato/templates/profile/info.html:37 tomato/templates/profile/list.html:58
+#: tomato/templates/templates/info.html:49
+#: tomato/templates/templates/list.html:57
 msgid "Preference"
 msgstr "偏好"
 
-#: external_network.py:36
+#: tomato/external_network.py:36
 msgid ""
 "Sort networks in the editor (higher preference first). The item with the "
 "highest preference will be the default one. An integer number."
 msgstr "在编辑器中显示网络的顺序。数字越大越靠前，必须是整数"
 
-#: external_network.py:37 external_network.py:86 template.py:181
-msgid "description"
-msgstr "描述"
-
-#: external_network.py:38
+#: tomato/external_network.py:38
 msgid "Show as a big icon in the editor"
 msgstr "在编辑器中用大图标显示"
 
-#: external_network.py:39 template.py:68
+#: tomato/external_network.py:39 tomato/template.py:68
 msgid "Show in Common Elements"
 msgstr "在常用元素中显示"
 
-#: external_network.py:39
+#: tomato/external_network.py:39
 msgid "Show this network in the common elements section in the editor"
-msgstr "这个模板在编辑器中表现为一个常用元素"
+msgstr "在编辑器的常用元素选项中显示此网络"
 
-#: external_network.py:84 template.py:177
+#: tomato/external_network.py:84
 msgid "label"
 msgstr "标签"
 
-#: external_network.py:85 template.py:179
+#: tomato/external_network.py:85
 msgid "preference"
 msgstr "偏好"
 
-#: external_network.py:87
+#: tomato/external_network.py:86
+msgid "description"
+msgstr "描述"
+
+#: tomato/external_network.py:87
 msgid "big_icon"
 msgstr "大图标"
 
-#: external_network.py:88 template.py:185
+#: tomato/external_network.py:88
 msgid "show_as_common"
 msgstr "作为常用元素显示"
 
-#: external_network.py:91 external_network.py:94
+#: tomato/external_network.py:91 tomato/external_network.py:94
 msgid "Add External Network"
 msgstr "增加外部网络"
 
-#: main.py:70
+#: tomato/external_network_instance.py:33 tomato/templates/host/info.html:7
+#: tomato/templates/host/info.html:16
+msgid "Host"
+msgstr "主机"
+
+#: tomato/external_network_instance.py:34
+msgid "Bridge"
+msgstr "网桥"
+
+#: tomato/external_network_instance.py:34
+msgid "TODO: write a useful help text here..."
+msgstr ""
+
+#: tomato/external_network_instance.py:35
+msgid "Network"
+msgstr "网络"
+
+#: tomato/main.py:70
 msgid "username"
 msgstr "用户"
 
-#: main.py:71
+#: tomato/main.py:71
 msgid "password"
 msgstr "密码"
 
-#: main.py:72
+#: tomato/main.py:72
 msgid "Remember me"
 msgstr "记住我"
 
-#: main.py:86
+#: tomato/main.py:86
 msgid "Log in"
 msgstr "登录"
 
-#: profile.py:37
+#: tomato/profile.py:37
 msgid "The displayed label for this profile"
-msgstr " 此配置文件显示的标签 "
+msgstr "用于显示此规格配置名称的标签"
 
-#: profile.py:38
+#: tomato/profile.py:38
 msgid "RAM (MB)"
-msgstr ""
+msgstr "内存 (MB)"
 
-#: profile.py:39
+#: tomato/profile.py:39
 msgid ""
 "Sort profiles in the editor (higher preference first). The profile with "
 "highest preference will be the default. Must be an integer number."
 msgstr "在编辑器中显示缩略图的顺序。数字越大越靠前，必须是整数。"
 
-#: profile.py:40 template.py:65 templates/external_networks/list.html:57
-#: templates/profile/info.html:41 templates/templates/info.html:80
+#: tomato/profile.py:40 tomato/template.py:65
+#: tomato/templates/external_networks/list.html:57
+#: tomato/templates/profile/info.html:41
+#: tomato/templates/templates/info.html:80
 msgid "Restricted"
 msgstr "限制"
 
-#: profile.py:40
+#: tomato/profile.py:40
 msgid "Restrict usage of this profile to administrators"
 msgstr "对管理员限制这种概览的使用"
 
-#: profile.py:41 templates/profile/info.html:33 templates/profile/list.html:52
-#: templates/security/info.html:37 templates/templates/info.html:37
-#: templates/templates/list.html:52
+#: tomato/profile.py:41 tomato/templates/profile/info.html:33
+#: tomato/templates/profile/list.html:52 tomato/templates/security/info.html:37
+#: tomato/templates/templates/info.html:37
+#: tomato/templates/templates/list.html:52
 msgid "Tech"
 msgstr "技术"
 
-#: profile.py:107 template.py:79
-msgid "Internal Name"
-msgstr "内部名字"
-
-#: profile.py:107
-msgid ""
-"Must be unique for all profiles of the same tech. Cannot be changed. Not "
-"displayed."
-msgstr "对相同技术的所有概览是独一无二的。不能被修改，不显示。"
-
-#: profile.py:108
-msgid "Disk Space (MB)"
-msgstr "磁盘空间"
-
-#: profile.py:108
-msgid "only OpenVZ and KVMqm"
-msgstr "仅仅使用OpenVZ和KVMqm"
-
-#: profile.py:109
+#: tomato/profile.py:54 tomato/profile.py:109
 msgid "number of CPUs"
 msgstr "cpu数目"
 
-#: profile.py:109
+#: tomato/profile.py:55 tomato/profile.py:108
+msgid "Disk Space (MB)"
+msgstr "磁盘空间 (MB)"
+
+#: tomato/profile.py:107 tomato/template.py:79
+msgid "Internal Name"
+msgstr "内部名字"
+
+#: tomato/profile.py:107
+msgid ""
+"Must be unique for all profiles of the same tech. Cannot be changed. Not "
+"displayed."
+msgstr "对相同技术的所有概览必须是唯一的。不能被修改，不显示。"
+
+#: tomato/profile.py:108
+msgid "only OpenVZ and KVMqm"
+msgstr "仅仅使用OpenVZ和KVMqm"
+
+#: tomato/profile.py:109
 msgid "Repy, OpenVZ: float number; KVMqm: integer number"
 msgstr "Repy, OpenVZ:浮点数;KVMqm：整数"
 
-#: profile.py:169 profile.py:174
+#: tomato/profile.py:169 tomato/profile.py:174
 msgid "Add Device Profile"
 msgstr "增加设备概览"
 
-#: security.py:58
+#: tomato/profile.py:185
+msgid "Remove Device Profile"
+msgstr "移除设备概览"
+
+#: tomato/profile.py:185
+msgid "Are you sure you want to remove the device profile '"
+msgstr "你确定要删除小组'%(group)s'吗?"
+
+#: tomato/profile.py:215
+msgid "Edit Device Profile '"
+msgstr "增加设备概览"
+
+#: tomato/profile.py:227
+msgid "Edit "
+msgstr "编辑主机"
+
+#: tomato/profile.py:227
+msgid " Device Profile '"
+msgstr "设备概览"
+
+#: tomato/security.py:58
 msgid "available_template"
 msgstr "可用模板"
 
-#: settings.py:39
+#: tomato/settings.py:39
 msgid "English"
-msgstr ""
+msgstr "English"
 
-#: settings.py:40
+#: tomato/settings.py:40
 msgid "Simplified Chinese"
 msgstr "简体中文"
 
-#: settings.py:41
+#: tomato/settings.py:41
 msgid "Traditional Chinese"
 msgstr "繁体中文"
 
-#: sys_config.py:48
+#: tomato/sys_config.py:48
 msgid "Language"
 msgstr "语言"
 
-#: sys_config.py:73
+#: tomato/sys_config.py:73
 msgid "System Configuration"
 msgstr "系统设置"
 
-#: template.py:61
+#: tomato/template.py:61
 msgid "The displayed label for this template"
-msgstr " 此配置文件显示的标签 "
+msgstr " 用于显示此模板名称的标签 "
 
-#: template.py:64
+#: tomato/template.py:62 tomato/templates/security/info.html:41
+#: tomato/templates/security/list.html:55
+#: tomato/templates/templates/info.html:41
+#: tomato/templates/templates/list.html:55
+msgid "Subtype"
+msgstr "图表类型"
+
+#: tomato/template.py:64
 msgid ""
 "Sort templates in the editor (higher preference first). The template with "
 "highest preference will be the default. Must be an integer number."
 msgstr "在编辑器中显示拓扑的顺序。数字越大越靠前，必须是整数"
 
-#: template.py:65
+#: tomato/template.py:65
 msgid "Restrict usage of this template to administrators"
-msgstr "对管理员限制这种概览的使用"
+msgstr "对管理员限制此模板的使用"
 
-#: template.py:66
+#: tomato/template.py:66
 msgid "nlXTP Guest Modules installed"
-msgstr "nlXTP客户模块建立"
+msgstr "安装nlXTP客户模块"
 
-#: template.py:66
+#: tomato/template.py:66
 msgid "Ignore this for Repy devices."
-msgstr "为答复设备忽视"
+msgstr "此选项对Repy设备无效。"
 
-#: template.py:68
+#: tomato/template.py:67 tomato/templates/security/list.html:56
+#: tomato/templates/security_resources/malicious_code_info.html:55
+#: tomato/templates/security_resources/security_software_info.html:55
+#: tomato/templates/security_resources/vulnerability_info.html:56
+#: tomato/templates/templates/list.html:58
+#: tomato/templates/web_resources/default_executable_archive_list.html:24
+msgid "Creation Date"
+msgstr "创建时间"
+
+#: tomato/template.py:68
 msgid "Show this template in the common elements section in the editor"
-msgstr "这个模板在编辑器中表现为一个常用元素"
+msgstr "在编辑器的常用元素选项中显示此模板"
 
-#: template.py:69 templates/organization/info.html:24
-#: templates/templates/info.html:90
-#: templates/web_resources/default_executable_archive_info.html:41
+#: tomato/template.py:69 tomato/templates/organization/info.html:24
+#: tomato/templates/templates/info.html:90
+#: tomato/templates/web_resources/default_executable_archive_info.html:41
 msgid "Icon"
 msgstr "图标"
 
-#: template.py:69
+#: tomato/template.py:69
 msgid ""
 "URL of a 32x32 icon to use for elements of this template, leave empty to use "
 "the default icon"
 msgstr "模板元素的图标url，留空则使用默认图标。"
 
-#: template.py:70
+#: tomato/template.py:70
 msgid "Keyboard Layout"
 msgstr "默认键盘布局"
 
-#: template.py:70
+#: tomato/template.py:70
 msgid "Only for full-virtualization templates"
-msgstr "仅仅使用全虚拟模板"
+msgstr "仅对于全虚拟模板"
 
-#: template.py:71
+#: tomato/template.py:71
 msgid ""
 "URLs that point to the template's image file. Enter one or more URLs; one "
 "URL per line."
-msgstr "指向这个模板的url。键入一个或者多个url，一个一行。"
+msgstr "模板镜像的url。输入一个或者多个url，每行一个URL。"
 
-#: template.py:72
+#: tomato/template.py:72
 msgid "Customize Function"
 msgstr "定制功能"
 
-#: template.py:72
+#: tomato/template.py:72
 msgid "Only chose when you customize the template"
-msgstr "仅仅选择你定制的模板"
+msgstr "仅在定制模板时选中"
 
-#: template.py:79
+#: tomato/template.py:79
 msgid "Must be unique for all profiles. Cannot be changed. Not displayed."
-msgstr "独一无二的。不能被修改，不显示。"
+msgstr "必须唯一。不能被修改，不显示。"
 
-#: template.py:178
-msgid "subtype"
-msgstr "图表类型"
-
-#: template.py:180
-msgid "restricted"
-msgstr "限制"
-
-#: template.py:182
-msgid "nlXTP_installed"
-msgstr "nlXTP客户模块建立"
-
-#: template.py:183 templates/security_resources/malicious_code_list.html:34
-#: templates/security_resources/security_software_list.html:34
-#: templates/security_resources/vulnerability_list.html:34
-msgid "creation_date"
-msgstr "创建时间"
-
-#: template.py:184
-msgid "icon"
-msgstr "图标"
-
-#: template.py:186
-msgid "urls"
-msgstr "urls"
-
-#: template.py:187
-msgid "customize"
-msgstr "定制"
-
-#: template.py:201 template.py:206
+#: tomato/template.py:193 tomato/template.py:198
 msgid "Add Template"
 msgstr "增加模板"
 
-#: templates/account/info.html:5 templates/account/info.html:19
+#: tomato/templates/account/info.html:5 tomato/templates/account/info.html:19
 msgid "User Account"
 msgstr "用户账户"
 
-#: templates/account/info.html:15
+#: tomato/templates/account/info.html:15
 msgid "All Accounts"
 msgstr "所有账户"
 
-#: templates/account/info.html:43 templates/account/list.html:81
-#: templates/host/info.html:53 templates/organization/info.html:7
-#: templates/organization/info.html:16
-msgid "Organization"
-msgstr "组织"
-
-#: templates/account/info.html:47
-msgid "Email"
-msgstr "邮箱"
-
-#: templates/account/info.html:57 templates/account/list.html:82
+#: tomato/templates/account/info.html:57 tomato/templates/account/list.html:82
+#: tomato/templates/account/list_by_group.html:53
 msgid "Flags"
 msgstr "标记"
 
-#: templates/account/info.html:62
+#: tomato/templates/account/info.html:62
 msgid "Not shown"
 msgstr "不显示"
 
-#: templates/account/info.html:68
+#: tomato/templates/account/info.html:68
 msgid "Reason for registering"
 msgstr "注册原因"
 
-#: templates/account/info.html:74
+#: tomato/templates/account/info.html:74
 msgid "Quota"
 msgstr "配额"
 
-#: templates/account/info.html:77
+#: tomato/templates/account/info.html:77
 msgid "CPU time"
 msgstr "CPU时间"
 
-#: templates/account/info.html:78 templates/host/info.html:117
-#: templates/profile/info.html:57 templates/topology/info.html:132
-#: templates/topology/list.html:82
+#: tomato/templates/account/info.html:78 tomato/templates/host/info.html:117
+#: tomato/templates/profile/info.html:57 tomato/templates/topology/list.html:82
 msgid "Memory"
 msgstr "内存"
 
-#: templates/account/info.html:79 templates/host/info.html:126
-#: templates/host/info.html:135 templates/profile/info.html:55
+#: tomato/templates/account/info.html:79 tomato/templates/host/info.html:126
+#: tomato/templates/host/info.html:135 tomato/templates/profile/info.html:55
 msgid "Disk space"
 msgstr "硬盘空间"
 
-#: templates/account/info.html:80 templates/topology/info.html:131
-#: templates/topology/list.html:81
+#: tomato/templates/account/info.html:80 tomato/templates/topology/list.html:81
 msgid "Traffic"
 msgstr "流量"
 
-#: templates/account/info.html:93
+#: tomato/templates/account/info.html:93
 msgid "Accept Account"
 msgstr "可接受账户"
 
-#: templates/account/info.html:96
+#: tomato/templates/account/info.html:96
+#: tomato/templates/organization/info.html:76
 msgid "Resource Usage"
 msgstr "资源使用"
 
-#: templates/account/info.html:97
+#: tomato/templates/account/info.html:97
 msgid "Edit Account"
 msgstr "编辑账户"
 
-#: templates/account/info.html:100
+#: tomato/templates/account/info.html:100
 msgid "reset password"
 msgstr "重置密码"
 
-#: templates/account/info.html:101
-msgid "Remove Account"
-msgstr "移除账户"
-
-#: templates/account/list.html:9 templates/account/list.html:17
+#: tomato/templates/account/list.html:9 tomato/templates/account/list.html:17
+#: tomato/templates/account/list_by_group.html:9
+#: tomato/templates/account/list_by_group.html:16
 msgid "User Accounts"
 msgstr "使用者账户"
 
-#: templates/account/list.html:15
+#: tomato/templates/account/list.html:15
 msgid "Pending Account Registrations"
 msgstr "待处理账户注册"
 
-#: templates/account/list.html:25
+#: tomato/templates/account/list.html:25
 msgid "Showing all accounts of"
 msgstr "显示账户来自于"
 
-#: templates/account/list.html:27 templates/account/list.html:49
+#: tomato/templates/account/list.html:27 tomato/templates/account/list.html:49
+#: tomato/templates/account/list_by_group.html:26
 msgid "Showing all accounts"
 msgstr "显示所有账户"
 
-#: templates/account/list.html:32 templates/account/list.html:55
-#: templates/account/list.html:57
+#: tomato/templates/account/list.html:32 tomato/templates/account/list.html:55
+#: tomato/templates/account/list.html:57
+#: tomato/templates/account/list_by_group.html:31
 msgid "Show all accounts"
 msgstr "显示所有账户"
 
-#: templates/account/list.html:34 templates/base.html:224
-#: templates/host/list.html:29 templates/organization/list.html:9
-#: templates/organization/list.html:13
+#: tomato/templates/account/list.html:34 tomato/templates/base.html:224
+#: tomato/templates/external_network_instances/list.html:90
+#: tomato/templates/host/list.html:29 tomato/templates/organization/list.html:9
+#: tomato/templates/organization/list.html:13
 msgid "Organizations"
 msgstr "组织"
 
-#: templates/account/list.html:36
+#: tomato/templates/account/list.html:36
 msgid "Show all accounts of"
 msgstr "显示所有账户来自于"
 
-#: templates/account/list.html:47
+#: tomato/templates/account/list.html:47
 msgid "Showing pending registrations"
 msgstr "显示待处理的注册信息"
 
-#: templates/account/list.html:61 templates/account/list.html:63
-#: templates/account/list.html:66
+#: tomato/templates/account/list.html:61 tomato/templates/account/list.html:63
+#: tomato/templates/account/list.html:66
 msgid "Show pending registrations"
 msgstr "显示待处理的注册信息"
 
-#: templates/account/list.html:78 templates/host/info.html:37
-#: templates/host/list.html:80 templates/profile/info.html:25
-#: templates/profile/list.html:53 templates/scenario/info.html:62
-#: templates/scenario/list.html:326 templates/security/info.html:29
-#: templates/security/list.html:53
-#: templates/security_resources/malicious_code_info.html:35
-#: templates/security_resources/malicious_code_list.html:31
-#: templates/security_resources/security_software_info.html:35
-#: templates/security_resources/security_software_list.html:31
-#: templates/security_resources/vulnerability_info.html:36
-#: templates/security_resources/vulnerability_list.html:31
-#: templates/templates/info.html:29 templates/templates/list.html:53
-#: templates/topology/list.html:76
-#: templates/web_resources/default_executable_archive_info.html:29
-#: templates/web_resources/default_executable_archive_list.html:22
-msgid "Name"
-msgstr "名字"
-
-#: templates/account/list.html:114
+#: tomato/templates/account/list.html:114
 msgid "There are no pending registrations."
 msgstr "没有待处理的注册"
 
-#: templates/account/list.html:116
+#: tomato/templates/account/list.html:116
 msgid "There are no accounts yet."
 msgstr "还没有账户"
 
-#: templates/account/list.html:121
+#: tomato/templates/account/list.html:121
 msgid "Create new Account"
 msgstr "创建一个新的账户"
 
-#: templates/account/notifications.html:5
+#: tomato/templates/account/list_by_group.html:17
+msgid "Group:"
+msgstr "小组:"
+
+#: tomato/templates/account/list_by_group.html:24
+msgid "Showing "
+msgstr "显示"
+
+#: tomato/templates/account/list_by_group.html:24
+msgid " accounts"
+msgstr "账户"
+
+#: tomato/templates/account/list_by_group.html:35
+msgid "Manager"
+msgstr "管理"
+
+#: tomato/templates/account/list_by_group.html:36
+msgid "User"
+msgstr "用户"
+
+#: tomato/templates/account/list_by_group.html:37
+msgid "Invited"
+msgstr "被邀请中"
+
+#: tomato/templates/account/list_by_group.html:38
+msgid "Applying"
+msgstr "申请中"
+
+#: tomato/templates/account/list_by_group.html:54
+msgid "Operations"
+msgstr "操作"
+
+#: tomato/templates/account/list_by_group.html:87
+msgid "Accept"
+msgstr "接受"
+
+#: tomato/templates/account/list_by_group.html:91
+msgid "Decline"
+msgstr "拒绝"
+
+#: tomato/templates/account/list_by_group.html:108
+msgid "There are no adequate accounts yet."
+msgstr "没有符合要求的账户"
+
+#: tomato/templates/account/list_by_group.html:117
+msgid "Set Account"
+msgstr "设置账户"
+
+#: tomato/templates/account/list_by_group.html:125
+msgid "Invite User"
+msgstr "邀请用户"
+
+#: tomato/templates/account/notifications.html:5
 msgid "Notifications"
 msgstr "通知"
 
-#: templates/base.html:111
+#: tomato/templates/base.html:111
 msgid "BUPT ProviSec"
 msgstr "BUPT ProviSec"
 
-#: templates/base.html:125
+#: tomato/templates/base.html:125
 msgid "Welcome"
 msgstr "欢迎"
 
-#: templates/base.html:167
+#: tomato/templates/base.html:167
 msgid "My Account"
 msgstr "我的账户"
 
-#: templates/base.html:168
+#: tomato/templates/base.html:168
 msgid "Log Out"
 msgstr "登出"
 
-#: templates/base.html:190
+#: tomato/templates/base.html:190
 msgid "MyTopologies"
 msgstr "我的拓扑"
 
-#: templates/base.html:195 templates/main/statistics.html:54
+#: tomato/templates/base.html:195 tomato/templates/main/statistics.html:54
 msgid "Users"
 msgstr "用户"
 
-#: templates/base.html:197
+#: tomato/templates/base.html:197
 msgid "Your Organization's accounts"
 msgstr "你的组织账户"
 
-#: templates/base.html:198
+#: tomato/templates/base.html:198
 msgid "All accounts"
 msgstr "所有账户"
 
-#: templates/base.html:199
+#: tomato/templates/base.html:199
 msgid "Pending account registrations"
 msgstr "待处理的账户注册"
 
-#: templates/base.html:200
+#: tomato/templates/base.html:200
 msgid "Broadcast new announcement"
 msgstr "广播消息"
 
-#: templates/base.html:206 templates/main/statistics.html:18
-#: templates/profile/info.html:51
+#: tomato/templates/base.html:206 tomato/templates/main/statistics.html:18
+#: tomato/templates/profile/info.html:51
 msgid "Resources"
 msgstr "资源"
 
-#: templates/base.html:208
-#: templates/web_resources/default_executable_archive_info.html:72
+#: tomato/templates/base.html:208
+#: tomato/templates/web_resources/default_executable_archive_info.html:72
 msgid "Templates"
 msgstr "模板"
 
-#: templates/base.html:209
+#: tomato/templates/base.html:209
 msgid "Device profiles"
 msgstr "设备"
 
-#: templates/base.html:210 templates/host/info.html:163
+#: tomato/templates/base.html:210 tomato/templates/host/info.html:163
 msgid "External networks"
 msgstr "外部网络"
 
-#: templates/base.html:211
-#: templates/web_resources/default_executable_archive_list.html:13
+#: tomato/templates/base.html:211
+#: tomato/templates/web_resources/default_executable_archive_list.html:13
 msgid "Default Executable Archives"
 msgstr "默认服务"
 
-#: templates/base.html:212
-#: templates/web_resources/custom_element_icons_list.html:13
+#: tomato/templates/base.html:212
+#: tomato/templates/web_resources/custom_element_icons_list.html:13
 msgid "Custom Element Icons"
 msgstr "定制元素图标"
 
-#: templates/base.html:213 templates/scenario/list.html:287
+#: tomato/templates/base.html:213 tomato/templates/scenario/list.html:16
 msgid "Scenarios"
 msgstr "场景"
 
-#: templates/base.html:214
-#: templates/security_resources/malicious_code_list.html:13
+#: tomato/templates/base.html:214
+#: tomato/templates/security_resources/malicious_code_info.html:12
+#: tomato/templates/security_resources/malicious_code_list.html:9
+#: tomato/templates/security_resources/malicious_code_list.html:13
 msgid "Malicious Code"
 msgstr "恶意代码"
 
-#: templates/base.html:215
+#: tomato/templates/base.html:215
 msgid "Security Softwares"
 msgstr "安全软件"
 
-#: templates/base.html:216
+#: tomato/templates/base.html:216
 msgid "Vulnerabilities"
 msgstr "漏洞"
 
-#: templates/base.html:222 templates/main/start.html:8
+#: tomato/templates/base.html:222 tomato/templates/main/start.html:8
 msgid "Testbed"
 msgstr "实验平台"
 
-#: templates/base.html:225
+#: tomato/templates/base.html:225
 msgid "Sites map"
 msgstr "站点地图"
 
-#: templates/base.html:227 templates/host/list.html:12
-#: templates/organization/info.html:67 templates/organization/info.html:94
-#: templates/organization/info.html:129 templates/security/info.html:73
-#: templates/templates/info.html:138
+#: tomato/templates/base.html:227
+#: tomato/templates/external_network_instances/list.html:110
+#: tomato/templates/host/list.html:12
+#: tomato/templates/organization/info.html:33
+#: tomato/templates/organization/info.html:74
+#: tomato/templates/organization/info.html:101
+#: tomato/templates/organization/info.html:136
+#: tomato/templates/security/info.html:73
+#: tomato/templates/templates/info.html:138
 msgid "Hosts"
 msgstr "主机"
 
-#: templates/base.html:229 templates/main/statistics.html:7
-#: templates/main/statistics.html:12
+#: tomato/templates/base.html:229 tomato/templates/main/statistics.html:7
+#: tomato/templates/main/statistics.html:12
 msgid "Statistics"
 msgstr "统计"
 
-#: templates/base.html:234 templates/host/list.html:52
+#: tomato/templates/base.html:234 tomato/templates/host/list.html:52
 msgid "Debug"
 msgstr "调试"
 
-#: templates/base.html:236 templates/dumpmanager/list.html:8
-#: templates/dumpmanager/list.html:12
+#: tomato/templates/base.html:236 tomato/templates/dumpmanager/list.html:8
+#: tomato/templates/dumpmanager/list.html:12
 msgid "Dump Manager"
-msgstr "管理"
+msgstr "Dump管理"
 
-#: templates/base.html:237 templates/security/info.html:66
-#: templates/templates/info.html:131
+#: tomato/templates/base.html:237 tomato/templates/security/info.html:66
+#: tomato/templates/templates/info.html:131
 msgid "Backend"
 msgstr "后台"
 
-#: templates/base.html:238
+#: tomato/templates/base.html:238
 msgid "backend_api"
 msgstr "后台接口"
 
-#: templates/base.html:239
+#: tomato/templates/base.html:239
 msgid "backend_users"
 msgstr "后台用户"
 
-#: templates/base.html:240
+#: tomato/templates/base.html:240
 msgid "backend_core"
 msgstr "后台核心"
 
-#: templates/base.html:241
+#: tomato/templates/base.html:241
 msgid "backend_accounting"
 msgstr "后台账户"
 
-#: templates/base.html:242
+#: tomato/templates/base.html:242
 msgid "backend_debug"
 msgstr "后台调试"
 
-#: templates/base.html:245
+#: tomato/templates/base.html:245
 msgid "API Call Durations"
 msgstr "API调用持续时间"
 
-#: templates/base.html:252
+#: tomato/templates/base.html:252
 msgid "Links"
 msgstr "链接"
 
-#: templates/base.html:254
+#: tomato/templates/base.html:254
 msgid "Project"
 msgstr "项目"
 
-#: templates/base.html:255
+#: tomato/templates/base.html:255
 msgid "Help"
 msgstr "帮助"
 
-#: templates/base.html:256
+#: tomato/templates/base.html:256
 msgid "Bugtracker"
 msgstr "缺陷跟踪"
 
-#: templates/base.html:257
+#: tomato/templates/base.html:257
 msgid "Acceptable Use Policy"
 msgstr "使用策略"
 
-#: templates/base.html:258
+#: tomato/templates/base.html:258
 msgid "Contact"
 msgstr "与我们联系"
 
-#: templates/base.html:272
+#: tomato/templates/base.html:272
 msgid "hide panel"
 msgstr "隐藏导航菜单"
 
-#: templates/base.html:273
+#: tomato/templates/base.html:273
 msgid "show panel"
 msgstr "显示导航菜单"
 
-#: templates/base.html:275
+#: tomato/templates/base.html:275
 msgid "Configuration"
 msgstr "配置"
 
-#: templates/debug/backend_overview.html:14
+#: tomato/templates/debug/backend_overview.html:14
 msgid "Backend Module"
 msgstr "后台模块"
 
-#: templates/debug/backend_overview.html:15
+#: tomato/templates/debug/backend_overview.html:15
 msgid "Reachable"
 msgstr "可达"
 
-#: templates/debug/host_users.html:7 templates/debug/host_users.html:12
+#: tomato/templates/debug/host_users.html:7
+#: tomato/templates/debug/host_users.html:12
 msgid "Users of host"
 msgstr "主机使用"
 
-#: templates/debug/host_users.html:21
+#: tomato/templates/debug/host_users.html:21
 msgid "ID on host"
 msgstr "主机ID"
 
-#: templates/debug/host_users.html:22 templates/dumpmanager/info.html:100
-#: templates/error/exception.html:31 templates/error/fault.html:14
-#: templates/security_resources/malicious_code_info.html:39
-#: templates/security_resources/malicious_code_list.html:32
-#: templates/security_resources/security_software_info.html:39
-#: templates/security_resources/security_software_list.html:32
-#: templates/security_resources/vulnerability_info.html:40
-#: templates/security_resources/vulnerability_list.html:32
+#: tomato/templates/debug/host_users.html:22
+#: tomato/templates/dumpmanager/info.html:100
+#: tomato/templates/error/exception.html:31
+#: tomato/templates/error/fault.html:14
+#: tomato/templates/security_resources/malicious_code_info.html:39
+#: tomato/templates/security_resources/malicious_code_list.html:32
+#: tomato/templates/security_resources/security_software_info.html:39
+#: tomato/templates/security_resources/security_software_list.html:32
+#: tomato/templates/security_resources/vulnerability_info.html:40
+#: tomato/templates/security_resources/vulnerability_list.html:32
 msgid "Type"
 msgstr "类型"
 
-#: templates/debug/host_users.html:23
+#: tomato/templates/debug/host_users.html:23
 msgid "State"
 msgstr "状态"
 
-#: templates/debug/host_users.html:24 templates/element/rextfv_status.html:59
-#: templates/topology/info.html:111
+#: tomato/templates/debug/host_users.html:24
+#: tomato/templates/element/rextfv_status.html:59
+#: tomato/templates/topology/info.html:111
 msgid "Topology"
 msgstr "拓扑"
 
-#: templates/debug/host_users.html:25 templates/element/rextfv_status.html:53
+#: tomato/templates/debug/host_users.html:25
+#: tomato/templates/element/rextfv_status.html:53
 msgid "Element"
 msgstr "元素"
 
-#: templates/debug/host_users.html:26
+#: tomato/templates/debug/host_users.html:26
 msgid "Connection"
 msgstr "连接"
 
-#: templates/debug/stats.html:7 templates/debug/stats.html:12
+#: tomato/templates/debug/stats.html:7 tomato/templates/debug/stats.html:12
 msgid "Debug Statistics"
 msgstr "调试策略"
 
-#: templates/debug/stats.html:17
+#: tomato/templates/debug/stats.html:17
 msgid "Database"
 msgstr "数据库"
 
-#: templates/debug/stats.html:23
+#: tomato/templates/debug/stats.html:23
 msgid "Total size"
 msgstr "总大小"
 
-#: templates/debug/stats.html:24
+#: tomato/templates/debug/stats.html:24
 msgid "Data size"
 msgstr "数据大小"
 
-#: templates/debug/stats.html:25
+#: tomato/templates/debug/stats.html:25
 msgid "Objects"
 msgstr "对象"
 
-#: templates/debug/stats.html:37
+#: tomato/templates/debug/stats.html:37
 msgid "Collection"
 msgstr "采集"
 
-#: templates/debug/stats.html:38
+#: tomato/templates/debug/stats.html:38
 msgid "Entries"
 msgstr "条目"
 
-#: templates/debug/stats.html:39
+#: tomato/templates/debug/stats.html:39
 msgid "Storage Size"
 msgstr "储存空间"
 
-#: templates/debug/stats.html:40
+#: tomato/templates/debug/stats.html:40
 msgid "Index Size"
 msgstr "索引数目"
 
-#: templates/debug/stats.html:41
+#: tomato/templates/debug/stats.html:41
 msgid "Data Size"
 msgstr "数据大小"
 
-#: templates/debug/stats.html:59
+#: tomato/templates/debug/stats.html:59
 msgid "Tasks"
 msgstr "任务"
 
-#: templates/debug/stats.html:63
+#: tomato/templates/debug/stats.html:63
 msgid "Workers"
 msgstr "工作者"
 
-#: templates/debug/stats.html:64
+#: tomato/templates/debug/stats.html:64
 msgid "Max late time"
 msgstr "最后时间"
 
-#: templates/debug/stats.html:65
+#: tomato/templates/debug/stats.html:65
 msgid "Waiting fraction"
 msgstr "等待分钟"
 
-#: templates/debug/stats.html:66
+#: tomato/templates/debug/stats.html:66
 msgid "Last task"
 msgstr "最后任务"
 
-#: templates/debug/stats.html:67
+#: tomato/templates/debug/stats.html:67
 msgid "Tasks per minute"
 msgstr "每分钟任务数"
 
-#: templates/debug/stats.html:83
+#: tomato/templates/debug/stats.html:83
 msgid "Method"
 msgstr "方法"
 
-#: templates/debug/stats.html:84
+#: tomato/templates/debug/stats.html:84
 msgid "Repeated"
 msgstr "重复"
 
-#: templates/debug/stats.html:85
+#: tomato/templates/debug/stats.html:85
 msgid "Last"
 msgstr "最后"
 
-#: templates/debug/stats.html:86
+#: tomato/templates/debug/stats.html:86
 msgid "Next"
 msgstr "下一个"
 
-#: templates/debug/stats.html:87
+#: tomato/templates/debug/stats.html:87
 msgid "Duration"
 msgstr "持续时间"
 
-#: templates/debug/stats.html:89
+#: tomato/templates/debug/stats.html:89
 msgid "Kwargs"
 msgstr "Kwargs参数"
 
-#: templates/debug/stats.html:136
+#: tomato/templates/debug/stats.html:136
 msgid "Record Count"
 msgstr "记录数"
 
-#: templates/dumpmanager/info.html:7 templates/dumpmanager/info.html:89
+#: tomato/templates/dumpmanager/info.html:7
+#: tomato/templates/dumpmanager/info.html:89
 msgid "Error Group"
 msgstr "错误组"
 
-#: templates/dumpmanager/info.html:86
+#: tomato/templates/dumpmanager/info.html:86
 msgid "All Errorgroups"
 msgstr "所有错误组"
 
-#: templates/dumpmanager/info.html:98
+#: tomato/templates/dumpmanager/info.html:98
 msgid "Source"
 msgstr "资源"
 
-#: templates/dumpmanager/info.html:99
+#: tomato/templates/dumpmanager/info.html:99
 msgid "Software version"
 msgstr "软件版本"
 
-#: templates/dumpmanager/info.html:102
+#: tomato/templates/dumpmanager/info.html:102
 msgid "Timestamp"
 msgstr "时间"
 
-#: templates/dumpmanager/info.html:138
+#: tomato/templates/dumpmanager/info.html:138
 msgid "This group is empty."
 msgstr "该组为空"
 
-#: templates/dumpmanager/list.html:15
+#: tomato/templates/dumpmanager/list.html:15
 #, python-format
 msgid "This installation of ToMaTo is 100%% error-free."
 msgstr "无错误"
 
-#: templates/dumpmanager/list.html:16
+#: tomato/templates/dumpmanager/list.html:16
 msgid "Or you're just ignoring the errors..."
 msgstr "或者你忽视这个错误"
 
-#: templates/dumpmanager/list.html:27
+#: tomato/templates/dumpmanager/list.html:27
 msgid "Favorites"
 msgstr "喜欢"
 
-#: templates/dumpmanager/list.html:35 templates/host/list.html:105
+#: tomato/templates/dumpmanager/list.html:35
+#: tomato/templates/host/list.html:105
 msgid "Dumps"
 msgstr "错误次数"
 
-#: templates/dumpmanager/list.html:36
+#: tomato/templates/dumpmanager/list.html:36
 msgid "Last Dump"
 msgstr "最后"
 
-#: templates/dumpmanager/list.html:74
+#: tomato/templates/dumpmanager/list.html:74
 msgid "Refresh Dumps"
 msgstr "更新转出信息"
 
-#: templates/dumpmanager/list.html:81
+#: tomato/templates/dumpmanager/list.html:78
+msgid "Clear Old Groups"
+msgstr "清除所有旧的组"
+
+#: tomato/templates/dumpmanager/list.html:81
 msgid "Clear groups older than 60 days"
 msgstr "组织超过60天"
 
-#: templates/dumpmanager/list.html:82
+#: tomato/templates/dumpmanager/list.html:82
 msgid "Clear groups older than 7 days"
 msgstr "清除组织超过7天"
 
-#: templates/dumpmanager/list.html:83
+#: tomato/templates/dumpmanager/list.html:83
 msgid "Clear groups older than 1 day"
 msgstr "清除组织超过1天"
 
-#: templates/dumpmanager/list.html:84
+#: tomato/templates/dumpmanager/list.html:84
 msgid "Clear all groups"
 msgstr "清除所有组"
 
-#: templates/dumpmanager/list.html:90
+#: tomato/templates/dumpmanager/list.html:90
 msgid "Remove Old Groups"
 msgstr "移除旧的组"
 
-#: templates/dumpmanager/list.html:93
+#: tomato/templates/dumpmanager/list.html:93
 msgid "Remove groups older than 60 days"
 msgstr "移除组织超过60天"
 
-#: templates/dumpmanager/list.html:94
+#: tomato/templates/dumpmanager/list.html:94
 msgid "Remove groups older than 7 days"
 msgstr "移除组织超过60天"
 
-#: templates/dumpmanager/list.html:95
+#: tomato/templates/dumpmanager/list.html:95
 msgid "Remove groups older than 1 day"
 msgstr "移除组织超过60天"
 
-#: templates/dumpmanager/list.html:96
+#: tomato/templates/dumpmanager/list.html:96
 msgid "Remove all groups"
 msgstr "移除组织超过60天"
 
-#: templates/element/console_novnc.html:22
+#: tomato/templates/element/console_novnc.html:22
 msgid "Loading"
 msgstr "载入"
 
-#: templates/element/console_novnc.html:29
+#: tomato/templates/element/console_novnc.html:29
 msgid "Canvas not supported."
 msgstr "不支持画布"
 
-#: templates/element/rextfv_status.html:56
+#: tomato/templates/element/rextfv_status.html:56
 msgid "Element Info"
 msgstr "元素信息"
 
-#: templates/element/rextfv_status.html:58
+#: tomato/templates/element/rextfv_status.html:58
 msgid "Element Name"
 msgstr "元素名字"
 
-#: templates/element/rextfv_status.html:60
+#: tomato/templates/element/rextfv_status.html:60
 msgid "Last Update"
 msgstr "最近更新"
 
-#: templates/element/rextfv_status.html:61
+#: tomato/templates/element/rextfv_status.html:61
 msgid "available"
 msgstr "可用的"
 
-#: templates/element/rextfv_status.html:68
+#: tomato/templates/element/rextfv_status.html:68
 msgid "Custom Status"
 msgstr "定制状态"
 
-#: templates/error/backend_trouble.html:7
-#: templates/error/backend_trouble.html:11
+#: tomato/templates/error/backend_trouble.html:7
+#: tomato/templates/error/backend_trouble.html:11
 msgid "Backend Problems"
 msgstr "后台问题"
 
-#: templates/error/backend_trouble.html:13
+#: tomato/templates/error/backend_trouble.html:13
 msgid "The ToMaTo backend is not responding properly. Please try again later."
 msgstr "后台没能及时响应，请再试几次"
 
-#: templates/error/backend_trouble.html:15
+#: tomato/templates/error/backend_trouble.html:15
 msgid "If this problem continues to occur, please contact an administrator."
 msgstr "如果该错误继续发生，请联系管理员"
 
-#: templates/error/backend_trouble.html:20
+#: tomato/templates/error/backend_trouble.html:20
 msgid "ToMaTo Module"
 msgstr "模块"
 
-#: templates/error/backend_trouble.html:24 templates/error/fault.html:15
+#: tomato/templates/error/backend_trouble.html:24
+#: tomato/templates/error/fault.html:15
 msgid "Code"
 msgstr "代码"
 
-#: templates/error/error.html:8 templates/error/error.html:27
+#: tomato/templates/error/error.html:8 tomato/templates/error/error.html:27
 msgid "Error"
 msgstr "错误"
 
-#: templates/error/error.html:32 templates/error/fault.html:13
+#: tomato/templates/error/error.html:32 tomato/templates/error/fault.html:13
 msgid "Error Details"
 msgstr "错误信息"
 
-#: templates/error/error.html:38
+#: tomato/templates/error/error.html:38
 msgid "Frame Trace"
 msgstr "帧跟踪"
 
-#: templates/error/error.html:38
+#: tomato/templates/error/error.html:38
 msgid "Show"
 msgstr "显示"
 
-#: templates/error/error.html:38
+#: tomato/templates/error/error.html:38
 msgid "(as seen by webfrontend)"
 msgstr "(前台可见)"
 
-#: templates/error/error.html:43 templates/error/exception.html:50
+#: tomato/templates/error/error.html:43
+#: tomato/templates/error/exception.html:50
 msgid "View in Dump Manager"
 msgstr "在Dump Manager中显示"
 
-#: templates/error/error.html:48
+#: tomato/templates/error/error.html:48
 msgid "contact an administrator"
 msgstr "联系管理员"
 
-#: templates/error/exception.html:8 templates/error/fault.html:7
+#: tomato/templates/error/exception.html:8 tomato/templates/error/fault.html:7
 msgid "Error page"
 msgstr "错误页"
 
-#: templates/error/exception.html:27
+#: tomato/templates/error/exception.html:27
 msgid "An Exception Occured."
 msgstr "出现了一次异常"
 
-#: templates/error/exception.html:35
+#: tomato/templates/error/exception.html:35
 msgid "Traceback"
 msgstr "追踪"
 
-#: templates/error/exception.html:38
+#: tomato/templates/error/exception.html:38
 msgid "line"
 msgstr "行"
 
-#: templates/error/exception.html:54
+#: tomato/templates/error/exception.html:54
 msgid "If you continue to encounter this problem, please"
 msgstr "如果你继续遇到这个问题，请"
 
-#: templates/error/exception.html:54
+#: tomato/templates/error/exception.html:54
 msgid "file a bug report"
 msgstr "提交错误报告"
 
-#: templates/error/fault.html:11
+#: tomato/templates/error/fault.html:11
 msgid "Oops an error occurred"
 msgstr "发生了错误"
 
-#: templates/external_networks/list.html:12
-msgid "External Networks"
-msgstr "外部网络"
+#: tomato/templates/external_network_instances/list.html:8
+#: tomato/templates/external_network_instances/list.html:12
+#: tomato/templates/organization/info.html:75
+#: tomato/templates/organization/info.html:137
+msgid "External Network Instances"
+msgstr "外部网络实例"
 
-#: templates/external_networks/list.html:16
-#: templates/external_networks/list.html:85
-msgid "Add external network"
-msgstr "增加外部网络"
+#: tomato/templates/external_network_instances/list.html:18
+msgid "Showing instances of"
+msgstr "显示实例来自于"
 
-#: templates/external_networks/list.html:24
-msgid "External network"
-msgstr "外部网络"
+#: tomato/templates/external_network_instances/list.html:20
+msgid "Showing instances of all networks"
+msgstr "显示实例来自于所有网络"
 
-#: templates/external_networks/list.html:38 templates/templates/info.html:53
-msgid "Common Element"
-msgstr "公共元素"
+#: tomato/templates/external_network_instances/list.html:41
+msgid "Show all external network instances"
+msgstr "显示所有外部网络实例"
 
-#: templates/external_networks/list.html:45
-msgid "Big icon"
-msgstr "大图标"
+#: tomato/templates/external_network_instances/list.html:60
+msgid "Show instances of"
+msgstr "显示实例来自于"
 
-#: templates/external_networks/list.html:60 templates/templates/info.html:55
-#: templates/templates/info.html:73 templates/templates/info.html:83
-#: templates/templates/info.html:133
-msgid "yes"
-msgstr "是"
+#: tomato/templates/external_network_instances/list.html:69
+msgid "Showing instances on host"
+msgstr "显示实例来自于"
 
-#: templates/external_networks/list.html:62 templates/templates/info.html:57
-#: templates/templates/info.html:75 templates/templates/info.html:85
-#: templates/templates/info.html:135
-msgid "no"
-msgstr "否"
+#: tomato/templates/external_network_instances/list.html:72
+msgid "Showing instances on site"
+msgstr "显示实例来自于站点"
 
-#: templates/external_networks/list.html:70
-msgid "instances of"
-msgstr "实例来自于"
+#: tomato/templates/external_network_instances/list.html:75
+msgid "Showing instances on organization"
+msgstr "显示实例来自于组织"
 
-#: templates/external_networks/list.html:72
+#: tomato/templates/external_network_instances/list.html:77
+msgid "Showing instances on all hosts"
+msgstr "显示实例来自于所有主机"
+
+#: tomato/templates/external_network_instances/list.html:85
+#: tomato/templates/external_network_instances/list.html:87
+msgid "Show instances on all hosts"
+msgstr "显示实例来自于所有主机"
+
+#: tomato/templates/external_network_instances/list.html:93
+#: tomato/templates/external_network_instances/list.html:95
+#: tomato/templates/external_network_instances/list.html:103
+#: tomato/templates/external_network_instances/list.html:105
+#: tomato/templates/external_network_instances/list.html:113
+msgid "Show instances on"
+msgstr "显示实例来自于"
+
+#: tomato/templates/external_network_instances/list.html:100
+#: tomato/templates/host/list.html:34
+msgid "Sites"
+msgstr "站点"
+
+#: tomato/templates/external_network_instances/list.html:115
+msgid "show instances on"
+msgstr "显示实例来自于"
+
+#: tomato/templates/external_network_instances/list.html:139
+#: tomato/templates/external_network_instances/list.html:195
+msgid "Add external network instance"
+msgstr "增加外部网络实例"
+
+#: tomato/templates/external_network_instances/list.html:166
+#: tomato/templates/external_networks/list.html:72
 msgid "edit"
 msgstr "编辑"
 
-#: templates/external_networks/list.html:73
+#: tomato/templates/external_network_instances/list.html:167
+#: tomato/templates/external_networks/list.html:73
 msgid "remove"
 msgstr "移除"
 
-#: templates/external_networks/list.html:80
+#: tomato/templates/external_network_instances/list.html:176
+msgid "No external network instances"
+msgstr "没有外部网络实例"
+
+#: tomato/templates/external_networks/list.html:12
+msgid "External Networks"
+msgstr "外部网络"
+
+#: tomato/templates/external_networks/list.html:16
+#: tomato/templates/external_networks/list.html:85
+msgid "Add external network"
+msgstr "增加外部网络"
+
+#: tomato/templates/external_networks/list.html:24
+msgid "External network"
+msgstr "外部网络"
+
+#: tomato/templates/external_networks/list.html:38
+#: tomato/templates/templates/info.html:53
+msgid "Common Element"
+msgstr "常用元素"
+
+#: tomato/templates/external_networks/list.html:45
+msgid "Big icon"
+msgstr "大图标"
+
+#: tomato/templates/external_networks/list.html:60
+#: tomato/templates/templates/info.html:55
+#: tomato/templates/templates/info.html:73
+#: tomato/templates/templates/info.html:83
+#: tomato/templates/templates/info.html:133
+msgid "yes"
+msgstr "是"
+
+#: tomato/templates/external_networks/list.html:62
+#: tomato/templates/templates/info.html:57
+#: tomato/templates/templates/info.html:75
+#: tomato/templates/templates/info.html:85
+#: tomato/templates/templates/info.html:135
+msgid "no"
+msgstr "否"
+
+#: tomato/templates/external_networks/list.html:70
+msgid "instances of"
+msgstr "实例来自于"
+
+#: tomato/templates/external_networks/list.html:80
 msgid "No external networks"
 msgstr "没有外部网络"
 
-#: templates/host/info.html:7 templates/host/info.html:16
-msgid "Host"
-msgstr "主机"
-
-#: templates/host/info.html:13
+#: tomato/templates/host/info.html:13
 msgid "All Hosts"
 msgstr "所有主机"
 
-#: templates/host/info.html:22
+#: tomato/templates/host/info.html:22
 msgid "Host has problems"
 msgstr "主机有错误"
 
-#: templates/host/info.html:22
+#: tomato/templates/host/info.html:22
 msgid ""
 "This host is currently not working properly and is disabled. The details of "
 "the problems follow"
 msgstr "这个主机目前不是正常工作,并且是禁用的。细节问题如下"
 
-#: templates/host/info.html:30
+#: tomato/templates/host/info.html:30
 msgid "No problems"
 msgstr "没有错误"
 
-#: templates/host/info.html:30
+#: tomato/templates/host/info.html:30
 msgid "This host is currently working without problems."
 msgstr "这台主机正常工作"
 
-#: templates/host/info.html:41 templates/host/list.html:81
-msgid "Address"
-msgstr "地址"
-
-#: templates/host/info.html:45
+#: tomato/templates/host/info.html:45
 msgid "RPC URL"
 msgstr "文档地址"
 
-#: templates/host/info.html:49 templates/host/list.html:82
-#: templates/organization/info.html:84
+#: tomato/templates/host/info.html:49 tomato/templates/host/list.html:82
+#: tomato/templates/organization/info.html:91
 msgid "Site"
 msgstr "站点"
 
-#: templates/host/info.html:57 templates/host/list.html:106
-#: templates/organization/info.html:38 templates/organization/info.html:99
-#: templates/security/info.html:63 templates/templates/info.html:128
+#: tomato/templates/host/info.html:57 tomato/templates/host/list.html:106
+#: tomato/templates/organization/info.html:45
+#: tomato/templates/organization/info.html:106
+#: tomato/templates/organization/list.html:39
+#: tomato/templates/security/info.html:63
+#: tomato/templates/templates/info.html:128
 msgid "Availability"
-msgstr "平均可用"
+msgstr "可用性"
 
-#: templates/host/info.html:61 templates/host/info.html:112
-#: templates/main/statistics.html:30
+#: tomato/templates/host/info.html:61 tomato/templates/host/info.html:112
+#: tomato/templates/main/statistics.html:30
 msgid "Average load"
-msgstr "平均登录"
+msgstr "平均负载"
 
-#: templates/host/info.html:66 templates/host/list.html:89
+#: tomato/templates/host/info.html:66 tomato/templates/host/list.html:89
 msgid "Uptime"
 msgstr "开启时间"
 
-#: templates/host/info.html:70
+#: tomato/templates/host/info.html:70
 msgid "Information age"
-msgstr "信息页"
+msgstr "数据更新时间"
 
-#: templates/host/info.html:74
+#: tomato/templates/host/info.html:74
 msgid "Time difference"
 msgstr "时间差"
 
-#: templates/host/info.html:78
+#: tomato/templates/host/info.html:78
 msgid "Last query duration"
-msgstr "上一次查询时间"
+msgstr "上一次查询耗时"
 
-#: templates/host/info.html:82 templates/host/list.html:46
+#: tomato/templates/host/info.html:82 tomato/templates/host/list.html:46
 msgid "Versions"
 msgstr "版本"
 
-#: templates/host/info.html:85 templates/host/list.html:84
+#: tomato/templates/host/info.html:85 tomato/templates/host/list.html:84
 msgid "Hostmanager"
 msgstr "主机管理"
 
-#: templates/host/info.html:91
+#: tomato/templates/host/info.html:91
 msgid "Updater"
 msgstr "最近更新"
 
-#: templates/host/info.html:98 templates/host/list.html:85
+#: tomato/templates/host/info.html:98 tomato/templates/host/list.html:85
 msgid "Distribution"
 msgstr "描述"
 
-#: templates/host/info.html:105
+#: tomato/templates/host/info.html:99
+msgid "Python"
+msgstr "Python"
+
+#: tomato/templates/host/info.html:100
+msgid "Kernel"
+msgstr "内核"
+
+#: tomato/templates/host/info.html:105
 msgid "Processor"
 msgstr "加工"
 
-#: templates/host/info.html:108
+#: tomato/templates/host/info.html:108
 msgid "Count"
 msgstr "所有账户"
 
-#: templates/host/info.html:109
+#: tomato/templates/host/info.html:109
 msgid "Model"
 msgstr "模型"
 
-#: templates/host/info.html:110
+#: tomato/templates/host/info.html:110
 msgid "Architecture"
 msgstr "体系结构"
 
-#: templates/host/info.html:111 templates/host/list.html:94
+#: tomato/templates/host/info.html:111 tomato/templates/host/list.html:94
 msgid "Bogomips"
 msgstr "主频"
 
-#: templates/host/info.html:120 templates/host/info.html:129
-#: templates/host/info.html:138 templates/host/list.html:98
-#: templates/host/list.html:100
+#: tomato/templates/host/info.html:120 tomato/templates/host/info.html:129
+#: tomato/templates/host/info.html:138 tomato/templates/host/list.html:98
+#: tomato/templates/host/list.html:100
 msgid "Total"
 msgstr "总大小"
 
-#: templates/host/info.html:121 templates/host/info.html:130
-#: templates/host/info.html:139 templates/host/list.html:99
-#: templates/host/list.html:101
+#: tomato/templates/host/info.html:121 tomato/templates/host/info.html:130
+#: tomato/templates/host/info.html:139 tomato/templates/host/list.html:99
+#: tomato/templates/host/list.html:101
 msgid "Free"
 msgstr "空闲"
 
-#: templates/host/info.html:145
+#: tomato/templates/host/info.html:145
 msgid "Supported types"
 msgstr "支持的类型"
 
-#: templates/host/info.html:148 templates/host/list.html:102
+#: tomato/templates/host/info.html:148 tomato/templates/host/list.html:102
 msgid "Element types"
 msgstr "元素类型"
 
-#: templates/host/info.html:149 templates/host/list.html:103
+#: tomato/templates/host/info.html:149 tomato/templates/host/list.html:103
 msgid "Connection types"
 msgstr "连接类型"
 
-#: templates/host/info.html:154
+#: tomato/templates/host/info.html:154
 msgid "Debug information"
 msgstr "调试信息"
 
-#: templates/host/info.html:157
+#: tomato/templates/host/info.html:157
 msgid "Component errors"
 msgstr "组件错误"
 
-#: templates/host/info.html:158
+#: tomato/templates/host/info.html:158
 msgid "Error dumps"
 msgstr "错误数目"
 
-#: templates/host/info.html:186
+#: tomato/templates/host/info.html:186
 msgid "External Networks on This Host"
 msgstr "这台主机的外部网络"
 
-#: templates/host/info.html:188
+#: tomato/templates/host/info.html:188
 msgid "Host Users"
 msgstr "主机用户"
 
-#: templates/host/info.html:192
+#: tomato/templates/host/info.html:192
 msgid "Refresh Host Information"
 msgstr "更新主机信息"
 
-#: templates/host/info.html:193
+#: tomato/templates/host/info.html:193
 msgid "Edit Host"
 msgstr "编辑主机"
 
-#: templates/host/info.html:194
+#: tomato/templates/host/info.html:194
 msgid "Remove Host"
 msgstr "移除主机"
 
-#: templates/host/list.html:18
+#: tomato/templates/host/list.html:18
 msgid "Showing all hosts of organization"
 msgstr "显示主机来自于"
 
-#: templates/host/list.html:20
+#: tomato/templates/host/list.html:20
 msgid "Showing all hosts on site"
 msgstr "显示所有主机来自于"
 
-#: templates/host/list.html:22
+#: tomato/templates/host/list.html:22
 msgid "Showing all hosts"
 msgstr "显示所有主机"
 
-#: templates/host/list.html:27
+#: tomato/templates/host/list.html:27
 msgid "Show all hosts"
 msgstr "显示所有主机"
 
-#: templates/host/list.html:31
+#: tomato/templates/host/list.html:31
 msgid "Show all hosts of"
 msgstr "显示所有主机来自于"
 
-#: templates/host/list.html:34
-msgid "Sites"
-msgstr "站点"
-
-#: templates/host/list.html:36
+#: tomato/templates/host/list.html:36
 msgid "Show all hosts on"
 msgstr "显示所有主机来自于"
 
-#: templates/host/list.html:45
+#: tomato/templates/host/list.html:45
 msgid "Most Important"
 msgstr "最重要"
 
-#: templates/host/list.html:47
+#: tomato/templates/host/list.html:47
 msgid "Timing"
 msgstr "定时"
 
-#: templates/host/list.html:48
+#: tomato/templates/host/list.html:48
 msgid "CPU"
 msgstr "核心数目"
 
-#: templates/host/list.html:49 templates/profile/list.html:56
+#: tomato/templates/host/list.html:49 tomato/templates/profile/list.html:56
 msgid "RAM"
-msgstr ""
+msgstr "内存"
 
-#: templates/host/list.html:50 templates/topology/info.html:133
-#: templates/topology/list.html:83
+#: tomato/templates/host/list.html:50 tomato/templates/topology/list.html:83
 msgid "Disk"
 msgstr "硬盘"
 
-#: templates/host/list.html:51 templates/main/start.html:92
+#: tomato/templates/host/list.html:51 tomato/templates/main/start.html:92
 msgid "Features"
 msgstr "平台特点"
 
-#: templates/host/list.html:83 templates/organization/info.html:39
-#: templates/organization/info.html:100
+#: tomato/templates/host/list.html:83
+#: tomato/templates/organization/info.html:46
+#: tomato/templates/organization/info.html:107
+#: tomato/templates/organization/list.html:39
 msgid "Load"
 msgstr "负载"
 
-#: templates/host/list.html:88
+#: tomato/templates/host/list.html:88
 msgid "Info age"
 msgstr "信息页"
 
-#: templates/host/list.html:90
+#: tomato/templates/host/list.html:90
 msgid "Time diff"
 msgstr "时间差"
 
-#: templates/host/list.html:91
+#: tomato/templates/host/list.html:91
 msgid "Query time"
 msgstr "查询时间"
 
-#: templates/host/list.html:92 templates/profile/info.html:58
-#: templates/profile/list.html:57 templates/topology/info.html:130
-#: templates/topology/list.html:80
+#: tomato/templates/host/list.html:92 tomato/templates/profile/info.html:58
+#: tomato/templates/profile/list.html:57 tomato/templates/topology/list.html:80
 msgid "CPUs"
 msgstr "核心数目"
 
-#: templates/host/list.html:93
+#: tomato/templates/host/list.html:93
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
-#: templates/host/list.html:95
+#: tomato/templates/host/list.html:95
 msgid "CPU Load"
 msgstr "CPU负载"
 
-#: templates/host/list.html:96
+#: tomato/templates/host/list.html:96
 msgid "Total RAM"
 msgstr "RAM总大小"
 
-#: templates/host/list.html:97
+#: tomato/templates/host/list.html:97
 msgid "Free RAM"
 msgstr "空闲RAM"
 
-#: templates/host/list.html:104
+#: tomato/templates/host/list.html:104
 msgid "Errors"
 msgstr "错误"
 
-#: templates/host/list.html:231
+#: tomato/templates/host/list.html:231
 msgid "No hosts"
 msgstr "没有主机"
 
-#: templates/host/list.html:242
+#: tomato/templates/host/list.html:242
 msgid "Add host"
 msgstr "增加主机"
 
-#: templates/main/login.html:7 templates/main/start.html:71
+#: tomato/templates/main/login.html:7 tomato/templates/main/start.html:71
 msgid "Login"
 msgstr "登录"
 
-#: templates/main/login.html:12
+#: tomato/templates/main/login.html:12
 msgid "Login to ToMaTo"
 msgstr "登录到ProviSec"
 
-#: templates/main/start.html:23
+#: tomato/templates/main/start.html:23
 msgid "Welcome to the"
 msgstr "欢迎来到"
 
-#: templates/main/start.html:23
+#: tomato/templates/main/start.html:23
 msgid "ProviSec Testbed"
 msgstr "ProviSec实验平台"
 
-#: templates/main/start.html:43
+#: tomato/templates/main/start.html:43
 msgid "My Topologies"
 msgstr "我的拓扑"
 
-#: templates/main/start.html:54
+#: tomato/templates/main/start.html:54
 msgid "Manage Users"
 msgstr "管理用户"
 
-#: templates/main/start.html:62
+#: tomato/templates/main/start.html:62
 msgid "Manage Hosts"
 msgstr "管理主机"
 
-#: templates/main/start.html:66
+#: tomato/templates/main/start.html:66
 msgid "Create New Topology"
 msgstr "创建一个新的拓扑"
 
-#: templates/main/start.html:73
+#: tomato/templates/main/start.html:73
 msgid "Register"
 msgstr "注册"
 
-#: templates/main/start.html:78
+#: tomato/templates/main/start.html:78
 msgid "Visit our Homepage"
 msgstr "浏览我们的主页"
 
-#: templates/main/start.html:132
+#: tomato/templates/main/start.html:132
 msgid "Intuitive editor"
 msgstr "直观的编辑器"
 
-#: templates/main/start.html:133
+#: tomato/templates/main/start.html:133
 msgid ""
 "Create your virtual network topology in an intuitive web-based editor. No "
 "need to write config files or code."
 msgstr "在web端创建你的虚拟拓扑网络，不需要写入配置文件和代码"
 
-#: templates/main/start.html:145
+#: tomato/templates/main/start.html:145
 msgid "Up and running in seconds"
 msgstr "在数秒内开启运行"
 
-#: templates/main/start.html:146
+#: tomato/templates/main/start.html:146
 msgid ""
 "Even very complex topologies can be configured and started in a few seconds."
 msgstr "即使是非常复杂的网络也可以在数秒内开启"
 
-#: templates/main/start.html:158
+#: tomato/templates/main/start.html:158
 msgid "Sites worldwide"
 msgstr "全球站点"
 
-#: templates/main/start.html:159
+#: tomato/templates/main/start.html:159
 msgid ""
 "Create topologies that go around the globe, select freely from our various "
 "sites."
 msgstr "创建全球站点"
 
-#: templates/main/start.html:171
+#: tomato/templates/main/start.html:171
 msgid "Packet capturing"
 msgstr "包捕捉"
 
-#: templates/main/start.html:172
+#: tomato/templates/main/start.html:172
 msgid ""
 "Have a look at what goes over the wire. Just activate packet capturing on a "
 "link and analyze the traffic in Wireshark."
 msgstr "在wireshark中观察捕获的包，分析链路"
 
-#: templates/main/start.html:184
+#: tomato/templates/main/start.html:184
 msgid "Link emulation"
 msgstr "链路测试"
 
-#: templates/main/start.html:185
+#: tomato/templates/main/start.html:185
 msgid ""
 "Configure different properties like latency, packet loss or bandwidth on "
 "each link."
 msgstr "在链路上配置如丢包率，潜在因素和带宽等不同的属性"
 
-#: templates/main/start.html:197
+#: tomato/templates/main/start.html:197
 msgid "Graphical console"
 msgstr "图形化的控制台"
 
-#: templates/main/start.html:198
+#: tomato/templates/main/start.html:198
 msgid ""
 "Control your virtual machines directly from a web-based console viewer. "
 "Watch your VM boot or control graphical user interfaces."
 msgstr ""
 "从一个基于web的控制台查看器控制你的虚拟机。启动或控制你的虚拟图形用户界面。"
 
-#: templates/main/start.html:210 templates/main/statistics.html:80
+#: tomato/templates/main/start.html:210
+#: tomato/templates/main/statistics.html:80
 msgid "Virtual networks"
 msgstr "虚拟网络"
 
-#: templates/main/start.html:211
+#: tomato/templates/main/start.html:211
 msgid "Use virtual switches or external networks to connect your topology."
 msgstr "使用虚拟交换机或外部网络连接拓扑。"
 
-#: templates/main/start.html:223
+#: tomato/templates/main/start.html:223
 msgid "Different virtualization technologies"
 msgstr "不同的虚拟技术"
 
-#: templates/main/start.html:224
+#: tomato/templates/main/start.html:224
 msgid ""
 "Select from full virtualization (KVM) and container virtualization (OpenVZ) "
 "for each topology component to save resources."
 msgstr "使用KVM或者OpenVZ用于对每个组件虚拟化为资源"
 
-#: templates/main/start.html:236
+#: tomato/templates/main/start.html:236
 msgid "Pre-configured templates"
 msgstr "提前配置好的拓扑"
 
-#: templates/main/start.html:237
+#: tomato/templates/main/start.html:237
 msgid ""
 "Select from a wide range of pre-configures VM images spanning from Debian, "
 "Ubuntu and other Linux systems to Windows XP."
 msgstr "选择Debian、ubuntu或者其他linux系统的预配置虚拟机镜像"
 
-#: templates/main/start.html:249
+#: tomato/templates/main/start.html:249
 msgid "Integrated monitoring"
 msgstr "综合检测"
 
-#: templates/main/start.html:250
+#: tomato/templates/main/start.html:250
 msgid ""
 "Observe the resource usage of a whole topology or individual components."
 msgstr "观察整个拓扑或单个组件的资源使用情况。"
 
-#: templates/main/start.html:273
+#: tomato/templates/main/start.html:273
 msgid "Latest news "
 msgstr "最近新闻"
 
-#: templates/main/start.html:273
+#: tomato/templates/main/start.html:273
 msgid "RSS Feed"
 msgstr "RSS订阅"
 
-#: templates/main/start.html:286
+#: tomato/templates/main/start.html:286
 msgid "Failed to load news feed!"
 msgstr "载入RSS失败"
 
-#: templates/main/statistics.html:22
+#: tomato/templates/main/statistics.html:22
 msgid "Host count"
-msgstr "主机账户"
+msgstr "主机数量"
 
-#: templates/main/statistics.html:26
+#: tomato/templates/main/statistics.html:26
 msgid "Average availability"
-msgstr "平均可用"
+msgstr "平均可用性"
 
-#: templates/main/statistics.html:34
+#: tomato/templates/main/statistics.html:34
 msgid "Total CPUs"
-msgstr "总的cpu"
+msgstr "总CPU数量"
 
-#: templates/main/statistics.html:38
+#: tomato/templates/main/statistics.html:38
 msgid "Total memory"
 msgstr "总内存大小"
 
-#: templates/main/statistics.html:42
+#: tomato/templates/main/statistics.html:42
 msgid "Total disk space"
-msgstr "总的硬盘空间"
+msgstr "总磁盘空间"
 
-#: templates/main/statistics.html:50
+#: tomato/templates/main/statistics.html:50
 msgid "Usage"
 msgstr "使用情况"
 
-#: templates/main/statistics.html:58 templates/organization/info.html:65
-#: templates/topology/list.html:12
+#: tomato/templates/main/statistics.html:55
+msgid "active in the last 30 days"
+msgstr "活动(30天内)"
+
+#: tomato/templates/main/statistics.html:58
+#: tomato/templates/organization/info.html:72
+#: tomato/templates/topology/list.html:12
 msgid "Topologies"
 msgstr "拓扑"
 
-#: templates/main/statistics.html:62 templates/topology/info.html:129
-#: templates/topology/list.html:79
+#: tomato/templates/main/statistics.html:59
+msgid "active"
+msgstr "活动中"
+
+#: tomato/templates/main/statistics.html:62
+#: tomato/templates/topology/list.html:79
 msgid "Elements"
 msgstr "元素"
 
-#: templates/main/statistics.html:66
+#: tomato/templates/main/statistics.html:66
 msgid "Connections"
 msgstr "连接"
 
-#: templates/main/statistics.html:70
+#: tomato/templates/main/statistics.html:70
 msgid "Virtual machines"
 msgstr "虚拟机"
 
-#: templates/main/statistics.html:84
+#: tomato/templates/main/statistics.html:84
 msgid "External"
 msgstr "外部网络"
 
-#: templates/main/usage.html:138
+#: tomato/templates/main/usage.html:138
 msgid "Interval"
 msgstr "间隙"
 
-#: templates/main/usage.html:140
+#: tomato/templates/main/usage.html:140
 msgid "Years"
 msgstr "年份"
 
-#: templates/main/usage.html:141
+#: tomato/templates/main/usage.html:141
 msgid "Months"
 msgstr "月份"
 
-#: templates/main/usage.html:142
+#: tomato/templates/main/usage.html:142
 msgid "Days"
 msgstr "日"
 
-#: templates/main/usage.html:143
+#: tomato/templates/main/usage.html:143
 msgid "Hours"
 msgstr "小时"
 
-#: templates/main/usage.html:144
+#: tomato/templates/main/usage.html:144
 msgid "5 Minutes"
 msgstr "5分钟"
 
-#: templates/map/index.html:38
+#: tomato/templates/map/index.html:38
 msgid "Site Map"
 msgstr "站点地图"
 
-#: templates/organization/info.html:13
+#: tomato/templates/organization/info.html:13
 msgid "All Organizations"
 msgstr "组织"
 
-#: templates/organization/info.html:29 templates/organization/info.html:89
+#: tomato/templates/organization/info.html:29
+#: tomato/templates/organization/info.html:96
 msgid "Internal name"
 msgstr "内部名字"
 
-#: templates/organization/info.html:44
+#: tomato/templates/organization/info.html:38
+msgid "hosts"
+msgstr "主机"
+
+#: tomato/templates/organization/info.html:40
+#: tomato/templates/organization/list.html:38
+msgid "host"
+msgstr "主机"
+
+#: tomato/templates/organization/info.html:51
 msgid "Homepage"
 msgstr "浏览我们的主页"
 
-#: templates/organization/info.html:62
+#: tomato/templates/organization/info.html:69
 msgid "Accounts"
 msgstr "所有账户"
 
-#: templates/organization/info.html:68 templates/organization/info.html:130
-msgid "External Network Instances"
-msgstr "外部网络实例"
-
-#: templates/organization/info.html:72
-msgid "Add Site"
-msgstr "增加站点"
-
-#: templates/organization/info.html:73
+#: tomato/templates/organization/info.html:80
 msgid "Edit Organization"
 msgstr "编辑组织"
 
-#: templates/organization/info.html:74
+#: tomato/templates/organization/info.html:81
 msgid "Remove Organization"
 msgstr "移除组织"
 
-#: templates/organization/info.html:105
+#: tomato/templates/organization/info.html:112
 msgid "Location"
 msgstr "地点"
 
-#: templates/organization/info.html:109
+#: tomato/templates/organization/info.html:116
 msgid "Geolocation"
-msgstr "地理定位"
+msgstr "地理位置"
 
-#: templates/organization/info.html:112
+#: tomato/templates/organization/info.html:118
+msgid "Longitude"
+msgstr "经度"
+
+#: tomato/templates/organization/info.html:118
+msgid "Latitude"
+msgstr "纬度"
+
+#: tomato/templates/organization/info.html:119
 msgid "Google Maps"
-msgstr "谷歌地图"
+msgstr "Google地图"
 
-#: templates/organization/info.html:132
+#: tomato/templates/organization/info.html:139
 msgid "Edit Site"
 msgstr "编辑站点"
 
-#: templates/organization/info.html:133
+#: tomato/templates/organization/info.html:140
 msgid "Remove Site"
 msgstr "移除站点"
 
-#: templates/organization/list.html:19
+#: tomato/templates/organization/list.html:19
 msgid "Add organization"
 msgstr "增加组织"
 
-#: templates/organization/list.html:55
+#: tomato/templates/organization/list.html:55
 msgid "No organizations"
 msgstr "没有组织"
 
-#: templates/organization/list.html:60
+#: tomato/templates/organization/list.html:60
 msgid " Add organization"
 msgstr "增加组织"
 
-#: templates/profile/info.html:7
+#: tomato/templates/profile/info.html:7
 msgid "Device profile "
 msgstr "设备概览"
 
-#: templates/profile/info.html:17
+#: tomato/templates/profile/info.html:14
+msgid "All Device Profiles"
+msgstr "设备概览"
+
+#: tomato/templates/profile/info.html:17
 msgid "Device profile"
 msgstr "设备概览"
 
-#: templates/profile/info.html:74
+#: tomato/templates/profile/info.html:74
 msgid "edit device profile"
 msgstr "编辑设备概览"
 
-#: templates/profile/info.html:75
+#: tomato/templates/profile/info.html:75
 msgid "remove device profile"
 msgstr "移除设备概览"
 
-#: templates/profile/list.html:8 templates/profile/list.html:12
+#: tomato/templates/profile/list.html:8 tomato/templates/profile/list.html:12
 msgid "Device Profiles"
 msgstr "设备概览"
 
-#: templates/profile/list.html:18
+#: tomato/templates/profile/list.html:18
 msgid "Showing all device profiles of tech"
 msgstr "显示所有设备技术"
 
-#: templates/profile/list.html:20
+#: tomato/templates/profile/list.html:20
 msgid "Showing all device profiles"
 msgstr "显示所有设备概览"
 
-#: templates/profile/list.html:25
+#: tomato/templates/profile/list.html:25
 msgid "Show all device profiles"
 msgstr "显示所有设备概览"
 
-#: templates/profile/list.html:28
+#: tomato/templates/profile/list.html:28
 msgid "Show all device profiles of tech"
 msgstr "显示所有设备概览来自于"
 
-#: templates/profile/list.html:43 templates/profile/list.html:117
+#: tomato/templates/profile/list.html:43 tomato/templates/profile/list.html:117
 msgid "Add device profile"
 msgstr "增加设备概览"
 
-#: templates/profile/list.html:55
+#: tomato/templates/profile/list.html:55
 msgid "Disk Space"
 msgstr "磁盘空间"
 
-#: templates/profile/list.html:97
+#: tomato/templates/profile/list.html:97
 msgid ""
 "This profile is restricted. It can only be used by users with the "
 "\"Restricted Profiles\" flag."
 msgstr "这个概览被限制，可以被有着权限的用户使用"
 
-#: templates/profile/list.html:106
+#: tomato/templates/profile/list.html:106
 msgid "No profiles"
 msgstr "没有概览"
 
-#: templates/scenario/info.html:46
+#: tomato/templates/scenario/info.html:46
 msgid "All Scenarios"
 msgstr "所有场景"
 
-#: templates/scenario/info.html:50
+#: tomato/templates/scenario/info.html:50
 msgid "Scenario"
 msgstr "场景"
 
-#: templates/scenario/info.html:58
-#: templates/security_resources/malicious_code_info.html:31
-#: templates/security_resources/security_software_info.html:31
-#: templates/security_resources/vulnerability_info.html:32
+#: tomato/templates/scenario/info.html:58
+#: tomato/templates/security_resources/malicious_code_info.html:31
+#: tomato/templates/security_resources/security_software_info.html:31
+#: tomato/templates/security_resources/vulnerability_info.html:32
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: templates/scenario/info.html:70 templates/scenario/list.html:328
+#: tomato/templates/scenario/info.html:70
+#: tomato/templates/scenario/list.html:57
 msgid "Accessibility"
 msgstr "平均可用"
 
-#: templates/scenario/info.html:74 templates/scenario/list.html:329
+#: tomato/templates/scenario/info.html:74
+#: tomato/templates/scenario/list.html:58
 msgid "Author"
 msgstr "作者"
 
-#: templates/scenario/info.html:78
+#: tomato/templates/scenario/info.html:78
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: templates/scenario/info.html:82
+#: tomato/templates/scenario/info.html:82
 msgid "topology Info"
 msgstr "拓扑信息"
 
-#: templates/scenario/info.html:102
+#: tomato/templates/scenario/info.html:102
 msgid "topology info"
 msgstr "拓扑信息"
 
-#: templates/scenario/info.html:106
+#: tomato/templates/scenario/info.html:106
 msgid "upload topo"
 msgstr "上传拓扑"
 
-#: templates/scenario/info.html:110
+#: tomato/templates/scenario/info.html:110
 msgid "download topo"
 msgstr "下载拓扑"
 
-#: templates/scenario/info.html:115
+#: tomato/templates/scenario/info.html:115
 msgid "deploy scenario"
 msgstr "部署场景"
 
-#: templates/scenario/info.html:119
+#: tomato/templates/scenario/info.html:119
 msgid "edit scenario"
 msgstr "编辑场景"
 
-#: templates/scenario/info.html:123
+#: tomato/templates/scenario/info.html:123
 msgid "remove scenario"
 msgstr "移除场景"
 
-#: templates/scenario/list.html:293
+#: tomato/templates/scenario/list.html:22
 msgid "Showing all scenarios"
 msgstr "显示所有账户"
 
-#: templates/scenario/list.html:295 templates/scenario/list.html:306
+#: tomato/templates/scenario/list.html:24
+#: tomato/templates/scenario/list.html:35
 msgid "Showing my scenarios"
 msgstr "场景"
 
-#: templates/scenario/list.html:297 templates/scenario/list.html:307
+#: tomato/templates/scenario/list.html:26
+#: tomato/templates/scenario/list.html:36
 msgid "Showing public scenarios"
 msgstr "显示公共场景"
 
-#: templates/scenario/list.html:299
+#: tomato/templates/scenario/list.html:28
 msgid "Error..."
 msgstr "错误"
 
-#: templates/scenario/list.html:304
+#: tomato/templates/scenario/list.html:33
 msgid "Show all scenarios"
 msgstr "显示所有场景"
 
-#: templates/scenario/list.html:316
+#: tomato/templates/scenario/list.html:45
 msgid "Add Scenario"
 msgstr "增加场景"
 
-#: templates/scenario/list.html:330
+#: tomato/templates/scenario/list.html:59
 msgid "Create Time"
 msgstr "创建时间"
 
-#: templates/scenario/list.html:354
+#: tomato/templates/scenario/list.html:77
 msgid ""
 "No scenarios. You can save a topology as a scenario in the edit panel of the "
 "topology."
 msgstr "没有场景，你可以在拓扑的编辑工具栏中将一个拓扑保存为场景"
 
-#: templates/security/info.html:21 templates/security/list.html:13
+#: tomato/templates/security/info.html:21
+#: tomato/templates/security/list.html:13
 msgid "Security"
 msgstr "安全软件"
 
-#: templates/security/info.html:41 templates/security/list.html:55
-#: templates/templates/info.html:41 templates/templates/list.html:55
-msgid "Subtype"
-msgstr "图表类型"
-
-#: templates/security/info.html:46 templates/templates/info.html:62
-#: templates/web_resources/default_executable_archive_info.html:37
-#: templates/web_resources/default_executable_archive_info.html:82
+#: tomato/templates/security/info.html:46
+#: tomato/templates/templates/info.html:62
+#: tomato/templates/web_resources/default_executable_archive_info.html:37
+#: tomato/templates/web_resources/default_executable_archive_info.html:82
 msgid "Creation date"
 msgstr "创建时间"
 
-#: templates/security/info.html:53 templates/templates/info.html:115
+#: tomato/templates/security/info.html:53
+#: tomato/templates/templates/info.html:115
 msgid "External URLs"
 msgstr "外部URLs"
 
-#: templates/security/info.html:96
+#: tomato/templates/security/info.html:96
 msgid "edit security"
 msgstr "编辑安全软件"
 
-#: templates/security/info.html:97
+#: tomato/templates/security/info.html:97
 msgid "remove security"
 msgstr "移除安全软件"
 
-#: templates/security/list.html:19
+#: tomato/templates/security/list.html:19
 msgid "Showing all Security of tech"
 msgstr "显示所有安全软件技术"
 
-#: templates/security/list.html:21
+#: tomato/templates/security/list.html:21
 msgid "Showing all Security"
 msgstr "显示所有安全软件"
 
-#: templates/security/list.html:29
+#: tomato/templates/security/list.html:29
 msgid "Show all security of tech"
 msgstr "显示安全软件来自"
 
-#: templates/security/list.html:56
-#: templates/security_resources/malicious_code_info.html:55
-#: templates/security_resources/security_software_info.html:55
-#: templates/security_resources/vulnerability_info.html:56
-#: templates/templates/list.html:58
-#: templates/web_resources/default_executable_archive_list.html:24
-msgid "Creation Date"
-msgstr "创建时间"
-
-#: templates/security/list.html:57 templates/templates/list.html:59
+#: tomato/templates/security/list.html:57
+#: tomato/templates/templates/list.html:59
 msgid "Ready"
 msgstr "就绪"
 
-#: templates/security/list.html:108
+#: tomato/templates/security/list.html:108
 msgid "Add security"
 msgstr "增加安全软件"
 
-#: templates/security_resources/malicious_code_info.html:21
+#: tomato/templates/security_resources/malicious_code_info.html:21
 msgid "All Malicious Codes"
 msgstr "恶意代码"
 
-#: templates/security_resources/malicious_code_info.html:25
+#: tomato/templates/security_resources/malicious_code_info.html:25
 msgid "Malicious Code "
 msgstr "恶意代码"
 
-#: templates/security_resources/malicious_code_info.html:43
-#: templates/security_resources/malicious_code_list.html:33
-#: templates/security_resources/security_software_info.html:43
-#: templates/security_resources/security_software_list.html:33
-#: templates/security_resources/vulnerability_info.html:44
-#: templates/security_resources/vulnerability_list.html:33
+#: tomato/templates/security_resources/malicious_code_info.html:43
+#: tomato/templates/security_resources/malicious_code_list.html:33
+#: tomato/templates/security_resources/security_software_info.html:43
+#: tomato/templates/security_resources/security_software_list.html:33
+#: tomato/templates/security_resources/vulnerability_info.html:44
+#: tomato/templates/security_resources/vulnerability_list.html:33
 msgid "System"
 msgstr "系统"
 
-#: templates/security_resources/malicious_code_info.html:47
-#: templates/security_resources/security_software_info.html:47
-#: templates/security_resources/vulnerability_info.html:48
-#: templates/web_resources/custom_element_icons_list.html:27
+#: tomato/templates/security_resources/malicious_code_info.html:47
+#: tomato/templates/security_resources/security_software_info.html:47
+#: tomato/templates/security_resources/vulnerability_info.html:48
+#: tomato/templates/web_resources/custom_element_icons_list.html:27
 msgid "URL"
 msgstr "文档地址"
 
-#: templates/security_resources/malicious_code_info.html:68
+#: tomato/templates/security_resources/malicious_code_info.html:68
 msgid "edit malicious code"
 msgstr "编辑恶意代码"
 
-#: templates/security_resources/malicious_code_info.html:72
+#: tomato/templates/security_resources/malicious_code_info.html:72
 msgid "remove malicious code"
 msgstr "移除恶意代码"
 
-#: templates/security_resources/malicious_code_list.html:21
+#: tomato/templates/security_resources/malicious_code_list.html:21
 msgid "Add malicious code"
 msgstr "增加恶意代码"
 
-#: templates/security_resources/malicious_code_list.html:48
+#: tomato/templates/security_resources/malicious_code_list.html:34
+#: tomato/templates/security_resources/security_software_list.html:34
+#: tomato/templates/security_resources/vulnerability_list.html:34
+msgid "creation_date"
+msgstr "创建时间"
+
+#: tomato/templates/security_resources/malicious_code_list.html:48
 msgid "No Malicious Code"
 msgstr "没有恶意代码"
 
-#: templates/security_resources/security_software_info.html:21
-msgid "All Security Software"
-msgstr "安全软件"
-
-#: templates/security_resources/security_software_info.html:25
-#: templates/security_resources/security_software_list.html:13
+#: tomato/templates/security_resources/security_software_info.html:12
+#: tomato/templates/security_resources/security_software_info.html:25
+#: tomato/templates/security_resources/security_software_list.html:9
+#: tomato/templates/security_resources/security_software_list.html:13
 msgid "Security Software"
 msgstr "安全软件"
 
-#: templates/security_resources/security_software_info.html:68
+#: tomato/templates/security_resources/security_software_info.html:21
+msgid "All Security Software"
+msgstr "安全软件"
+
+#: tomato/templates/security_resources/security_software_info.html:68
 msgid "edit security software"
 msgstr "编辑安全软件"
 
-#: templates/security_resources/security_software_info.html:72
+#: tomato/templates/security_resources/security_software_info.html:72
 msgid "remove security software"
 msgstr "移除安全软件"
 
-#: templates/security_resources/security_software_list.html:21
+#: tomato/templates/security_resources/security_software_list.html:21
 msgid "Add Security Software"
 msgstr "增加安全软件"
 
-#: templates/security_resources/security_software_list.html:48
+#: tomato/templates/security_resources/security_software_list.html:48
 msgid "No Security Software"
 msgstr "没有安全软件"
 
-#: templates/security_resources/vulnerability_info.html:22
+#: tomato/templates/security_resources/vulnerability_info.html:22
 msgid "All Vulnerabilities"
 msgstr "所有漏洞"
 
-#: templates/security_resources/vulnerability_info.html:26
+#: tomato/templates/security_resources/vulnerability_info.html:26
 msgid "Vulnerabilitie"
 msgstr "漏洞"
 
-#: templates/security_resources/vulnerability_info.html:69
+#: tomato/templates/security_resources/vulnerability_info.html:69
 msgid "edit vulnerability"
 msgstr "编辑漏洞"
 
-#: templates/security_resources/vulnerability_info.html:73
+#: tomato/templates/security_resources/vulnerability_info.html:73
 msgid "remove vulnerability"
 msgstr "移除漏洞"
 
-#: templates/security_resources/vulnerability_list.html:13
+#: tomato/templates/security_resources/vulnerability_list.html:13
 msgid "Vulnerability"
 msgstr "漏洞"
 
-#: templates/security_resources/vulnerability_list.html:21
+#: tomato/templates/security_resources/vulnerability_list.html:21
 msgid "Add vulnerability"
 msgstr "平均可用"
 
-#: templates/security_resources/vulnerability_list.html:48
+#: tomato/templates/security_resources/vulnerability_list.html:48
 msgid "No Vulnerability"
 msgstr "没有漏洞"
 
-#: templates/templates/info.html:18
+#: tomato/templates/templates/info.html:18
 msgid "All Templates"
 msgstr "所有模板"
 
-#: templates/templates/info.html:21
+#: tomato/templates/templates/info.html:21
 msgid "Template"
 msgstr "模板"
 
-#: templates/templates/info.html:45 templates/templates/list.html:56
+#: tomato/templates/templates/info.html:45
+#: tomato/templates/templates/list.html:56
 msgid "Popularity"
 msgstr "热度"
 
-#: templates/templates/info.html:66
+#: tomato/templates/templates/info.html:66
 msgid "Customize function"
 msgstr "定制功能"
 
-#: templates/templates/info.html:70
+#: tomato/templates/templates/info.html:70
 msgid "Executable archive support"
 msgstr "默认服务"
 
-#: templates/templates/info.html:105
+#: tomato/templates/templates/info.html:105
 msgid "Default Keyboard Layout"
 msgstr "默认键盘布局"
 
-#: templates/templates/info.html:110
+#: tomato/templates/templates/info.html:110
 msgid "Image Size"
-msgstr "储存空间"
+msgstr "镜像大小"
 
-#: templates/templates/info.html:124
+#: tomato/templates/templates/info.html:124
 msgid "Checksum"
 msgstr "校验和"
 
-#: templates/templates/info.html:161
+#: tomato/templates/templates/info.html:161
 msgid "edit template"
 msgstr "编辑模板"
 
-#: templates/templates/info.html:162
+#: tomato/templates/templates/info.html:162
 msgid "remove template"
 msgstr "移除模板"
 
-#: templates/templates/list.html:19
+#: tomato/templates/templates/list.html:19
 msgid "Showing all templates of tech"
 msgstr "显示所有设备技术"
 
-#: templates/templates/list.html:21
+#: tomato/templates/templates/list.html:21
 msgid "Showing all templates"
 msgstr "显示所有模板"
 
-#: templates/templates/list.html:26
+#: tomato/templates/templates/list.html:26
 msgid "Show all templates"
 msgstr "显示所有拓扑"
 
-#: templates/templates/list.html:29
+#: tomato/templates/templates/list.html:29
 msgid "Show all template of tech"
 msgstr "显示拓扑来自"
 
-#: templates/templates/list.html:125
+#: tomato/templates/templates/list.html:125
 msgid "This template appears as a common element in the editor"
 msgstr "这个模板在拓扑中表现为一个普通元素"
 
-#: templates/templates/list.html:132
+#: tomato/templates/templates/list.html:132
 msgid "nlXTP Guest Modules not installed"
 msgstr "nlXTP客户模块未被建立"
 
-#: templates/templates/list.html:139
+#: tomato/templates/templates/list.html:139
 msgid "This template is restricted"
 msgstr "这个模板有所限制"
 
-#: templates/templates/list.html:151
+#: tomato/templates/templates/list.html:151
 msgid "No templates"
 msgstr "没有模板"
 
-#: templates/templates/list.html:162
+#: tomato/templates/templates/list.html:162
 msgid "Add template"
 msgstr "增加模板"
 
-#: templates/topology/info.html:119
-msgid "add Subtopology"
-msgstr "增加拓扑"
+#: tomato/templates/topology/import.html:8
+#: tomato/templates/topology/import.html:12
+msgid "Import Topology"
+msgstr "导入拓扑"
 
-#: templates/topology/info.html:126
-msgid "Subtop Name"
-msgstr "图表类型"
-
-#: templates/topology/info.html:127 templates/topology/list.html:77
-msgid "Owner"
-msgstr "拥有者"
-
-#: templates/topology/info.html:128 templates/topology/list.html:78
-msgid "Timeout"
-msgstr "时间"
-
-#: templates/topology/list.html:8
+#: tomato/templates/topology/list.html:8
 msgid "Topology list"
 msgstr "拓扑列表"
 
-#: templates/topology/list.html:30
+#: tomato/templates/topology/list.html:30
 msgid "Show user topologies"
 msgstr "显示用户拓扑"
 
-#: templates/topology/list.html:33 templates/topology/list.html:37
+#: tomato/templates/topology/list.html:33
+#: tomato/templates/topology/list.html:37
 msgid "Show all topologies of"
 msgstr "显示拓扑来自"
 
-#: templates/topology/list.html:35
+#: tomato/templates/topology/list.html:35
 msgid "Show all topologies"
 msgstr "显示所有拓扑"
 
-#: templates/topology/list.html:47
+#: tomato/templates/topology/list.html:47
 msgid "Note"
 msgstr "提示"
 
-#: templates/topology/list.html:59 templates/topology/list.html:124
+#: tomato/templates/topology/list.html:59
+#: tomato/templates/topology/list.html:124
 msgid "Create new Topology"
 msgstr "创建一个新的拓扑"
 
-#: templates/topology/list.html:60 templates/topology/list.html:125
-#: templates/topology/tutorials_list.html:12
+#: tomato/templates/topology/list.html:60
+#: tomato/templates/topology/list.html:125
+#: tomato/templates/topology/tutorials_list.html:12
 msgid "Tutorials"
 msgstr "教程"
 
-#: templates/topology/list.html:61 templates/topology/list.html:126
+#: tomato/templates/topology/list.html:61
+#: tomato/templates/topology/list.html:126
 msgid "Import from file"
 msgstr "从文件导入"
 
-#: templates/topology/list.html:112
+#: tomato/templates/topology/list.html:78
+msgid "Timeout"
+msgstr "时间"
+
+#: tomato/templates/topology/list.html:112
 msgid ""
 "You do not own or have access to any topologies yet. If you are a new user, "
 "we recommend you to do a tutorial."
 msgstr "你没有任何拓扑的权限，如果你是一个新用户，我们将对你进行教程"
 
-#: templates/topology/list.html:114
+#: tomato/templates/topology/list.html:114
 msgid "There are not topologies yet."
 msgstr "没有任何拓扑"
 
-#: templates/topology/list.html:121
+#: tomato/templates/topology/list.html:121
 msgid ""
 "You may not create any topologies. Contact the administrator for more "
 "information."
 msgstr "你没有创建任何拓扑，请联系管理员获取更多信息。"
 
-#: templates/topology/tutorial_error.html:8
+#: tomato/templates/topology/tutorial_error.html:8
 msgid "Tutorials - ProviSec Testbed"
 msgstr "教程 - ProviSec Testbed"
 
-#: templates/topology/tutorial_error.html:12
+#: tomato/templates/topology/tutorial_error.html:12
 msgid "Error loading custom tutorial"
 msgstr "载入客户教程错误"
 
-#: templates/topology/tutorial_error.html:28
+#: tomato/templates/topology/tutorial_error.html:28
 msgid ""
 "An error occurred! Please check the URL and make sure it leads to the right "
 "direction."
 msgstr "一个错误发生了，请检查URL并确保它指向一个正确的方向"
 
-#: templates/topology/tutorial_error.html:35
+#: tomato/templates/topology/tutorial_error.html:35
 msgid "Start Tutorial"
 msgstr "开始教程"
 
-#: templates/topology/tutorials_list.html:41
+#: tomato/templates/topology/tutorials_list.html:41
 msgid "Load in Editor"
 msgstr "在编辑器中加载"
 
-#: templates/topology/tutorials_list.html:47
+#: tomato/templates/topology/tutorials_list.html:47
 msgid "Watch Screencast"
 msgstr "观看视频演示"
 
-#: templates/topology/tutorials_list.html:97
+#: tomato/templates/topology/tutorials_list.html:97
 msgid "Load Own Editor Tutorial from URL"
 msgstr "从url中加载你的自定义教程"
 
-#: templates/web_resources/custom_element_icons_list.html:15
+#: tomato/templates/web_resources/custom_element_icons_list.html:15
 msgid "In the topology editor, you can set custom icons for elements"
 msgstr "在拓扑编辑器中，你可以定制元素图标"
 
-#: templates/web_resources/custom_element_icons_list.html:16
+#: tomato/templates/web_resources/custom_element_icons_list.html:16
 msgid ""
 "In general, you can provide any URL, including icons that are hosted by your "
 "own organization, and data URLs. This is a list of icons provided by us for "
@@ -2097,72 +2628,95 @@ msgstr ""
 "事实上，你可以提供任何URL，包括被你的组织所管理的图标和数据URLs。下面是我们提"
 "供给你的一些图标。"
 
-#: templates/web_resources/custom_element_icons_list.html:40
+#: tomato/templates/web_resources/custom_element_icons_list.html:40
 msgid "No default executable archives"
 msgstr "默认服务"
 
-#: templates/web_resources/custom_element_icons_list.html:48
-#: templates/web_resources/default_executable_archive_info.html:108
-#: templates/web_resources/default_executable_archive_list.html:66
+#: tomato/templates/web_resources/custom_element_icons_list.html:48
+#: tomato/templates/web_resources/default_executable_archive_info.html:108
+#: tomato/templates/web_resources/default_executable_archive_list.html:66
 msgid "Default executable archives are described at"
 msgstr "默认服务"
 
-#: templates/web_resources/custom_element_icons_list.html:49
-#: templates/web_resources/default_executable_archive_info.html:109
-#: templates/web_resources/default_executable_archive_list.html:67
+#: tomato/templates/web_resources/custom_element_icons_list.html:49
+#: tomato/templates/web_resources/default_executable_archive_info.html:109
+#: tomato/templates/web_resources/default_executable_archive_list.html:67
 msgid "This location can be changed in the web/web-resources settings via "
 msgstr "这个地点可以被修改在web/web-resources settings中"
 
-#: templates/web_resources/custom_element_icons_list.html:51
-#: templates/web_resources/default_executable_archive_info.html:111
-#: templates/web_resources/default_executable_archive_list.html:69
+#: tomato/templates/web_resources/custom_element_icons_list.html:51
+#: tomato/templates/web_resources/default_executable_archive_info.html:111
+#: tomato/templates/web_resources/default_executable_archive_list.html:69
 msgid ""
 "You can describe default executable archives via the web/web-resources "
 "settings by providing a URL for the setting "
 msgstr "你可以通过web/web-resources settings的URL提供路径的设置默认服务。"
 
-#: templates/web_resources/default_executable_archive_info.html:18
+#: tomato/templates/web_resources/default_executable_archive_info.html:18
 msgid "All Default Executable Archives"
 msgstr "默认服务"
 
-#: templates/web_resources/default_executable_archive_info.html:21
+#: tomato/templates/web_resources/default_executable_archive_info.html:21
 msgid "Executable Archive"
 msgstr "默认服务"
 
-#: templates/web_resources/default_executable_archive_info.html:56
-#: templates/web_resources/default_executable_archive_info.html:91
+#: tomato/templates/web_resources/default_executable_archive_info.html:56
+#: tomato/templates/web_resources/default_executable_archive_info.html:91
 msgid "Archive File"
 msgstr "档案文件"
 
-#: templates/web_resources/default_executable_archive_info.html:66
-#: templates/web_resources/default_executable_archive_list.html:25
+#: tomato/templates/web_resources/default_executable_archive_info.html:66
+#: tomato/templates/web_resources/default_executable_archive_list.html:25
 msgid "Alternatives"
 msgstr "代替文件"
 
-#: templates/web_resources/default_executable_archive_list.html:47
+#: tomato/templates/web_resources/default_executable_archive_list.html:47
 msgid "No description available."
 msgstr "没有可用描述"
 
-#: templates/web_resources/default_executable_archive_list.html:58
+#: tomato/templates/web_resources/default_executable_archive_list.html:58
 msgid "No default executable archives."
 msgstr "没有默认服务"
 
-#, fuzzy
-#~| msgid "Show user topologies"
+#: tomato/topology.py:40
+msgid "Topology File"
+msgstr "拓扑文件"
+
+#: tomato/topology.py:46
+msgid "Import"
+msgstr "导入"
+
+#~ msgid ""
+#~ "Here you can import a topology file which you have previously exported "
+#~ "from the Editor."
+#~ msgstr "你可以把编辑器中导出的拓扑在这里导入。"
+
+#~ msgid "subtype"
+#~ msgstr "图表类型"
+
+#~ msgid "restricted"
+#~ msgstr "限制"
+
+#~ msgid "nlXTP_installed"
+#~ msgstr "nlXTP客户模块建立"
+
+#~ msgid "icon"
+#~ msgstr "图标"
+
+#~ msgid "urls"
+#~ msgstr "urls"
+
+#~ msgid "customize"
+#~ msgstr "定制"
+
+#~ msgid "add Subtopology"
+#~ msgstr "增加拓扑"
+
+#~ msgid "Subtop Name"
+#~ msgstr "图表类型"
+
 #~ msgid "show Subtopologylist"
-#~ msgstr "显示用户拓扑"
-
-#~ msgid "Include Reference to:"
-#~ msgstr "包括参考"
-
-#~ msgid "Referenced Object ID"
-#~ msgstr "参考对象ID"
-
-#~ msgid "Usually ID or name of the entity to be referenced."
-#~ msgstr "通常要引用的名称或ID"
-
-#~ msgid "Show your name as sender in the notification"
-#~ msgstr "接收通知"
+#~ msgstr "显示用户子拓扑列表"
 
 #~ msgid ""
 #~ "Your account has been activated by an administrator. Now you are ready to "
@@ -2179,15 +2733,6 @@ msgstr "没有默认服务"
 
 #~ msgid "This name is already taken"
 #~ msgstr "昵称已被占用"
-
-#~ msgid "Are you sure you want to remove the account '"
-#~ msgstr "你确定要移除这个账户吗"
-
-#~ msgid "Broadcast Announcement"
-#~ msgstr "广播消息"
-
-#~ msgid "Add Host"
-#~ msgstr "增加主机"
 
 #~ msgid "login failed"
 #~ msgstr "登录失败"

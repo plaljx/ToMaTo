@@ -33,6 +33,7 @@ Created on Dec 4, 2014
 from django.http import HttpResponseRedirect
 from django import forms
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from tomato.crispy_forms.layout import Layout
 from ..admin_common import Buttons
@@ -74,15 +75,15 @@ geolocation_script = '<script>\n\
 
 
 class SiteForm(AddEditForm):
-	name = forms.CharField(max_length=50, help_text="The name of the site. Must be unique to all sites. e.g.: ukl")
-	label = forms.CharField(max_length=255, label="Label", help_text="e.g.: Technische Universit&auml;t Kaiserslautern")
-	description = forms.CharField(widget=forms.Textarea, label="Description", required=False)
-	organization = forms.CharField(max_length=50)
-	location = forms.CharField(max_length=255, help_text="e.g.: Germany")
-	geolocation_longitude = forms.FloatField(help_text="Float Number. >0 if East, <0 if West",
-											 label="Geolocation: Longitude")
-	geolocation_latitude = forms.FloatField(help_text="Float Number. >0 if North, <0 if South",
-											label="Geolocation: Latitude")
+	name = forms.CharField(max_length=50, label=_("Name"), help_text=_("The name of the site. Must be unique to all sites. e.g.: ukl"))
+	label = forms.CharField(max_length=255, label=_("Label"), help_text=_("e.g.: Technische Universit&auml;t Kaiserslautern"))
+	description = forms.CharField(widget=forms.Textarea, label=_("Description"), required=False)
+	organization = forms.CharField(max_length=50, label=_("Organization"))
+	location = forms.CharField(max_length=255, help_text=_("e.g.: Germany"))
+	geolocation_longitude = forms.FloatField(help_text=_("Float Number. >0 if East, <0 if West"),
+											 label=_("Geolocation: Longitude"))
+	geolocation_latitude = forms.FloatField(help_text=_("Float Number. >0 if North, <0 if South"),
+											label=_("Geolocation: Latitude"))
 
 	buttons = Buttons.cancel_add
 
@@ -106,7 +107,7 @@ class SiteForm(AddEditForm):
 		)
 
 class AddSiteForm(SiteForm):
-	title = "Add Site"
+	title = _("Add Site")
 
 	def __init__(self, organization=None, *args, **kwargs):
 		super(AddSiteForm, self).__init__(*args, **kwargs)
@@ -125,7 +126,7 @@ class AddSiteForm(SiteForm):
 
 class EditSiteForm(SiteForm):
 	buttons = Buttons.cancel_save
-	title = "Editing Site '%(name)s'"
+	title = _("Editing Site '%(name)s'")
 
 	def __init__(self, data, *args, **kwargs):
 		if data is not None and 'geolocation' in data and data['geolocation']:
@@ -145,8 +146,8 @@ class EditSiteForm(SiteForm):
 		api.site_modify(formData['name'], {k: v for k, v in formData.iteritems() if k not in ('name',)})
 
 class RemoveSiteForm(RemoveConfirmForm):
-	message = "Are you sure you want to remove the site '%(name)s'?"
-	title = "Remove Site '%(name)s'"
+	message = _("Are you sure you want to remove the site '%(name)s'?")
+	title = _("Remove Site '%(name)s'")
 
 
 @wrap_rpc

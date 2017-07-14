@@ -7,7 +7,7 @@ from . import AddEditForm, RemoveConfirmForm, ConfirmForm, RenderableForm
 from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
-from ..lib.group_role import GroupRole
+from ..lib.group_role import GroupRole # TODO: FIX THIS
 from django.utils.translation import ugettext_lazy as _
 
 class GroupForm(AddEditForm):
@@ -108,11 +108,13 @@ class HandleApplicationForm(RenderableForm):
 		super(HandleApplicationForm, self).__init__(*args, **kwargs)
 		self.helper.layout = Layout(self.buttons)
 		if operation is True or operation == 'accept':
-			self.message = _("Are you sure you want to accept the application from user %s to group %s?") % (user, group)
-			self.title = "Accept group application"
+			self.message = _("Are you sure you want to accept the application from user %(user)s to group %(group)s?") \
+				% {user: user, group: group}
+			self.title = _("Accept group application")
 		elif operation is False or operation == 'decline':
-			self.message = _("Are you sure you want to decline the application from user %s to group %s?") % (user, group)
-			self.title = "Decline group application"
+			self.message = _("Are you sure you want to decline the application from user %(user)s to group %(group)s?") \
+				% {user: user, group: group}
+			self.title = _("Decline group application")
 
 
 @wrap_rpc

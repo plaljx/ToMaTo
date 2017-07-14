@@ -9,7 +9,7 @@
 
 
 {% block title %}
-<title>Malicious Code '{{ mc_info.name }}' - ProviSec Testbed</title>
+<title>{% trans 'Malicious Code' %} '{{ mc_info.name }}' - ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
     </button>
 </form>
 
-<h1>{%trans 'Malicious Code ''%}{{mc_info.name}}'</h1>
+<h1>{%trans 'Malicious Code '%}'{{mc_info.name}}'</h1>
 
 <div class="skip-sm"></div>
 

@@ -19,6 +19,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from lib import serverInfo
 
 from tomato.crispy_forms.layout import Layout
@@ -67,10 +68,10 @@ class Buttons:
 	@staticmethod
 	def default(**kwargs):
 		return createButtons(**kwargs)
-	cancel_save = createButtons()
-	cancel_add = createButtons(label="Add")
-	cancel_continue = createButtons(label="Continue")
-	cancel_remove =	createButtons(icon="trash", label="Remove", class_="btn-warning")
+	cancel_save = createButtons(label=_("Save"))
+	cancel_add = createButtons(label=_("Add"))
+	cancel_continue = createButtons(label=_("Continue"))
+	cancel_remove =	createButtons(icon="trash", label=_("Remove"), class_="btn-warning")
 
 class ConfirmForm(BootstrapForm):
 	@classmethod

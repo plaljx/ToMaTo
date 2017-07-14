@@ -30,9 +30,16 @@
 	    <td>{{organization.name}}</td>
 	</tr>
 	{% endif %}
-	<th>Hosts:</th>
+	<th>{%trans 'Hosts'%}:</th>
 		<td>
-			<b>{{organization.hosts.count}} host{% if site.hosts.count != 1 %}s{%endif%}</b>
+			<b>
+                {{organization.hosts.count}}
+                {% if site.hosts.count != 1 %}
+                    {% trans 'hosts' %}
+                {% else %}
+                    {% trans 'host' %}
+                {% endif %}
+            </b>
 			{% if organization.hosts.count > 0 %}
 			<br/>
 			{%trans 'Availability'%}: {{organization.hosts.avg_availability|percentage}}<br/>
@@ -66,7 +73,7 @@
   {%endif%}
   <button type="submit" formaction="{%url "organization_hosts" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'Hosts'%}</button>
   <button type="submit" formaction="{%url "organization_external_networks" organization.name%}" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> {%trans 'External Network Instances'%}</button>
-  <a class="btn btn-info" href="javascript:window.open('{%url "usage.organization" organization.name%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> Resource Usage</a>
+  <a class="btn btn-info" href="javascript:window.open('{%url "usage.organization" organization.name%}', '_blank', 'innerHeight=450,innerWidth=600,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');"><span class="glyphicon glyphicon glyphicon-stats"></span> {% trans 'Resource Usage' %}</a>
   {% if request.session.user and request.session.user|args:organization.name|call:"isHostManager" %}
 	<div class="skip-xs"></div>
 	<button type="submit" formaction="{%url "admin.site.add" organization.name%}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> {%trans 'Add Site'%}</button>
@@ -108,7 +115,7 @@
 	<tr>
 		<th>{%trans 'Geolocation'%}:</th>
 		<td>{% if site.geolocation %}
-				Longitude: {{site.geolocation.longitude}}, Latitude: {{site.geolocation.latitude}}
+				{%trans 'Longitude'%}: {{site.geolocation.longitude}}, {%trans 'Latitude'%}: {{site.geolocation.latitude}}
 				<a class="btn btn-default btn-xs" target="_blank" href="http://www.google.com/maps/place/{{site.geolocation.latitude}}+{{site.geolocation.longitude}}"><span class="glyphicon glyphicon-share-alt"></span> {%trans 'Google Maps'%}</a>
 			{% else %}
 				unknown

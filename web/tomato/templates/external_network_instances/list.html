@@ -5,19 +5,19 @@
 {% load tomato %}
 
 {% block title %}
-<title>External Network Instances - ProviSec Testbed</title>
+<title>{% trans 'External Network Instances' %} - ProviSec Testbed</title>
 {% endblock %}
 
 {% block content %}
-<h1>External Network Instances</h1>
+<h1>{% trans 'External Network Instances' %}</h1>
 
 <div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
   	<span class="glyphicon glyphicon-filter"></span>
     {% if network %}
-      Showing instances of '{{network_label}}'
+      {% trans 'Showing instances of'%} '{{network_label}}'
     {% else %}
-      Showing instances of all networks
+      {% trans 'Showing instances of all networks' %}
     {% endif %}
     <span class="caret"></span>
   </button>
@@ -38,7 +38,7 @@
 	      	{% endif %}
 	      {% endif %}
 	      
-    Show all external network instances</a></li>
+    {% trans 'Show all external network instances' %}</a></li>
     
     <li class="divider"></li>
     {% for net in networks %}
@@ -57,7 +57,7 @@
 	      	{% endif %}
 	      {% endif %}
 	      
-	      Show instances of '{{net.label}}'</a></li>
+	      {% trans 'Show instances of' %} '{{net.label}}'</a></li>
     {% endfor %}
   </ul>
 </div>
@@ -66,15 +66,15 @@
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
   	<span class="glyphicon glyphicon-filter"></span>
     {% if host %}
-      Showing instances on host '{{host}}'
+      {% trans 'Showing instances on host' %} '{{host}}'
     {% else %}
     	{% if site %}
-    		Showing instances on site '{{site_label}}'
+            {% trans 'Showing instances on site' %} '{{site_label}}'
     	{% else %}
     		{% if organization %}
-    			Showing instances on organization '{{organization_label}}'
+    			{%trans 'Showing instances on organization' %} '{{organization_label}}'
     		{% else %}
-      			Showing instances on all hosts
+                {% trans 'Showing instances on all hosts' %}
       		{% endif %}
    		{% endif %}
     {% endif %}
@@ -82,37 +82,37 @@
   </button>
   <ul class="dropdown-menu" role="menu">
     {% if network %}
-      <li><a href="{%url "external_network_instances" network %}">Show instances on all hosts</a></li>
+      <li><a href="{%url "external_network_instances" network %}">{% trans 'Show instances on all hosts' %}</a></li>
     {% else %}
-      <li><a href="{%url "external_network_instances_all" %}">Show instances on all hosts</a></li>
+      <li><a href="{%url "external_network_instances_all" %}">{% trans 'Show instances on all hosts' %}</a></li>
     {%endif%}
     <li class="divider"></li>
-    <li class="dropdown-header">Organizations</li>
+    <li class="dropdown-header">{% trans 'Organizations' %}</li>
     {% for o in organizations %}
     	{% if network %}
-      		<li><a href="{%url "organization_external_network" o.name network %}">Show instances on '{{o.label}}'</a></li>
+      		<li><a href="{%url "organization_external_network" o.name network %}">{% trans 'Show instances on' %} '{{o.label}}'</a></li>
     	{% else %}
-    		<li><a href="{%url "organization_external_networks" o.name %}">Show instances on '{{o.label}}'</a></li>
+    		<li><a href="{%url "organization_external_networks" o.name %}">{% trans 'Show instances on' %} '{{o.label}}'</a></li>
     	{% endif %}
     {% endfor %}
     
     <li class="divider"></li>
-    <li class="dropdown-header">Sites</li>
+    <li class="dropdown-header">{% trans 'Sites' %}</li>
     {% for s in sites %}
     	{% if network %}
-     		<li><a href="{%url "site_external_network" s.name network %}">Show instances on '{{s.label}}'</a></li>
+     		<li><a href="{%url "site_external_network" s.name network %}">{% trans 'Show instances on' %} '{{s.label}}'</a></li>
      	{% else %}
-     		<li><a href="{%url "site_external_networks" s.name %}">Show instances on '{{s.label}}'</a></li>
+     		<li><a href="{%url "site_external_networks" s.name %}">{% trans 'Show instances on' %} '{{s.label}}'</a></li>
      	{% endif %}   
     {% endfor %}
     
     <li class="divider"></li>
-    <li class="dropdown-header">Hosts</li>
+    <li class="dropdown-header">{% trans 'Hosts' %}</li>
     {% for h in hosts %}
     	{% if network %}
-      		<li><a href="{%url "host_external_network" h.name network %}">Show instances on '{{h.name}}'</a></li> 
+      		<li><a href="{%url "host_external_network" h.name network %}">{% trans 'Show instances on' %} '{{h.name}}'</a></li>
     	{% else %}
-      		<li><a href="{%url "host_external_networks" h.name %}">Show instances on '{{h.name}}'</a></li> 
+      		<li><a href="{%url "host_external_networks" h.name %}">{% trans 'show instances on' %} '{{h.name}}'</a></li>
       	{% endif %}   
     {% endfor %}
   </ul>
@@ -136,7 +136,7 @@
   	  formaction="{%url "external_network_instance.add"%}"
   	{%endif%}
   {%endif%}
-  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add external network instance</button>
+  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>{% trans 'Add external network instance' %}</button>
 </form>
 {% endif %}
 
@@ -163,9 +163,9 @@
 	    {% if request.session.user.isHostManager %}
 	    <td>
 	    	<form>
-	    		<button type="submit" formaction="{%url "external_network_instance.edit" ni.id%}" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span> edit</button>
-  				<button type="submit" formaction="{%url "external_network_instance.remove" ni.id%}" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span> remove</button>
-  			</from>
+	    		<button type="submit" formaction="{%url "external_network_instance.edit" ni.id%}" class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-pencil"></span>{% trans 'edit' %}</button>
+  				<button type="submit" formaction="{%url "external_network_instance.remove" ni.id%}" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span>{% trans 'remove' %}</button>
+  			</form>
 		</td>
 	    {% endif %}
 	    
@@ -173,7 +173,7 @@
 	{% endfor %}
 	</table>
 {% else %}
-	<p>No external network instances</p>
+	<p>{% trans 'No external network instances' %}</p>
 {% endif %}
 
 {% if request.session.user.isHostManager %}
@@ -192,7 +192,7 @@
   	  formaction="{%url "external_network_instance.add"%}"
   	{%endif%}
   {%endif%}
-  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add external network instance</button>
+  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>{% trans 'Add external network instance' %}</button>
 </form>
 {% endif %}
 

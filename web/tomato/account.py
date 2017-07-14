@@ -132,11 +132,11 @@ class AccountForm(BootstrapForm):
 	name = forms.CharField(label=_("Account name"), max_length=50)
 	password = forms.CharField(label=_("Password"), widget=forms.PasswordInput, required=False)
 	password2 = forms.CharField(label=_("Password (repeated)"), widget=forms.PasswordInput, required=False)
-	organization = forms.CharField(max_length=50)
+	organization = forms.CharField(label=_("Organization"), max_length=50)
 	origin = forms.CharField(label=_("Origin"), widget=forms.HiddenInput, required=False)
 	realname = forms.CharField(label=_("Full name"))
-	email = forms.EmailField()
-	flags = forms.MultipleChoiceField(required=False)
+	email = forms.EmailField(label=_("Email"))
+	flags = forms.MultipleChoiceField(label=_("flags"),required=False)
 	_reason = forms.CharField(widget = forms.Textarea, required=False, label=_("Reason for Registering"))
 	send_mail = forms.BooleanField(label=_("Inform user"), required=False, initial=True)
 	def __init__(self, api, *args, **kwargs):
@@ -234,11 +234,11 @@ class AdminAccountRegisterForm(AccountForm):
 		)
 
 class AnnouncementForm(BootstrapForm):
-	title = forms.CharField(required=True)
-	message = forms.CharField(widget=forms.Textarea, required=True)
-	ref_type = forms.CharField(required=False, label="Include Reference to:")
-	ref_id = forms.CharField(required=False, label="Referenced Object ID", help_text="Usually ID or name of the entity to be referenced.")
-	show_sender = forms.BooleanField(required=False, initial=False, help_text="Show your name as sender in the notification")
+	title = forms.CharField(required=True, label=_("Title"))
+	message = forms.CharField(widget=forms.Textarea, required=True, label=_("Message"))
+	ref_type = forms.CharField(required=False, label=_("Include Reference to:"))
+	ref_id = forms.CharField(required=False, label=_("Referenced Object ID"), help_text=_("Usually ID or name of the entity to be referenced."))
+	show_sender = forms.BooleanField(required=False, initial=False, label=_("Show Sender"),help_text=_("Show your name as sender in the notification"))
 	def __init__(self, *args, **kwargs):
 		super(AnnouncementForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(announcement_form)
@@ -389,10 +389,9 @@ def group_account_remove(api, request, user, group):
 	else:
 		form = RemoveConfirmForm.build(reverse("tomato.account.group_account_remove",
 		                                       kwargs={"user": user, "group": group}))
-		return render(request,
-		              "form.html",
-		              {"heading": "Remove Account from group",
-		               "message_before": "Are you sure to remove account %s from group %s?" % (user, group),
+		return render(request, "form.html",
+		              {"heading": _("Remove Account from group"),
+		               "message_before": _("Are you sure to remove account %(user)s from group %(group)s?") % (user, group),
 		               'form': form})
 
 @wrap_rpc
@@ -420,7 +419,7 @@ def group_account_invite(api, request, group=None):
 			data['group'] = group
 		data['role'] = 'invited'
 		form = GroupInviteAccountForm(api, data)
-		return render(request, "form.html", {"form": form, "heading": "Invite account to group"})
+		return render(request, "form.html", {"form": form, "heading": _("Invite account to group")})
 
 @wrap_rpc
 def info(api, request, id=None):
@@ -492,7 +491,7 @@ def edit(api, request, id):
 		data = user.copy()
 		data["send_mail"] = user["id"] != api.user.id
 		form = AccountChangeForm(api, data)
-	return render(request, "form.html", {"account": user, "form": form, "heading":"Edit Account "+user["id"]})
+	return render(request, "form.html", {"account": user, "form": form, "heading": _("Edit Account ") + user["id"]})
 	
 @wrap_rpc
 def register(api, request):
@@ -534,7 +533,7 @@ def register(api, request):
 					raise
 	else:
 		form = AdminAccountRegisterForm(api) if api.user else AccountRegisterForm(api) 
-	return render(request, "form.html", {"form": form, "heading":_("Register New Account")})
+	return render(request, "form.html", {"form": form, "heading": _("Register New Account")})
 
 @wrap_rpc
 def reset_password(api, request, id):
@@ -546,7 +545,7 @@ def reset_password(api, request, id):
 			api.account_send_notification(id, subject="Password reset", message="Your password has been reset by an administrator to\n\n\t%s\n\nPlease login using that password and change it to something you can remember." % passwd, from_support=True)
 			return HttpResponseRedirect(reverse("tomato.account.info", kwargs={"id": id}))
 	form = ConfirmForm.build(reverse("tomato.account.reset_password", kwargs={"id": id}))
-	return render(request, "form.html", {"heading": "Reset Password", "message_before": "Are you sure you want to reset the password of the account '"+id+"'?", 'form': form})	
+	return render(request, "form.html", {"heading": _("Reset Password"), "message_before": _("Are you sure you want to reset the password of the account '")+id+"'?", 'form': form})
 
 @wrap_rpc
 def remove(api, request, id=None):
@@ -556,7 +555,7 @@ def remove(api, request, id=None):
 			api.account_remove(id)
 			return HttpResponseRedirect(reverse("account_list"))
 	form = RemoveConfirmForm.build(reverse("tomato.account.remove", kwargs={"id": id}))
-	return render(request, "form.html", {"heading": "Remove Account", "message_before": "Are you sure you want to remove the account '"+id+"'?", 'form': form})
+	return render(request, "form.html", {"heading": _("Remove Account"), "message_before": _("Are you sure you want to remove the account '")+id+"'?", 'form': form})
 
 
 @wrap_rpc
@@ -637,4 +636,4 @@ def announcement_form(api, request):
 			request.session["user"].updateData(api)
 			return HttpResponseRedirect(reverse("tomato.account.unread_notifications"))
 	form = AnnouncementForm()
-	return render(request, "form.html", {'form': form, "heading": "Broadcast Announcement"})
+	return render(request, "form.html", {'form': form, "heading": _("Broadcast Announcement")})
