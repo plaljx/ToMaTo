@@ -15,6 +15,8 @@ ADMINS = (
 	# ('Your Name', 'your_email@domain.com'),
 )
 
+ALLOWED_HOSTS = ['*']    # Allow external access when `DEBUG` is True
+
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = ''  # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
