@@ -15,8 +15,6 @@ docs_build
 *.log
 *.pem
 *.torrent
-*.qcow2
-*.tar.gz
 *.conf
 .idea
 __pycache__
@@ -32,7 +30,10 @@ cli/ovz
 docs/static/doc
 cli/tests/backend/old
 
-########
+###########################
+
+*.qcow2
+*.tar.gz
 
 # docker
 # docker.bak
