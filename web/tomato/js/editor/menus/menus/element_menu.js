@@ -43,6 +43,11 @@ var createElementMenu = function(obj) {
 						obj.editor.onElementConnectTo(obj);
 					}
 				} : null,
+				"connect to other topology":obj.isConnectable()?{
+					name:gettext("connect to other topology"),
+					icon:"connect",
+					items:{}
+				}:null,
 				"start": obj.actionEnabled("start") ? {
 					name:gettext('Start'),
 					icon:'start',
@@ -235,17 +240,52 @@ var createElementMenu = function(obj) {
 					callback: function(){
 						obj.remove(null, true);
 					}
-				} : null
+				} : null,
+				"move":{
+					name : gettext("Move to other topology"),
+					icon : "remove",
+					items:{}
+				}
 			}
 		};
 	}
+	if(obj.isConnectable()) {
+        for (var element in obj.editor.topology.elements) {
+            if (element != obj.id && !obj.editor.topology.elements[element].parent && obj.editor.topology.elements[element].canvas !== obj.canvas) {
+                var tmp = {
+                    name: obj.editor.topology.elements[element].data.name + "(" + obj.editor.topology.elements[element].canvas.canvas.id + ")",
+                    icon: "connect",
+                    callback: function () {
+                        obj.editor.onElementConnectTo(obj)
+                        obj.editor.onElementSelected(obj.editor.topology.elements[element])
+
+                    }
+                }
+                menu.items["connect to other topology"].items[element] = tmp;
+            }
+        }
+    }
+	// for (var n = 0; n < obj.editor.workspace.subtopologyList.length; n++){
+	// 	var tmp = {
+	// 		name : obj.editor.workspace.subtopologyList[n],
+	// 		icon: "debug",
+	// 		callback: function () {
+	// 			console.log(obj)
+	// 			// obj.data._pos["canvas"] = obj.editor.workspace.subtopologyList[n]
+	// 			var pos = obj.getPos()
+	// 			pos.canvas = obj.editor.workspace.subtopologyList[n]
+	// 			obj.modify_value("_pos", pos)
+	// 		}
+	// 	}
+	// 	menu.items["move"].items[obj.editor.workspace.subtopologyList[n]] = tmp;
+	// }
 	for (var name in menu.items) {
 		if (! menu.items[name]) {
 			delete menu.items[name];
 			continue;
 		}
 		var menu2 = menu.items[name];
-		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2]; 
+		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2];
 	}
 	return menu;
 };

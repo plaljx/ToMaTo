@@ -285,6 +285,21 @@ class UserInfo(InfoObj):
 	def get_organization_name(self):
 		return self.info()['organization']
 
+	def get_group_role(self, group=None):
+		if group is None:
+			return self.info()['groups']
+		else:
+			group_roles = self.info()['groups']
+			for group_role in group_roles:
+				if group_role['group'] == group:
+					return group_role['role']
+			else:
+				return None
+
+	def set_group_role(self, group, role):
+		res = get_backend_users_proxy().user_set_group_role(self.name, group, role)
+		return res
+
 	def _check_exists(self):
 		if self._info is not None:
 			return True
@@ -409,6 +424,34 @@ class TopologyInfo(ActionObj):
 		organizations_with_role = get_backend_users_proxy().organization_list(user_list)
 
 		return (organization in organizations_with_role)
+
+	# def group_has_role(self, group, role):
+	# 	"""
+	# 	Check if the group has the group
+	# 	Currently a group provides a max role of 'user'
+	# 	"""
+	# 	if role != 'user':  # FIXME: may use something like 'Role.leq'
+	# 		return False
+	# 	for _group in self.info()['group_info']:
+	# 		if group == _group:
+	# 			return True
+	# 	else:
+	# 		return False
+
+	def get_group_info_list(self):
+		return self.info()['group_info']
+
+	def add_group(self, group):
+		res = get_backend_core_proxy().topology_add_group(self.topology_id, group)
+		if self._info is not None:
+			self._info['group_info'].append(group)
+		return res
+
+	def remove_group(self, group):
+		res = get_backend_core_proxy().topology_remove_group(self.topology_id, group)
+		if self._info is not None:
+			self._info['group_info'].remove(group)
+		return res
 
 	def set_permission(self, user, role):
 		"""
@@ -821,6 +864,16 @@ def get_user_list(organization=None, with_flag=None):
 	:rtype: list(dict)
 	"""
 	return get_backend_users_proxy().user_list(organization=organization, with_flag=with_flag)
+
+@cached(60)
+def get_user_list_by_group(group=None, role=None):
+	"""
+	get the list of users of a given group
+	:param str group: group filter
+	:param str role: role filter, eg. if role is 'owner', then only owner will be listed
+	:return: list(dict)
+	"""
+	return get_backend_users_proxy().user_list_by_group(group=group, role=role)
 
 @cached(1800)
 def get_organization_info(organization_name):

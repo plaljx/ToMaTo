@@ -2,6 +2,7 @@ from mongoengine import *
 import string, random, crypt, time
 from mongoengine.errors import NotUniqueError
 
+from ...lib.group_role import GroupRole as GROUP_ROLE
 
 class Usage(EmbeddedDocument):
 	memory = FloatField(default=0.0) #unit: bytes
@@ -23,6 +24,18 @@ class Organization(Document):
 		]
 	}
 
+class Group(Document):
+	name = StringField(unique=True, required=True)
+	label = StringField(required=True)
+	description = StringField()
+	meta = {
+		'ordering': 'name',
+		'indexes': ['name']
+	}
+
+class GroupRole(EmbeddedDocument):
+	group = StringField(required=True)
+	role = StringField(choices=GROUP_ROLE.CHOICES, required=True)
 
 class Quota(EmbeddedDocument):
 	monthly = EmbeddedDocumentField(Usage, required=True)
@@ -35,6 +48,7 @@ class User(Document):
 	name = StringField(required=True, unique_with='origin')
 	origin = StringField(required=True)
 	organization = ReferenceField(Organization, required=True, reverse_delete_rule=DENY)
+	groups = ListField(EmbeddedDocumentField(GroupRole))
 	password = StringField(required=True)
 	passwordTime = FloatField(db_field='password_time', required=True)
 	lastLogin = FloatField(db_field='last_login', required=True)
@@ -66,8 +80,13 @@ def migrate():
 	except NotUniqueError:
 		org = Organization.objects.get(name="others")
 	try:
+		grp = Group(name="default", label="Default").save()
+	except NotUniqueError:
+		grp = Group.objects.get(name="default")
+	try:
 		User(name="admin", origin="", organization=org, password="", passwordTime=time.time(),
 			lastLogin=time.time(), email="mail@example.com",
+			groups=[GroupRole(group="default", role="owner")],
 			quota=Quota(monthly=Usage(cputime= 5.0 *(60*60*24*30), memory=10e9, diskspace=100e9, traffic=5.0e6 /8.0*(60*60*24*30)), used=Usage(), usedTime=time.time(), continousFactor=1.0),
 			realname="Admin", flags=["global_admin", "global_host_manager", "debug", "nomails"]).save().storePassword("changeme")
 	except NotUniqueError:

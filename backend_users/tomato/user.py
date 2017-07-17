@@ -22,8 +22,8 @@ from .lib import logging, util, mail #@UnresolvedImport
 from . import scheduler
 from .lib.settings import settings, Config
 from .lib.error import UserError, InternalError
-
 from .lib.userflags import Flags
+from .lib.group_role import GroupRole as GROUP_ROLE
 
 
 USER_ATTRS = ["realname", "email", "password"]
@@ -58,9 +58,15 @@ class Notification(EmbeddedDocument):
 	def set_read(self, read):
 		self.read = read
 
+class GroupRole(EmbeddedDocument):
+
+	group = StringField(required=True)
+	role = StringField(choices=GROUP_ROLE.CHOICES, required=True)
+
 class User(Entity, BaseDocument):
 	"""
 	:type organization: organization.Organization
+	:type groups: list of GroupRole
 	:type quota: quota.Quota
 	:type flags: list
 	:type clientData: dict
@@ -71,6 +77,8 @@ class User(Entity, BaseDocument):
 
 	name = StringField(required=True)
 	organization = ReferenceField(Organization, required=True, reverse_delete_rule=DENY)
+	groups = ListField(EmbeddedDocumentField(GroupRole))
+	# groups = EmbeddedDocumentListField(GroupRole)
 	password = StringField(required=True)
 	lastLogin = FloatField(db_field='last_login', required=True)
 	quota = EmbeddedDocumentField(Quota, required=True)
@@ -165,6 +173,59 @@ class User(Entity, BaseDocument):
 				return User.objects(organization=organization)
 			else:
 				return User.objects(organization=organization).exclude('notifications')
+
+	@classmethod
+	def list_by_group(cls, group=None, role=None):
+		if group is None:
+			if role is None:
+				return User.objects.all()
+			else:
+				return User.objects(groups__role__exact=role)
+		else:
+			if role is None:
+				return User.objects(groups__group__exact=group)
+			else:
+				return User.objects(Q(groups__group__exact=group) & Q(groups__role__exact=role))
+
+	def set_group_role(self, group, role=None):
+		"""
+		Update the [group, role] pair info.
+		If role is None, this will keep no group role info of current group
+		:param group: Group name in str
+		:param role: Role, choice=["owner", "manager", "user"]
+		"""
+		for group_role in self.groups:
+			if group_role.group == group:
+				if role is None:
+					self.groups.remove(group_role)
+				else:
+					group_role.role = role
+				self.save()
+				break
+		else:
+			if role is None:
+				pass
+			else:
+				self.groups.append(GroupRole(group=group, role=role))
+				self.save()
+
+	def get_group_roles(self):
+		group_roles = [{"group": group_role.group, "role": group_role.role} for group_role in self.groups]
+		return group_roles
+
+	def get_account_group(self, role=None):
+		from .group import Group
+		if role is None:
+			target_groups = [group_role.group for group_role in self.groups]
+		else:
+			target_groups = [group_role.group for group_role in self.groups if group_role.role == role]
+		return Group.objects(name__in=target_groups)
+
+	def quit_group(self, group):
+		"""
+		Quit the specified group, actually removing the related GroupRole info from db.
+		"""
+		self.set_group_role(group, None)
 
 	def modify_organization(self, val):
 		from .organization import Organization
@@ -295,7 +356,8 @@ class User(Entity, BaseDocument):
 		"notification_count": Attribute(get=lambda self: len(filter(lambda n: not n.read, self.notifications))),
 		"last_login": Attribute(get=lambda self: self.lastLogin),
 		"password_hash": Attribute(field=password),
-		"password": Attribute(set=modify_password)
+		"password": Attribute(set=modify_password),
+		"groups": Attribute(get=get_group_roles)
 	}
 
 

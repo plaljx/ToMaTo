@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% load tomato %}
+
+{% block title %}
+<title>Group - ProviSec Testbed</title>
+{% endblock %}
+
+{% block content %}
+<h1>{% trans 'Group' %}</h1>
+
+<div class="skip-sm"></div>
+
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-filter"></span>
+    {% if role %}
+        {#{% trans 'Showing '%} {{ role }} {% trans ' groups' %}#}
+        {% trans 'Showing groups ' %}
+    {% else %}
+      {% trans 'Showing all groups' %}
+    {% endif %}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="{% url "admin_group_list"%}">{%trans 'Show all groups'%}</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url "admin_account_groups" user=request.session.user.name %}">{%trans 'My Groups'%}</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-header">{%trans "My groups with role of..."%}</li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="owner" %}">{%trans 'Owner'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="manager" %}">{%trans 'Manager'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="user" %}">{%trans 'User'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="invited" %}">{%trans 'Invited'%}</a></li>
+    <li><a href="{% url "admin_account_groups_role" user=request.session.user.name role="applying" %}">{%trans 'Applying'%}</a></li>
+  </ul>
+</div>
+
+<div class="skip-sm"></div>
+
+{% if groups %}
+<script src="/js/enhancetable.js"></script>
+<table class="sortable,filterable table table-striped">
+
+    <tr>
+        <th>{% trans 'Name' %}</th>
+        <th>{% trans 'Label' %}</th>
+        {# <th>Description</th> #}
+        <th>{% trans 'Role' %}</th>
+        <th>{% trans 'Operations' %}</th>
+    </tr>
+
+    {% for group in groups %}
+    <tr>
+        <td><a href="{% url 'admin_group_info' group.name %}">{{ group.name }}</a></td>
+        <td>{{ group.label }}</td>
+        {# <td>{{ group.description }}</td> #}
+        <td>
+            {% if group.role != None %}
+                {% trans group.role %}
+            {% else %}
+                {% trans 'None' %}
+            {% endif %}
+        </td>
+        <td>
+            <span>
+                {% if group.role == 'invited' %}
+                    <a class="btn btn-xs btn-primary" role="button"
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='accept'%}">
+                        <span class="glyphicon glyphicon-ok"></span>{% trans 'Accept' %}
+                    </a>
+                    <a class="btn btn-xs btn-warning" role="button"
+                       href="{%url 'admin_account_handle_invite' user=request.session.user.name group=group.name operation='decline'%}">
+                        <span class="glyphicon glyphicon-remove"></span>{% trans 'Decline' %}
+                    </a>
+                {% endif %}
+                {% if group.role == None %}
+                    <a class="btn btn-xs btn-default" role="button"
+                        href="{%url 'admin_account_group_apply' user=request.session.user.name group=group.name %}">
+                        <span class="glyphicon glyphicon-send"></span>{% trans 'Apply' %}
+                    </a>
+                {% endif %}
+            </span>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% else %}
+<p>{% trans 'No Eligible Group' %}</p>
+{% endif %}
+
+<form>
+    <button type="submit" formaction="{%url 'admin_group_add' %}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span>
+        {% trans 'Add group' %}
+    </button>
+</form>
+
+{% endblock %}

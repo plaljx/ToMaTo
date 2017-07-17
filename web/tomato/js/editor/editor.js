@@ -156,7 +156,9 @@ var Editor = Class.extend({
 	onElementSelected: function(el) {
 		switch (this.mode) {
 			case Mode.connectOnce:
-				if (! el.isConnectable()) return;
+				if (! el.isConnectable()) {
+					return;
+				}
 				this.topology.createConnection(el, this.connectElement);
 				this.setMode(Mode.select);
 				break;
@@ -212,14 +214,21 @@ var Editor = Class.extend({
 		return function(pos) {
 			var data = copy(el, true);
 			data._pos = pos;
+			if(this.workspace.canvas){
+			data._pos['canvas'] = this.workspace.canvas.canvas.id;
 			t.topology.createElement(data);
 			t.selectBtn.click();
+		}
+		else{
+			alert("no canvas");
+		}
 		}
 	},
 	createUploadFunc: function(type) {
 		var t = this;
 		return function(pos) {
 			var data = {type: type, _pos: pos};
+			data._pos['canvas'] = $('svg:visible').attr('id')
 			t.topology.createElement(data, function(el1) {
 					el1.showConfigWindow(false, function (el2) {
 							el2.action("prepare", { callback: function(el3) {el3.uploadImage_fromFile();} });
@@ -233,6 +242,9 @@ var Editor = Class.extend({
 	createTemplateFunc: function(tmpl) {
 		return this.createElementFunc({type: tmpl.type, template: tmpl.name});
 	},
+	// addSubtopology: function(subtopologyname){
+
+	// },
 	buildMenu: function(editor) {
 		var t = this;
 
@@ -673,6 +685,50 @@ var Editor = Class.extend({
 
 		this.optionCheckboxes = {};
 		this.optionsManager.buildOptionsTab(tab);
+
+		// for topgroup
+		// var tab = this.menu.addTab(gettext("Topgroup"));
+		// var group = tab.addGroup(gettext("Manager"));
+
+		// group.addElement(Menu.button({ 
+  //           label: gettext("Add to topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroup_adddDialog();
+  //           }
+  //       }));
+  //       group.addElement(Menu.button({  
+  //           label: gettext("Create a Topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroup_createDialog();
+  //           }
+  //       }));
+  //       group.addElement(Menu.button({  
+  //           label: gettext("Remove from Topgroup"),
+  //           icon: "img/repy32.png",
+  //           toggle: false,
+  //           small: false,
+  //           func: function () {
+  //               t.topology.topgroupDialog();
+  //           }
+  //       }));
+
+        var tab = this.menu.addTab(gettext("Canvas"));
+		var group = tab.addGroup(gettext("Manager"));
+		group.addElement(Menu.button({  
+            label: gettext("add subtopology"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.subtopolgy_addDialog();
+            }
+        }));
 
 		this.menu.paint();
 	}

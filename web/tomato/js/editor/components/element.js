@@ -24,7 +24,9 @@ var Element = Component.extend({
 		return (!this.editor.options.fixed_pos) && this.editor.mode == Mode.select;
 	},
 	isConnectable: function() {
-		if (this.connection) return false;
+		if (this.connection) {
+			return false;
+		}
 		if (! this.caps.children) return false;
 		for (var ch in this.caps.children)
 			if (this.caps.children[ch].indexOf(this.data.state) >= 0)
@@ -150,7 +152,7 @@ var Element = Component.extend({
 	},
 	getPos: function() {
 		if (! this.data._pos) {
-			this.data._pos = {x: Math.random(), y: Math.random()};
+			this.data._pos = {x: Math.random(), y: Math.random(), canvas:this.editor.workspace.canvas.canvas.id};
 			this.modify_value("_pos", this.data._pos);
 		}
 		return this.data._pos;
@@ -169,12 +171,12 @@ var Element = Component.extend({
 		}
 	},
 	getAbsPos: function() {
-		return this.canvas.absPos(this.getPos());
+		return this.canvas.workspace.absPos(this.getPos());
 	},
 	setAbsPos: function(pos) {
 		var grid = this.editor.options.grid_size;
 		if (this.editor.options.snap_to_grid) pos = {x: Math.round(pos.x/grid)*grid, y: Math.round(pos.y/grid)*grid};
-		this.setPos(this.canvas.relPos(pos));
+		this.setPos(this.canvas.workspace.relPos(pos));
 	},
 	openConsole: function() {
 	    window.open('../element/'+this.id+'/console', '_blank', "innerWidth=745,innerheight=400,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");

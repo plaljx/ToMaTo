@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block header %}
+<script language="JavaScript" type="text/javascript" src="/js/dynimg.js"></script>
+{% endblock %}
+
+
+{% block title %}
+<title>{% trans 'Group' %} '{{ group.name }}' - ProviSec Testbed</title>
+{% endblock %}
+
+{% block content %}
+{% load tomato %}
+
+<form>
+    <button type="submit" formaction="{%url "admin_group_list"%}" class="btn btn-primary" style="float:right;">
+        <span class="glyphicon glyphicon-list"></span>
+        All Groups
+    </button>
+</form>
+
+<h1>Group '{{ group.name }}'</h1>
+
+<div class="skip-sm"></div>
+
+<table class="table">
+    <tr>
+        <th>{% trans 'Name' %}:</th>
+        <td>{{ group.name }}</td>
+    </tr>
+    <tr>
+        <th>{% trans 'Label' %}:</th>
+        <td>{{ group.label }}</td>
+    </tr>
+    <tr>
+        <th>{% trans 'Description' %}:</th>
+        <td>{{ group.description }}</td>
+    </tr>
+    <tr>
+        <th>{% trans 'Owner' %}:</th>
+        <td>{{ group.owner }}</td>
+    </tr>
+</table>
+
+<div class="skip-sm"></div>
+
+{% load tomato %}
+
+<form>
+{# User List #}
+<button type="submit" formaction="{%url "group_accounts_all" group.name%}" class="btn btn-info">
+    <span class="glyphicon glyphicon-list"></span>
+    {%trans 'Accounts'%}
+</button>
+
+{# Topology List #}
+<button type="submit" formaction="{%url "admin_group_topology" group.name%}" class="btn btn-info">
+    <span class="glyphicon glyphicon-list-alt"></span>
+    {%trans 'Topologies'%}
+</button>
+
+{# Edit #}
+{% if request.session.user.isAdmin or role == "owner" or role == "manager" %}
+    <button type="submit" formaction="{%url "admin_group_edit" group.name%}" class="btn btn-warning">
+        <span class="glyphicon glyphicon-pencil"></span>
+        {% trans 'Edit Group' %}
+    </button>
+{% endif %}
+
+{# Remove #}
+{% if request.session.user.isAdmin or role == "owner" %}
+    <button type="submit" formaction="{%url "admin_group_remove" group.name%}" class="btn btn-danger">
+        <span class="glyphicon glyphicon-trash"></span>
+        {% trans 'Remove Group' %}
+    </button>
+{% endif %}
+
+{# Change Owner #}
+{% if role == "owner" %}
+    {# TODO: Change Owner #}
+{% endif %}
+</form>
+
+{% endblock %}

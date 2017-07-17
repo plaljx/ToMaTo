@@ -5,6 +5,7 @@ from ..lib.topology_role import Role
 from ..lib.error import UserError
 from ..lib.service import get_backend_users_proxy
 from ..lib.constants import ActionName
+from ..lib.group_role import GroupRole
 
 import time
 
@@ -110,12 +111,14 @@ class PermissionChecker(UserInfo):
 		:return: keys of user_info() which this user may see
 		:rtype: list(str)
 		"""
-		res = {'name', 'origin', 'id', 'realname'}  # needed for everyone to add a user to a topology.
+		res = {'name', 'origin', 'id', 'realname', 'groups'}  # needed for everyone to add a user to a topology.
 		if self.get_username() == userB.get_username():
-			res.update(['email', 'flags', 'organization', 'quota', 'notification_count', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'quota', 'notification_count', 'client_data', 'last_login', 'password_hash',
+			            'groups'])
 		if Flags.GlobalAdmin in self.get_flags() or \
 				Flags.OrgaAdmin in self.get_flags() and self.get_organization_name() == userB.get_organization_name():
-			res.update(['email', 'flags', 'organization', 'quota', 'client_data', 'last_login', 'password_hash'])
+			res.update(['email', 'flags', 'organization', 'quota', 'client_data', 'last_login', 'password_hash',
+			            'groups'])
 		return res
 
 	def modify_user_allowed_keys(self, userB):
@@ -457,6 +460,14 @@ class PermissionChecker(UserInfo):
 			if topology_info.organization_has_role(self.get_organization_name(), role):  # organization has role on topology
 				return True
 
+		# group has role on topology, currently group only provides a max role of user
+		if role == GroupRole.user:
+			top_group_info = topology_info.get_group_info_list()
+			for group_role_dict in self.get_group_role():
+				if group_role_dict['group'] in top_group_info \
+						and group_role_dict['role'] in [GroupRole.owner, GroupRole.manager, GroupRole.user]:
+					return True
+
 		return False
 
 	def _check_has_topology_role(self, topology_info, role):
@@ -791,3 +802,101 @@ class PermissionChecker(UserInfo):
 	def check_may_execute_tasks(self):
 		#fixme: this is what was checked in api before. I think this should check for debug permissions...
 		auth_check(Flags.GlobalAdmin in self.get_flags(), "you don't have permissions to execute tasks")
+
+
+
+
+
+
+	# group
+
+	def check_may_list_group(self, user=None, role=None):
+		"""
+		Check whether user can view the list of groups.
+		"""
+		if user is None:
+			return True
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_username() == user:
+			return True
+		auth_fail("you may not view other's groups")
+
+	def check_may_create_group(self):
+		"""
+		Check whether user can create a group
+		At present, every user can create group
+		"""
+		return True
+
+	def check_may_modify_group(self, group):
+		"""
+		Check whether user can modify the basic information of a group
+		At present, global_admin and the owner, manager can modify the group
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
+			return True
+		auth_fail("operation requires global admin, group owner, group manager")
+
+	def check_may_remove_group(self, group):
+		"""
+		Check whether user can remove a group
+		At present, global_admin and the owner can modify the group
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) == GroupRole.owner:
+			return True
+		auth_fail("operation requires global admin or group owner")
+
+	def check_may_set_group_role(self, name, group, role=None):
+		"""
+		Check whether user can directly set a group role to a user
+		Only global admin should be permitted to do this
+		"""
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		auth_fail("operation requires global admin")
+
+	def check_may_invite_users(self, group):
+		"""
+		Check whether user can invite a user to a specified group
+		"""
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
+			return True
+		auth_fail("operations requires group owner or manager")
+
+	def check_may_handle_invite(self, group):
+		"""
+		Check whether user can handle the invite
+		If the role of target group is 'invited', this will be allowed
+		"""
+		if self.get_group_role(group) == GroupRole.invited:
+			return True
+		auth_fail("you are not been invited to group %s" % group)
+
+	def check_may_apply_for_group(self, group):
+		"""
+		Check whether user can apply to join a group
+		"""
+		current_role = self.get_group_role(group)
+		if current_role is None:
+			return True
+		auth_fail("you are already has a role \'%s\' on group %s" % (current_role, group))
+
+	def check_may_handle_application(self, group):
+		"""
+		Check whether user can handle a group application from a user
+		"""
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager):
+			return True
+		auth_fail("operations requires group owner or manager")
+
+	def check_may_list_group_topologies(self, group):
+		if Flags.GlobalAdmin in self.get_flags():
+			return True
+		if self.get_group_role(group) in (GroupRole.owner, GroupRole.manager, GroupRole.user):
+			return True
+		auth_fail("operations requires GlobalAdmin or a member role of the group")

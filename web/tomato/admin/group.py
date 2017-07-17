@@ -7,7 +7,9 @@ from . import AddEditForm, RemoveConfirmForm, ConfirmForm, RenderableForm
 from ..crispy_forms.layout import Layout
 from ..lib import wrap_rpc, AuthError
 from ..admin_common import Buttons
+
 from ..lib.group_role import GroupRole # TODO: FIX THIS
+
 from django.utils.translation import ugettext_lazy as _
 
 class GroupForm(AddEditForm):

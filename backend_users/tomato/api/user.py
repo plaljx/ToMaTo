@@ -17,6 +17,9 @@ def username_list(organization=None, with_flag=None):
 def user_list(organization=None, with_flag=None):
 	return [u.info() for u in _user_list(organization, with_flag)]
 
+def user_list_by_group(group=None, role=None):
+	return [u.info() for u in User.list_by_group(group, role)]
+
 def user_exists(name):
 	if _getUser(name, include_notifications=False):
 		return True
@@ -42,3 +45,7 @@ def user_remove(name):
 def user_modify(name, attrs):
 	user = _getUser(name, include_notifications=False)
 	user.modify(**attrs)
+
+def user_set_group_role(name, group, role=None):
+	user = _getUser(name, include_notifications=False)
+	user.set_group_role(group, role)

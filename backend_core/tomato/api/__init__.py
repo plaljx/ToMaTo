@@ -43,7 +43,9 @@ from template import template_id, template_info, template_create, template_list,
 from site import site_create, site_info, site_list, site_modify, site_remove
 
 from topology import topology_action, topology_create, topology_info,\
-	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage, topology_exists
+	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage, topology_exists,\
+	topology_list_by_group, \
+	topology_add_group, topology_remove_group
 
 from hierarchy import object_exists, object_parents, objects_available
 
@@ -61,3 +63,11 @@ from security_resources.security_software import security_software_create, secur
     security_software_list, security_software_modify, security_software_remove
 
 from traffic import traffic_list, traffic_create, traffic_info, traffic_remove, traffic_modify, traffic_start
+
+
+# topgroup
+
+from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info, topgroup_topology
+from groupconnection import *
+
+from subtopology import *

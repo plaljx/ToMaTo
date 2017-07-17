@@ -212,7 +212,11 @@ var Component = Class.extend({
 	},
 	modify_value: function(name, value) {
 		var attrs = {};
+		//fiexd the element's postion's modify for subtopology
 		attrs[name] = value;
+		if(name == "_pos"){
+			attrs[name].canvas = this.editor.workspace.canvas.canvas.id;
+		}
 		this.modify(attrs);
 	},
 	action: function(action, options) {
@@ -255,13 +259,13 @@ var Component = Class.extend({
 		new errorWindow({error:error});
 	},
 	trafficAvailable:function(){
-		var t = this;
-		/*if(this.data.type != "openvz"){
-			return false
-		}*/
+		//var t = this;
+		// /*if(this.data.type != "openvz"){
+		//	return false
+		//}*/
 		//var settings = this.configWindowSettings();
 		//if(settings.special.template.template.customize == "mgen") {
-		return true;
+			//return true;
 		//}
 		//return false;
 	},
@@ -271,5 +275,10 @@ var Component = Class.extend({
 		//this.checkTrafficWindow();
 		//this.trafficWindow.createTrafficList();
 		//this.trafficWindow.show();
-	}
+	},
+
+	//topgroup
+	// showLinkToTopgroup:function(){
+
+	// },
 });

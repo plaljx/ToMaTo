@@ -98,7 +98,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	DOC=""
 
 	# noinspection PyMethodOverriding
-	def init(self, topology, el1, el2, **attrs):
+	def init(self, topology , el1, el2, **attrs):
 		if not attrs: attrs = {}
 		self.topology = topology
 		self.state = ST_CREATED

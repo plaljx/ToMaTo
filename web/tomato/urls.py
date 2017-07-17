@@ -243,7 +243,43 @@ urlpatterns = patterns('',
     url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
     url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
     url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
-    # (r'^fight/$', 'tomato.finght.start'),
+    
+
+    # topgroup
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/list$', 'tomato.ajax.topgroup_list'),
+    (r'^ajax/topgroup/(?P<top_id>\w{24})/gettopgroupinfo$', 'tomato.ajax.topgroup_info'),
+
+    (r'^ajax/groupconnection/create$', 'tomato.ajax.groupconnection_create'),
+
+
+    # subtopology
+    (r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
+    (r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
+    # (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
+
+	# Group
+	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all
+	url(r'^account/(?P<user>[^/]+)/groups$', 'tomato.admin.group.list_', name='admin_account_groups'),
+	url(r'^account/(?P<user>[^/]+)/groups/(?P<role>\w+)$', 'tomato.admin.group.list_', name='admin_account_groups_role'),
+	url(r'^account/(?P<user>[^/]+)/invite/(?P<group>\w+)/(?P<operation>\w+)$', 'tomato.admin.group.handle_invite', name='admin_account_handle_invite'),
+	url(r'^account/(?P<user>[^/]+)/apply/(?P<group>\w+)$', 'tomato.admin.group.apply_', name='admin_account_group_apply'),
+	url(r'^group/add$', 'tomato.admin.group.add', name='admin_group_add'),
+	url(r'^group/(?P<group>\w+)$', 'tomato.admin.group.info', name='admin_group_info'),
+	url(r'^group/(?P<group>\w+)/topology$', 'tomato.admin.group.topology', name='admin_group_topology'),
+	url(r'^group/(?P<group>\w+)/application/(?P<user>[^/]+)/(?P<operation>\w+)$', 'tomato.admin.group.handle_application', name='group_handle_application'),
+	url(r'^group/(?P<group>\w+)/edit$', 'tomato.admin.group.edit', name='admin_group_edit'),
+	url(r'^group/(?P<group>\w+)/remove$', 'tomato.admin.group.remove', name='admin_group_remove'),
+	url(r'^group/(?P<group>\w+)/accounts$', 'tomato.account.list_by_group', {"role": None}, name="group_accounts_all"),
+	url(r'^group/(?P<group>\w+)/accounts/add$', "tomato.account.group_account_add", name="group_account_add"),
+	url(r'^group/(?P<group>\w+)/accounts/remove/(?P<user>\w+)$', 'tomato.account.group_account_remove', name="group_account_remove"),
+	url(r'^group/(?P<group>\w+)/accounts/invite$', 'tomato.account.group_account_invite', name="group_account_invite"),
+	url(r'^group/(?P<group>\w+)/accounts/(?P<role>\w+)$', 'tomato.account.list_by_group', name="group_accounts"),
+	# url(r'^group/(?P<group>\w+)/topologies$', 'tomato.topology.list_of_group', name="group_topologies"),
+	url(r'^ajax/topology/(?P<topl_id>\w{24})/group_info/(?P<group>\w+)/add$', 'tomato.ajax.topology_add_group'),
+	url(r'^ajax/topology/(?P<topl_id>\w{24})/group_info/(?P<group>\w+)/remove$', 'tomato.ajax.topology_remove_group'),
+	url(r'^ajax/group/(?P<group>\w+)/info$', 'tomato.ajax.group_info'),
 
 )
 urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )

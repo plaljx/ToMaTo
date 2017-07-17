@@ -29,11 +29,18 @@ from .lib.constants import StateName, ActionName
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 from .lib.references import Reference
 
+from .topgroup import Topgroup
+
 class TimeoutStep:
 	INITIAL = 0
 	WARNED = 9
 	STOPPED = 10
 	DESTROYED = 20
+
+
+class GroupInfo(ExtDocument, EmbeddedDocument):
+	group = StringField(required=True)
+
 
 class Permission(ExtDocument, EmbeddedDocument):
 	"""
@@ -47,16 +54,22 @@ class Permission(ExtDocument, EmbeddedDocument):
 class Topology(Entity, BaseDocument):
 	"""
 	:type permissions: list of Permission
+	:type group_info: list of GroupInfo
 	:type site: Site
 	:type clientData: dict
 	"""
 	from .host import Site
 	permissions = ListField(EmbeddedDocumentField(Permission))
+	group_info = ListField(EmbeddedDocumentField(GroupInfo))
 	timeout = FloatField(required=True)
 	timeoutStep = IntField(db_field='timeout_step', required=True, default=TimeoutStep.INITIAL)
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
 	name = StringField()
 	clientData = DictField(db_field='client_data')
+	# topgroup
+	topgroup = ReferenceField(Topgroup,reverse_delete_rule=DENY)
+	topgroupId = ReferenceFieldId(topgroup)
+	
 	meta = {
 		'ordering': ['name'],
 		'indexes': [
@@ -217,6 +230,31 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
+	def add_group_info(self, group):
+		"""
+		Set group relation info of the topology
+		:param str group: group name
+		:return: None
+		"""
+		for info in self.group_info:
+			# avoid duplication
+			if info.group == group:
+				break
+		else:
+			self.group_info.append(GroupInfo(group=group))
+			self.save()
+
+	def remove_group_info(self, group):
+		"""
+		Remove specified group relation info of the topology
+		:param str group: group name
+		:return: None
+		"""
+		for info in self.group_info:
+			if info.group == group:
+				self.group_info.remove(info)
+				self.save()
+
 
 
 	def checkRemove(self, recurse=True):
@@ -348,6 +386,7 @@ class Topology(Entity, BaseDocument):
 		"id": IdAttribute(),
 		"permissions": Attribute(readOnly=True, get=lambda self: {str(p.user): p.role for p in self.permissions},
 			schema=schema.StringMap(additional=True)),
+		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
 		"site": Attribute(get=lambda self: self.site.name if self.site else None, set=modify_site),
 		"elements": Attribute(readOnly=True, schema=schema.List()),
 		"connections": Attribute(readOnly=True, schema=schema.List()),
