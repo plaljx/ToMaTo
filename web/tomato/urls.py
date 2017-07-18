@@ -18,9 +18,9 @@
 
 from django import VERSION as DJANGO_VERSION
 if DJANGO_VERSION < (1,6):
-    from django.conf.urls.defaults import *
+	from django.conf.urls.defaults import *
 else:
-    from django.conf.urls import patterns, url, include
+	from django.conf.urls import patterns, url, include
 
 from django.views.i18n import javascript_catalog
 
@@ -29,7 +29,7 @@ from django.views.i18n import javascript_catalog
 # admin.autodiscover()
 js_info_dict = {
 	'domain': 'djangojs',
-    'packages': ('django.contrib.auth',
+	'packages': ('django.contrib.auth',
 	'django.contrib.contenttypes',
 	'django.contrib.sites',
 	'tomato.crispy_forms',
@@ -37,7 +37,8 @@ js_info_dict = {
 }
 from django.conf.urls.i18n import i18n_patterns
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+	'',
 	(r'^$', 'tomato.main.index'),
 	url(r'^$', 'tomato.main.index', name='index'),
 	(r'^fonts/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'tomato/fonts'}),
@@ -51,8 +52,8 @@ urlpatterns = patterns('',
 	url(r'^login$', 'tomato.main.login'),
 	(r'^logout$', 'tomato.main.logout'),
 	(r'^account/register$', 'tomato.account.register'),
-    (r'^img_ls$', 'tomato.dynimg.ls_img'),
-    (r'^key.pem$', 'tomato.main.backend_key'),
+	(r'^img_ls$', 'tomato.dynimg.ls_img'),
+	(r'^key.pem$', 'tomato.main.backend_key'),
 	url(r'^account/list$', 'tomato.account.list', {"organization": True}, name="account_list"),
 	url(r'^account/list/all$', 'tomato.account.list', {"organization": False}, name="account_list_all"),
 	url(r'^account/registrations$', 'tomato.account.list', {"organization": True, "with_flag": "new_account"}, name="account_list_registrations"),
@@ -110,16 +111,16 @@ urlpatterns = patterns('',
 	(r'^organization/(?P<name>\w+)/remove$', 'tomato.admin.organization.remove'),
 	(r'^organization/(?P<name>\w+)/usage$', 'tomato.usage.organization'),
 	(r'^organization/(?P<organization>\w+)/add_site$', 'tomato.admin.site.add'),
-    (r'^site/$', 'tomato.admin.site.list'),
-    (r'^site/add$', 'tomato.admin.site.add'),
-    (r'^site/(?P<name>\w+)/edit$', 'tomato.admin.site.edit'),
-    (r'^site/(?P<name>\w+)/info$', 'tomato.admin.site.info'),
+	(r'^site/$', 'tomato.admin.site.list'),
+	(r'^site/add$', 'tomato.admin.site.add'),
+	(r'^site/(?P<name>\w+)/edit$', 'tomato.admin.site.edit'),
+	(r'^site/(?P<name>\w+)/info$', 'tomato.admin.site.info'),
 	(r'^site/(?P<name>\w+)/remove$', 'tomato.admin.site.remove'),
 	url(r'^template/$', 'tomato.template.list', {"tech": None}, name="template_list"),
 	url(r'^template/bytech/(?P<tech>\w+)$', 'tomato.template.list', name="template_list_bytech"),
 	(r'^template/add$', 'tomato.template.add'),
 	(r'^template/add/(?P<tech>\w+)$', 'tomato.template.add'),
-    (r'^template/(?P<res_id>\w{24})$', 'tomato.template.info'),
+	(r'^template/(?P<res_id>\w{24})$', 'tomato.template.info'),
 	(r'^template/(?P<res_id>\w{24})/edit$', 'tomato.template.edit'),
 	(r'^template/(?P<res_id>\w{24})/remove$', 'tomato.template.remove'),
 	url(r'^profile/$', 'tomato.profile.list', {"tech": None}, name="profile_list"),
@@ -175,89 +176,89 @@ urlpatterns = patterns('',
 	(r'^debug/stats/$', 'tomato.debug.stats'),
 	(r'^debug/stats/(?P<tomato_module>[^/]+)$', 'tomato.debug.stats'),
 	(r'^debug/api_stats$', 'tomato.debug.api_call_stats'),
-    url(r'^dumpmanager/$',  'tomato.dumpmanager.group_list',name='errorgroup_list'),
-    (r'^dumpmanager/refresh$', 'tomato.dumpmanager.refresh'),
-    (r'^dumpmanager/hide_older_than/(?P<border_time>[0-9]+.?[0-9]*)_days$', 'tomato.dumpmanager.hide_old_errorgroups'),
-    (r'^dumpmanager/remove_older_than/(?P<border_time>[0-9]+.?[0-9]*)_days$', 'tomato.dumpmanager.remove_old_errorgroups'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)$', 'tomato.dumpmanager.group_info'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/edit$', 'tomato.dumpmanager.group_edit'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/hide$', 'tomato.dumpmanager.group_hide'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/remove$', 'tomato.dumpmanager.group_remove'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/add_to_favorites', 'tomato.dumpmanager.errorgroup_favorite'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/remove_from_favorites', 'tomato.dumpmanager.errorgroup_unfavorite'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/github', 'tomato.dumpmanager.errorgroup_github'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export$', 'tomato.dumpmanager.dump_export'),
-    (r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export_data$', 'tomato.dumpmanager.dump_export_with_data'),
+	url(r'^dumpmanager/$',  'tomato.dumpmanager.group_list',name='errorgroup_list'),
+	(r'^dumpmanager/refresh$', 'tomato.dumpmanager.refresh'),
+	(r'^dumpmanager/hide_older_than/(?P<border_time>[0-9]+.?[0-9]*)_days$', 'tomato.dumpmanager.hide_old_errorgroups'),
+	(r'^dumpmanager/remove_older_than/(?P<border_time>[0-9]+.?[0-9]*)_days$', 'tomato.dumpmanager.remove_old_errorgroups'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)$', 'tomato.dumpmanager.group_info'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/edit$', 'tomato.dumpmanager.group_edit'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/hide$', 'tomato.dumpmanager.group_hide'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/remove$', 'tomato.dumpmanager.group_remove'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/add_to_favorites', 'tomato.dumpmanager.errorgroup_favorite'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/remove_from_favorites', 'tomato.dumpmanager.errorgroup_unfavorite'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/github', 'tomato.dumpmanager.errorgroup_github'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export$', 'tomato.dumpmanager.dump_export'),
+	(r'^dumpmanager/group/(?P<group_id>\w+)/source/(?P<source>[^/]+)/dump/(?P<dump_id>[\d_.]+)/export_data$', 'tomato.dumpmanager.dump_export_with_data'),
 
 	url(r'^sysconfig$','tomato.sys_config.config', name="sysconfig"),
-	
-    # Topology Scenario
-    (r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
-    url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),
-    url(r'^scenario/my$', 'tomato.scenario.list_', {"show": "my"}, name='scenario_list_my'),
-    url(r'^scenario/public$', 'tomato.scenario.list_', {"show": "public"}, name='scenario_list_public'),
-    url(r'^scenario/(?P<id_>\w{24})/$', 'tomato.scenario.info', name='scenario_info'),
-    url(r'^scenario/add/$', 'tomato.scenario.add', name='scenario_add'),
-    url(r'^scenario/(?P<id_>\w{24})/edit$', 'tomato.scenario.edit', name='scenario_edit'),
-    url(r'^scenario/(?P<id_>\w{24})/remove$', 'tomato.scenario.remove', name='scenario_remove'),
-    url(r'^scenario/(?P<id_>\w{24})/deploy$', 'tomato.scenario.deploy', name='scenario_deploy'),
-    url(r'^scenario/(?P<id_>\w{24})/download_topo$', 'tomato.scenario.download_topo', name='scenario_download_topo'),
-    url(r'^scenario/(?P<id_>\w{24})/upload_topo$', 'tomato.scenario.upload_topo', name='scenario_upload_topo'),
 
-    # (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
-    # (r'ajax/scenario/(?P<id_>\w{24})/deploy$', 'tomato.ajax.scenario_deploy'),
-    # (r'ajax/scenario/(?P<id_>\w{24})/modify$', 'tomato.ajax.scenario_modify'),
+	# Topology Scenario
+	(r'ajax/topology/(?P<id_>\w{24})/save_as_scenario$', 'tomato.ajax.save_as_scenario'),
+	url(r'^scenario/$', 'tomato.scenario.list_', {"show": "all"}, name='scenario_list'),
+	url(r'^scenario/my$', 'tomato.scenario.list_', {"show": "my"}, name='scenario_list_my'),
+	url(r'^scenario/public$', 'tomato.scenario.list_', {"show": "public"}, name='scenario_list_public'),
+	url(r'^scenario/(?P<id_>\w{24})/$', 'tomato.scenario.info', name='scenario_info'),
+	url(r'^scenario/add/$', 'tomato.scenario.add', name='scenario_add'),
+	url(r'^scenario/(?P<id_>\w{24})/edit$', 'tomato.scenario.edit', name='scenario_edit'),
+	url(r'^scenario/(?P<id_>\w{24})/remove$', 'tomato.scenario.remove', name='scenario_remove'),
+	url(r'^scenario/(?P<id_>\w{24})/deploy$', 'tomato.scenario.deploy', name='scenario_deploy'),
+	url(r'^scenario/(?P<id_>\w{24})/download_topo$', 'tomato.scenario.download_topo', name='scenario_download_topo'),
+	url(r'^scenario/(?P<id_>\w{24})/upload_topo$', 'tomato.scenario.upload_topo', name='scenario_upload_topo'),
 
-    # Security Resources
-    url(r'^malicious_code/$', 'tomato.malicious_code.list_', name='malicious_code_list'),
-    url(r'^malicious_code/add/$', 'tomato.malicious_code.add', name='malicious_code_add'),
-    url(r'^malicious_code/(?P<res_id>\w{24})/$', 'tomato.malicious_code.info', name='malicious_code_info'),
-    url(r'^malicious_code/(?P<res_id>\w{24})/edit/$', 'tomato.malicious_code.edit', name='malicious_code_edit'),
-    url(r'^malicious_code/(?P<res_id>\w{24})/remove/$', 'tomato.malicious_code.remove', name='malicious_code_remove'),
+	# (r'ajax/scenario/(?P<id_>\w{24})/remove$', 'tomato.ajax.scenario_remove'),
+	# (r'ajax/scenario/(?P<id_>\w{24})/deploy$', 'tomato.ajax.scenario_deploy'),
+	# (r'ajax/scenario/(?P<id_>\w{24})/modify$', 'tomato.ajax.scenario_modify'),
 
-    # url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
-    # url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
-    # url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
-    # url(r'^security_software/(?P<res_id>\w{24})/edit/$', 'tomato.security_software.edit', name='security_software_edit'),
-    # url(r'^security_software/(?P<res_id>\w{24})/remove/$', 'tomato.security_software.remove', name='security_software_remove'),
-    # url(r'^vulnerability/$', 'tomato.vulnerability.list_', name='scenario_list'),
-    # url(r'^vulnerability/add/$', 'tomato.vulnerability.add', name='vulnerability_add'),
-    # url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
-    # url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
-    # url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
+	# Security Resources
+	url(r'^malicious_code/$', 'tomato.malicious_code.list_', name='malicious_code_list'),
+	url(r'^malicious_code/add/$', 'tomato.malicious_code.add', name='malicious_code_add'),
+	url(r'^malicious_code/(?P<res_id>\w{24})/$', 'tomato.malicious_code.info', name='malicious_code_info'),
+	url(r'^malicious_code/(?P<res_id>\w{24})/edit/$', 'tomato.malicious_code.edit', name='malicious_code_edit'),
+	url(r'^malicious_code/(?P<res_id>\w{24})/remove/$', 'tomato.malicious_code.remove', name='malicious_code_remove'),
 
-    #add by Nong Caihua at 2016.12.29
-    (r'^ajax/element/(?P<element_id>\w{24})/traffic_create$' , 'tomato.ajax.traffic_create'),
-    (r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
-    (r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
+	# url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
+	# url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
+	# url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
+	# url(r'^security_software/(?P<res_id>\w{24})/edit/$', 'tomato.security_software.edit', name='security_software_edit'),
+	# url(r'^security_software/(?P<res_id>\w{24})/remove/$', 'tomato.security_software.remove', name='security_software_remove'),
+	# url(r'^vulnerability/$', 'tomato.vulnerability.list_', name='scenario_list'),
+	# url(r'^vulnerability/add/$', 'tomato.vulnerability.add', name='vulnerability_add'),
+	# url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
+	# url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
+	# url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
+
+	#add by Nong Caihua at 2016.12.29
+	(r'^ajax/element/(?P<element_id>\w{24})/traffic_create$' , 'tomato.ajax.traffic_create'),
+	(r'^ajax/element/(?P<element_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
+	(r'^ajax/element/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
 	(r'^ajax/element/(?P<element_id>\w{24})/traffic_start$' , 'tomato.ajax.traffic_start'),
 
 
-    url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
-    url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
-    url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
-    url(r'^security_software/(?P<res_id>\w{24})/edit/$', 'tomato.security_software.edit', name='security_software_edit'),
-    url(r'^security_software/(?P<res_id>\w{24})/remove/$', 'tomato.security_software.remove', name='security_software_remove'),
-    url(r'^vulnerability/$', 'tomato.vulnerability.list_', name='vulnerability_list'),
-    url(r'^vulnerability/add/$', 'tomato.vulnerability.add', name='vulnerability_add'),
-    url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
-    url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
-    url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
-    
-
-    # topgroup
-    (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
-    (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
-    (r'^ajax/topgroup/(?P<top_id>\w{24})/list$', 'tomato.ajax.topgroup_list'),
-    (r'^ajax/topgroup/(?P<top_id>\w{24})/gettopgroupinfo$', 'tomato.ajax.topgroup_info'),
-
-    (r'^ajax/groupconnection/create$', 'tomato.ajax.groupconnection_create'),
+	url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
+	url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),
+	url(r'^security_software/(?P<res_id>\w{24})/$', 'tomato.security_software.info', name='security_software_info'),
+	url(r'^security_software/(?P<res_id>\w{24})/edit/$', 'tomato.security_software.edit', name='security_software_edit'),
+	url(r'^security_software/(?P<res_id>\w{24})/remove/$', 'tomato.security_software.remove', name='security_software_remove'),
+	url(r'^vulnerability/$', 'tomato.vulnerability.list_', name='vulnerability_list'),
+	url(r'^vulnerability/add/$', 'tomato.vulnerability.add', name='vulnerability_add'),
+	url(r'^vulnerability/(?P<res_id>\w{24})/$', 'tomato.vulnerability.info', name='vulnerability_info'),
+	url(r'^vulnerability/(?P<res_id>\w{24})/edit/$', 'tomato.vulnerability.edit', name='vulnerability_edit'),
+	url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
 
 
-    # subtopology
-    (r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
-    (r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
-    # (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
+	# topgroup
+	# (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
+	# (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
+	# (r'^ajax/topgroup/(?P<top_id>\w{24})/list$', 'tomato.ajax.topgroup_list'),
+	# (r'^ajax/topgroup/(?P<top_id>\w{24})/gettopgroupinfo$', 'tomato.ajax.topgroup_info'),
+	#
+	# (r'^ajax/groupconnection/create$', 'tomato.ajax.groupconnection_create'),
+
+
+	# subtopology
+	(r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
+	(r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
+	# (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
 
 	# Group
 	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all

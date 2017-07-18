@@ -16,7 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from .topology import Topology
-from .scenario import Scenario    # by Chang Rui
+from .topology import SubTopology
+from .scenario import Scenario
 from .elements import Element
 from .elements.generic import VMElement, VMInterface
 from .elements.container_virtualization import ContainerVirtualization, ContainerVirtualization_Interface
@@ -37,6 +38,6 @@ from .resources.network import Network, NetworkInstance
 from .resources.profile import Profile
 from .db import DataEntry
 from .traffic import Traffic
-from .topgroup import Topgroup
-from .groupconnection import Groupconnection
+# from .topgroup import Topgroup
+# from .groupconnection import Groupconnection
 from .subtopology import Subtopology

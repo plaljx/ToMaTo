@@ -81,7 +81,8 @@ from group import group_remove, group_modify, group_info, group_list, group_crea
 	handle_application, group_apply, group_topology_list, topology_add_group, topology_remove_group
 
 # topgroup
-from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info
-from groupconnection import *
+# from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info
+# from groupconnection import *
+
 
 from subtopology import *

@@ -29,7 +29,6 @@ from .lib.constants import StateName, ActionName
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 from .lib.references import Reference
 
-from .topgroup import Topgroup
 
 class TimeoutStep:
 	INITIAL = 0
@@ -51,6 +50,59 @@ class Permission(ExtDocument, EmbeddedDocument):
 	role = StringField(choices=[Role.owner, Role.manager, Role.user], required=True)
 
 
+class SubTopology(Entity, BaseDocument):
+	"""
+	Separate the sub topology data into own collections,
+	since a sub topology may be referred by multiple places.
+	:type name: str
+	:type topology: ReferenceField
+	:type group_info: list
+	"""
+	name = StringField(required=True, unique=True)
+	topology = ReferenceField('Topology', required=True) # TODO: check whether should use CASCADE
+	group_info = EmbeddedDocumentListField(GroupInfo)
+
+	@classmethod
+	def get_default_name(self):
+		return "Main"
+
+	def get_group_info(self):
+		return self.group_info.to_json()  # TODO: check if `to_json` works
+
+	@property
+	def elements(self):					# TODO
+		return None
+
+	@property
+	def connections(self):				# TODO
+		return None
+
+	def add_group(self, name):
+		# TODO: check if the `get` works on EmbeddedDocument
+		try:
+			if self.group_info.get(name=name):
+				raise UserError(
+					code=UserError.ALREADY_EXISTS,
+					message="The sub topology already has the group",
+					data={"topology": self.topology.name, "sub_topology": self.name, "group": name})
+		except DoesNotExist:
+			self.group_info.append(GroupInfo(group=name))
+			self.save()
+			return True
+
+	def remove_group(self, name):
+		# TODO: check if the `get` works on EmbeddedDocument
+		try:
+			group = self.group_info.get(name=name)
+			self.group_info.remove(group)
+			return True
+		except DoesNotExist:
+			raise UserError(
+				code=UserError.ENTITY_DOES_NOT_EXIST,
+				message="The sub topology does not exist",
+				data={"topology": self.topology.name, "sub_topology": self.name, "group": name})
+
+
 class Topology(Entity, BaseDocument):
 	"""
 	:type permissions: list of Permission
@@ -66,9 +118,7 @@ class Topology(Entity, BaseDocument):
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
 	name = StringField()
 	clientData = DictField(db_field='client_data')
-	# topgroup
-	topgroup = ReferenceField(Topgroup,reverse_delete_rule=DENY)
-	topgroupId = ReferenceFieldId(topgroup)
+	sub_topologies = ListField(ReferenceField('SubTopology'))
 	
 	meta = {
 		'ordering': ['name'],
@@ -86,6 +136,13 @@ class Topology(Entity, BaseDocument):
 	def connections(self):
 		return Connection.objects(topology=self)
 
+	# @property
+	# def sub_topologies(self):
+	# 	# st_json = self.sub_topologies.to_json()    # TODO: check if `to_json` works
+	# 	# print st_json
+	# 	# return st_json
+	# 	return self.sub_topologies
+
 	DOC = ""
 
 	def init(self, owner, **attrs):
@@ -98,6 +155,8 @@ class Topology(Entity, BaseDocument):
 		self.save()
 		self.name = "Topology [%s]" % self.idStr
 		self.modify(**attrs)
+		self.add_sub_topology(SubTopology.get_default_name())
+		self.save()
 
 	def isBusy(self):
 		return hasattr(self, "_busy") and self._busy
@@ -229,6 +288,30 @@ class Topology(Entity, BaseDocument):
 				return Role.leq(role, perm.role)
 		return False
 
+
+	def add_sub_topology(self, name):
+		try:
+			sub_topology = SubTopology(name=name, topology=self)
+			sub_topology.save()
+			self.sub_topologies.append(sub_topology)
+			self.save()
+		except NotUniqueError:
+			raise UserError(
+				UserError.ALREADY_EXISTS,
+				message="Sub topology already exists",
+				data={"topology": self.name, "id": self.id, "sub_topology": name})
+
+	def remove_sub_topology(self, name):
+		try:
+			sub_topology = self.sub_topologies.get(name=name)
+			self.sub_topologies.remove(sub_topology)    # TODO: check if this could `PULL`
+			self.save()
+		except DoesNotExist:
+			raise UserError(
+				UserError.ENTITY_DOES_NOT_EXIST,
+				message="Sub topology does not exists",
+				data={"topology": self.name, "id": self.id, "sub_topology": name}
+			)
 
 	def add_group_info(self, group):
 		"""
@@ -386,13 +469,14 @@ class Topology(Entity, BaseDocument):
 		"id": IdAttribute(),
 		"permissions": Attribute(readOnly=True, get=lambda self: {str(p.user): p.role for p in self.permissions},
 			schema=schema.StringMap(additional=True)),
-		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
 		"site": Attribute(get=lambda self: self.site.name if self.site else None, set=modify_site),
 		"elements": Attribute(readOnly=True, schema=schema.List()),
 		"connections": Attribute(readOnly=True, schema=schema.List()),
 		"timeout": Attribute(field=timeout, readOnly=True, schema=schema.Number()),
 		"state_max": Attribute(field=maxState, readOnly=True, schema=schema.String()),
-		"name": Attribute(field=name, schema=schema.String())
+		"name": Attribute(field=name, schema=schema.String()),
+		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
+		"sub_topologies": Attribute(readOnly=True, schema=schema.List())
 	}
 
 	@classmethod
@@ -402,8 +486,11 @@ class Topology(Entity, BaseDocument):
 		except cls.DoesNotExist:
 			return None
 
-
-
+# The bi-directional references not work with delete-rule,
+# thus need to move delete-rules here.
+# TODO: check if the delete rules correct
+SubTopology.register_delete_rule(Topology, 'sub_topologies', CASCADE)
+Topology.register_delete_rule(SubTopology, 'topology', PULL)
 
 def get(id_, **kwargs):
 	return Topology.get(id_, **kwargs)
