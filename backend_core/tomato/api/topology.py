@@ -263,5 +263,17 @@ def topology_remove_group(id, group):
 	top = _getTopology(id)
 	top.remove_group_info(group)
 
+def topology_get_sub_topology(topo_id, name=None):
+	top = _getTopology(topo_id)
+	return top.get_sub_topology(name=name)
+
+def topology_add_sub_topology(topo_id, name):
+	top = _getTopology(topo_id)
+	return top.add_sub_topology(name)
+
+def topology_remove_sub_topology(topo_id, name):
+	top = _getTopology(topo_id)
+	return top.remove_sub_topology(name=name)
+
 from .. import topology
 from ..lib.error import UserError

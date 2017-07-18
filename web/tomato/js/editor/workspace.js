@@ -15,7 +15,9 @@ var Workspace = Class.extend({
     	var t = this;
 
     	ajax({
-			url:'topology/'+ this.editor.options.topology + '/getsubtopology',
+			// url:'topology/'+ this.editor.options.topology + '/getsubtopology',
+			url: 'topology/' + this.editor.options.topology + '/subtopology/',
+			data: '',
 			synchronous: true,
 			successFn:function(result){
 				t.subtopologyList = result
@@ -44,7 +46,7 @@ var Workspace = Class.extend({
     	};
 
     	//tutorial UI
-    	this.tutorialWindow = new TutorialWindow({ 
+    	this.tutorialWindow = new TutorialWindow({
 			autoOpen: false, 
 			draggable: true,  
 			resizable: false, 
@@ -58,7 +60,7 @@ var Workspace = Class.extend({
 			hideCloseButton: true,
 			editor: this.editor
 		});
-    	
+
     	this.permissionsWindow = new PermissionsWindow({
     		autoOpen: false,
     		draggable: true,
@@ -115,7 +117,8 @@ var Workspace = Class.extend({
 			'name': canvasname,
 		}
 		ajax({
-			url:'topology/'+ this.editor.topology.id + '/addsubtopology',
+			// url:'topology/'+ this.editor.topology.id + '/addsubtopology',
+			url:'topology/'+ this.editor.topology.id + '/subtopology/add',
 			data:data,
 			successFn:function(){
 			},
@@ -124,6 +127,10 @@ var Workspace = Class.extend({
 			}
 		})
 	},
+
+	removeCanvas:function (canvasname) {
+		// TODO
+    },
 
 	tabCanvas:function(canvasname){
 

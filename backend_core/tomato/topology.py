@@ -58,12 +58,12 @@ class SubTopology(Entity, BaseDocument):
 	:type topology: ReferenceField
 	:type group_info: list
 	"""
-	name = StringField(required=True, unique=True)
-	topology = ReferenceField('Topology', required=True) # TODO: check whether should use CASCADE
+	name = StringField(required=True)
+	topology = ReferenceField('Topology', required=True)  # TODO: check whether should use CASCADE
 	group_info = EmbeddedDocumentListField(GroupInfo)
 
 	@classmethod
-	def get_default_name(self):
+	def get_default_name(cls):
 		return "Main"
 
 	def get_group_info(self):
@@ -106,18 +106,20 @@ class SubTopology(Entity, BaseDocument):
 class Topology(Entity, BaseDocument):
 	"""
 	:type permissions: list of Permission
-	:type group_info: list of GroupInfo
 	:type site: Site
 	:type clientData: dict
+	:type group_info: list
+	:type sub_topologies: list
 	"""
 	from .host import Site
 	permissions = ListField(EmbeddedDocumentField(Permission))
-	group_info = ListField(EmbeddedDocumentField(GroupInfo))
 	timeout = FloatField(required=True)
 	timeoutStep = IntField(db_field='timeout_step', required=True, default=TimeoutStep.INITIAL)
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
 	name = StringField()
 	clientData = DictField(db_field='client_data')
+
+	group_info = ListField(EmbeddedDocumentField(GroupInfo))
 	sub_topologies = ListField(ReferenceField('SubTopology'))
 	
 	meta = {
@@ -136,12 +138,6 @@ class Topology(Entity, BaseDocument):
 	def connections(self):
 		return Connection.objects(topology=self)
 
-	# @property
-	# def sub_topologies(self):
-	# 	# st_json = self.sub_topologies.to_json()    # TODO: check if `to_json` works
-	# 	# print st_json
-	# 	# return st_json
-	# 	return self.sub_topologies
 
 	DOC = ""
 
@@ -156,7 +152,6 @@ class Topology(Entity, BaseDocument):
 		self.name = "Topology [%s]" % self.idStr
 		self.modify(**attrs)
 		self.add_sub_topology(SubTopology.get_default_name())
-		self.save()
 
 	def isBusy(self):
 		return hasattr(self, "_busy") and self._busy
@@ -289,12 +284,17 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
+	def get_sub_topology(self, name=None):
+		# TODO: when `name` is not `None`
+		return [sub_topo.name for sub_topo in self.sub_topologies]
+
 	def add_sub_topology(self, name):
 		try:
 			sub_topology = SubTopology(name=name, topology=self)
 			sub_topology.save()
 			self.sub_topologies.append(sub_topology)
 			self.save()
+			return True
 		except NotUniqueError:
 			raise UserError(
 				UserError.ALREADY_EXISTS,
@@ -306,6 +306,7 @@ class Topology(Entity, BaseDocument):
 			sub_topology = self.sub_topologies.get(name=name)
 			self.sub_topologies.remove(sub_topology)    # TODO: check if this could `PULL`
 			self.save()
+			return True
 		except DoesNotExist:
 			raise UserError(
 				UserError.ENTITY_DOES_NOT_EXIST,
@@ -476,7 +477,7 @@ class Topology(Entity, BaseDocument):
 		"state_max": Attribute(field=maxState, readOnly=True, schema=schema.String()),
 		"name": Attribute(field=name, schema=schema.String()),
 		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
-		"sub_topologies": Attribute(readOnly=True, schema=schema.List())
+		"sub_topologies": Attribute(readOnly=True, get=get_sub_topology)
 	}
 
 	@classmethod

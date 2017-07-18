@@ -147,7 +147,7 @@ var Topology = Class.extend({
 				}
 			}
 		});
-        this.configWindow.add(new TextElement({
+		this.configWindow.add(new TextElement({
 				label: gettext("Name"),
 				name: "name",
 				value: this.data.name,
@@ -170,18 +170,18 @@ var Topology = Class.extend({
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/modify',
-		 	data: attrs,
-		 	successFn: function(result) {
+			data: attrs,
+			successFn: function(result) {
 				t.editor.triggerEvent({component: "topology", object: this, operation: "modify", phase: "end", attrs: attrs});
-		 	},
-		 	errorFn: function(error) {
-		 		new errorWindow({error:error});
+			},
+			errorFn: function(error) {
+				new errorWindow({error:error});
 				t.editor.triggerEvent({component: "topology", object: this, operation: "modify", phase: "error", attrs: attrs});
-		 	}
+			}
 		});
 		for (var name in attrs) {
-		    this.data[name] = attrs[name];
-    		if (name == "name") editor.workspace.updateTopologyTitle();
+			this.data[name] = attrs[name];
+			if (name == "name") editor.workspace.updateTopologyTitle();
 		}
 	},
 	action: function(action, options) {
@@ -191,16 +191,16 @@ var Topology = Class.extend({
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/action',
-		 	data: {action: action, params: params},
-		 	successFn: function(result) {
-		 		var data = result[1];
-		 		t.data = data;
+			data: {action: action, params: params},
+			successFn: function(result) {
+				var data = result[1];
+				t.data = data;
 				t.editor.triggerEvent({component: "topology", object: this, operation: "action", phase: "end", action: action, params: params});
-		 	},
-		 	errorFn: function(error) {
-		 		new errorWindow({error:error});
+			},
+			errorFn: function(error) {
+				new errorWindow({error:error});
 				t.editor.triggerEvent({component: "topology", object: this, operation: "action", phase: "error", action: action, params: params});
-		 	}
+			}
 		});
 	},
 	modify_value: function(name, value) {
@@ -286,7 +286,7 @@ var Topology = Class.extend({
 				t.onUpdate();
 			},
 			errorFn: function(error) {
-		 		new errorWindow({error:error});
+				new errorWindow({error:error});
 				obj.paintRemove();
 				t.pendingNames.remove(data.name);
 				t.editor.triggerEvent({component: "element", object: obj, operation: "create", phase: "error", attrs: data});
@@ -326,7 +326,7 @@ var Topology = Class.extend({
 					el2.onConnected();
 				},
 				errorFn: function(error) {
-			 		new errorWindow({error:error});
+					new errorWindow({error:error});
 					obj.paintRemove();
 					t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "error", attrs: data});
 				}
@@ -442,50 +442,50 @@ var Topology = Class.extend({
 			}});
 		}});
 	},
-    saveAsScenario: function(data) {    // by Chang Rui
-        var t = this;
-        ajax({
-            url: 'topology/' + this.id + '/save_as_scenario',
-            data: data,
-            successFn: function (result) {
-                console.log("Save as scenario: Success.");
-                console.log("Result: " + result)
-            },
-            errorFn: function (error) {
-                new errorWindow({error:error});
-            }
-        })
-    },
-    showDebugInfo: function() {
+	saveAsScenario: function(data) {    // by Chang Rui
+		var t = this;
+		ajax({
+			url: 'topology/' + this.id + '/save_as_scenario',
+			data: data,
+			successFn: function (result) {
+				console.log("Save as scenario: Success.");
+				console.log("Result: " + result)
+			},
+			errorFn: function (error) {
+				new errorWindow({error:error});
+			}
+		})
+	},
+	showDebugInfo: function() {
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/info',
-		 	data: {},
-		 	successFn: function(result) {
-		 		var win = new Window({
-		 			title: "Debug info",
-		 			width: 500,
-		 			buttons: {
-		 				Close: function() {
-		 					win.hide();
-		 				}
+			data: {},
+			successFn: function(result) {
+				var win = new Window({
+					title: "Debug info",
+					width: 500,
+					buttons: {
+						Close: function() {
+							win.hide();
+						}
 					}
-		 		});
-		 		div = $('<div></div>');
-		 		new PrettyJSON.view.Node({
-		 			data: result,
-		 			el: div
-		 		});
-		 		win.add(div);
-		 		win.show();
-		 	},
-		 	errorFn: function(error) {
-		 		new errorWindow({error:error});
-		 	}
+				});
+				div = $('<div></div>');
+				new PrettyJSON.view.Node({
+					data: result,
+					el: div
+				});
+				win.add(div);
+				win.show();
+			},
+			errorFn: function(error) {
+				new errorWindow({error:error});
+			}
 		});
 	},
 	showUsage: function() {
-  		window.open('/topology/'+this.id+'/usage', '_blank', 'innerHeight=450,innerWidth=650,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');
+		window.open('/topology/'+this.id+'/usage', '_blank', 'innerHeight=450,innerWidth=650,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');
 		this.editor.triggerEvent({component: "topology", object: this, operation: "usage-dialog"});
 	},
 	notesDialog: function() {
@@ -513,13 +513,13 @@ var Topology = Class.extend({
 			modal: true,
 			buttons: {
 				Save: function() {
-		        	dialog.dialog("close");
-			      	t.modify_value("_notes", ta.val());
-			      	t.modify_value("_notes_autodisplay", openWithEditor.checked)
-			    },
-		        Close: function() {
-		        	dialog.dialog("close");
-		        }
+					dialog.dialog("close");
+					t.modify_value("_notes", ta.val());
+					t.modify_value("_notes_autodisplay", openWithEditor.checked)
+				},
+				Close: function() {
+					dialog.dialog("close");
+				}
 			}
 		});
 	},
@@ -589,11 +589,11 @@ var Topology = Class.extend({
 
 		})
 		name = dialog.add(new TextElement({
-            name: "name",
-            label: gettext("Name"),
-            help_text: gettext("The name of your subtopology"),
-        }));
-        dialog.show()
+			name: "name",
+			label: gettext("Name"),
+			help_text: gettext("The name of your subtopology"),
+		}));
+		dialog.show()
 	},
 	subtopology_tabMenu:function(name){
 		var t = this;
@@ -610,123 +610,123 @@ var Topology = Class.extend({
 	// 	var t = this
 	// 	var name
 	// },
-	topgroup_createDialog:function(){
-		var t = this;
-		var dialog;
-		var name, 
-		dialog = new AttributeWindow({
-			title: gettext('Create Topgroup'),
-			width: 550,
-			buttons: [
-			{
-				text: gettext('Save'),
-				click:function(){
-					var data = {
-						'name': name.getValue(),
-						'id':t.id,
-					}
-					t.topgroup_create(data)
-					dialog.hide()
-				}
-			},
-			{
-				text:gettext('Cancel'),
-				click:function(){
-					dialog.hide()
-				}
-			}
-			]
-
-		})
-		name = dialog.add(new TextElement({
-            name: "name",
-            label: gettext("Name"),
-            help_text: gettext("The name of your topgroup(unique)"),
-        }));
-		dialog.show()
-	},
+	// topgroup_createDialog:function(){
+	// 	var t = this;
+	// 	var dialog;
+	// 	var name,
+	// 	dialog = new AttributeWindow({
+	// 		title: gettext('Create Topgroup'),
+	// 		width: 550,
+	// 		buttons: [
+	// 		{
+	// 			text: gettext('Save'),
+	// 			click:function(){
+	// 				var data = {
+	// 					'name': name.getValue(),
+	// 					'id':t.id,
+	// 				}
+	// 				t.topgroup_create(data)
+	// 				dialog.hide()
+	// 			}
+	// 		},
+	// 		{
+	// 			text:gettext('Cancel'),
+	// 			click:function(){
+	// 				dialog.hide()
+	// 			}
+	// 		}
+	// 		]
+	//
+	// 	})
+	// 	name = dialog.add(new TextElement({
+	 //        name: "name",
+	 //        label: gettext("Name"),
+	 //        help_text: gettext("The name of your topgroup(unique)"),
+	 //    }));
+	// 	dialog.show()
+	// },
 	// topgroup_remove:function(){
 
 	// },
-	topgroup_adddDialog:function(){
-		var t = this;
-		var dialog;
-		var name;
-		var choices = {};
-		ajax({
-			url : 'topgroup/' + this.id + '/list',
-			// data : data,
-			synchronous: true,
-			successFn: function(result){
-				// console.log(choices)
-				for (var i = 0; i  < result.length; i ++){
-					choices[result[i]] = result[i]
-				}
-				console.log(choices)
-				console.log(result)
-			},
-			errorFn:function(error){
-				new errorWindow({error:error})
-			}
-		})
-		dialog = new AttributeWindow({
-			title: gettext('Add to Topgroup'),
-			width: 550,
-			buttons: [
-			{
-				text: gettext('Save'),
-				click:function(){
-					var data = {
-						'name': choice.getValue(),
-						'id':t.id,
-					}
-					t.topgroup_add(data)
-					dialog.hide()
-				}
-			},
-			{
-				text:gettext('Cancel'),
-				click:function(){
-					dialog.hide()
-				}
-			}
-			]
-
-		})
-		// name = dialog.add(new TextElement({
-        choice = dialog.add(new ChoiceElement({
-        	name: gettext('topgroupname'),
-        	label: gettext('topgroupname'),
-        	choices: choices,
-        }))
-		dialog.show()
-	},
-	topgroup_create: function(data){
-		var t = this;
-		ajax({
-			url: 'topgroup/'+ t.id + '/create',
-			data: data,
-			successFn:function(result){
-			},
-			errorFn:function(error){
-				new errorWindow({error:error});
-			}
-		})
-
-	},
-	topgroup_add: function(data){
-		var t = this;
-		ajax({
-			url: 'topgroup/'+ t.id + '/add',
-			data: data,
-			successFn:function(result){
-			},
-			errorFn:function(error){
-				new errorWindow({error:error});
-			}
-		})
-
-	},
+	// topgroup_adddDialog:function(){
+	// 	var t = this;
+	// 	var dialog;
+	// 	var name;
+	// 	var choices = {};
+	// 	ajax({
+	// 		url : 'topgroup/' + this.id + '/list',
+	// 		// data : data,
+	// 		synchronous: true,
+	// 		successFn: function(result){
+	// 			// console.log(choices)
+	// 			for (var i = 0; i  < result.length; i ++){
+	// 				choices[result[i]] = result[i]
+	// 			}
+	// 			console.log(choices)
+	// 			console.log(result)
+	// 		},
+	// 		errorFn:function(error){
+	// 			new errorWindow({error:error})
+	// 		}
+	// 	})
+	// 	dialog = new AttributeWindow({
+	// 		title: gettext('Add to Topgroup'),
+	// 		width: 550,
+	// 		buttons: [
+	// 		{
+	// 			text: gettext('Save'),
+	// 			click:function(){
+	// 				var data = {
+	// 					'name': choice.getValue(),
+	// 					'id':t.id,
+	// 				}
+	// 				t.topgroup_add(data)
+	// 				dialog.hide()
+	// 			}
+	// 		},
+	// 		{
+	// 			text:gettext('Cancel'),
+	// 			click:function(){
+	// 				dialog.hide()
+	// 			}
+	// 		}
+	// 		]
+    //
+	// 	})
+	// 	// name = dialog.add(new TextElement({
+	// 	choice = dialog.add(new ChoiceElement({
+	// 		name: gettext('topgroupname'),
+	// 		label: gettext('topgroupname'),
+	// 		choices: choices,
+	// 	}))
+	// 	dialog.show()
+	// },
+	// topgroup_create: function(data){
+	// 	var t = this;
+	// 	ajax({
+	// 		url: 'topgroup/'+ t.id + '/create',
+	// 		data: data,
+	// 		successFn:function(result){
+	// 		},
+	// 		errorFn:function(error){
+	// 			new errorWindow({error:error});
+	// 		}
+	// 	})
+    //
+	// },
+	// topgroup_add: function(data){
+	// 	var t = this;
+	// 	ajax({
+	// 		url: 'topgroup/'+ t.id + '/add',
+	// 		data: data,
+	// 		successFn:function(result){
+	// 		},
+	// 		errorFn:function(error){
+	// 			new errorWindow({error:error});
+	// 		}
+	// 	})
+    //
+	// },
 	renewDialog: function() {
 		var t = this;
 		var dialog, timeout;
@@ -782,90 +782,90 @@ var Topology = Class.extend({
 		}
 		dialog.show();
 	},
-    saveAsScenarioDialog: function() {    // by Chang Rui
-        var t = this;
-        var dialog;
-        var id, name, description, accessibility, author;
-        var choices = {
-            "private": "Private",
-            "public": "Public",
-        };
-        // , name, description, timeout;
-        dialog = new AttributeWindow({
-            title: gettext("Save As Scenario"),
-            width: 500,
-            // height: 400,
-            // closable: false,
-            buttons: [
-                {
-                    text: gettext("Save"),
-                    id: "scenario_dialog_save",
-                    click: function() {
-                        var data = {
-                            "topology_id": t.id,
-                            "name": name.getValue(),
-                            "description": description.getValue(),
-                            "accessibility": accessibility.getValue(),
-                            "author": author.getValue()
-                        };
-                        t.saveAsScenario(data);
-                        if (dialog != null) {
-                            dialog.remove()
-                        }
-                        dialog = null;
-                    }
-                },
-                {
-                    text: gettext("Close"),
-                    click: function() {
-                        dialog.remove();
-                    }
-                }
-            ]
-        });
-        // dialog.addText("<div>123456789.</div>")
-        id = dialog.add(new TextElement({
-            name: "id",
-            label: "ID",
-            disabled: true,
-            value: this.id,
-        }));
-        author = dialog.add(new TextElement({
-            name: "author",
-            label: gettext("Author"),
-            disabled: true,
-            value: this.editor.options.user.name,
-        }));
-        name = dialog.add(new TextElement({
-            name: "name",
-            label: gettext("Name"),
-            help_text: gettext("The name of your scenario"),
-            onChangeFct: function() {
-                // TODO: name inspection ineffective?
-                if(this.value == '') {
-                    $('#scenario_dialog_save').button('disable');
-                } else {
-                    $('#scenario_dialog_save').button('enable');
-                }
-            },
-        }));
-        description = dialog.add(new TextAreaElement({
-            name: "description",
-            label: gettext("Description"),
-            help_text: gettext("The text description of your scenario."),
-        }));
-        accessibility = dialog.add(new ChoiceElement({
-            name: "accessibility",
-            label: gettext("Accessibility"),
-            // value: choices[0],
-            choices: choices,
-            help_text: gettext("Whether other users can use the scenario.")
-        }));
+	saveAsScenarioDialog: function() {    // by Chang Rui
+		var t = this;
+		var dialog;
+		var id, name, description, accessibility, author;
+		var choices = {
+			"private": "Private",
+			"public": "Public",
+		};
+		// , name, description, timeout;
+		dialog = new AttributeWindow({
+			title: gettext("Save As Scenario"),
+			width: 500,
+			// height: 400,
+			// closable: false,
+			buttons: [
+				{
+					text: gettext("Save"),
+					id: "scenario_dialog_save",
+					click: function() {
+						var data = {
+							"topology_id": t.id,
+							"name": name.getValue(),
+							"description": description.getValue(),
+							"accessibility": accessibility.getValue(),
+							"author": author.getValue()
+						};
+						t.saveAsScenario(data);
+						if (dialog != null) {
+							dialog.remove()
+						}
+						dialog = null;
+					}
+				},
+				{
+					text: gettext("Close"),
+					click: function() {
+						dialog.remove();
+					}
+				}
+			]
+		});
+		// dialog.addText("<div>123456789.</div>")
+		id = dialog.add(new TextElement({
+			name: "id",
+			label: "ID",
+			disabled: true,
+			value: this.id,
+		}));
+		author = dialog.add(new TextElement({
+			name: "author",
+			label: gettext("Author"),
+			disabled: true,
+			value: this.editor.options.user.name,
+		}));
+		name = dialog.add(new TextElement({
+			name: "name",
+			label: gettext("Name"),
+			help_text: gettext("The name of your scenario"),
+			onChangeFct: function() {
+				// TODO: name inspection ineffective?
+				if(this.value == '') {
+					$('#scenario_dialog_save').button('disable');
+				} else {
+					$('#scenario_dialog_save').button('enable');
+				}
+			},
+		}));
+		description = dialog.add(new TextAreaElement({
+			name: "description",
+			label: gettext("Description"),
+			help_text: gettext("The text description of your scenario."),
+		}));
+		accessibility = dialog.add(new ChoiceElement({
+			name: "accessibility",
+			label: gettext("Accessibility"),
+			// value: choices[0],
+			choices: choices,
+			help_text: gettext("Whether other users can use the scenario.")
+		}));
 
-        dialog.show();
-    },
-    tabbedConsoleWindow: function() {
-	    window.open('../topology/'+this.id+'/tabbed-console', '_blank', "innerWidth=760,innerheight=483,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");
+		dialog.show();
+	},
+	tabbedConsoleWindow: function() {
+		window.open('../topology/'+this.id+'/tabbed-console', '_blank', "innerWidth=760,innerheight=483,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");
 	},
 	initialDialog: function() {
 		var t = this;

@@ -30,10 +30,10 @@ from django.views.i18n import javascript_catalog
 js_info_dict = {
 	'domain': 'djangojs',
 	'packages': ('django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sites',
-	'tomato.crispy_forms',
-	'tomato'),
+				 'django.contrib.contenttypes',
+				 'django.contrib.sites',
+				 'tomato.crispy_forms',
+				 'tomato'),
 }
 from django.conf.urls.i18n import i18n_patterns
 
@@ -259,6 +259,12 @@ urlpatterns = patterns(
 	(r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
 	(r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
 	# (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
+
+	# New Sub Topology
+	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/add', 'tomato.ajax.topology_add_sub_topology'),
+	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/remove', 'tomato.ajax.topology_remove_sub_topology'),
+	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/', 'tomato.ajax.topology_get_sub_topology', {"name": None}),
+	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<name>\w+)', 'tomato.ajax.topology_get_sub_topology'),
 
 	# Group
 	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all

@@ -248,3 +248,15 @@ def topology_usage(id): #@ReservedAssignment
 	UserError.check(target_topology.exists(), code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that name does not exist")
 	getCurrentUserInfo().check_may_view_topology_usage(target_topology)
 	return target_topology.get_usage(hide_no_such_record_error=True)
+
+def topology_get_sub_topology(topo_id, name=None):
+	# TODO: Permission Checking
+	return get_backend_core_proxy().topology_get_sub_topology(topo_id, name)
+
+def topology_add_sub_topology(topo_id, name):
+	# TODO: Permission Checking
+	return get_backend_core_proxy().topology_add_sub_topology(topo_id, name)
+
+def topology_remove_sub_topology(topo_id, name):
+	# TODO: Permission Checking
+	return get_backend_core_proxy().topology_remove_sub_topology(topo_id, name)
