@@ -54,7 +54,9 @@ from templates import template_list, template_info, template_create, template_mo
 from topology import topology_action, topology_create, topology_info,\
 	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage
 
-from topology import topology_get_sub_topology, topology_add_sub_topology, topology_remove_sub_topology
+from topology import topology_get_sub_topology_info_list, topology_get_sub_topology_name_list, \
+	topology_add_sub_topology, topology_remove_sub_topology,\
+	sub_topology_get_groups, sub_topology_add_group, sub_topology_remove_group
 
 from orchestration.topology_export_import import topology_export, topology_import
 
@@ -85,4 +87,4 @@ from group import group_remove, group_modify, group_info, group_list, group_crea
 # from groupconnection import *
 
 
-from subtopology import *
+# from subtopology import *

@@ -249,9 +249,15 @@ def topology_usage(id): #@ReservedAssignment
 	getCurrentUserInfo().check_may_view_topology_usage(target_topology)
 	return target_topology.get_usage(hide_no_such_record_error=True)
 
-def topology_get_sub_topology(topo_id, name=None):
-	# TODO: Permission Checking
-	return get_backend_core_proxy().topology_get_sub_topology(topo_id, name)
+# def topology_get_sub_topology(topo_id):
+# 	# TODO: Permission Checking
+# 	user = getCurrentUserInfo()
+# 	topl = get_topology_info(topo_id)
+# 	if user.may_view_all_sub_topologies(topl):
+# 		return get_backend_core_proxy().topology_get_sub_topology(topo_id)
+# 	else:
+# 		group_info = user.info()['groups']  # get list of {"group": str, "role": str} dict
+# 		return get_backend_core_proxy().topology_get_sub_topology(topo_id, group_info)
 
 def topology_add_sub_topology(topo_id, name):
 	# TODO: Permission Checking
@@ -260,3 +266,39 @@ def topology_add_sub_topology(topo_id, name):
 def topology_remove_sub_topology(topo_id, name):
 	# TODO: Permission Checking
 	return get_backend_core_proxy().topology_remove_sub_topology(topo_id, name)
+
+def sub_topology_get_groups(topo_id, sub_topo):
+	# TODO: Permission Checking
+	return get_backend_core_proxy().sub_topology_get_groups(topo_id, sub_topo)
+
+def topology_get_sub_topology_name_list(topo_id):
+	# TODO: Permission Checking
+	user = getCurrentUserInfo()
+	topl = get_topology_info(topo_id)
+	if user.may_view_all_sub_topologies(topl):
+		return get_backend_core_proxy().topology_get_sub_topology_name_list(topo_id)
+	else:
+		group_info = user.info()['groups']
+		return get_backend_core_proxy().topology_get_sub_topology_name_list(topo_id, group_info)
+
+def topology_get_sub_topology_info_list(topo_id, group_info=None):
+	# TODO: Permission Checking
+	user = getCurrentUserInfo()
+	topl = get_topology_info(topo_id)
+	if user.may_view_all_sub_topologies(topl):
+		return get_backend_core_proxy().topology_get_sub_topology_info_list(topo_id)
+	else:
+		group_info = user.info()['groups']
+		return get_backend_core_proxy().topology_get_sub_topology_info_list(topo_id, group_info)
+
+def sub_topology_add_group(topo_id, sub_topo, group):
+	# TODO: Permission Checking
+	UserError.check(
+		get_backend_users_proxy().group_exists(group),
+		code=UserError.ENTITY_DOES_NOT_EXIST,
+		message="User with that name does not exist")
+	return get_backend_core_proxy().sub_topology_add_group(topo_id, sub_topo, group)
+
+def sub_topology_remove_group(topo_id, sub_topo, group):
+	# TODO: Permission Checking
+	return get_backend_core_proxy().sub_topology_remove_group(topo_id, sub_topo, group)

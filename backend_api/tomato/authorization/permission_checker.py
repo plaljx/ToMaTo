@@ -492,6 +492,8 @@ class PermissionChecker(UserInfo):
 		check whether this user may view this topology.
 		:param TopologyInfo topology_info: target topology
 		"""
+		if self.may_view_at_least_one_sub_topology(topology_info):
+			return True
 		self._check_has_topology_role(topology_info, Role.user)
 
 	def check_may_remove_topology(self, topology_info):
@@ -594,6 +596,36 @@ class PermissionChecker(UserInfo):
 				return
 		self._check_has_topology_role(topology_info, Role.user)
 
+	def may_view_all_sub_topologies(self, topology_info):
+		"""
+		Check if the user can view all sub topologies.
+		For now, the user with user or higher role can view all sub topologies,
+		include cases that the user has a user group through group mechanism
+		"""
+		if self._has_topology_role(topology_info, Role.user):
+			return True
+
+	# TODO
+	def may_view_sub_topology(self, topology_info, sub_topo_name):
+		"""
+		Check if the user can view a specified sub topology
+		"""
+		return True
+
+	def may_view_at_least_one_sub_topology(self, topology_info):
+		"""
+		Check if the user can view at least a sub topology
+		This means that the user should be able to open the topology info page
+		"""
+		sub_topologies_groups = set()
+		for sub_topo in topology_info.get_sub_topologies_info():
+			for grp in sub_topo['groups']:
+				sub_topologies_groups.add(grp)
+		user_group_info = self.get_group_role()
+		for group_info in user_group_info:
+			if group_info['group'] in sub_topologies_groups \
+					and group_info['role'] in [GroupRole.owner, GroupRole.manager, GroupRole.user]:
+				return True
 
 
 

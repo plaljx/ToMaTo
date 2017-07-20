@@ -56,18 +56,16 @@ class SubTopology(Entity, BaseDocument):
 	since a sub topology may be referred by multiple places.
 	:type name: str
 	:type topology: ReferenceField
-	:type group_info: list
+	:type groups: list
 	"""
 	name = StringField(required=True)
 	topology = ReferenceField('Topology', required=True)  # TODO: check whether should use CASCADE
-	group_info = EmbeddedDocumentListField(GroupInfo)
+	topologyId = ReferenceFieldId(topology)
+	groups = ListField(StringField())
 
 	@classmethod
 	def get_default_name(cls):
 		return "Main"
-
-	def get_group_info(self):
-		return self.group_info.to_json()  # TODO: check if `to_json` works
 
 	@property
 	def elements(self):					# TODO
@@ -77,30 +75,47 @@ class SubTopology(Entity, BaseDocument):
 	def connections(self):				# TODO
 		return None
 
-	def add_group(self, name):
-		# TODO: check if the `get` works on EmbeddedDocument
-		try:
-			if self.group_info.get(name=name):
-				raise UserError(
-					code=UserError.ALREADY_EXISTS,
-					message="The sub topology already has the group",
-					data={"topology": self.topology.name, "sub_topology": self.name, "group": name})
-		except DoesNotExist:
-			self.group_info.append(GroupInfo(group=name))
-			self.save()
-			return True
+	def get_groups(self):
+		return self.groups
 
-	def remove_group(self, name):
-		# TODO: check if the `get` works on EmbeddedDocument
-		try:
-			group = self.group_info.get(name=name)
-			self.group_info.remove(group)
-			return True
-		except DoesNotExist:
+	def add_group(self, group):
+		if group in self.groups:
+			raise UserError(
+				code=UserError.ALREADY_EXISTS,
+				message="The sub topology already has the group",
+				data={
+					"topology": self.topology.name,
+					"topology_id": self.topology.id,
+					"sub_topology": self.name,
+					"sub_topology_id": self.id,
+					"group": group})
+		self.groups.append(group)
+		self.save()
+		return True
+
+	def remove_group(self, group):
+		if group not in self.groups:
 			raise UserError(
 				code=UserError.ENTITY_DOES_NOT_EXIST,
 				message="The sub topology does not exist",
-				data={"topology": self.topology.name, "sub_topology": self.name, "group": name})
+				data={
+					"topology": self.topology.name,
+					"topology_id": self.topology.id,
+					"sub_topology": self.name,
+					"sub_topology_id": self.id,
+					"group": group})
+		self.groups.remove(group)
+		self.save()
+		return True
+
+	# TODO: test if `SubTopology.info()` works
+	ATTRIBUTES = {
+		"id": IdAttribute(),
+		"name": Attribute(field=name, schema=schema.String()),
+		"topology": Attribute(readOnly=True, get=lambda self: self.topology.name),
+		"topology_id": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
+		"groups": Attribute(field=groups, readOnly=True, schema=schema.List(items=schema.String()))
+	}
 
 
 class Topology(Entity, BaseDocument):
@@ -284,13 +299,40 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
-	def get_sub_topology(self, name=None):
-		# TODO: when `name` is not `None`
-		return [sub_topo.name for sub_topo in self.sub_topologies]
+	def _get_sub_topologies(self, group_info=None):
+		"""Return the `SubTopology` Document list"""
+		from .lib.group_role import GroupRole
+		if group_info is None:
+			sub_topos = self.sub_topologies
+		else:
+			group_names = set()
+			for data in group_info:
+				if data['role'] in (GroupRole.owner, GroupRole.manager, GroupRole.user):
+					group_names.add(data['group'])
+			sub_topos = SubTopology.objects.filter(Q(topology=self) & Q(groups__in=group_names))
+		return sub_topos
 
-	def add_sub_topology(self, name):
+
+	def _get_sub_topology(self, sub_topo_name):
+		"""
+		Return a `SubTopology` Document object
+		May raise `DoesNotExist`, `MultipleObjectsReturned`
+		"""
+		return SubTopology.objects.get(name=sub_topo_name, topology=self)
+
+	def get_sub_topologies_name(self, group_info=None):
+		"""Return the `SubTopology` name list"""
+		sub_topos = self._get_sub_topologies(group_info)
+		return [sub_topo.name for sub_topo in sub_topos]
+
+	def get_sub_topologies_info(self, group_info=None):
+		"""Return the `SubTopology` info list"""
+		sub_topos = self._get_sub_topologies(group_info)
+		return [sub_topo.info() for sub_topo in sub_topos]
+
+	def add_sub_topology(self, sub_topo_name):
 		try:
-			sub_topology = SubTopology(name=name, topology=self)
+			sub_topology = SubTopology(name=sub_topo_name, topology=self)
 			sub_topology.save()
 			self.sub_topologies.append(sub_topology)
 			self.save()
@@ -299,12 +341,13 @@ class Topology(Entity, BaseDocument):
 			raise UserError(
 				UserError.ALREADY_EXISTS,
 				message="Sub topology already exists",
-				data={"topology": self.name, "id": self.id, "sub_topology": name})
+				data={"topology": self.name, "id": self.id, "sub_topology": sub_topo_name})
 
-	def remove_sub_topology(self, name):
+	def remove_sub_topology(self, sub_topo_name):
 		try:
-			sub_topology = self.sub_topologies.get(name=name)
-			self.sub_topologies.remove(sub_topology)    # TODO: check if this could `PULL`
+			sub_topo = self._get_sub_topology(sub_topo_name)
+			self.sub_topologies.remove(sub_topo)		# TODO: check if this could `PULL`
+			# sub_topology.remove()  # this should be done by delete rule `PULL`
 			self.save()
 			return True
 		except DoesNotExist:
@@ -477,7 +520,7 @@ class Topology(Entity, BaseDocument):
 		"state_max": Attribute(field=maxState, readOnly=True, schema=schema.String()),
 		"name": Attribute(field=name, schema=schema.String()),
 		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
-		"sub_topologies": Attribute(readOnly=True, get=get_sub_topology)
+		"sub_topologies": Attribute(readOnly=True, get=get_sub_topologies_info)
 	}
 
 	@classmethod

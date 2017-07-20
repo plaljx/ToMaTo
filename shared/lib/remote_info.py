@@ -441,6 +441,9 @@ class TopologyInfo(ActionObj):
 	def get_group_info_list(self):
 		return self.info()['group_info']
 
+	def get_sub_topologies_info(self):
+		return self.info()['sub_topologies']
+
 	def add_group(self, group):
 		res = get_backend_core_proxy().topology_add_group(self.topology_id, group)
 		if self._info is not None:

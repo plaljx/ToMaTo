@@ -40,4 +40,4 @@ from .db import DataEntry
 from .traffic import Traffic
 # from .topgroup import Topgroup
 # from .groupconnection import Groupconnection
-from .subtopology import Subtopology
+# from .subtopology import Subtopology

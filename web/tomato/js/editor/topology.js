@@ -606,6 +606,67 @@ var Topology = Class.extend({
 			t.editor.workspace.tabCanvas(canvasname);	
 		})
 	},
+	subtopologyGroupDialog:function() {
+		var t = this;
+		var subTopology, group;
+		var dialog = new AttributeWindow({
+			title: gettext("Add group to subtopology"),
+            width: 500,
+            buttons: [
+                {
+                    text: gettext("Ok"),
+                    click: function(){
+                        var data = {
+                            "topology_id": t.id,
+                            "sub_topology": subTopology.getValue(),
+                            "group": group.getValue()
+                        };
+                        t.setSubtopologyGroup(data);
+                        if (dialog !== null) {
+                            dialog.remove()
+                        }
+                        dialog = null;
+                    }
+                },
+				{
+					text: gettext("Cancel"),
+					click: function() {
+						if (dialog != null) {
+							dialog.remove();
+						}
+						dialog = null;
+					}
+				}
+			]
+		});
+		subTopology = dialog.add(new TextElement({
+			name: "sub_topology",
+			label: gettext("Sub Topology"),
+			help_text: gettext("The name of sub topology."),
+		}));
+		group = dialog.add(new TextElement({
+			name: "group",
+			label: gettext("Group"),
+			help_text: gettext("The name of group"),
+		}));
+		dialog.show();
+	},
+	setSubtopologyGroup: function(data) {
+		var t = this;
+		ajax({
+			url: 'topology/'+ data['topology_id'] + '/subtopology/' + data['sub_topology'] + '/add_group',
+			data: {
+				group: data["group"]
+			},
+			successFn: function (result) {
+				console.log("Save as scenario: Success.");
+				console.log("Result: " + result)
+			},
+			errorFn: function (error) {
+				new errorWindow({error:error});
+			},
+		})
+	},
 	// subtopology_tabDialog: function(){
 	// 	var t = this
 	// 	var name

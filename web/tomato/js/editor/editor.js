@@ -729,7 +729,15 @@ var Editor = Class.extend({
                 t.topology.subtopolgy_addDialog();
             }
         }));
-
+		group.addElement(Menu.button({
+			label: gettext("set group"),
+			icon: "img/repy32.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.topology.subtopologyGroupDialog();
+			}
+		}));
 		this.menu.paint();
 	}
 });

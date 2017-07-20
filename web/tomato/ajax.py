@@ -220,8 +220,11 @@ def subtopology_get(api, request, top_id, **data):
 
 # New Sub Topology
 @wrap_json
-def topology_get_sub_topology(api, request, topo_id, name):
-	return api.topology_get_sub_topology(topo_id, name)
+def topology_get_sub_topology(api, request, topo_id):
+	"""
+	Return sub topology name list, according to the role of current user
+	"""
+	return api.topology_get_sub_topology_name_list(topo_id)
 
 @wrap_json
 def topology_add_sub_topology(api, request, topo_id, **data):
@@ -232,3 +235,18 @@ def topology_add_sub_topology(api, request, topo_id, **data):
 def topology_remove_sub_topology(api, request, topo_id, **data):
 	name = data.get('name')
 	return api.topology_remove_sub_topology(topo_id, name)
+
+@wrap_json
+def sub_topology_get_groups(api, request, topo_id, sub_topo):
+	# TODO: may change this to `sub_topology_info`
+	return api.sub_topology_get_groups(topo_id, sub_topo)
+
+@wrap_json
+def sub_topology_add_group(api, request, topo_id, sub_topo, **data):
+	group = data.get('group')
+	return api.sub_topology_add_group(topo_id, sub_topo, group)
+
+@wrap_json
+def sub_topology_remove_group(api, request, topo_id, sub_topo, **data):
+	group = data.get('group')
+	return api.sub_topology_remove_group(topo_id, sub_topo, group)

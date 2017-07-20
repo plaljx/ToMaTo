@@ -16,7 +16,7 @@ var Workspace = Class.extend({
 
     	ajax({
 			// url:'topology/'+ this.editor.options.topology + '/getsubtopology',
-			url: 'topology/' + this.editor.options.topology + '/subtopology/',
+			url: 'topology/' + this.editor.options.topology + '/subtopology',
 			data: '',
 			synchronous: true,
 			successFn:function(result){

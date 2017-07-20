@@ -26,6 +26,18 @@ def _getTopology(id_):
 	UserError.check(top, code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that id does not exist", data={"id": id_})
 	return top
 
+def _getSubTopology(topo_id, sub_topology):
+	from mongoengine import NotUniqueError, DoesNotExist    # TODO: review the exception handling
+	top = topology.get(topo_id)
+	# TODO: Permission checking
+	try:
+		return topology.SubTopology.objects.get(topology=top, name=sub_topology)
+	except DoesNotExist:
+		raise
+	except NotUniqueError:
+		raise
+
+
 def topology_exists(topology_id):
 	if _getTopology(topology_id):
 		return True
@@ -263,9 +275,30 @@ def topology_remove_group(id, group):
 	top = _getTopology(id)
 	top.remove_group_info(group)
 
-def topology_get_sub_topology(topo_id, name=None):
-	top = _getTopology(topo_id)
-	return top.get_sub_topology(name=name)
+# def topology_get_sub_topology(topo_id, group_info=None):  # TODO: may change func name to `topology_get_sub_topology_name`
+# 	"""
+# 	if group_info is None, return all of sub topologies
+# 	else, return sub topologies corresponds to group info
+# 	"""
+# 	top = _getTopology(topo_id)
+# 	return top.get_sub_topology_name(group_info)
+
+def topology_get_sub_topology_name_list(topo_id, group_info=None):
+	"""
+	If group_info is None, return all of sub topology's name.
+	Else, return the names of sub topologies that corresponds to group info.
+	"""
+	topo = _getTopology(topo_id)
+	return topo.get_sub_topologies_name(group_info=group_info)
+
+def topology_get_sub_topology_info_list(topo_id, group_info=None):
+	"""
+	If group_info is None, return info of all sub topologies.
+	Else, return info of sub topologies that corresponds to group info
+	"""
+	topo = _getTopology(topo_id)
+	return topo.get_sub_topologies_name(group_info=group_info)
+
 
 def topology_add_sub_topology(topo_id, name):
 	top = _getTopology(topo_id)
@@ -274,6 +307,19 @@ def topology_add_sub_topology(topo_id, name):
 def topology_remove_sub_topology(topo_id, name):
 	top = _getTopology(topo_id)
 	return top.remove_sub_topology(name=name)
+
+def sub_topology_get_groups(topo_id, sub_topo):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.get_groups()
+
+def sub_topology_add_group(topo_id, sub_topo, group):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.add_group(group)
+
+def sub_topology_remove_group(topo_id, sub_topo, group):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.remove_group(group)
+
 
 from .. import topology
 from ..lib.error import UserError
