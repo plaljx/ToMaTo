@@ -283,22 +283,25 @@ def topology_remove_group(id, group):
 # 	top = _getTopology(topo_id)
 # 	return top.get_sub_topology_name(group_info)
 
-def topology_get_sub_topology_name_list(topo_id, group_info=None):
-	"""
-	If group_info is None, return all of sub topology's name.
-	Else, return the names of sub topologies that corresponds to group info.
-	"""
-	topo = _getTopology(topo_id)
-	return topo.get_sub_topologies_name(group_info=group_info)
+# def topology_get_sub_topology_name_list(topo_id, group_info=None):
+# 	"""
+# 	If group_info is None, return all of sub topology's name.
+# 	Else, return the names of sub topologies that corresponds to group info.
+# 	"""
+# 	topo = _getTopology(topo_id)
+# 	return topo.get_sub_topologies_name(group_info=group_info)
+#
+# def topology_get_sub_topology_info_list(topo_id, group_info=None):
+# 	"""
+# 	If group_info is None, return info of all sub topologies.
+# 	Else, return info of sub topologies that corresponds to group info
+# 	"""
+# 	topo = _getTopology(topo_id)
+# 	return topo.get_sub_topologies_name(group_info=group_info)
 
-def topology_get_sub_topology_info_list(topo_id, group_info=None):
-	"""
-	If group_info is None, return info of all sub topologies.
-	Else, return info of sub topologies that corresponds to group info
-	"""
+def topology_get_sub_topologies(topo_id, group_info=None):
 	topo = _getTopology(topo_id)
-	return topo.get_sub_topologies_name(group_info=group_info)
-
+	return topo.get_sub_topologies_info(group_info=group_info)
 
 def topology_add_sub_topology(topo_id, name):
 	top = _getTopology(topo_id)

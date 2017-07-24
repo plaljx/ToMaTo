@@ -263,7 +263,7 @@ urlpatterns = patterns(
 	# New Sub Topology
 	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/add$', 'tomato.ajax.topology_add_sub_topology'),
 	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/remove$', 'tomato.ajax.topology_remove_sub_topology'),
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology$', 'tomato.ajax.topology_get_sub_topology'),
+	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology$', 'tomato.ajax.topology_get_sub_topologies'),
 
 	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo>\w+)/add_group', 'tomato.ajax.sub_topology_add_group'),
 	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo>\w+)/remove_group', 'tomato.ajax.sub_topology_remove_group'),

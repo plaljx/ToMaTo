@@ -299,18 +299,18 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
-	def _get_sub_topologies(self, group_info=None):
-		"""Return the `SubTopology` Document list"""
-		from .lib.group_role import GroupRole
-		if group_info is None:
-			sub_topos = self.sub_topologies
-		else:
-			group_names = set()
-			for data in group_info:
-				if data['role'] in (GroupRole.owner, GroupRole.manager, GroupRole.user):
-					group_names.add(data['group'])
-			sub_topos = SubTopology.objects.filter(Q(topology=self) & Q(groups__in=group_names))
-		return sub_topos
+	# def _get_sub_topologies(self, group_info=None):
+	# 	"""Return the `SubTopology` Document list"""
+	# 	from .lib.group_role import GroupRole
+	# 	if group_info is None:
+	# 		sub_topos = self.sub_topologies
+	# 	else:
+	# 		group_names = set()
+	# 		for data in group_info:
+	# 			if data['role'] in (GroupRole.owner, GroupRole.manager, GroupRole.user):
+	# 				group_names.add(data['group'])
+	# 		sub_topos = SubTopology.objects.filter(Q(topology=self) & Q(groups__in=group_names))
+	# 	return sub_topos
 
 
 	def _get_sub_topology(self, sub_topo_name):
@@ -320,15 +320,21 @@ class Topology(Entity, BaseDocument):
 		"""
 		return SubTopology.objects.get(name=sub_topo_name, topology=self)
 
-	def get_sub_topologies_name(self, group_info=None):
-		"""Return the `SubTopology` name list"""
-		sub_topos = self._get_sub_topologies(group_info)
-		return [sub_topo.name for sub_topo in sub_topos]
+	# def get_sub_topologies_name(self, group_info=None):
+	# 	"""Return the `SubTopology` name list"""
+	# 	# TODO: remove this
+	# 	sub_topos = self._get_sub_topologies(group_info)
+	# 	return [sub_topo.name for sub_topo in sub_topos]
+	#
+	# def get_sub_topologies_info(self, group_info=None):
+	# 	"""Return the `SubTopology` info list"""
+	# 	# TODO: remove this
+	# 	sub_topos = self._get_sub_topologies(group_info)
+	# 	return [sub_topo.info() for sub_topo in sub_topos]
 
-	def get_sub_topologies_info(self, group_info=None):
+	def get_sub_topologies(self, groups=None):
 		"""Return the `SubTopology` info list"""
-		sub_topos = self._get_sub_topologies(group_info)
-		return [sub_topo.info() for sub_topo in sub_topos]
+		return [sub_topo.info() for sub_topo in self.sub_topologies]
 
 	def add_sub_topology(self, sub_topo_name):
 		try:
@@ -354,7 +360,7 @@ class Topology(Entity, BaseDocument):
 			raise UserError(
 				UserError.ENTITY_DOES_NOT_EXIST,
 				message="Sub topology does not exists",
-				data={"topology": self.name, "id": self.id, "sub_topology": name}
+				data={"topology": self.name, "id": self.id, "sub_topology": sub_topo_name}
 			)
 
 	def add_group_info(self, group):
@@ -520,7 +526,7 @@ class Topology(Entity, BaseDocument):
 		"state_max": Attribute(field=maxState, readOnly=True, schema=schema.String()),
 		"name": Attribute(field=name, schema=schema.String()),
 		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
-		"sub_topologies": Attribute(readOnly=True, get=get_sub_topologies_info)
+		"sub_topologies": Attribute(readOnly=True, get=get_sub_topologies)
 	}
 
 	@classmethod

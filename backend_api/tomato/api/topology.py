@@ -20,6 +20,7 @@ from ..lib.topology_role import Role
 from ..lib.remote_info import get_topology_info, get_topology_list, TopologyInfo,get_organization_info
 from ..lib.service import get_backend_core_proxy,get_backend_users_proxy
 from ..lib.error import UserError
+from ..lib.group_role import GroupRole
 
 def topology_create():
 	"""
@@ -271,25 +272,15 @@ def sub_topology_get_groups(topo_id, sub_topo):
 	# TODO: Permission Checking
 	return get_backend_core_proxy().sub_topology_get_groups(topo_id, sub_topo)
 
-def topology_get_sub_topology_name_list(topo_id):
+def topology_get_sub_topologies(topo_id):
 	# TODO: Permission Checking
 	user = getCurrentUserInfo()
 	topl = get_topology_info(topo_id)
 	if user.may_view_all_sub_topologies(topl):
+		return get_backend_core_proxy().topology_get_sub_topologies(topo_id)
+	else:
+		# TODO: filter sub topologies by group permission
 		return get_backend_core_proxy().topology_get_sub_topology_name_list(topo_id)
-	else:
-		group_info = user.info()['groups']
-		return get_backend_core_proxy().topology_get_sub_topology_name_list(topo_id, group_info)
-
-def topology_get_sub_topology_info_list(topo_id, group_info=None):
-	# TODO: Permission Checking
-	user = getCurrentUserInfo()
-	topl = get_topology_info(topo_id)
-	if user.may_view_all_sub_topologies(topl):
-		return get_backend_core_proxy().topology_get_sub_topology_info_list(topo_id)
-	else:
-		group_info = user.info()['groups']
-		return get_backend_core_proxy().topology_get_sub_topology_info_list(topo_id, group_info)
 
 def sub_topology_add_group(topo_id, sub_topo, group):
 	# TODO: Permission Checking

@@ -6,30 +6,37 @@ var Workspace = Class.extend({
 		container.addClass("tomato").addClass("workspace");
 		container[0].obj = editor.topology;
 		this.container.click(function(){});
-    	this.size = {x: this.container.width(), y: this.container.height()};
+		this.size = {x: this.container.width(), y: this.container.height()};
 
 
-    	this.subtopologyList = [];
-    	this.canvas_dict = {};
+		this.subtopologyInfoList = [];
+		this.subtopologyList = [];
+		this.canvas_dict = {};
 
-    	var t = this;
+		var t = this;
 
-    	ajax({
+		ajax({
 			// url:'topology/'+ this.editor.options.topology + '/getsubtopology',
 			url: 'topology/' + this.editor.options.topology + '/subtopology',
 			data: '',
 			synchronous: true,
 			successFn:function(result){
-				t.subtopologyList = result
+				t.subtopologyInfoList = result;
+				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
+					t.subtopologyList.push(t.subtopologyInfoList[i].name);
+				}
+				// t.subtopologyList = result;
 				for (var i = 0; i < t.subtopologyList.length; i++){
-    				t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
-    				t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i]
-    				t.canvas_dict[t.subtopologyList[i]].workspace = t
-    				t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-    				t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
-    			}
-    			$('#workspace>svg').hide()
-    			$('#main').show()
+					t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
+					t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i];
+					t.canvas_dict[t.subtopologyList[i]].workspace = t;
+					t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+					// TODO: only add to tabMenu, when user has the subtopology permission
+					t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
+				}
+				$('#workspace>svg').hide();
+				// $('#main').show()
+				$('#' + t.subtopologyList[0]).show();
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});
@@ -37,16 +44,16 @@ var Workspace = Class.extend({
 		});
 
 		var c = this.canvas_dict[t.subtopologyList[0]];
-    	var fs = t.editor.options.frame_size;
+		var fs = t.editor.options.frame_size;
 		this.absPos = function(pos){
-    		return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
-    	};
-    	this.relPos = function(pos){
-    		return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
-    	};
+			return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+		};
+		this.relPos = function(pos){
+			return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
+		};
 
-    	//tutorial UI
-    	this.tutorialWindow = new TutorialWindow({
+		//tutorial UI
+		this.tutorialWindow = new TutorialWindow({
 			autoOpen: false, 
 			draggable: true,  
 			resizable: false, 
@@ -61,19 +68,19 @@ var Workspace = Class.extend({
 			editor: this.editor
 		});
 
-    	this.permissionsWindow = new PermissionsWindow({
-    		autoOpen: false,
-    		draggable: true,
-    		resizable: false,
-    		title: "Permissions",
-    		modal: false,
-    		width: 500,
-    		topology: this.editor.topology,
-    		isGlobalOwner: this.editor.options.isGlobalOwner, //todo: set value depending on user permissions
-    		ownUserId: this.editor.options.user.id,
-    		permissions: this.editor.options.permission_list
-    	});
-    	this.groupWindow = new GroupWindow({
+		this.permissionsWindow = new PermissionsWindow({
+			autoOpen: false,
+			draggable: true,
+			resizable: false,
+			title: "Permissions",
+			modal: false,
+			width: 500,
+			topology: this.editor.topology,
+			isGlobalOwner: this.editor.options.isGlobalOwner, //todo: set value depending on user permissions
+			ownUserId: this.editor.options.user.id,
+			permissions: this.editor.options.permission_list
+		});
+		this.groupWindow = new GroupWindow({
 			autoOpen: false,
 			draggable: true,
 			resizable: false,
@@ -83,14 +90,14 @@ var Workspace = Class.extend({
 			topology: this.editor.topology,
 			ownUserId: this.editor.options.user.id
 		});
-    	var t = this;
+		var t = this;
 
-    	this.canvas = this.canvas_dict[t.subtopologyList[0]]
-    	this.editor.listeners.push(function(obj){
-    		t.tutorialWindow.triggerProgress(obj);
-    	});
+		this.canvas = this.canvas_dict[t.subtopologyList[0]]
+		this.editor.listeners.push(function(obj){
+			t.tutorialWindow.triggerProgress(obj);
+		});
 
-    	this.connectPath = this.canvas.connectPath
+		this.connectPath = this.canvas.connectPath
 		this.container.click(function(evt){
 			t.onClicked(evt);
 		});
@@ -130,15 +137,15 @@ var Workspace = Class.extend({
 
 	removeCanvas:function (canvasname) {
 		// TODO
-    },
+	},
 
 	tabCanvas:function(canvasname){
 
 		var t = this;
 		this.canvas = this.canvas_dict[canvasname]
-    	this.connectPath = this.canvas.connectPath
-    	$('#workspace>svg').hide();
-    	$('#' + canvasname).show();
+		this.connectPath = this.canvas.connectPath
+		$('#workspace>svg').hide();
+		$('#' + canvasname).show();
 
 	},
 
@@ -181,7 +188,7 @@ var Workspace = Class.extend({
 		}
 	},
 	onOptionChanged: function(name) {
-    		this.tutorialWindow.updateText();
+			this.tutorialWindow.updateText();
 	},
 	onModeChanged: function(mode) {
 		for (var name in Mode) this.container.removeClass("mode_" + Mode[name]);

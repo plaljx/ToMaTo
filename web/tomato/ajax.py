@@ -220,11 +220,11 @@ def subtopology_get(api, request, top_id, **data):
 
 # New Sub Topology
 @wrap_json
-def topology_get_sub_topology(api, request, topo_id):
+def topology_get_sub_topologies(api, request, topo_id):
 	"""
-	Return sub topology name list, according to the role of current user
+	Get list of subtopology info
 	"""
-	return api.topology_get_sub_topology_name_list(topo_id)
+	return api.topology_get_sub_topologies(topo_id)
 
 @wrap_json
 def topology_add_sub_topology(api, request, topo_id, **data):

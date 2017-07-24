@@ -659,8 +659,7 @@ var Topology = Class.extend({
 				group: data["group"]
 			},
 			successFn: function (result) {
-				console.log("Save as scenario: Success.");
-				console.log("Result: " + result)
+
 			},
 			errorFn: function (error) {
 				new errorWindow({error:error});
