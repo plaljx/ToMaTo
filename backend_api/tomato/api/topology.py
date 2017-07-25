@@ -250,15 +250,26 @@ def topology_usage(id): #@ReservedAssignment
 	getCurrentUserInfo().check_may_view_topology_usage(target_topology)
 	return target_topology.get_usage(hide_no_such_record_error=True)
 
-# def topology_get_sub_topology(topo_id):
-# 	# TODO: Permission Checking
-# 	user = getCurrentUserInfo()
-# 	topl = get_topology_info(topo_id)
-# 	if user.may_view_all_sub_topologies(topl):
-# 		return get_backend_core_proxy().topology_get_sub_topology(topo_id)
-# 	else:
-# 		group_info = user.info()['groups']  # get list of {"group": str, "role": str} dict
-# 		return get_backend_core_proxy().topology_get_sub_topology(topo_id, group_info)
+def topology_get_sub_topologies(topo_id):
+	"""
+	Return list of sub-topology info.
+	This will add `allowed` value, so that front end could know which sub-topology is able to shown.
+	"""
+	# TODO: Permission Checking
+	user = getCurrentUserInfo()
+	topl = get_topology_info(topo_id)
+	sub_topologies = get_backend_core_proxy().topology_get_sub_topologies(topo_id)
+	if user.may_view_all_sub_topologies(topl):
+		for sub_topology in sub_topologies:
+			sub_topology["permitted"] = True
+	else:
+		groups_set = set(user.get_groups(GroupRole.user))
+		for sub_topology in sub_topologies:
+			if groups_set.isdisjoint(sub_topology["groups"]):
+				sub_topology["permitted"] = False
+			else:
+				sub_topology["permitted"] = True
+	return sub_topologies
 
 def topology_add_sub_topology(topo_id, name):
 	# TODO: Permission Checking
@@ -271,16 +282,6 @@ def topology_remove_sub_topology(topo_id, name):
 def sub_topology_get_groups(topo_id, sub_topo):
 	# TODO: Permission Checking
 	return get_backend_core_proxy().sub_topology_get_groups(topo_id, sub_topo)
-
-def topology_get_sub_topologies(topo_id):
-	# TODO: Permission Checking
-	user = getCurrentUserInfo()
-	topl = get_topology_info(topo_id)
-	if user.may_view_all_sub_topologies(topl):
-		return get_backend_core_proxy().topology_get_sub_topologies(topo_id)
-	else:
-		# TODO: filter sub topologies by group permission
-		return get_backend_core_proxy().topology_get_sub_topology_name_list(topo_id)
 
 def sub_topology_add_group(topo_id, sub_topo, group):
 	# TODO: Permission Checking

@@ -299,9 +299,9 @@ def topology_remove_group(id, group):
 # 	topo = _getTopology(topo_id)
 # 	return topo.get_sub_topologies_name(group_info=group_info)
 
-def topology_get_sub_topologies(topo_id, group_info=None):
+def topology_get_sub_topologies(topo_id):
 	topo = _getTopology(topo_id)
-	return topo.get_sub_topologies_info(group_info=group_info)
+	return topo.get_sub_topologies()
 
 def topology_add_sub_topology(topo_id, name):
 	top = _getTopology(topo_id)

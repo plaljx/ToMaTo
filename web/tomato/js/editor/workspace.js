@@ -32,7 +32,11 @@ var Workspace = Class.extend({
 					t.canvas_dict[t.subtopologyList[i]].workspace = t;
 					t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
 					// TODO: only add to tabMenu, when user has the subtopology permission
-					t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
+					// t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
+				}
+				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
+					if (t.subtopologyInfoList[i].permitted)
+                        t.editor.topology.subtopology_tabMenu(t.subtopologyInfoList[i].name);
 				}
 				$('#workspace>svg').hide();
 				// $('#main').show()

@@ -332,7 +332,7 @@ class Topology(Entity, BaseDocument):
 	# 	sub_topos = self._get_sub_topologies(group_info)
 	# 	return [sub_topo.info() for sub_topo in sub_topos]
 
-	def get_sub_topologies(self, groups=None):
+	def get_sub_topologies(self):
 		"""Return the `SubTopology` info list"""
 		return [sub_topo.info() for sub_topo in self.sub_topologies]
 
