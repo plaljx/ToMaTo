@@ -225,12 +225,26 @@ def topology_list(full=False, organization_filter=None, username_filter=None): #
 
 	return [top.info(full) for top in tops]
 
-def topology_list_by_group(group=None, full=False):
-	if group is None:
-		tops = topology.getAll()
+def topology_list_by_group(group_filter=None, full=False):    # TODO: test
+	if group_filter is not None:
+		from collections import Sequence, Set
+		if isinstance(group_filter, str):
+			tops = topology.getAll(group_info__group=group_filter)
+		elif isinstance(group_filter, Sequence):
+			tops = topology.getAll(group_info__group__in=group_filter)
+		else:
+			raise UserError(
+				code=None,
+				message="The topology list query filter is not supported",
+				data={"group_filter": repr(group_filter)})
 	else:
-		tops = topology.getAll(group_info__group=group)
+		tops = topology.getAll()
 	return [top.info(full) for top in tops]
+	# if group is None:
+	# 	tops = topology.getAll()
+	# else:
+	# 	tops = topology.getAll(group_info__group=group)
+	# return [top.info(full) for top in tops]
 
 
 def topology_set_permission(id, user, role): #@ReservedAssignment
@@ -275,29 +289,9 @@ def topology_remove_group(id, group):
 	top = _getTopology(id)
 	top.remove_group_info(group)
 
-# def topology_get_sub_topology(topo_id, group_info=None):  # TODO: may change func name to `topology_get_sub_topology_name`
-# 	"""
-# 	if group_info is None, return all of sub topologies
-# 	else, return sub topologies corresponds to group info
-# 	"""
-# 	top = _getTopology(topo_id)
-# 	return top.get_sub_topology_name(group_info)
-
-# def topology_get_sub_topology_name_list(topo_id, group_info=None):
-# 	"""
-# 	If group_info is None, return all of sub topology's name.
-# 	Else, return the names of sub topologies that corresponds to group info.
-# 	"""
-# 	topo = _getTopology(topo_id)
-# 	return topo.get_sub_topologies_name(group_info=group_info)
-#
-# def topology_get_sub_topology_info_list(topo_id, group_info=None):
-# 	"""
-# 	If group_info is None, return info of all sub topologies.
-# 	Else, return info of sub topologies that corresponds to group info
-# 	"""
-# 	topo = _getTopology(topo_id)
-# 	return topo.get_sub_topologies_name(group_info=group_info)
+def topology_list_by_sub_topology(group, full=False):
+	topos = topology.getBySubStopology(group)
+	return [topo.info(full) for topo in topos]
 
 def topology_get_sub_topologies(topo_id):
 	topo = _getTopology(topo_id)

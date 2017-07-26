@@ -47,7 +47,7 @@ from topology import topology_action, topology_create, topology_info,\
 
 from topology import topology_list_by_group, topology_add_group, topology_remove_group
 
-from topology import topology_get_sub_topologies, \
+from topology import topology_get_sub_topologies, topology_list_by_sub_topology, \
 	topology_add_sub_topology, topology_remove_sub_topology, \
 	sub_topology_get_groups, sub_topology_add_group, sub_topology_remove_group
 

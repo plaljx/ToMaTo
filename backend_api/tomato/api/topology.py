@@ -250,6 +250,15 @@ def topology_usage(id): #@ReservedAssignment
 	getCurrentUserInfo().check_may_view_topology_usage(target_topology)
 	return target_topology.get_usage(hide_no_such_record_error=True)
 
+
+def topology_list_by_sub_topology(group=None, full=False):
+	# TODO: Permission Checking
+	if group is None:
+		groups = getCurrentUserInfo().get_groups(min_role=GroupRole.user)
+		return get_backend_core_proxy().topology_list_by_sub_topology(groups)
+	else:
+		return get_backend_core_proxy().topology_list_by_sub_topology(group)
+
 def topology_get_sub_topologies(topo_id):
 	"""
 	Return list of sub-topology info.
@@ -263,7 +272,7 @@ def topology_get_sub_topologies(topo_id):
 		for sub_topology in sub_topologies:
 			sub_topology["permitted"] = True
 	else:
-		groups_set = set(user.get_groups(GroupRole.user))
+		groups_set = set(user.get_groups(min_role=GroupRole.user))
 		for sub_topology in sub_topologies:
 			if groups_set.isdisjoint(sub_topology["groups"]):
 				sub_topology["permitted"] = False

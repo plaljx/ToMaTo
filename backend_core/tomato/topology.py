@@ -299,19 +299,6 @@ class Topology(Entity, BaseDocument):
 		return False
 
 
-	# def _get_sub_topologies(self, group_info=None):
-	# 	"""Return the `SubTopology` Document list"""
-	# 	from .lib.group_role import GroupRole
-	# 	if group_info is None:
-	# 		sub_topos = self.sub_topologies
-	# 	else:
-	# 		group_names = set()
-	# 		for data in group_info:
-	# 			if data['role'] in (GroupRole.owner, GroupRole.manager, GroupRole.user):
-	# 				group_names.add(data['group'])
-	# 		sub_topos = SubTopology.objects.filter(Q(topology=self) & Q(groups__in=group_names))
-	# 	return sub_topos
-
 
 	def _get_sub_topology(self, sub_topo_name):
 		"""
@@ -319,18 +306,6 @@ class Topology(Entity, BaseDocument):
 		May raise `DoesNotExist`, `MultipleObjectsReturned`
 		"""
 		return SubTopology.objects.get(name=sub_topo_name, topology=self)
-
-	# def get_sub_topologies_name(self, group_info=None):
-	# 	"""Return the `SubTopology` name list"""
-	# 	# TODO: remove this
-	# 	sub_topos = self._get_sub_topologies(group_info)
-	# 	return [sub_topo.name for sub_topo in sub_topos]
-	#
-	# def get_sub_topologies_info(self, group_info=None):
-	# 	"""Return the `SubTopology` info list"""
-	# 	# TODO: remove this
-	# 	sub_topos = self._get_sub_topologies(group_info)
-	# 	return [sub_topo.info() for sub_topo in sub_topos]
 
 	def get_sub_topologies(self):
 		"""Return the `SubTopology` info list"""
@@ -547,6 +522,11 @@ def get(id_, **kwargs):
 
 def getAll(**kwargs):
 	return list(Topology.objects.filter(**kwargs))
+
+def getBySubStopology(group):
+	sub_topos = SubTopology.objects.filter(groups__exists=group)
+	topos = sorted(set(topo.topology for topo in sub_topos), key=lambda t: t.id)
+	return topos
 
 def create(owner, **attrs):
 	top = Topology()

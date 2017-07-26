@@ -147,14 +147,30 @@ def info(api, request, group):
 	return render(request, "group/info.html", {"group": group_info, "role": role})
 
 @wrap_rpc
-def topology(api, request, group):
+def topology(api, request, group=None):
 	"""
-	The topology list of a group
+	The topology list of a group, filtered by group name `group`
+	if `group` is None, the page will show all of topologies, which current user can access by group permission.
 	"""
 	if not api.user:
 		raise AuthError()
 	topology_list = api.group_topology_list(group)
-	return render(request, "group/group_topology_list.html",
+	return render(
+		request,
+		"group/group_topology_list.html",
+		{'top_list': topology_list, 'group': group})
+
+@wrap_rpc
+def topology_by_sub_topology(api, request, group=None):
+	"""
+	The list of topology which accessing is allowed by group & sub-topology mechanism, may filtered by `group`
+	"""
+	if not api.user:
+		raise AuthError()
+	topology_list = api.topology_list_by_sub_topology(group)
+	return render(
+		request,
+		"group/group_topology_list_by_sub_topology.html",
 		{'top_list': topology_list, 'group': group})
 
 @wrap_rpc

@@ -81,6 +81,7 @@ def list(api, request, show_all=False, organization=None):
 
 @wrap_rpc
 def list_by_group(api, request, group=None):
+	# TODO: check if this is used, if not, may remove this
 	if not api.user:
 		raise AuthError()
 	toplist = api.topology_list_by_group(group=group)
@@ -89,6 +90,12 @@ def list_by_group(api, request, group=None):
 	# 	top['processed'] = {'timeout_critical': top['timeout'] - time.time() < serverInfo()['topology_timeout']['warning']}
 	return render(request, "topology/list_by_group.html", {'top_list': toplist, 'group': group})
 
+@wrap_rpc
+def list_by_sub_topology(api, request, group=None):
+	if not api.user:
+		raise AuthError()
+	toplist = api.topology_list_by_sub_topology(group=group)
+	return render(request, "topology/group_topology_list_by_sub_topology.html", {'top_list': toplist, 'group': group})
 
 def _display(api, request, info, tutorial_state):
 	caps = api.capabilities()

@@ -25,14 +25,11 @@ var Workspace = Class.extend({
 				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
 					t.subtopologyList.push(t.subtopologyInfoList[i].name);
 				}
-				// t.subtopologyList = result;
 				for (var i = 0; i < t.subtopologyList.length; i++){
 					t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
 					t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i];
 					t.canvas_dict[t.subtopologyList[i]].workspace = t;
 					t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-					// TODO: only add to tabMenu, when user has the subtopology permission
-					// t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
 				}
 				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
 					if (t.subtopologyInfoList[i].permitted)

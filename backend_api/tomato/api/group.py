@@ -134,14 +134,19 @@ def handle_application(user, group, operation):
 	else:
 		raise Exception("Invalid parameter")
 
-def group_topology_list(group):
+def group_topology_list(group=None):
 	"""
 	Return the group topology list
+	if group is None, this will return all group permitted topologies
 	"""
+	current_user = getCurrentUserInfo()
 	if group is None:
-		raise UserError(code=UserError.DENIED, message="Need specify a group.")
-	getCurrentUserInfo().check_may_list_group_topologies(group)
-	return get_backend_core_proxy().topology_list_by_group(group)
+		# TODO: Permission Checking
+		groups = current_user.get_groups(min_role=GroupRole.user)
+		return get_backend_core_proxy().topology_list_by_group(groups)
+	else:
+		current_user.check_may_list_group_topologies(group)
+		return get_backend_core_proxy().topology_list_by_group(group)
 
 def topology_add_group(topl_id, group):
 	topl = get_topology_info(topl_id)
