@@ -3,6 +3,8 @@
 * 删除主拓扑时，不会顺带删除其下的子拓扑
     * 导致"游离"的子拓扑保留对已删除拓扑的空引用
     * 此时导致`get_topology_by_sub_topology`抛出`DoesNotExist`错误
+    * 可能需要手动处理
+* Topology List by Sub Topology会显示全部拓扑
 
 ## Test List
 
@@ -10,12 +12,12 @@
     * 删除主拓扑后，其下子拓扑应同时被删除（已测试无法实现，已加入Bug List）
     * 删除子拓扑后，主拓扑应从`sub_topologies`中删除对其的引用
 * 测试重新实现的Group Topology List (All)
+* 测试Topology List by Sub Topology
 
 ## Todo List
 
 #### 紧急or易于实现
 
-* Group Info页面中的Topology List by Sub Topology，并测试
 * 完成sub topology相关的前端部分功能
     * 按钮、对话框等
     * 查看已有的 Group <=> SubTopology 关系
@@ -23,6 +25,7 @@
     * 删除子拓扑后其上的元素如何处理？
 * 完成子拓扑相关的基本权限验证功能
     * 创建、删除、更名子拓扑的权限
+* 考虑在子拓扑功能相关的URL和参数中，使用子拓扑ID，而非名字
 
 #### 难于实现
 

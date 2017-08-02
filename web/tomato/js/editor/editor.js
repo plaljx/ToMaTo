@@ -529,9 +529,9 @@ var Editor = Class.extend({
 		for (var i=0; i<tmpls.length; i++)
 		 if(tmpls[i].subtype != "device")
 		  btns.push(tmpls[i].menuButton({
-		  	toggleGroup: toggleGroup,
-		  	small: true,
-		  	func: this.createPositionElementFunc(this.createTemplateFunc(tmpls[i]))
+			toggleGroup: toggleGroup,
+			small: true,
+			func: this.createPositionElementFunc(this.createTemplateFunc(tmpls[i]))
 		}));
 		group.addStackedElements(btns);
 
@@ -602,15 +602,15 @@ var Editor = Class.extend({
 
 		var group = tab.addGroup(gettext("Management"));
 
-        group.addElement(Menu.button({  // by Chang Rui
-            label: gettext("Save As Scenario"),
-            icon: "img/export16.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.saveAsScenarioDialog();
-            }
-        }));
+		group.addElement(Menu.button({  // by Chang Rui
+			label: gettext("Save As Scenario"),
+			icon: "img/export16.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.topology.saveAsScenarioDialog();
+			}
+		}));
 		group.addElement(Menu.button({
 			label: gettext("Renew"),
 			icon: "img/renew.png",
@@ -671,73 +671,49 @@ var Editor = Class.extend({
 			}
 		}));
 		group.addElement(Menu.button({
-			label: gettext("Sub-Topology Settings"),
-			icon: "img/user32.png",
-			toggle: false,
-			small: false,
-			func: function() {
-
-			}
+		    label: gettext("Add sub-topo"),
+		    icon: "img/repy32.png",
+		    toggle: false,
+            small: false,
+            func: function () {
+                t.topology.subtopolgy_addDialog();
+            }
+        }));
+        group.addElement(Menu.button({
+            label: gettext("Sub-topo settings"),
+            icon: "img/repy32.png",
+            toggle: false,
+            small: false,
+            func: function () {
+                t.topology.subtopologyGroupDialog();
+            }
 		}));
-
 
 		var tab = this.menu.addTab(gettext("Options"));
 
 		this.optionCheckboxes = {};
 		this.optionsManager.buildOptionsTab(tab);
 
-		// for topgroup
-		// var tab = this.menu.addTab(gettext("Topgroup"));
+		// var tab = this.menu.addTab(gettext("Canvas"));
 		// var group = tab.addGroup(gettext("Manager"));
-
-		// group.addElement(Menu.button({ 
-  //           label: gettext("Add to topgroup"),
-  //           icon: "img/repy32.png",
-  //           toggle: false,
-  //           small: false,
-  //           func: function () {
-  //               t.topology.topgroup_adddDialog();
-  //           }
-  //       }));
-  //       group.addElement(Menu.button({  
-  //           label: gettext("Create a Topgroup"),
-  //           icon: "img/repy32.png",
-  //           toggle: false,
-  //           small: false,
-  //           func: function () {
-  //               t.topology.topgroup_createDialog();
-  //           }
-  //       }));
-  //       group.addElement(Menu.button({  
-  //           label: gettext("Remove from Topgroup"),
-  //           icon: "img/repy32.png",
-  //           toggle: false,
-  //           small: false,
-  //           func: function () {
-  //               t.topology.topgroupDialog();
-  //           }
-  //       }));
-
-        var tab = this.menu.addTab(gettext("Canvas"));
-		var group = tab.addGroup(gettext("Manager"));
-		group.addElement(Menu.button({  
-            label: gettext("add subtopology"),
-            icon: "img/repy32.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.subtopolgy_addDialog();
-            }
-        }));
-		group.addElement(Menu.button({
-			label: gettext("set group"),
-			icon: "img/repy32.png",
-			toggle: false,
-			small: false,
-			func: function () {
-				t.topology.subtopologyGroupDialog();
-			}
-		}));
+		// group.addElement(Menu.button({
+		 //    label: gettext("add subtopology"),
+		 //    icon: "img/repy32.png",
+		 //    toggle: false,
+		 //    small: false,
+		 //    func: function () {
+		 //        t.topology.subtopolgy_addDialog();
+		 //    }
+		// }));
+		// group.addElement(Menu.button({
+		// 	label: gettext("set group"),
+		// 	icon: "img/repy32.png",
+		// 	toggle: false,
+		// 	small: false,
+		// 	func: function () {
+		// 		t.topology.subtopologyGroupDialog();
+		// 	}
+		// }));
 		this.menu.paint();
 	}
 });
