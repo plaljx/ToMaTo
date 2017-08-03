@@ -574,7 +574,7 @@ var Topology = Class.extend({
 		this.rename.show();
 	},
 	subtopolgy_addDialog:function(){
-		var t = this
+		var t = this;
 		var name;
 		dialog = new AttributeWindow({
 			title: gettext('add subtopology'),
@@ -583,10 +583,10 @@ var Topology = Class.extend({
 			{
 				text: gettext('Save'),
 				click:function(){
-					canvasname = name.getValue()
+					canvasname = name.getValue();
 					// t.editor.addSubtopology(canvasname)
-					t.editor.workspace.addCanvas(canvasname)
-					t.subtopology_tabMenu(canvasname)
+					t.editor.workspace.addCanvas(canvasname);
+					// t.subtopology_tabMenu(canvasname)
 					dialog.hide()
 				}
 			},
@@ -598,7 +598,7 @@ var Topology = Class.extend({
 			}
 			]
 
-		})
+		});
 		name = dialog.add(new TextElement({
 			name: "name",
 			label: gettext("Name"),
@@ -606,15 +606,14 @@ var Topology = Class.extend({
 		}));
 		dialog.show()
 	},
-	subtopology_tabMenu:function(name){
+	subtopology_tabMenu:function(name, id){
 		var t = this;
 		// var name;
-		$("#subtopology_tab").append('<button type="button" class="button button-pill button-action" id ="tab_' + name + '" >' + name +'</button>')
-		$('#tab_' + name).click(function(){
-			var canvasname = $('#tab_' + name).text()
-			console.log(canvasname)
+		$("#subtopology_tab").append('<button type="button" class="button button-pill button-action" id ="tab_' + id + '" >' + name +'</button>');
+		$('#tab_' + id).click(function(){
+			// var canvasName = $('#tab_' + id).text();
 			t.editor.workspace.hideCanvas();
-			t.editor.workspace.tabCanvas(canvasname);	
+			t.editor.workspace.tabCanvas(id);
 		})
 	},
 	subtopologyGroupDialog:function() {

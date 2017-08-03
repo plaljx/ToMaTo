@@ -33,7 +33,7 @@ var Workspace = Class.extend({
 				}
 				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
 					if (t.subtopologyInfoList[i].permitted)
-                        t.editor.topology.subtopology_tabMenu(t.subtopologyInfoList[i].name);
+                        t.editor.topology.subtopology_tabMenu(t.subtopologyInfoList[i].name, t.subtopologyInfoList[i].id);
 				}
 				$('#workspace>svg').hide();
 				// $('#main').show()
@@ -113,23 +113,26 @@ var Workspace = Class.extend({
 	
 	addCanvas:function(canvasname){
 		var t = this;
-		this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
-
-		this.canvas_dict[canvasname].canvas.id = canvasname
-		this.canvas_dict[canvasname].workspace = this
-
-		this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-
-		$("#" + canvasname).hide()
+		// this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
+		// this.canvas_dict[canvasname].canvas.id = canvasname;
+		// this.canvas_dict[canvasname].workspace = this;
+		// this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+		// $("#" + canvasname).hide();
 		var data = {
-			'name': canvasname,
-		}
+			'name': canvasname
+		};
 		ajax({
 			// url:'topology/'+ this.editor.topology.id + '/addsubtopology',
 			url:'topology/'+ this.editor.topology.id + '/subtopology/add',
 			data:data,
-			successFn:function(){
-			},
+            successFn:function(result){
+                t.canvas_dict[result.id] = Raphael(t.container[0], t.size.x, t.size.y);
+                t.canvas_dict[result.id].canvas.id = result.id;
+                t.canvas_dict[result.id].workspace = t;
+                t.canvas_dict[result.id].connectPath = t.canvas_dict[result.id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+                $("#" + result.id).hide();
+                t.editor.topology.subtopology_tabMenu(result.name, result.id);
+            },
 			errorFn:function(error){
 				new errorWindow({error:error});
 			}
@@ -140,13 +143,13 @@ var Workspace = Class.extend({
 		// TODO
 	},
 
-	tabCanvas:function(canvasname){
+	tabCanvas:function(canvasId){
 
 		var t = this;
-		this.canvas = this.canvas_dict[canvasname]
-		this.connectPath = this.canvas.connectPath
+		this.canvas = this.canvas_dict[canvasId];
+		this.connectPath = this.canvas.connectPath;
 		$('#workspace>svg').hide();
-		$('#' + canvasname).show();
+		$('#' + canvasId).show();
 
 	},
 
