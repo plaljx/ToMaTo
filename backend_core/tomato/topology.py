@@ -68,12 +68,12 @@ class SubTopology(Entity, BaseDocument):
 		return "Main"
 
 	@property
-	def elements(self):					# TODO
-		return None
+	def elements(self):
+		return elements.Element.objects(subTopology=self)
 
 	@property
-	def connections(self):				# TODO
-		return None
+	def connections(self):
+		return Connection.objects(subTopology=self)
 
 	def get_groups(self):
 		return self.groups
@@ -317,7 +317,7 @@ class Topology(Entity, BaseDocument):
 			sub_topology.save()
 			self.sub_topologies.append(sub_topology)
 			self.save()
-			return True
+			return sub_topology.info()
 		except NotUniqueError:
 			raise UserError(
 				UserError.ALREADY_EXISTS,

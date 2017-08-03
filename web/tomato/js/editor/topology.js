@@ -5,54 +5,65 @@ var Topology = Class.extend({
 		this.connections = {};
 		this.pendingNames = [];
 	},
-	_getCanvas: function(canvasname) {
+	_getCanvas: function(canvas_id) {
 		// this.editor.workspace.tabCanvas(canvasname)
-		if(canvasname){
-			return this.editor.workspace.canvas_dict[canvasname];
+		if(canvas_id){
+			return this.editor.workspace.canvas_dict[canvas_id];
 		}else{
 			return this.editor.workspace.canvas;
 		}
 
 	},
+	/*
+	TODO: May remove the `canvas` parameter, use sub topo id from data `el`
+	 */
 	loadElement: function(el) {
-		console.log(el)
 		var elObj;
 		switch (el.type) {
 			case "full":
 			case "container":
 			case "repy":
-				elObj = new VMElement(this, el, this._getCanvas(el._pos['canvas']));
+				// elObj = new VMElement(this, el, this._getCanvas(el._pos['canvas']));
+				elObj = new VMElement(this, el, this._getCanvas(el.sub_topology));
 				break;
 			
 			case "full_interface":
 			case "repy_interface":
-				elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
+				// elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
+				elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology));
 				break;
 			case "container_interface":
-				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
+				// elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
+				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology));
 				break;
 			case "external_network":
-				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
+				// elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
+				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el.sub_topology));
 				break;
 			case "external_network_endpoint":
 				//hide external network endpoints with external_network parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos["canvas"])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"])) ;
-				break;
-			case "tinc_vpn":
-				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
-				break;
-			case "tinc_endpoint":
-				//hide tinc endpoints with tinc_vpn parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
-				break;
-			case "vpncloud":
-				elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
-				break;
-			case "vpncloud_endpoint":
-				//hide vpncloud endpoints with vpcloud parent but show endpoints without parent
-				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
-				break;
-			default:
+				// elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos["canvas"])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
+                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new ExternalNetworkElement(this, el, this._getCanvas(el.sub_topology));
+                break;
+            case "tinc_vpn":
+                // elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
+                elObj = new VPNElement(this, el, this._getCanvas(el.sub_topology));
+                break;
+            case "tinc_endpoint":
+                //hide tinc endpoints with tinc_vpn parent but show endpoints without parent
+                // elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
+                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new VPNElement(this, el, this._getCanvas(el.sub_topology)) ;
+                break;
+            case "vpncloud":
+                // elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
+                elObj = new VPNElement(this, el, this._getCanvas(el.sub_topology));
+                break;
+            case "vpncloud_endpoint":
+                //hide vpncloud endpoints with vpcloud parent but show endpoints without parent
+                // elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
+                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new VPNElement(this, el, this._getCanvas(el.sub_topology)) ;
+                break;
+            default:
 				elObj = new UnknownElement(this, el, this._getCanvas());
 				break;
 		}

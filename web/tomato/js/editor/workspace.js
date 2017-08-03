@@ -10,7 +10,7 @@ var Workspace = Class.extend({
 
 
 		this.subtopologyInfoList = [];
-		this.subtopologyList = [];
+		// this.subtopologyList = [];
 		this.canvas_dict = {};
 
 		var t = this;
@@ -22,14 +22,14 @@ var Workspace = Class.extend({
 			synchronous: true,
 			successFn:function(result){
 				t.subtopologyInfoList = result;
-				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
-					t.subtopologyList.push(t.subtopologyInfoList[i].name);
-				}
-				for (var i = 0; i < t.subtopologyList.length; i++){
-					t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
-					t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i];
-					t.canvas_dict[t.subtopologyList[i]].workspace = t;
-					t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+				// for (var i = 0; i < t.subtopologyInfoList.length; i++) {
+				// 	t.subtopologyList.push(t.subtopologyInfoList[i].name);
+				// }
+				for (var i = 0; i < t.subtopologyInfoList.length; i++){
+					t.canvas_dict[t.subtopologyInfoList[i].id] = Raphael(t.container[0], t.size.x, t.size.y);
+					t.canvas_dict[t.subtopologyInfoList[i].id].canvas.id = t.subtopologyInfoList[i].id;
+					t.canvas_dict[t.subtopologyInfoList[i].id].workspace = t;
+					t.canvas_dict[t.subtopologyInfoList[i].id].connectPath = t.canvas_dict[t.subtopologyInfoList[i].id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
 				}
 				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
 					if (t.subtopologyInfoList[i].permitted)
@@ -37,14 +37,14 @@ var Workspace = Class.extend({
 				}
 				$('#workspace>svg').hide();
 				// $('#main').show()
-				$('#' + t.subtopologyList[0]).show();
+				$('#' + t.subtopologyInfoList[0].id).show();
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});
 			}
 		});
 
-		var c = this.canvas_dict[t.subtopologyList[0]];
+		var c = this.canvas_dict[t.subtopologyInfoList[0].id];
 		var fs = t.editor.options.frame_size;
 		this.absPos = function(pos){
 			return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
@@ -93,7 +93,7 @@ var Workspace = Class.extend({
 		});
 		var t = this;
 
-		this.canvas = this.canvas_dict[t.subtopologyList[0]]
+		this.canvas = this.canvas_dict[t.subtopologyInfoList[0].id];
 		this.editor.listeners.push(function(obj){
 			t.tutorialWindow.triggerProgress(obj);
 		});

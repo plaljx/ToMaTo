@@ -17,7 +17,7 @@
 
 from ..generic import *
 from ..db import *
-from ..topology import Topology
+from ..topology import Topology, SubTopology
 from ..host import Host
 from ..lib import logging
 from ..lib.decorators import *
@@ -31,6 +31,7 @@ TYPES = {}
 class Element(LockedStatefulEntity, BaseDocument):
 	"""
 	:type topology: Topology
+	:type subTopology: SubTopology
 	:type parent: Element
 	:type connection: connections.Connection
 	:type clientData: dict
@@ -40,6 +41,8 @@ class Element(LockedStatefulEntity, BaseDocument):
 	"""
 	topology = ReferenceField(Topology, required=True, reverse_delete_rule=DENY)
 	topologyId = ReferenceFieldId(topology)
+	subTopology = ReferenceField(SubTopology, reverse_delete_rule=DENY)  # TODO: think of `required=True`
+	subTopologyId = ReferenceFieldId(subTopology)
 	state = StringField(choices=['default', 'created', 'prepared', 'started'], required=True)
 	parent = GenericReferenceField()
 	parentId = ReferenceFieldId(parent)
@@ -53,9 +56,10 @@ class Element(LockedStatefulEntity, BaseDocument):
 	meta = {
 		'allow_inheritance': True,
 		'indexes': [
-			'topology', 'state', 'parent',
+			'topology', 'state', 'parent', 'subTopology',
 			{'fields': ['topology'], 'cls': False},
 			{'fields': ['parent'], 'cls': False},
+			{'fields': ['subTopology'], 'cls': False}
 		]
 	}
 	@property
@@ -88,6 +92,7 @@ class Element(LockedStatefulEntity, BaseDocument):
 	SAME_SITE_AFFINITY = 20 #keep traffic local and latencies low
 	
 	def init(self, topology, parent=None, **attrs):
+		from ..topology import SubTopology
 		if parent:
 			UserError.check(parent.type in self.CAP_PARENT, code=UserError.INVALID_VALUE,
 				message="Parent type not allowed for this type", data={"parent_type": parent.type, "type": self.type})
@@ -96,9 +101,11 @@ class Element(LockedStatefulEntity, BaseDocument):
 			UserError.check(parent.state in parent.CAP_CHILDREN[self.type], code=UserError.INVALID_STATE,
 				message="Parent does not allow children of this type in its current state",
 				data={"parent_type": parent.type, "type": self.type, "parent_state": parent.state})
+			self.subTopology = parent.subTopology
 		else:
 			UserError.check(None in self.CAP_PARENT, code=UserError.INVALID_CONFIGURATION, message="Type needs parent",
 				data={"type": self.type})
+			self.subTopology = SubTopology.objects.get(id=attrs.pop('sub_topology', None))
 		self.topology = topology
 		self.parent = parent
 		Entity.init(self, **attrs)
@@ -404,6 +411,7 @@ class Element(LockedStatefulEntity, BaseDocument):
 		"type": Attribute(field=type, readOnly=True, schema=schema.Identifier()),
 		"tech": Attribute(field=type, label="Tech", readOnly=True, schema=schema.Identifier()),
 		"topology": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
+		"sub_topology": Attribute(field=subTopologyId, readOnly=True, schema=schema.Identifier()),
 		"parent": Attribute(field=parentId, readOnly=True, schema=schema.Identifier(null=True)),
 		"state": Attribute(field=state, readOnly=True, schema=schema.Identifier()),
 		"children": Attribute(field=childrenIds, readOnly=True, schema=schema.List(items=schema.Identifier())),

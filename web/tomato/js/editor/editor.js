@@ -209,6 +209,7 @@ var Editor = Class.extend({
 			t.setMode(mode);
 		}
 	},
+	// TODO
 	createElementFunc: function(el) {
 		var t = this;
 		return function(pos) {
@@ -216,6 +217,9 @@ var Editor = Class.extend({
 			data._pos = pos;
 			if(this.workspace.canvas){
 			data._pos['canvas'] = this.workspace.canvas.canvas.id;
+			data._canvas = this.workspace.canvas.canvas.id;
+			data.sub_topology = this.workspace.canvas.canvas.id;
+
 			t.topology.createElement(data);
 			t.selectBtn.click();
 		}

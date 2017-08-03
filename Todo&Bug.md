@@ -1,3 +1,13 @@
+## Now Doing
+
+* 子拓扑功能相关的URL和参数中，使用子拓扑ID，而非名字
+
+* 建立`element <-> sub_topo`和`connection <-> sub_topo`的关系
+    * 在element和connection中加入对sub topo的外键引用
+
+* 实现子拓扑删除功能
+    * 先删除其中的元素、链接，参考Topology删除
+
 ## Bug List
 
 * 删除主拓扑时，不会顺带删除其下的子拓扑
