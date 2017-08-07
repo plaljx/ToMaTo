@@ -675,22 +675,31 @@ var Editor = Class.extend({
 			}
 		}));
 		group.addElement(Menu.button({
-		    label: gettext("Add sub-topo"),
-		    icon: "img/repy32.png",
-		    toggle: false,
-            small: false,
-            func: function () {
-                t.topology.subtopolgy_addDialog();
-            }
-        }));
-        group.addElement(Menu.button({
-            label: gettext("Sub-topo settings"),
-            icon: "img/repy32.png",
-            toggle: false,
-            small: false,
-            func: function () {
-                t.topology.subtopologyGroupDialog();
-            }
+			label: gettext("Add sub-topo"),
+			icon: "img/repy32.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.topology.subtopolgy_addDialog();
+			}
+		}));
+		group.addElement(Menu.button({
+			label: gettext("Sub-topo settings"),
+			icon: "img/repy32.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.topology.subtopologyGroupDialog();
+			}
+		}));
+		group.addElement(Menu.button({
+			label: gettext("Remove sub-topo"),
+			icon: "img/repy32.png",
+			toggle: false,
+			small: false,
+			func: function () {
+				t.topology.subtopolgy_removeDialog();
+			}
 		}));
 
 		var tab = this.menu.addTab(gettext("Options"));

@@ -576,7 +576,7 @@ var Topology = Class.extend({
 	subtopolgy_addDialog:function(){
 		var t = this;
 		var name;
-		dialog = new AttributeWindow({
+		var dialog = new AttributeWindow({
 			title: gettext('add subtopology'),
 			width: 550,
 			buttons: [
@@ -605,6 +605,34 @@ var Topology = Class.extend({
 			help_text: gettext("The name of your subtopology"),
 		}));
 		dialog.show()
+	},
+	subtopolgy_removeDialog:function() {
+		var t = this;
+		var name;
+		var dialog = new AttributeWindow({
+			title: gettext("remove subtopology"),
+			width: 550,
+			buttons: [
+				{
+					text: gettext('Remove'),
+					click: function() {
+						t.editor.workspace.removeCanvas(name.getValue());
+					}
+				},
+				{
+					text: gettext('Cancel'),
+					click: function(){
+						dialog.hide();
+					}
+				}
+			],
+		});
+		name = dialog.add(new TextElement({
+			name: "name",
+			label: gettext("Name"),
+			help_text: gettext("The name of removed subtopology"),
+		}));
+		dialog.show();
 	},
 	subtopology_tabMenu:function(name, id){
 		var t = this;

@@ -110,7 +110,11 @@ var Workspace = Class.extend({
 
 
 	},
-	
+
+	/**
+	 * Send `add sub-topology` ajax request, and add the sub-topo entrance in the bottom tab if success
+	 * @param {string} canvasname - the name of the added sub topology
+	 */
 	addCanvas:function(canvasname){
 		var t = this;
 		// this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
@@ -122,25 +126,41 @@ var Workspace = Class.extend({
 			'name': canvasname
 		};
 		ajax({
-			// url:'topology/'+ this.editor.topology.id + '/addsubtopology',
-			url:'topology/'+ this.editor.topology.id + '/subtopology/add',
-			data:data,
-            successFn:function(result){
-                t.canvas_dict[result.id] = Raphael(t.container[0], t.size.x, t.size.y);
-                t.canvas_dict[result.id].canvas.id = result.id;
-                t.canvas_dict[result.id].workspace = t;
-                t.canvas_dict[result.id].connectPath = t.canvas_dict[result.id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-                $("#" + result.id).hide();
-                t.editor.topology.subtopology_tabMenu(result.name, result.id);
-            },
-			errorFn:function(error){
+			url: 'topology/'+ this.editor.topology.id + '/subtopology/add',
+			data: data,
+			successFn: function(result){
+				t.canvas_dict[result.id] = Raphael(t.container[0], t.size.x, t.size.y);
+				t.canvas_dict[result.id].canvas.id = result.id;
+				t.canvas_dict[result.id].workspace = t;
+				t.canvas_dict[result.id].connectPath = t.canvas_dict[result.id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+				$("#" + result.id).hide();
+				t.editor.topology.subtopology_tabMenu(result.name, result.id);
+			},
+			errorFn: function(error){
 				new errorWindow({error:error});
 			}
 		})
 	},
 
+	/**
+	 * Send `remove sub-topology` ajax request, and remove it from tab if success
+	 * @param {string} canvasname - the name of removed sub topology
+	 */
 	removeCanvas:function (canvasname) {
-		// TODO
+		var t = this;
+		var data = {
+			'name': canvasname
+		};
+		ajax({
+			url: 'topology/' + this.editor.topology.id + '/subtopology/remove',
+			data: data,
+			successFn: function(result) {
+				// TODO: remove sub-topo entrance from bottom tab
+			},
+			errorFn: function (error) {
+				new errorWindow({error:error});
+			}
+		});
 	},
 
 	tabCanvas:function(canvasId){

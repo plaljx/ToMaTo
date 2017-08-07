@@ -303,7 +303,7 @@ def topology_add_sub_topology(topo_id, name):
 
 def topology_remove_sub_topology(topo_id, name):
 	top = _getTopology(topo_id)
-	return top.remove_sub_topology(name=name)
+	return top.remove_sub_topology(name)
 
 def sub_topology_get_groups(topo_id, sub_topo):
 	st = _getSubTopology(topo_id, sub_topo)

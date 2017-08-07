@@ -55,7 +55,7 @@ class SubTopology(Entity, BaseDocument):
 	Separate the sub topology data into own collections,
 	since a sub topology may be referred by multiple places.
 	:type name: str
-	:type topology: ReferenceField
+	:type topology: Topology
 	:type groups: list
 	"""
 	name = StringField(required=True)
@@ -74,6 +74,9 @@ class SubTopology(Entity, BaseDocument):
 	@property
 	def connections(self):
 		return Connection.objects(subTopology=self)
+
+	def isBusy(self):
+		return self.topology.isBusy()
 
 	def get_groups(self):
 		return self.groups
@@ -108,7 +111,42 @@ class SubTopology(Entity, BaseDocument):
 		self.save()
 		return True
 
-	# TODO: test if `SubTopology.info()` works
+	def checkRemove(self, recurse=True):
+		UserError.check(not self.topology.isBusy(), code=UserError.ENTITY_BUSY, message="Object is busy")
+		UserError.check(
+			recurse or self.elements.count() == 0,
+			code=UserError.NOT_EMPTY,
+			message="Cannot remove sub topology with elements")
+		UserError.check(
+			recurse or self.connections.count() == 0,
+			code=UserError.NOT_EMPTY,
+			message="Cannot remove sub topology with connections")
+		for el in self.elements:
+			el.checkRemove(recurse=recurse)
+		# for con in self.connections:
+		# 	con.checkRemove()
+
+	def _remove(self, recurse=True):
+		self.checkRemove(recurse)
+		if self.id:
+			try:
+				# Need to destroy the whole topology
+				# since may need to remove element interface in another sub topology
+				if self.topology.maxState in (StateName.STARTED, StateName.PREPARED):
+					self.topology.action("destroy")
+				# if recurse is True, this will also remove the
+				# child elements and connected connections
+				for el in self.elements:
+					el._remove(recurse=recurse)
+			except UserError:
+				raise
+			except:
+				raise
+
+	ACTIONS = {
+		Entity.REMOVE_ACTION: Action(_remove, check=checkRemove)
+	}
+
 	ATTRIBUTES = {
 		"id": IdAttribute(),
 		"name": Attribute(field=name, schema=schema.String()),
@@ -327,6 +365,7 @@ class Topology(Entity, BaseDocument):
 	def remove_sub_topology(self, sub_topo_name):
 		try:
 			sub_topo = self._get_sub_topology(sub_topo_name)
+			sub_topo.remove()
 			self.sub_topologies.remove(sub_topo)		# TODO: check if this could `PULL`
 			# sub_topology.remove()  # this should be done by delete rule `PULL`
 			self.save()
@@ -511,11 +550,8 @@ class Topology(Entity, BaseDocument):
 		except cls.DoesNotExist:
 			return None
 
-# The bi-directional references not work with delete-rule,
-# thus need to move delete-rules here.
-# TODO: check if the delete rules correct
-SubTopology.register_delete_rule(Topology, 'sub_topologies', CASCADE)
-Topology.register_delete_rule(SubTopology, 'topology', PULL)
+# SubTopology.register_delete_rule(Topology, 'sub_topologies', CASCADE)
+# Topology.register_delete_rule(SubTopology, 'topology', PULL)
 
 def get(id_, **kwargs):
 	return Topology.get(id_, **kwargs)
