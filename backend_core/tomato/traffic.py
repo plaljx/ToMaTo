@@ -53,7 +53,7 @@ class Traffic(BaseDocument):
 
 	def modify_extra_param(self, val):
 		self.extra_param = val
-		
+
 	def modify_element_id(self, val):
 		self.element_id = val
 
@@ -92,7 +92,8 @@ class Traffic(BaseDocument):
 		action = "rextfv_upload_grant"
 		action_use = "rextfv_upload_use"
 		traffic_info = get(traffic_id).info()
-		pack_dir = traffic.make_pack(traffic_info)
+
+		pack_dir = traffic.make_mgen_pack(traffic_info)
 		element_info = Element.get(element_id).info()
 		key = Element.get(element_id).action(action)
 		upload = traffic.send_pack(element_info ,pack_dir, key)
@@ -122,4 +123,35 @@ def create(element_id, **attrs):
 			except:
 				pass
 		raise e
+	return res
+
+def ditg_start(element_id , **attrs):
+	print attrs
+	if attrs["dns_enable"] == True and attrs["telnet_enable"] == True:
+		return None
+	kind = ""
+	if attrs["dns_enable"] == True:
+		kind = "dns"
+	elif attrs["telnet_enable"] == True:
+		kind = "telnet"
+	else:
+		kind = ""
+
+	action = "rextfv_upload_grant"
+	action_use = "rextfv_upload_use"
+	#launch ditg receiver
+	receiver_element = Element.get(attrs["target_id"]).info()
+	receiver_key = Element.get(attrs["target_id"]).action(action)
+	receiver_dir = traffic.make_ditg_pack("receive",attrs["target_id"],kind,**attrs)
+	upload = traffic.send_pack(receiver_element, receiver_dir, receiver_key)
+	res = Element.get(attrs["target_id"]).action(action_use)
+
+	#launch ditg sender
+	sender_element = Element.get(element_id)
+	sender_key = sender_element.action(action)
+	print sender_key
+	sender_dir = traffic.make_ditg_pack("send", element_id , kind,**attrs)
+	print sender_dir
+	upload = traffic.send_pack(sender_element.info(), sender_dir, sender_key)
+	res = sender_element.action(action_use)
 	return res
