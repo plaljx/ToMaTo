@@ -59,7 +59,7 @@ class SubTopology(Entity, BaseDocument):
 	:type groups: list
 	"""
 	name = StringField(required=True)
-	topology = ReferenceField('Topology', required=True)  # TODO: check whether should use CASCADE
+	topology = ReferenceField('Topology', required=True)
 	topologyId = ReferenceFieldId(topology)
 	groups = ListField(StringField())
 
@@ -550,8 +550,8 @@ class Topology(Entity, BaseDocument):
 		except cls.DoesNotExist:
 			return None
 
-# SubTopology.register_delete_rule(Topology, 'sub_topologies', CASCADE)
-# Topology.register_delete_rule(SubTopology, 'topology', PULL)
+SubTopology.register_delete_rule(Topology, 'sub_topologies', PULL)
+Topology.register_delete_rule(SubTopology, 'topology', CASCADE)
 
 def get(id_, **kwargs):
 	return Topology.get(id_, **kwargs)
