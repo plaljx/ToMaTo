@@ -90,7 +90,7 @@ class SubTopology(Entity, BaseDocument):
 					"topology": self.topology.name,
 					"topology_id": self.topology.id,
 					"sub_topology": self.name,
-					"sub_topology_id": self.id,
+					"sub_topology_id": self.idStr,
 					"group": group})
 		self.groups.append(group)
 		self.save()
@@ -105,7 +105,7 @@ class SubTopology(Entity, BaseDocument):
 					"topology": self.topology.name,
 					"topology_id": self.topology.id,
 					"sub_topology": self.name,
-					"sub_topology_id": self.id,
+					"sub_topology_id": self.idStr,
 					"group": group})
 		self.groups.remove(group)
 		self.save()
@@ -355,10 +355,16 @@ class Topology(Entity, BaseDocument):
 			raise UserError(
 				UserError.ALREADY_EXISTS,
 				message="Sub topology already exists",
-				data={"topology": self.name, "id": self.id, "sub_topology": sub_topo_name})
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name})
 
 	def remove_sub_topology(self, sub_topo_name):
 		try:
+			UserError.check(
+				sub_topo_name != SubTopology.get_default_name(),
+				code=UserError.INVALID_VALUE,
+				message="Cannot remove the default sub-topology",
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
+			)
 			sub_topo = self._get_sub_topology(sub_topo_name)
 			sub_topo.remove()
 			# self.sub_topologies.remove(sub_topo)  # this is done by reverse delete rule
@@ -368,7 +374,7 @@ class Topology(Entity, BaseDocument):
 			raise UserError(
 				UserError.ENTITY_DOES_NOT_EXIST,
 				message="Sub topology does not exists",
-				data={"topology": self.name, "id": self.id, "sub_topology": sub_topo_name}
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
 			)
 
 	def add_group_info(self, group):
