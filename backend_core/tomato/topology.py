@@ -123,21 +123,16 @@ class SubTopology(Entity, BaseDocument):
 			message="Cannot remove sub topology with connections")
 		for el in self.elements:
 			el.checkRemove(recurse=recurse)
-		# for con in self.connections:
-		# 	con.checkRemove()
 
 	def _remove(self, recurse=True):
 		self.checkRemove(recurse)
 		if self.id:
 			try:
-				# Need to destroy the whole topology
-				# since may need to remove element interface in another sub topology
 				if self.topology.maxState in (StateName.STARTED, StateName.PREPARED):
 					self.topology.action("destroy")
-				# if recurse is True, this will also remove the
-				# child elements and connected connections
 				for el in self.elements:
 					el._remove(recurse=recurse)
+				self.delete()
 			except UserError:
 				raise
 			except:
@@ -366,8 +361,7 @@ class Topology(Entity, BaseDocument):
 		try:
 			sub_topo = self._get_sub_topology(sub_topo_name)
 			sub_topo.remove()
-			self.sub_topologies.remove(sub_topo)		# TODO: check if this could `PULL`
-			# sub_topology.remove()  # this should be done by delete rule `PULL`
+			# self.sub_topologies.remove(sub_topo)  # this is done by reverse delete rule
 			self.save()
 			return True
 		except DoesNotExist:
