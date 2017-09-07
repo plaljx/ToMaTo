@@ -43,31 +43,35 @@ from template import template_id, template_info, template_create, template_list,
 from site import site_create, site_info, site_list, site_modify, site_remove
 
 from topology import topology_action, topology_create, topology_info,\
-	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage, topology_exists,\
-	topology_list_by_group, \
-	topology_add_group, topology_remove_group
+	topology_list, topology_modify, topology_set_permission, topology_remove, topology_usage, topology_exists
+
+from topology import topology_list_by_group, topology_add_group, topology_remove_group
+
+from topology import topology_get_sub_topologies, topology_list_by_sub_topology, \
+	topology_add_sub_topology, topology_remove_sub_topology, \
+	sub_topology_get_groups, sub_topology_add_group, sub_topology_remove_group
 
 from hierarchy import object_exists, object_parents, objects_available
 
 # Scenarios
 from scenario import scenario_modify, scenario_remove, scenario_create, scenario_list, scenario_count, \
-    scenario_topology_info_json, scenario_info
+	scenario_topology_info_json, scenario_info
 # scenario_deploy
 
 # Security Resources
 from security_resources.malicious_code import malicious_code_remove, malicious_code_create, malicious_code_info, \
-    malicious_code_list, malicious_code_modify
+	malicious_code_list, malicious_code_modify
 from security_resources.vulnerability import vulnerability_create, vulnerability_remove, vulnerability_modify, \
-    vulnerability_list, vulnerability_info
+	vulnerability_list, vulnerability_info
 from security_resources.security_software import security_software_create, security_software_info, \
-    security_software_list, security_software_modify, security_software_remove
+	security_software_list, security_software_modify, security_software_remove
 
 from traffic import traffic_list, traffic_create, traffic_info, traffic_remove, traffic_modify, traffic_start
 
 
 # topgroup
 
-from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info, topgroup_topology
-from groupconnection import *
+# from topgroup import topgroup_remove, topgroup_addtop, topgroup_create, topgroup_deletetop, topgroup_list, topgroup_info, topgroup_topology
+# from groupconnection import *
 
-from subtopology import *
+# from subtopology import *

@@ -2,6 +2,8 @@ from error import InternalError, UserError
 from service import get_backend_users_proxy, get_backend_core_proxy, get_backend_accounting_proxy
 from cache import cached
 from hierarchy import ClassName
+from ..lib.group_role import GroupRole
+
 import topology_role
 import time
 
@@ -296,6 +298,13 @@ class UserInfo(InfoObj):
 			else:
 				return None
 
+	def get_groups(self, min_role=None):
+		group_info_list = self.get_group_role()
+		if min_role is None:
+			return [group_info['group'] for group_info in group_info_list]
+		else:
+			return [group_info['group'] for group_info in group_info_list if GroupRole.leq(min_role, GroupRole.user)]
+
 	def set_group_role(self, group, role):
 		res = get_backend_users_proxy().user_set_group_role(self.name, group, role)
 		return res
@@ -440,6 +449,9 @@ class TopologyInfo(ActionObj):
 
 	def get_group_info_list(self):
 		return self.info()['group_info']
+
+	def get_sub_topologies_info(self):
+		return self.info()['sub_topologies']
 
 	def add_group(self, group):
 		res = get_backend_core_proxy().topology_add_group(self.topology_id, group)

@@ -15,6 +15,8 @@ class GroupRole:
 
 	RANKING = [null, applying, invited, user, manager, owner]
 
+	MEMBER_ROLES = [owner, manager, user]
+
 
 	@staticmethod
 	def max(role_1, role_2):

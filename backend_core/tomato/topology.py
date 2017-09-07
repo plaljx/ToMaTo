@@ -29,7 +29,6 @@ from .lib.constants import StateName, ActionName
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 from .lib.references import Reference
 
-from .topgroup import Topgroup
 
 class TimeoutStep:
 	INITIAL = 0
@@ -51,24 +50,125 @@ class Permission(ExtDocument, EmbeddedDocument):
 	role = StringField(choices=[Role.owner, Role.manager, Role.user], required=True)
 
 
+class SubTopology(Entity, BaseDocument):
+	"""
+	Separate the sub topology data into own collections,
+	since a sub topology may be referred by multiple places.
+	:type name: str
+	:type topology: Topology
+	:type groups: list
+	"""
+	name = StringField(required=True)
+	topology = ReferenceField('Topology', required=True)
+	topologyId = ReferenceFieldId(topology)
+	groups = ListField(StringField())
+
+	@classmethod
+	def get_default_name(cls):
+		return "Main"
+
+	@property
+	def elements(self):
+		# return elements.Element.objects(subTopology=self)
+
+	@property
+	def connections(self):
+		return Connection.objects(subTopology=self)
+
+	def isBusy(self):
+		return self.topology.isBusy()
+
+	def get_groups(self):
+		return self.groups
+
+	def add_group(self, group):
+		if group in self.groups:
+			raise UserError(
+				code=UserError.ALREADY_EXISTS,
+				message="The sub topology already has the group",
+				data={
+					"topology": self.topology.name,
+					"topology_id": self.topology.id,
+					"sub_topology": self.name,
+					"sub_topology_id": self.idStr,
+					"group": group})
+		self.groups.append(group)
+		self.save()
+		return True
+
+	def remove_group(self, group):
+		if group not in self.groups:
+			raise UserError(
+				code=UserError.ENTITY_DOES_NOT_EXIST,
+				message="The sub topology does not exist",
+				data={
+					"topology": self.topology.name,
+					"topology_id": self.topology.id,
+					"sub_topology": self.name,
+					"sub_topology_id": self.idStr,
+					"group": group})
+		self.groups.remove(group)
+		self.save()
+		return True
+
+	def checkRemove(self, recurse=True):
+		UserError.check(not self.topology.isBusy(), code=UserError.ENTITY_BUSY, message="Object is busy")
+		UserError.check(
+			recurse or self.elements.count() == 0,
+			code=UserError.NOT_EMPTY,
+			message="Cannot remove sub topology with elements")
+		UserError.check(
+			recurse or self.connections.count() == 0,
+			code=UserError.NOT_EMPTY,
+			message="Cannot remove sub topology with connections")
+		for el in self.elements:
+			el.checkRemove(recurse=recurse)
+
+	def _remove(self, recurse=True):
+		self.checkRemove(recurse)
+		if self.id:
+			try:
+				if self.topology.maxState in (StateName.STARTED, StateName.PREPARED):
+					self.topology.action("destroy")
+				for el in self.elements:
+					el._remove(recurse=recurse)
+				self.delete()
+			except UserError:
+				raise
+			except:
+				raise
+
+	ACTIONS = {
+		Entity.REMOVE_ACTION: Action(_remove, check=checkRemove)
+	}
+
+	ATTRIBUTES = {
+		"id": IdAttribute(),
+		"name": Attribute(field=name, schema=schema.String()),
+		"topology": Attribute(readOnly=True, get=lambda self: self.topology.name),
+		"topology_id": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
+		"groups": Attribute(field=groups, readOnly=True, schema=schema.List(items=schema.String()))
+	}
+
+
 class Topology(Entity, BaseDocument):
 	"""
 	:type permissions: list of Permission
-	:type group_info: list of GroupInfo
 	:type site: Site
 	:type clientData: dict
+	:type group_info: list
+	:type sub_topologies: list
 	"""
 	from .host import Site
 	permissions = ListField(EmbeddedDocumentField(Permission))
-	group_info = ListField(EmbeddedDocumentField(GroupInfo))
 	timeout = FloatField(required=True)
 	timeoutStep = IntField(db_field='timeout_step', required=True, default=TimeoutStep.INITIAL)
 	site = ReferenceField(Site, reverse_delete_rule=NULLIFY)
 	name = StringField()
 	clientData = DictField(db_field='client_data')
-	# topgroup
-	topgroup = ReferenceField(Topgroup,reverse_delete_rule=DENY)
-	topgroupId = ReferenceFieldId(topgroup)
+
+	group_info = ListField(EmbeddedDocumentField(GroupInfo))
+	sub_topologies = ListField(ReferenceField('SubTopology'))
 	
 	meta = {
 		'ordering': ['name'],
@@ -86,6 +186,7 @@ class Topology(Entity, BaseDocument):
 	def connections(self):
 		return Connection.objects(topology=self)
 
+
 	DOC = ""
 
 	def init(self, owner, **attrs):
@@ -98,6 +199,7 @@ class Topology(Entity, BaseDocument):
 		self.save()
 		self.name = "Topology [%s]" % self.idStr
 		self.modify(**attrs)
+		self.add_sub_topology(SubTopology.get_default_name())
 
 	def isBusy(self):
 		return hasattr(self, "_busy") and self._busy
@@ -229,6 +331,51 @@ class Topology(Entity, BaseDocument):
 				return Role.leq(role, perm.role)
 		return False
 
+
+
+	def _get_sub_topology(self, sub_topo_name):
+		"""
+		Return a `SubTopology` Document object
+		May raise `DoesNotExist`, `MultipleObjectsReturned`
+		"""
+		return SubTopology.objects.get(name=sub_topo_name, topology=self)
+
+	def get_sub_topologies(self):
+		"""Return the `SubTopology` info list"""
+		return [sub_topo.info() for sub_topo in self.sub_topologies]
+
+	def add_sub_topology(self, sub_topo_name):
+		try:
+			sub_topology = SubTopology(name=sub_topo_name, topology=self)
+			sub_topology.save()
+			self.sub_topologies.append(sub_topology)
+			self.save()
+			return sub_topology.info()
+		except NotUniqueError:
+			raise UserError(
+				UserError.ALREADY_EXISTS,
+				message="Sub topology already exists",
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name})
+
+	def remove_sub_topology(self, sub_topo_name):
+		try:
+			UserError.check(
+				sub_topo_name != SubTopology.get_default_name(),
+				code=UserError.INVALID_VALUE,
+				message="Cannot remove the default sub-topology",
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
+			)
+			sub_topo = self._get_sub_topology(sub_topo_name)
+			sub_topo.remove()
+			# self.sub_topologies.remove(sub_topo)  # this is done by reverse delete rule
+			self.save()
+			return True
+		except DoesNotExist:
+			raise UserError(
+				UserError.ENTITY_DOES_NOT_EXIST,
+				message="Sub topology does not exists",
+				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
+			)
 
 	def add_group_info(self, group):
 		"""
@@ -386,13 +533,14 @@ class Topology(Entity, BaseDocument):
 		"id": IdAttribute(),
 		"permissions": Attribute(readOnly=True, get=lambda self: {str(p.user): p.role for p in self.permissions},
 			schema=schema.StringMap(additional=True)),
-		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
 		"site": Attribute(get=lambda self: self.site.name if self.site else None, set=modify_site),
 		"elements": Attribute(readOnly=True, schema=schema.List()),
 		"connections": Attribute(readOnly=True, schema=schema.List()),
 		"timeout": Attribute(field=timeout, readOnly=True, schema=schema.Number()),
 		"state_max": Attribute(field=maxState, readOnly=True, schema=schema.String()),
-		"name": Attribute(field=name, schema=schema.String())
+		"name": Attribute(field=name, schema=schema.String()),
+		"group_info": Attribute(get=lambda self: [info.group for info in self.group_info]),
+		"sub_topologies": Attribute(readOnly=True, get=get_sub_topologies)
 	}
 
 	@classmethod
@@ -402,14 +550,19 @@ class Topology(Entity, BaseDocument):
 		except cls.DoesNotExist:
 			return None
 
-
-
+SubTopology.register_delete_rule(Topology, 'sub_topologies', PULL)
+Topology.register_delete_rule(SubTopology, 'topology', CASCADE)
 
 def get(id_, **kwargs):
 	return Topology.get(id_, **kwargs)
 
 def getAll(**kwargs):
 	return list(Topology.objects.filter(**kwargs))
+
+def getBySubStopology(group):
+	sub_topos = SubTopology.objects.filter(groups__exists=group)
+	topos = sorted(set(topo.topology for topo in sub_topos), key=lambda t: t.id)
+	return topos
 
 def create(owner, **attrs):
 	top = Topology()

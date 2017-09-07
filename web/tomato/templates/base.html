@@ -188,8 +188,13 @@ head.appendChild(style);
 
 							<li>	
 									{% if request.session.user %}
-									<a href="{%url "topology_list"%}"><i class="fa">{%trans 'MyTopologies'%} </i><span class="fa"></span></a>
-
+									{# <a href="{%url "topology_list"%}"><i class="fa">{%trans 'MyTopologies'%} </i><span class="fa"></span></a> #}
+                                    <a><i class="fa">{% trans 'Topologies' %}</i><span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{%url "topology_list"%}">{% trans "My Topologies" %}</a></li>
+                                        <li><a href="{%url "admin_group_all_topology"%}">{% trans "Group Topologies" %}</a></li>
+                                        <li><a href="{%url "admin_group_all_topology_by_sub_topology"%}">{% trans "Sub Topologies" %}</a></li> {# TODO #}
+                                    </ul>
 				        			{% if request.session.user.isAdmin %} 
 							</li>
 							<li>

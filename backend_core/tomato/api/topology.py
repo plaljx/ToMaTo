@@ -26,6 +26,18 @@ def _getTopology(id_):
 	UserError.check(top, code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that id does not exist", data={"id": id_})
 	return top
 
+def _getSubTopology(topo_id, sub_topology):
+	from mongoengine import NotUniqueError, DoesNotExist    # TODO: review the exception handling
+	top = topology.get(topo_id)
+	# TODO: Permission checking
+	try:
+		return topology.SubTopology.objects.get(topology=top, name=sub_topology)
+	except DoesNotExist:
+		raise
+	except NotUniqueError:
+		raise
+
+
 def topology_exists(topology_id):
 	if _getTopology(topology_id):
 		return True
@@ -213,12 +225,26 @@ def topology_list(full=False, organization_filter=None, username_filter=None): #
 
 	return [top.info(full) for top in tops]
 
-def topology_list_by_group(group=None, full=False):
-	if group is None:
-		tops = topology.getAll()
+def topology_list_by_group(group_filter=None, full=False):    # TODO: test
+	if group_filter is not None:
+		from collections import Sequence, Set
+		if isinstance(group_filter, str):
+			tops = topology.getAll(group_info__group=group_filter)
+		elif isinstance(group_filter, Sequence):
+			tops = topology.getAll(group_info__group__in=group_filter)
+		else:
+			raise UserError(
+				code=None,
+				message="The topology list query filter is not supported",
+				data={"group_filter": repr(group_filter)})
 	else:
-		tops = topology.getAll(group_info__group=group)
+		tops = topology.getAll()
 	return [top.info(full) for top in tops]
+	# if group is None:
+	# 	tops = topology.getAll()
+	# else:
+	# 	tops = topology.getAll(group_info__group=group)
+	# return [top.info(full) for top in tops]
 
 
 def topology_set_permission(id, user, role): #@ReservedAssignment
@@ -262,6 +288,35 @@ def topology_add_group(id, group):
 def topology_remove_group(id, group):
 	top = _getTopology(id)
 	top.remove_group_info(group)
+
+def topology_list_by_sub_topology(group, full=False):
+	topos = topology.getBySubStopology(group)
+	return [topo.info(full) for topo in topos]
+
+def topology_get_sub_topologies(topo_id):
+	topo = _getTopology(topo_id)
+	return topo.get_sub_topologies()
+
+def topology_add_sub_topology(topo_id, name):
+	top = _getTopology(topo_id)
+	return top.add_sub_topology(name)
+
+def topology_remove_sub_topology(topo_id, name):
+	top = _getTopology(topo_id)
+	return top.remove_sub_topology(name)
+
+def sub_topology_get_groups(topo_id, sub_topo):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.get_groups()
+
+def sub_topology_add_group(topo_id, sub_topo, group):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.add_group(group)
+
+def sub_topology_remove_group(topo_id, sub_topo, group):
+	st = _getSubTopology(topo_id, sub_topo)
+	return st.remove_group(group)
+
 
 from .. import topology
 from ..lib.error import UserError

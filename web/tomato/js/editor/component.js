@@ -5,6 +5,7 @@ var Component = Class.extend({
 		this.editor = topology.editor;
 		this.setData(data);
 		this.canvas = canvas;
+		// this.canvas = data.sub_topology;
 
 		this.trafficWindow = new TrafficWindow({
 			autoOpen: false,

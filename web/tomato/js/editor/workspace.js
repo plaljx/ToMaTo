@@ -6,45 +6,55 @@ var Workspace = Class.extend({
 		container.addClass("tomato").addClass("workspace");
 		container[0].obj = editor.topology;
 		this.container.click(function(){});
-    	this.size = {x: this.container.width(), y: this.container.height()};
+		this.size = {x: this.container.width(), y: this.container.height()};
 
 
-    	this.subtopologyList = [];
-    	this.canvas_dict = {};
+		this.subtopologyInfoList = [];
+		// this.subtopologyList = [];
+		this.canvas_dict = {};
 
-    	var t = this;
+		var t = this;
 
-    	ajax({
-			url:'topology/'+ this.editor.options.topology + '/getsubtopology',
+		ajax({
+			// url:'topology/'+ this.editor.options.topology + '/getsubtopology',
+			url: 'topology/' + this.editor.options.topology + '/subtopology',
+			data: '',
 			synchronous: true,
 			successFn:function(result){
-				t.subtopologyList = result
-				for (var i = 0; i < t.subtopologyList.length; i++){
-    				t.canvas_dict[t.subtopologyList[i]] = Raphael(t.container[0], t.size.x, t.size.y);
-    				t.canvas_dict[t.subtopologyList[i]].canvas.id = t.subtopologyList[i]
-    				t.canvas_dict[t.subtopologyList[i]].workspace = t
-    				t.canvas_dict[t.subtopologyList[i]].connectPath = t.canvas_dict[t.subtopologyList[i]].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-    				t.editor.topology.subtopology_tabMenu(t.subtopologyList[i])
-    			}
-    			$('#workspace>svg').hide()
-    			$('#main').show()
+				t.subtopologyInfoList = result;
+				// for (var i = 0; i < t.subtopologyInfoList.length; i++) {
+				// 	t.subtopologyList.push(t.subtopologyInfoList[i].name);
+				// }
+				for (var i = 0; i < t.subtopologyInfoList.length; i++){
+					t.canvas_dict[t.subtopologyInfoList[i].id] = Raphael(t.container[0], t.size.x, t.size.y);
+					t.canvas_dict[t.subtopologyInfoList[i].id].canvas.id = t.subtopologyInfoList[i].id;
+					t.canvas_dict[t.subtopologyInfoList[i].id].workspace = t;
+					t.canvas_dict[t.subtopologyInfoList[i].id].connectPath = t.canvas_dict[t.subtopologyInfoList[i].id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+				}
+				for (var i = 0; i < t.subtopologyInfoList.length; i++) {
+					if (t.subtopologyInfoList[i].permitted)
+                        t.editor.topology.subtopology_tabMenu(t.subtopologyInfoList[i].name, t.subtopologyInfoList[i].id);
+				}
+				$('#workspace>svg').hide();
+				// $('#main').show()
+				$('#' + t.subtopologyInfoList[0].id).show();
 			},
 			errorFn:function(error){
 				new errorWindow({error:error});
 			}
 		});
 
-		var c = this.canvas_dict[t.subtopologyList[0]];
-    	var fs = t.editor.options.frame_size;
+		var c = this.canvas_dict[t.subtopologyInfoList[0].id];
+		var fs = t.editor.options.frame_size;
 		this.absPos = function(pos){
-    		return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
-    	};
-    	this.relPos = function(pos){
-    		return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
-    	};
+			return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+		};
+		this.relPos = function(pos){
+			return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
+		};
 
-    	//tutorial UI
-    	this.tutorialWindow = new TutorialWindow({ 
+		//tutorial UI
+		this.tutorialWindow = new TutorialWindow({
 			autoOpen: false, 
 			draggable: true,  
 			resizable: false, 
@@ -58,20 +68,20 @@ var Workspace = Class.extend({
 			hideCloseButton: true,
 			editor: this.editor
 		});
-    	
-    	this.permissionsWindow = new PermissionsWindow({
-    		autoOpen: false,
-    		draggable: true,
-    		resizable: false,
-    		title: "Permissions",
-    		modal: false,
-    		width: 500,
-    		topology: this.editor.topology,
-    		isGlobalOwner: this.editor.options.isGlobalOwner, //todo: set value depending on user permissions
-    		ownUserId: this.editor.options.user.id,
-    		permissions: this.editor.options.permission_list
-    	});
-    	this.groupWindow = new GroupWindow({
+
+		this.permissionsWindow = new PermissionsWindow({
+			autoOpen: false,
+			draggable: true,
+			resizable: false,
+			title: "Permissions",
+			modal: false,
+			width: 500,
+			topology: this.editor.topology,
+			isGlobalOwner: this.editor.options.isGlobalOwner, //todo: set value depending on user permissions
+			ownUserId: this.editor.options.user.id,
+			permissions: this.editor.options.permission_list
+		});
+		this.groupWindow = new GroupWindow({
 			autoOpen: false,
 			draggable: true,
 			resizable: false,
@@ -81,14 +91,14 @@ var Workspace = Class.extend({
 			topology: this.editor.topology,
 			ownUserId: this.editor.options.user.id
 		});
-    	var t = this;
+		var t = this;
 
-    	this.canvas = this.canvas_dict[t.subtopologyList[0]]
-    	this.editor.listeners.push(function(obj){
-    		t.tutorialWindow.triggerProgress(obj);
-    	});
+		this.canvas = this.canvas_dict[t.subtopologyInfoList[0].id];
+		this.editor.listeners.push(function(obj){
+			t.tutorialWindow.triggerProgress(obj);
+		});
 
-    	this.connectPath = this.canvas.connectPath
+		this.connectPath = this.canvas.connectPath
 		this.container.click(function(evt){
 			t.onClicked(evt);
 		});
@@ -100,38 +110,66 @@ var Workspace = Class.extend({
 
 
 	},
-	
+
+	/**
+	 * Send `add sub-topology` ajax request, and add the sub-topo entrance in the bottom tab if success
+	 * @param {string} canvasname - the name of the added sub topology
+	 */
 	addCanvas:function(canvasname){
 		var t = this;
-		this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
-
-		this.canvas_dict[canvasname].canvas.id = canvasname
-		this.canvas_dict[canvasname].workspace = this
-
-		this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-
-		$("#" + canvasname).hide()
+		// this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
+		// this.canvas_dict[canvasname].canvas.id = canvasname;
+		// this.canvas_dict[canvasname].workspace = this;
+		// this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+		// $("#" + canvasname).hide();
 		var data = {
-			'name': canvasname,
-		}
+			'name': canvasname
+		};
 		ajax({
-			url:'topology/'+ this.editor.topology.id + '/addsubtopology',
-			data:data,
-			successFn:function(){
+			url: 'topology/'+ this.editor.topology.id + '/subtopology/add',
+			data: data,
+			successFn: function(result){
+				t.canvas_dict[result.id] = Raphael(t.container[0], t.size.x, t.size.y);
+				t.canvas_dict[result.id].canvas.id = result.id;
+				t.canvas_dict[result.id].workspace = t;
+				t.canvas_dict[result.id].connectPath = t.canvas_dict[result.id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+				$("#" + result.id).hide();
+				t.editor.topology.subtopology_tabMenu(result.name, result.id);
 			},
-			errorFn:function(error){
+			errorFn: function(error){
 				new errorWindow({error:error});
 			}
 		})
 	},
 
-	tabCanvas:function(canvasname){
+	/**
+	 * Send `remove sub-topology` ajax request, and remove it from tab if success
+	 * @param {string} canvasname - the name of removed sub topology
+	 */
+	removeCanvas:function (canvasname) {
+		var t = this;
+		var data = {
+			'name': canvasname
+		};
+		ajax({
+			url: 'topology/' + this.editor.topology.id + '/subtopology/remove',
+			data: data,
+			successFn: function(result) {
+				// TODO: remove sub-topo entrance from bottom tab
+			},
+			errorFn: function (error) {
+				new errorWindow({error:error});
+			}
+		});
+	},
+
+	tabCanvas:function(canvasId){
 
 		var t = this;
-		this.canvas = this.canvas_dict[canvasname]
-    	this.connectPath = this.canvas.connectPath
-    	$('#workspace>svg').hide();
-    	$('#' + canvasname).show();
+		this.canvas = this.canvas_dict[canvasId];
+		this.connectPath = this.canvas.connectPath;
+		$('#workspace>svg').hide();
+		$('#' + canvasId).show();
 
 	},
 
@@ -174,7 +212,7 @@ var Workspace = Class.extend({
 		}
 	},
 	onOptionChanged: function(name) {
-    		this.tutorialWindow.updateText();
+			this.tutorialWindow.updateText();
 	},
 	onModeChanged: function(mode) {
 		for (var name in Mode) this.container.removeClass("mode_" + Mode[name]);

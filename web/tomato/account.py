@@ -336,13 +336,12 @@ def list_by_group(api, request, group=None, role=None):
 	group_list = api.group_list()
 	group = api.group_info(name=group)
 
-	return render(request, "account/list_by_group.html",
-	              {
-		              'accounts': account_list,
-		              'group': group,
-		              'role': role,
-		              'group_list': group_list
-	              })
+	return render(request, "account/list_by_group.html", {
+		'accounts': account_list,
+		'group': group,
+		'role': role,
+		'group_list': group_list
+	})
 
 @wrap_rpc
 def group_account_add(api, request, group=None):
@@ -387,12 +386,15 @@ def group_account_remove(api, request, user, group):
 			api.account_set_group_role(user, group, None)
 			return HttpResponseRedirect(reverse("group_accounts_all", kwargs={"group": group}))
 	else:
-		form = RemoveConfirmForm.build(reverse("tomato.account.group_account_remove",
-		                                       kwargs={"user": user, "group": group}))
-		return render(request, "form.html",
-		              {"heading": _("Remove Account from group"),
-		               "message_before": _("Are you sure to remove account %(user)s from group %(group)s?") % (user, group),
-		               'form': form})
+		form = RemoveConfirmForm.build(
+			reverse(
+				"tomato.account.group_account_remove",
+				kwargs={"user": user, "group": group}))
+		return render(
+			request, "form.html", {
+				"heading": _("Remove Account from group"),
+				"message_before": _("Are you sure to remove account %(user)s from group %(group)s?") % (user, group),
+				'form': form})
 
 @wrap_rpc
 def group_account_invite(api, request, group=None):
