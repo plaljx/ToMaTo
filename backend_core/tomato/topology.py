@@ -28,6 +28,7 @@ from .lib.service import get_backend_users_proxy
 from .lib.constants import StateName, ActionName
 from .lib.exceptionhandling import wrap_and_handle_current_exception
 from .lib.references import Reference
+from .lib.constants import TypeName
 
 
 class TimeoutStep:
@@ -196,8 +197,8 @@ class Topology(Entity, BaseDocument):
 		self.set_role(owner, Role.owner, skip_save=True)
 		self.timeout = time.time() + settings.get_topology_settings()[Config.TOPOLOGY_TIMEOUT_INITIAL]
 		self.timeoutStep = TimeoutStep.WARNED #not sending a warning for initial timeout
-		self.save()
 		self.name = "Topology [%s]" % self.idStr
+		self.update_or_save()
 		self.modify(**attrs)
 		self.add_sub_topology(SubTopology.get_default_name())
 
@@ -218,30 +219,59 @@ class Topology(Entity, BaseDocument):
 				self.clientData[key[1:]] = value
 
 	def action_prepare(self):
-		self._compoundAction(action="prepare", stateFilter=lambda state: state=="created", 
-							 typeOrder=["kvm","kvmqm", "openvz", "repy", "tinc_vpn", "udp_endpoint"],
-							 typesExclude=["kvm_interface", "kvmqm_interface", "openvz_interface", "repy_interface", "external_network", "external_network_endpoint", "fixed_bridge", "bridge"])
-	
+		self._compoundAction(action="prepare", stateFilter=lambda state: state=="created",
+							 typeOrder=[TypeName.FULL_VIRTUALIZATION,
+										TypeName.CONTAINER_VIRTUALIZATION,
+										TypeName.REPY,
+										TypeName.TINC_VPN,
+										TypeName.UDP_ENDPOINT],
+							 typesExclude=[TypeName.FULL_VIRTUALIZATION_INTERFACE,
+										   TypeName.CONTAINER_VIRTUALIZATION_INTERFACE,
+										   TypeName.REPY_INTERFACE,
+										   TypeName.EXTERNAL_NETWORK,
+										   TypeName.EXTERNAL_NETWORK_ENDPOINT,
+										   TypeName.FIXED_BRIDGE,
+										   TypeName.BRIDGE])
+
 	def action_destroy(self):
 		try:
 			self.action_stop()
 		except:
 			pass  # destroying may still work...
 		self._compoundAction(action="destroy", stateFilter=lambda state: state=="prepared",
-							 typeOrder=["tinc_vpn", "udp_endpoint", "kvm", "kvmqm", "openvz", "repy"],
-							 typesExclude=["kvm_interface", "kvmqm_interface", "openvz_interface", "repy_interface", "external_network", "external_network_endpoint", "fixed_bridge", "bridge"])
-	
+							 typeOrder=[TypeName.TINC_VPN,
+										TypeName.UDP_ENDPOINT,
+										TypeName.FULL_VIRTUALIZATION,
+										TypeName.CONTAINER_VIRTUALIZATION,
+										TypeName.REPY],
+							 typesExclude=[TypeName.FULL_VIRTUALIZATION_INTERFACE,
+										   TypeName.CONTAINER_VIRTUALIZATION_INTERFACE,
+										   TypeName.REPY_INTERFACE,
+										   TypeName.EXTERNAL_NETWORK,
+										   TypeName.EXTERNAL_NETWORK_ENDPOINT,
+										   TypeName.FIXED_BRIDGE,
+										   TypeName.BRIDGE])
+
 	def action_start(self):
 		self.action_prepare()
 		self._compoundAction(action="start", stateFilter=lambda state: state!="started",
-							 typeOrder=["tinc_vpn", "udp_endpoint", "external_network", "kvm", "kvmqm", "openvz", "repy"],
-							 typesExclude=["kvm_interface", "kvmqm_interface", "openvz_interface", "repy_interface"])
+							 typeOrder=[TypeName.TINC_VPN, TypeName.UDP_ENDPOINT,TypeName.EXTERNAL_NETWORK, TypeName.FULL_VIRTUALIZATION, TypeName.CONTAINER_VIRTUALIZATION, TypeName.REPY],
+							 typesExclude = [TypeName.FULL_VIRTUALIZATION_INTERFACE,
+											TypeName.CONTAINER_VIRTUALIZATION_INTERFACE,
+											TypeName.REPY_INTERFACE])
 		
 	
 	def action_stop(self):
-		self._compoundAction(action="stop", stateFilter=lambda state: state=="started", 
-							 typeOrder=["kvm", "kvmqm", "openvz", "repy", "tinc_vpn", "udp_endpoint", "external_network"],
-							 typesExclude=["kvm_interface", "kvmqm_interface", "openvz_interface", "repy_interface"])
+		self._compoundAction(action="stop", stateFilter=lambda state: state=="started",
+							 typeOrder=[TypeName.FULL_VIRTUALIZATION,
+										TypeName.CONTAINER_VIRTUALIZATION,
+										TypeName.REPY,
+										TypeName.TINC_VPN,
+										TypeName.UDP_ENDPOINT,
+										TypeName.EXTERNAL_NETWORK],
+							 typesExclude=[TypeName.FULL_VIRTUALIZATION_INTERFACE,
+										   TypeName.CONTAINER_VIRTUALIZATION_INTERFACE,
+										   TypeName.REPY_INTERFACE])
 
 	def action_renew(self, timeout):
 		topology_config = settings.get_topology_settings()
@@ -291,16 +321,16 @@ class Topology(Entity, BaseDocument):
 			else:
 				self.permissions.append(Permission(user=username, role=role))
 				if not skip_save:
-					self.save()
+					self.update_or_save(permissions=self.permissions)
 		else:
 			if role == Role.null:
 				self.permissions.remove(target_permission)
 				if not skip_save:
-					self.save()
+					self.update_or_save(permissions=self.permissions)
 			else:
 				target_permission.role = role
 				if not skip_save:
-					self.save()
+					self.update_or_save(permissions=self.permissions)
 
 
 	def user_has_role(self, username, role):
@@ -441,7 +471,7 @@ class Topology(Entity, BaseDocument):
 		"""
 		logging.logMessage("disown", category="topology", id=self.idStr, info=self.info())
 		self.permissions = []
-		self.save()
+		self.update_or_save(permissions=self.permissions)
 
 	def modify_site(self, val):
 		if val:
@@ -580,7 +610,7 @@ def timeout_task():
 			logging.logMessage("timeout warning", category="topology", id=top.idStr)
 			top.sendNotification(role=Role.owner, subject="Topology timeout warning: %s" % top, message="The topology %s will time out soon. This means that the topology will be first stopped and afterwards destroyed which will result in data loss. If you still want to use this topology, please log in and renew the topology." % top)
 			top.timeoutStep = TimeoutStep.WARNED
-			top.save()
+			top.update_or_save(timeoutStep=top.timeoutStep)
 		except:
 			wrap_and_handle_current_exception(re_raise=False)
 	for top in Topology.objects.filter(timeoutStep=TimeoutStep.WARNED, timeout__lte=now):
@@ -589,7 +619,7 @@ def timeout_task():
 			top.action_stop()
 			top.sendNotification(role=Role.owner, subject="Topology stopped: %s" % top, message="The topology %s has timed out and is now stopped. Your data is safe for now. The topology will be destroyed in the future, which may result in data loss. To stop this process, please log in and renew your topology, or download your data." % top)
 			top.timeoutStep = TimeoutStep.STOPPED
-			top.save()
+			top.update_or_save(timeoutStep=top.timeoutStep)
 		except:
 			wrap_and_handle_current_exception(re_raise=False)
 	for top in Topology.objects.filter(timeoutStep=TimeoutStep.STOPPED, timeout__lte=now-topology_config[Config.TOPOLOGY_TIMEOUT_DESTROY]):
@@ -597,7 +627,7 @@ def timeout_task():
 			logging.logMessage("timeout destroy", category="topology", id=top.idStr)
 			top.action_destroy()
 			top.timeoutStep = TimeoutStep.DESTROYED
-			top.save()
+			top.update_or_save(timeoutStep=top.timeoutStep)
 		except:
 			wrap_and_handle_current_exception(re_raise=False)
 	for top in Topology.objects.filter(timeoutStep=TimeoutStep.DESTROYED, timeout__lte=now-topology_config[Config.TOPOLOGY_TIMEOUT_REMOVE]):

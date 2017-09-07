@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# ToMaTo (Topology management software) 
+# ToMaTo (Topology management software)
 # Copyright (C) 2012 Integrated Communication Systems Lab, University of Kaiserslautern
 #
 # This file is part of the ToMaTo project
@@ -9,7 +9,7 @@
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,24 +25,26 @@ from django.core.urlresolvers import reverse
 
 from lib import wrap_rpc
 from admin_common import RemoveConfirmForm, BootstrapForm, Buttons
-from template import techs_dict, techs_choices
+from template import types_dict, types_choices
 
 from lib.error import UserError #@UnresolvedImport
+from lib.constants import TypeName
 
 from tomato.crispy_forms.layout import Layout
 
 from django.utils.translation import ugettext_lazy as _
 
 class ProfileForm(BootstrapForm):
-	label = forms.CharField(label=_("Label"), max_length=255, help_text=_("The displayed label for this profile"))
+	label = forms.CharField(label=_("Label"), help_text=_("The displayed label for this profile"))
 	ram = forms.IntegerField(label=_("RAM (MB)"))
 	preference = forms.IntegerField(label=_("Preference"), help_text=_("Sort profiles in the editor (higher preference first). The profile with highest preference will be the default. Must be an integer number."))
 	restricted = forms.BooleanField(label=_("Restricted"), help_text=_("Restrict usage of this profile to administrators"), required=False)
-	tech = forms.ChoiceField(label=_("Tech"),choices=techs_choices())
+	type = forms.ChoiceField(label=_("type"),choices=types_choices())
+
 	description = forms.CharField(widget = forms.Textarea, required=False)
 	def __init__(self, *args, **kwargs):
 		super(ProfileForm, self).__init__(*args, **kwargs)
-		
+
 class EditProfileForm(ProfileForm):
 	res_id = forms.CharField(max_length=50, widget=forms.HiddenInput)
 	def __init__(self, res_id, *args, **kwargs):
@@ -50,14 +52,14 @@ class EditProfileForm(ProfileForm):
 		self.helper.form_action = reverse(edit, kwargs={"res_id": res_id})
 
 
-class EditOpenVZForm(EditProfileForm):
+class EditContainerBasedForm(EditProfileForm):
 	cpus = forms.FloatField(label=_("number of CPUs"))
 	diskspace = forms.IntegerField(label=_("Disk Space (MB)"))
 	def __init__(self, res_id, *args, **kwargs):
-		super(EditOpenVZForm, self).__init__(res_id, *args, **kwargs)
+		super(EditContainerBasedForm, self).__init__(res_id, *args, **kwargs)
 		self.helper.layout = Layout(
 			'res_id',
-			'tech',
+			'type',
 			'label',
 			'cpus',
 			'diskspace',
@@ -74,7 +76,7 @@ class EditRePyForm(EditProfileForm):
 		super(EditRePyForm, self).__init__(res_id, *args, **kwargs)
 		self.helper.layout = Layout(
 			'res_id',
-			'tech',
+			'type',
 			'label',
 			'cpus',
 			'ram',
@@ -84,14 +86,14 @@ class EditRePyForm(EditProfileForm):
 			Buttons.cancel_save
 		)
 
-class EditKVMqmForm(EditProfileForm):
+class EditFULL_VIRTUALIZATIONForm(EditProfileForm):
 	diskspace = forms.IntegerField(label="Disk Space (MB)")
 	cpus = forms.FloatField(label = "number of CPUs")
 	def __init__(self, res_id, *args, **kwargs):
-		super(EditKVMqmForm, self).__init__(res_id, *args, **kwargs)
+		super(EditFULL_VIRTUALIZATIONForm, self).__init__(res_id, *args, **kwargs)
 		self.helper.layout = Layout(
 			'res_id',
-			'tech',
+			'type',
 			'label',
 			'diskspace',
 			'cpus',
@@ -101,17 +103,17 @@ class EditKVMqmForm(EditProfileForm):
 			'description',
 			Buttons.cancel_save
 		)
-	
-	
+
+
 class AddProfileForm(ProfileForm):
-	name = forms.CharField(max_length=50,label=_("Internal Name"), help_text=_("Must be unique for all profiles of the same tech. Cannot be changed. Not displayed."))
+	name = forms.CharField(max_length=50,label=_("Internal Name"), help_text=_("Must be unique for all profiles of the same type. Cannot be changed. Not displayed."))
 	diskspace = forms.IntegerField(label=_("Disk Space (MB)"), required = False, help_text=_("only OpenVZ and KVMqm"))
 	cpus = forms.FloatField(label=_("number of CPUs"), help_text=_("Repy, OpenVZ: float number; KVMqm: integer number"))
 	def __init__(self, *args, **kwargs):
 		super(AddProfileForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(add)
 		self.helper.layout = Layout(
-			'tech',
+			'type',
 			'name',
 			'label',
 			'diskspace',
@@ -124,11 +126,11 @@ class AddProfileForm(ProfileForm):
 		)
 
 @wrap_rpc
-def list(api, request, tech):
+def list(api, request, type):
 	profile_list = api.profile_list()
 	print profile_list
 	def _cmp(ta, tb):
-		c = cmp(ta["tech"], tb["tech"])
+		c = cmp(ta["type"], tb["type"])
 		if c:
 			return c
 		c = -cmp(ta["preference"], tb["preference"])
@@ -136,17 +138,17 @@ def list(api, request, tech):
 			return c
 		return cmp(ta["name"], tb["name"])
 	profile_list.sort(_cmp)
-	if tech:
-		profile_list = filter(lambda t: t["tech"] == tech, profile_list)
-	return render(request, "profile/list.html", {'profile_list': profile_list, 'tech': tech, 'techs_dict': techs_dict})
+	if type:
+		profile_list = filter(lambda t: t["type"] == type, profile_list)
+	return render(request, "profile/list.html", {'profile_list': profile_list, 'type': type, 'types_dict': types_dict})
 
 @wrap_rpc
 def info(api, request, res_id):
 	profile = api.profile_info(res_id)
-	return render(request, "profile/info.html", {"profile": profile, "techs_dict": techs_dict})
+	return render(request, "profile/info.html", {"profile": profile, "types_dict": types_dict})
 
 @wrap_rpc
-def add(api, request, tech=None):
+def add(api, request, type=None):
 	if request.method == 'POST':
 		form = AddProfileForm(request.POST)
 		if form.is_valid():
@@ -155,22 +157,22 @@ def add(api, request, tech=None):
 				 'label':formData['label'],
 				 'preference':formData['preference'],
 				 'description':formData['description']}
-			if formData.get('diskspace') and (formData['tech'] != 'repy'):
+			if formData.get('diskspace') and (formData['type'] != 'repy'):
 				data['diskspace'] = formData['diskspace']
 			if formData.get('cpus'):
-				data['cpus'] = formData['cpus'] 
+				data['cpus'] = formData['cpus']
 			if formData['restricted']:
 				data['restricted'] = formData['restricted']
 			else:
 				data['restricted'] = False
-			res = api.profile_create(formData['tech'], formData['name'], data)
+			res = api.profile_create(formData['type'], formData['name'], data)
 			return HttpResponseRedirect(reverse("tomato.profile.info", kwargs={"res_id": res["id"]}))
 		else:
 			return render(request, "form.html", {'form': form, "heading": _("Add Device Profile")})
 	else:
 		form = AddProfileForm()
-		if tech:
-			form.fields['tech'].initial = tech
+		if type:
+			form.fields['type'].initial = type
 		return render(request, "form.html", {'form': form, "heading": _("Add Device Profile")})
 
 @wrap_rpc
@@ -183,17 +185,17 @@ def remove(api, request, res_id=None):
 	form = RemoveConfirmForm.build(reverse("tomato.profile.remove", kwargs={"res_id": res_id}))
 	res = api.profile_info(res_id)
 	return render(request, "form.html", {"heading": _("Remove Device Profile"), "message_before": _("Are you sure you want to remove the device profile '")+res["name"]+"'?", 'form': form})
-	
+
 @wrap_rpc
 def edit(api, request, res_id=None):
 	if request.method=='POST':
-		tech = request.POST['tech']
-		if tech == 'repy':
+		type = request.POST['type']
+		if type == 'repy':
 			form = EditRePyForm(res_id, request.POST)
-		elif tech == 'openvz':
-			form = EditOpenVZForm(res_id, request.POST)
+		elif type == TypeName.CONTAINER_VIRTUALIZATION:
+			form = EditContainerBasedForm(res_id, request.POST)
 		else:
-			form = EditKVMqmForm(res_id, request.POST)
+			form = EditFULL_VIRTUALIZATIONForm(res_id, request.POST)
 		if form.is_valid():
 			formData = form.cleaned_data
 			data={'cpus':formData['cpus'],
@@ -201,13 +203,13 @@ def edit(api, request, res_id=None):
 				 'label':formData['label'],
 				 'preference':formData['preference'],
 				 'description':formData['description']}
-			if (formData['tech'] != 'repy'):
+			if (formData['type'] != 'repy'):
 				data['diskspace'] = formData['diskspace']
 			if formData['restricted']:
 				data['restricted'] = formData['restricted']
 			else:
 				data['restricted'] = False
-			
+
 			api.profile_modify(formData["res_id"],data)
 			return HttpResponseRedirect(reverse("tomato.profile.info", kwargs={"res_id": res_id}))
 		label = request.POST["label"]
@@ -218,10 +220,15 @@ def edit(api, request, res_id=None):
 		res_info = api.profile_info(res_id)
 		origData = res_info
 		origData['res_id'] = res_id
-		if origData['tech'] == 'repy':
+		if origData['type'] == 'repy':
 			form = EditRePyForm(res_id, origData)
-		elif origData['tech'] == 'openvz':
-			form = EditOpenVZForm(res_id, origData)
+		elif origData['type'] == TypeName.CONTAINER_VIRTUALIZATION:
+			form = EditContainerBasedForm(res_id, origData)
 		else:
-			form = EditKVMqmForm(res_id, origData)
-		return render(request, "form.html", {'form': form, "heading":_("Edit ")+res_info['tech']+_(" Device Profile '")+res_info['label']+"'"})
+<<<<<<< HEAD
+			form = EditFULL_VIRTUALIZATIONForm(res_id, origData)
+		return render(request, "form.html", {'form': form, "heading":_("Edit ")+res_info['type']+_(" Device Profile '")+res_info['label']+"'"})
+=======
+			form = EditFULL_VIRTUALIZATIONForm(res_id, origData)
+		return render(request, "form.html", {'form': form, "heading":"Edit "+res_info['type']+" Device Profile '"+res_info['label']+"'"})
+>>>>>>> glab/master

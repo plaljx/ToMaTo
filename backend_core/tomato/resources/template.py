@@ -22,6 +22,7 @@ from ..lib.error import UserError, InternalError #@UnresolvedImport
 from ..lib.newcmd import aria2
 from ..lib.newcmd.util import fs
 from ..lib.constants import TypeName
+from ..lib.repy_doc_reader import read_repy_doc
 from .. import scheduler
 import os, os.path, shutil, threading
 
@@ -41,12 +42,12 @@ PATTERNS = {
 	TypeName.REPY: "%s.repy",
 }
 
-class Template(Entity, BaseDocument):
+class Template(LockedEntity, BaseDocument):
 	"""
 	:type host_urls: list of str
 	"""
-	tech = StringField(required=True)
-	name = StringField(required=True, unique_with='tech')
+	type = StringField(required=True)
+	name = StringField(required=True, unique_with='type')
 	popularity = FloatField(default=0)
 	preference = IntField(default=0)
 	urls = ListField()
@@ -62,17 +63,24 @@ class Template(Entity, BaseDocument):
 	showAsCommon = BooleanField(db_field='show_as_common')
 	creationDate = FloatField(db_field='creation_date', required=False)
 	hosts = ListField(StringField())
+	args_doc = StringField(db_field="args_doc", default=None)
 	icon = StringField()
 
 	#add by None at 2016/12/28
 	customize = StringField(required = False)
 
 	meta = {
-		'ordering': ['tech', '+preference', 'name'],
+		'ordering': ['type', '+preference', 'name'],
 		'indexes': [
-			('tech', 'preference'), ('tech', 'name')
+			('type', 'preference'), ('type', 'name')
 		]
 	}
+
+
+	LOCKED_ACTIONS = True
+	LOCKED_INFO = False
+	LOCKED_REMOVE = True
+	LOCKED_MODIFY = True
 
 	@property
 	def elements(self):
@@ -84,8 +92,9 @@ class Template(Entity, BaseDocument):
 			return  # old hostmanager
 		if not self.checksum:
 			return
+
 		_, checksum = self.checksum.split(":")
-		url = ("http://%s:%d/" + PATTERNS[self.tech]) % (host.address, host.hostInfo["templateserver_port"], checksum)
+		url = ("http://%s:%d/" + PATTERNS[self.type]) % (host.address, host.hostInfo["templateserver_port"], checksum)
 		if url in self.host_urls:
 			self.host_urls.remove(url)
 		if host.name in self.hosts:
@@ -93,7 +102,7 @@ class Template(Entity, BaseDocument):
 		if ready:
 			self.hosts.append(host.name)
 			self.host_urls.append(url)
-		self.save()
+		self.update_or_save(host_urls=self.host_urls, hosts=self.hosts)
 
 	@property
 	def all_urls(self):
@@ -110,7 +119,7 @@ class Template(Entity, BaseDocument):
 		}
 
 	def remove(self, **kwargs):
-		if self.tech and os.path.exists(self.getPath()):
+		if self.type and os.path.exists(self.getPath()):
 			if os.path.isdir(self.getPath()):
 				shutil.rmtree(self.getPath())
 			else:
@@ -118,6 +127,7 @@ class Template(Entity, BaseDocument):
 		if self.id:
 			self.delete()
 
+<<<<<<< HEAD
 	ACTIONS = {
 		Entity.REMOVE_ACTION: Action(fn=remove)
 	}
@@ -152,9 +162,11 @@ class Template(Entity, BaseDocument):
 		)
 	}
 
+=======
+>>>>>>> glab/master
 	def info_for_hosts(self):
 		return {
-			"tech": self.tech,
+			"type": self.type,
 			"name": self.name,
 			"urls": self.urls,
 			"popularity": self.popularity,
@@ -164,7 +176,7 @@ class Template(Entity, BaseDocument):
 		}
 
 	def init(self, **attrs):
-		for attr in ["name", "tech", "urls"]:
+		for attr in ["name", "type", "urls"]:
 			UserError.check(attr in attrs, code=UserError.INVALID_CONFIGURATION, message="Template needs attribute",
 				data={"attribute": attr})
 		if 'kblang' in attrs:
@@ -172,16 +184,28 @@ class Template(Entity, BaseDocument):
 			del attrs['kblang']
 		else:
 			kblang=None
+
+		urls = attrs['urls']
+		del attrs['urls']
+
 		Entity.init(self, **attrs)
 		if kblang:
 			self.modify(kblang=kblang)
-		self.fetch(detached=True)
+		self.modify(urls=urls)
+
+	def _update_repy_doc(self):
+		self.args_doc = None
+		if self.type == TypeName.REPY:
+			self.args_doc = read_repy_doc(self.getPath())
+
 
 	def fetch(self, detached=False):
 		if not self.urls:
 			return
+
 		if detached:
 			return threading.Thread(target=self.fetch).start()
+
 		path = self.getPath()
 		aria2.download(self.urls, path)
 		self.size = fs.file_size(path)
@@ -190,18 +214,19 @@ class Template(Entity, BaseDocument):
 		if old_checksum != self.checksum:
 			self.host_urls = []
 			self.hosts = []
-		self.save()
+			self._update_repy_doc()
+		self.update_or_save()
 
 	def getPath(self):
-		return os.path.join(settings.get_template_dir(), PATTERNS[self.tech] % self.name)
+		return os.path.join(settings.get_template_dir(), PATTERNS[self.type] % self.name)
 	
 	def modify_kblang(self, val):
-		UserError.check(self.tech == TypeName.FULL_VIRTUALIZATION, UserError.UNSUPPORTED_ATTRIBUTE, "Unsupported attribute for %s template: kblang" % (self.tech), data={"tech":self.tech,"attr_name":"kblang","attr_val":val})
+		UserError.check(self.type == TypeName.FULL_VIRTUALIZATION, UserError.UNSUPPORTED_ATTRIBUTE, "Unsupported attribute for %s template: kblang" % (self.type), data={"type":self.type,"attr_name":"kblang","attr_val":val})
 		self.kblang = val
 
 	def modify_urls(self, val):
 		self.urls = val
-		self.fetch(detached=True)
+		self.fetch(True)
 
 	def isReady(self):
 		return not self.checksum is None
@@ -212,39 +237,75 @@ class Template(Entity, BaseDocument):
 
 	def on_selected(self):
 		self.popularity += 1
-		self.save()
+		self.update_or_save(popularity=self.popularity)
 
 	def update_popularity(self):
 		self.popularity = 0.9 * (self.popularity + self.elements.count())
-		self.save()
+		self.update_or_save(popularity=self.popularity)
 
 	@classmethod
-	def get(cls, tech, name):
+	def get(cls, type, name):
 		try:
-			return Template.objects.get(tech=tech, name=name)
+			return Template.objects.get(type=type, name=name)
 		except:
 			return None
 
 	@classmethod
-	def getPreferred(cls, tech):
-		tmpls = Template.objects.filter(tech=tech).order_by("-preference")
-		InternalError.check(tmpls, code=InternalError.CONFIGURATION_ERROR, message="No template for this type registered", data={"tech": tech})
+	def getPreferred(cls, type):
+		tmpls = Template.objects.filter(type=type).order_by("-preference")
+		InternalError.check(tmpls, code=InternalError.CONFIGURATION_ERROR, message="No template for this type registered", data={"type": type})
 		return tmpls[0]
 
 	@classmethod
 	def create(cls, **attrs):
-		tmpls = Template.objects.filter(name=attrs["name"], tech=attrs["tech"])
+		tmpls = Template.objects.filter(name=attrs["name"], type=attrs["type"])
 		UserError.check(not tmpls, code=UserError.ALREADY_EXISTS,
-						message="There exists already a template for this technology with a similar name",
-						data={"name": attrs["name"], "tech": attrs["tech"]})
+						message="There exists already a template for this technology_type with a similar name",
+						data={"name": attrs["name"], "type": attrs["type"]})
 		obj = cls()
 		try:
 			obj.init(**attrs)
-			obj.save()
 			return obj
 		except:
 			obj.remove()
 			raise
+
+	ACTIONS = {
+		Entity.REMOVE_ACTION: Action(fn=remove)
+	}
+	ATTRIBUTES = {
+		"id": IdAttribute(),
+		"type": Attribute(field=type, schema=schema.String(options=PATTERNS.keys())),
+		"name": Attribute(field=name, schema=schema.Identifier()),
+		"popularity": Attribute(field=popularity, readOnly=True, schema=schema.Number(minValue=0)),
+		"urls": Attribute(field=urls, schema=schema.List(items=schema.URL()),
+						  set=lambda obj, value: obj.modify_urls(value)),
+		"all_urls": Attribute(schema=schema.List(items=schema.URL()), readOnly=True, get=lambda obj: obj.all_urls),
+		"preference": Attribute(field=preference, schema=schema.Number(minValue=0)),
+		"label": Attribute(field=label, schema=schema.String()),
+		"description": Attribute(field=description, schema=schema.String()),
+		"restricted": Attribute(field=restricted, schema=schema.Bool()),
+		"subtype": Attribute(field=subtype, schema=schema.String()),
+		"kblang": Attribute(field=kblang, set=lambda obj, value: obj.modify_kblang(value),
+							schema=schema.String(options=kblang_options.keys())),
+		"nlXTP_installed": Attribute(field=nlXTPInstalled),
+		"show_as_common": Attribute(field=showAsCommon),
+		"creation_date": Attribute(field=creationDate, schema=schema.Number(null=True)),
+		"icon": Attribute(field=icon),
+		"size": Attribute(get=lambda obj: float(obj.size) if obj.size else obj.size, readOnly=True,
+						  schema=schema.Number()),
+		"checksum": Attribute(readOnly=True, field=checksum, schema=schema.String()),
+		"args_doc": Attribute(readOnly=True, field=args_doc),
+		"ready": Attribute(readOnly=True, get=getReadyInfo, schema=schema.StringMap(items={
+			'backend': schema.Bool(),
+			'hosts': schema.StringMap(items={
+				'ready': schema.Int(),
+				'total': schema.Int()
+			})
+		})
+						   )
+	}
+
 
 def update_popularity():
 	for t in Template.objects():

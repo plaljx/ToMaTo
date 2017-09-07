@@ -45,9 +45,10 @@ class VpnCloud(ConnectingElement, Element):
 		self.state = ST_CREATED
 		Element.init(self, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
-			self.name = self.TYPE + self.idStr
+			self.name=self.TYPE+self.idStr
+			self.update_or_save(name=self.name)
 		self.network_id = random.randint(0, 2**31)
-		self.save()
+		self.update_or_save(network_id=self.network_id)
 	
 	def onChildAdded(self, iface):
 		if self.state == ST_PREPARED: #self is correct
@@ -167,8 +168,8 @@ class VpnCloudEndpoint(ConnectingElement, Element):
 		self.state = ST_CREATED
 		Element.init(self, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
-			self.name = self.parent._nextName("port")
-		self.save()
+			self.name=self.parent._nextName("port")
+			self.update_or_save(name=self.name)
 	
 	@property
 	def mainElement(self):
@@ -188,7 +189,7 @@ class VpnCloudEndpoint(ConnectingElement, Element):
 				if self.element:
 					self.element.remove()
 				self.element = None
-			self.save()
+				self.update_or_save(element=self.element)
 
 	def action_prepare(self):
 		hPref, sPref = self.getLocationPrefs()
@@ -197,7 +198,7 @@ class VpnCloudEndpoint(ConnectingElement, Element):
 		attrs = self._remoteAttrs
 		attrs.update(network_id=self.parent.network_id)
 		self.element = _host.createElement(self.remoteType, parent=None, attrs=attrs, ownerElement=self)
-		self.save()
+		self.update_or_save(element=self.element)
 		self.setState(ST_PREPARED, True)
 		
 	def action_destroy(self):

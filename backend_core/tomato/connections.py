@@ -94,7 +94,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	CUSTOM_ATTRS = {}
 	
 	DEFAULT_ATTRS = {"emulation": True, "bandwidth_to": 10000, "bandwidth_from": 10000}
-	
+
 	DOC=""
 
 	# noinspection PyMethodOverriding
@@ -137,7 +137,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 	@property
 	def _remoteAttrs(self):
 		caps = Host.getConnectionCapabilities(self.remoteType)
-		allowed = caps["attributes"].keys() if caps else []
+		allowed = (a for a, v in caps["attributes"].iteritems() if not v.get("read_only", False)) if caps else []
 		attrs = {}
 		for key, value in self.directData.iteritems():
 			if key in allowed:
@@ -173,6 +173,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 		self.topology.checkTimeout()
 
 	def checkUnknownAction(self, action, params=None):
+
 		if action in [ActionName.PREPARE, ActionName.START, ActionName.UPLOAD_GRANT, ActionName.REXTFV_UPLOAD_GRANT]:
 			self.checkTopologyTimeout()
 		UserError.check(self.DIRECT_ACTIONS and not action in self.DIRECT_ACTIONS_EXCLUDE,
@@ -181,7 +182,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 		if not action in self.mainConnection.getAllowedActions():
 			self.mainConnection.updateInfo()
 			self.state = self.mainConnection.state
-			self.save()
+			self.update_or_save(state=self.state)
 		UserError.check(action in self.mainConnection.getAllowedActions(),
 			code=UserError.UNSUPPORTED_ACTION, message="Unsupported action")
 		return True
@@ -238,25 +239,27 @@ class Connection(LockedStatefulEntity, BaseDocument):
 			except:  # try to rollback changes
 				try:
 					self.elementTo.connection = self
-					self.elementTo.save()
+					self.elementTo.update_or_save(connection=self)
 					self.elementFrom.connection = self
-					self.elementFrom.save()
+					self.elementFrom.update_or_save(connection=self)
 					if connTo:
-						connTo.save()
+						connTo.update_or_save()
 					if connFrom:
-						connFrom.save()
-					self.save()
+						connFrom.update_or_save()
+					self.update_or_save()
 				except:
 					wrap_and_handle_current_exception(re_raise=False)
 				raise
 
 	def setState(self, state):
 		self.state = state
-		self.save()
+		self.update_or_save(state=self.state)
 
 	@property
 	def hostElements(self):
-		return filter(bool, [self.connectionElementFrom, self.connectionElementTo])
+		elementFrom = [v for v in self.elementFrom.hostElements]
+		elementTo = [v for v in self.elementFrom.hostElements]
+		return filter(bool, elementFrom+elementTo)
 
 	@property
 	def hostConnections(self):
@@ -294,6 +297,7 @@ class Connection(LockedStatefulEntity, BaseDocument):
 			self.connectionFrom = el1.connectWith(el2, attrs={}, ownerConnection=self)
 			if self.connectionFrom.state == ST_CREATED:
 				self.connectionFrom.action(ActionName.START)
+			self.update_or_save(connectionFrom=self.connectionFrom)
 		else:
 			# complex case: helper elements needed to connect elements on different hosts
 			self.connectionElementFrom = el1.host.createElement("udp_tunnel", ownerConnection=self)
@@ -304,17 +308,23 @@ class Connection(LockedStatefulEntity, BaseDocument):
 			self.connectionTo = el2.connectWith(self.connectionElementTo, attrs={}, ownerConnection=self)
 			if "emulation" in self.connectionTo.getAllowedAttributes():
 				self.connectionTo.modify(emulation=False)
-			self.save()
 			self.connectionElementFrom.action(ActionName.START)
 			self.connectionElementTo.action(ActionName.START)
 			if self.connectionFrom.state == ST_CREATED:
 				self.connectionFrom.action(ActionName.START)
 			if self.connectionTo.state == ST_CREATED:
 				self.connectionTo.action(ActionName.START)
+			self.update_or_save(connectionTo=self.connectionTo, connectionFrom=self.connectionFrom,
+							 connectionElementTo=self.connectionElementTo, connectionElementFrom=self.connectionElementFrom)
 		# Find out and set allowed attributes
 		allowed = self.connectionFrom.getAllowedAttributes()
 		attrs = dict(filter(lambda (k, v): k in allowed, self._remoteAttrs.items()))
+
+
 		self.connectionFrom.modify(**attrs)
+
+
+
 		# Unset all disallowed attributes
 		for key in self._remoteAttrs.keys():
 			if not key in allowed:
@@ -327,25 +337,25 @@ class Connection(LockedStatefulEntity, BaseDocument):
 				self.connectionFrom.action(ActionName.STOP)
 			self.connectionFrom.remove()
 			self.connectionFrom = None
-			self.save()
+			self.update_or_save(connectionFrom=self.connectionFrom)
 		if self.connectionTo:
 			if self.connectionTo.state == ST_STARTED:
 				self.connectionTo.action(ActionName.STOP)
 			self.connectionTo.remove()
 			self.connectionTo = None
-			self.save()
+			self.update_or_save(connectionTo=self.connectionTo)
 		if self.connectionElementFrom:
 			if self.connectionElementFrom.state == ST_STARTED:
 				self.connectionElementFrom.action(ActionName.STOP)
 			self.connectionElementFrom.remove()
 			self.connectionElementFrom = None
-			self.save()
+			self.update_or_save(connectionElementFrom=self.connectionElementFrom)
 		if self.connectionElementTo:
 			if self.connectionElementTo.state == ST_STARTED:
 				self.connectionElementTo.action(ActionName.STOP)
 			self.connectionElementTo.remove()
 			self.connectionElementTo = None
-			self.save()
+			self.update_or_save(connectionElementTo=self.connectionElementTo)
 		self.setState(ST_CREATED)
 
 	def triggerStart(self):
@@ -549,22 +559,21 @@ class Connection(LockedStatefulEntity, BaseDocument):
 		if not attrs: attrs = {}
 		UserError.check(el1 != el2, code=UserError.INVALID_CONFIGURATION, message="Cannot connect element with itself")
 		UserError.check(not el1.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
-			data={"element": el1.id})
+			data={"element": str(el1.id)})
 		UserError.check(not el2.connection, code=UserError.ALREADY_CONNECTED, message="Element is already connected",
-			data={"element": el2.id})
+			data={"element": str(el2.id)})
 		UserError.check(el1.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
-			data={"element": el1.id})
+			data={"element": str(el1.id)})
 		UserError.check(el2.CAP_CONNECTABLE, code=UserError.INVALID_VALUE, message="Element can not be connected",
-			data={"element": el2.id})
+			data={"element": str(el2.id)})
 		UserError.check(el1.topology == el2.topology, code=UserError.INVALID_VALUE,
 			message="Can only connect elements from same topology")
 		con = cls()
 		con.init(el1.topology, el1, el2, **attrs)
-		con.save()
 		el1.connection = con
-		el1.save()
+		el1.update_or_save(connection=el1.connection)
 		el2.connection = con
-		el2.save()
+		el2.update_or_save(connection=el2.connection)
 		con.triggerStart()
 		logging.logMessage("create", category="connection", id=con.idStr)
 		logging.logMessage("info", category="connection", id=con.idStr, info=con.info())

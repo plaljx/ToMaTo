@@ -42,8 +42,8 @@ class UDPEndpoint(Element):
 		self.state = ST_CREATED
 		elements.Element.init(self, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
-			self.name = self.TYPE + str(self.id)
-		self.save()
+			self.name=self.TYPE+str(self.id)
+			self.update_or_save(name=self.name)
 	
 	@property
 	def mainElement(self):
@@ -68,7 +68,7 @@ class UDPEndpoint(Element):
 				for iface in self.children:
 					iface._remove()
 				self.element = None
-			self.save()
+				self.update_or_save(element=self.element)
 
 	def action_prepare(self):
 		_host = host.select(elementTypeConfigurations=[[self.HOST_TYPE]])
@@ -78,7 +78,7 @@ class UDPEndpoint(Element):
 			"connect": self.connect,
 		})
 		self.element = _host.createElement(self.remoteType, parent=None, attrs=attrs, ownerElement=self)
-		self.save()
+		self.update_or_save(element=self.element)
 		self.setState(ST_PREPARED, True)
 		
 	def action_destroy(self):

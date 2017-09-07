@@ -14,8 +14,8 @@
 <div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
   	<span class="glyphicon glyphicon-filter"></span>
-    {% if tech %}
-      {%trans 'Showing all device profiles of tech'%} '{{tech}}'
+    {% if type %}
+      {%trans 'Showing all device profiles of type'%} '{{type}}'
     {% else %}
       {%trans 'Showing all device profiles'%}
     {% endif %}
@@ -24,8 +24,8 @@
   <ul class="dropdown-menu" role="menu">
     <li><a href="{% url "profile_list" %}">{%trans 'Show all device profiles'%}</a></li>
     <li class="divider"></li>
-    {% for name, label in techs_dict.iteritems %}
-      <li><a href="{% url "profile_list_bytech" tech=name %}">{%trans 'Show all device profiles of tech'%} '{{label}}'</a></li>    
+    {% for name, label in types_dict.iteritems %}
+      <li><a href="{% url "profile_list_bytype" type=name %}">{%trans 'Show all device profiles of type'%} '{{label}}'</a></li>    
     {% endfor %}
   </ul>
 </div>
@@ -35,8 +35,8 @@
 {% if profile_list|length > 10 and request.session.user.isGlobalHostManager %}
 <form>
   <button type="submit" 
-  {% if tech %}
-  	formaction="{%url "profile.add" tech%}"
+  {% if type %}
+  	formaction="{%url "profile.add" type%}"
   {%else%}
   	formaction="{%url "profile.add"%}"
   {%endif%}
@@ -49,7 +49,7 @@
 	
 	<table class="sortable,filterable table table-striped">
 	  <tr>
-		<th class="icononly">{%trans 'Tech'%}</th>
+		<th class="icononly">{%trans 'type'%}</th>
 		<th>{%trans 'Name'%}</th>
 		<th>{%trans 'Label'%}</th>
 		<th>{%trans 'Disk Space'%}</th>
@@ -60,13 +60,13 @@
 	  </tr>
 	{% for profile in profile_list %}
 	  <tr>
-	  	<td enhancetable_customkey="{{profile.tech}}" align="right" class="icononly">
-	  		<img src="/img/{{profile.tech}}16.png" title="{{techs_dict|get:profile.tech}}" />
+	  	<td enhancetable_customkey="{{profile.type}}" align="right" class="icononly">
+	  		<img src="/img/{{profile.type}}16.png" title="{{types_dict|get:profile.type}}" />
 		</td>
 	    <td><a href="{%url "profile.info" profile.id%}">{{profile.name}}</a></td>
 	    <td>{{profile.label}}</td>
 		<td>
-			{% if profile.tech != 'repy' %}
+			{% if profile.type != 'repy' %}
 				{{profile.diskspace}} MB
 			{% endif %}
 		</td>
@@ -109,8 +109,8 @@
 {% if request.session.user.isGlobalHostManager or request.session.user.isGlobalAdmin  %}
 <form>
   <button type="submit" 
-  {% if tech %}
-  	formaction="{%url "profile.add" tech%}"
+  {% if type %}
+  	formaction="{%url "profile.add" type%}"
   {%else%}
   	formaction="{%url "profile.add"%}"
   {%endif%}

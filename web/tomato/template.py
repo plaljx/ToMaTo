@@ -7,7 +7,7 @@
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,12 +32,12 @@ from lib.error import UserError #@UnresolvedImport
 
 from django.utils.translation import ugettext_lazy as _
 
-techs = [{"name": t, "label": TypeName.ONSCREEN.get(t, t)} for t in [TypeName.FULL_VIRTUALIZATION, TypeName.CONTAINER_VIRTUALIZATION, TypeName.REPY]]
+types = [{"name": t, "label": TypeName.ONSCREEN.get(t, t)} for t in [TypeName.FULL_VIRTUALIZATION, TypeName.CONTAINER_VIRTUALIZATION, TypeName.REPY]]
 
-techs_dict = dict([(t["name"], t["label"]) for t in techs])
+types_dict = dict([(t["name"], t["label"]) for t in types])
 
-def techs_choices():
-	tlist = [(t["name"], t["label"]) for t in techs]
+def types_choices():
+	tlist = [(t["name"], t["label"]) for t in types]
 	return append_empty_choice(tlist)
 
 kblang_options = [
@@ -72,10 +72,10 @@ class TemplateForm(BootstrapForm):
 		super(TemplateForm, self).__init__(*args, **kwargs)
 		self.fields['creation_date'].initial=datetime.date.today()
 		self.fields['kblang'].initial="en_US"
-	
+
 class AddTemplateForm(TemplateForm):
 	name = forms.CharField(max_length=50, label=_("Internal Name"), help_text=_("Must be unique for all profiles. Cannot be changed. Not displayed."))
-	tech = forms.CharField(max_length=255, label=_("Tech"), widget = forms.widgets.Select(choices=techs_choices()))
+	type = forms.CharField(max_length=255, label=_("Type"), widget = forms.widgets.Select(choices=types_choices()))
 	def __init__(self, *args, **kwargs):
 		super(AddTemplateForm, self).__init__(*args, **kwargs)
 		self.helper.form_action = reverse(add)
@@ -84,7 +84,7 @@ class AddTemplateForm(TemplateForm):
             'label',
             'subtype',
             'description',
-            'tech',
+            'type',
             'preference',
             'show_as_common',
             'restricted',
@@ -100,10 +100,10 @@ class AddTemplateForm(TemplateForm):
 		valid = super(AddTemplateForm, self).is_valid()
 		if not valid:
 			return valid
-		if self.cleaned_data['tech'] == TypeName.FULL_VIRTUALIZATION:
+		if self.cleaned_data['type'] == TypeName.FULL_VIRTUALIZATION:
 			valid = (self.cleaned_data['kblang'] is not None)
 		return valid
-	
+
 class EditTemplateForm(TemplateForm):
 	res_id = forms.CharField(max_length=50, widget=forms.HiddenInput)
 	def __init__(self, res_id, showKblang=False, *args, **kwargs):
@@ -143,12 +143,12 @@ class EditTemplateForm(TemplateForm):
 				'urls',
 				Buttons.cancel_save
 	        )
-	
+
 @wrap_rpc
-def list(api, request, tech):
+def list(api, request, type):
 	templ_list = api.template_list()
 	def _cmp(a, b):
-		c = cmp(a["tech"], b["tech"])
+		c = cmp(a["type"], b["type"])
 		if c:
 			return c
 		c = -cmp(a["preference"], b["preference"])
@@ -156,17 +156,17 @@ def list(api, request, tech):
 			return c
 		return cmp(a["name"], b["name"])
 	templ_list.sort(_cmp)
-	if tech:
-		templ_list = filter(lambda t: t["tech"] == tech, templ_list)
-	return render(request, "templates/list.html", {'templ_list': templ_list, "tech": tech, "techs_dict": techs_dict})
+	if type:
+		templ_list = filter(lambda t: t["type"] == type, templ_list)
+	return render(request, "templates/list.html", {'templ_list': templ_list, "type": type, "types_dict": types_dict})
 
 @wrap_rpc
 def info(api, request, res_id):
 	template = api.template_info(res_id)
-	return render(request, "templates/info.html", {"template": template, "techs_dict": techs_dict})
+	return render(request, "templates/info.html", {"template": template, "types_dict": types_dict})
 
 @wrap_rpc
-def add(api, request, tech=None):
+def add(api, request, type=None):
 	if request.method == 'POST':
 		form = AddTemplateForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -181,19 +181,31 @@ def add(api, request, tech=None):
 						'creation_date':dateToTimestamp(creation_date) if creation_date else None,
 						'icon':formData['icon'],
 						'show_as_common':formData['show_as_common'],
+<<<<<<< HEAD
 						'urls': filter(lambda x: x, formData['urls'].splitlines()),
-						'customize': formData['customize']}
-			if formData['tech'] == TypeName.FULL_VIRTUALIZATION:
+						'customize': formData['customize']
+					}
+			if formData['type'] == TypeName.FULL_VIRTUALIZATION:
+=======
+						'urls': filter(lambda x: x, formData['urls'].splitlines())}
+			if formData['type'] == TypeName.FULL_VIRTUALIZATION:
+>>>>>>> glab/master
 				attrs['kblang'] = formData['kblang']
-			res = api.template_create(formData['tech'], formData['name'], attrs)
+			res = api.template_create(formData['type'], formData['name'], attrs)
 			return HttpResponseRedirect(reverse("tomato.template.info", kwargs={"res_id": res["id"]}))
 		else:
 			return render(request, "form.html", {'form': form, "heading":_("Add Template")})
 	else:
 		form = AddTemplateForm()
+<<<<<<< HEAD
 		if tech:
 			form.fields['tech'].initial = tech
 		return render(request, "form.html", {'form': form, "heading":_("Add Template"), 'hide_errors':True})
+=======
+		if type:
+			form.fields['type'].initial = type
+		return render(request, "form.html", {'form': form, "heading":"Add Template", 'hide_errors':True})
+>>>>>>> glab/master
 
 @wrap_rpc
 def remove(api, request, res_id=None):
@@ -210,7 +222,7 @@ def remove(api, request, res_id=None):
 def edit(api, request, res_id=None):
 	res_inf = api.template_info(res_id)
 	if request.method=='POST':
-		form = EditTemplateForm(res_id, res_inf['tech']== TypeName.FULL_VIRTUALIZATION, request.POST)
+		form = EditTemplateForm(res_id, res_inf['type']== TypeName.FULL_VIRTUALIZATION, request.POST)
 		if form.is_valid():
 			formData = form.cleaned_data
 			creation_date = formData['creation_date']
@@ -225,17 +237,22 @@ def edit(api, request, res_id=None):
 						'show_as_common':formData['show_as_common'],
 						'customize':formData['customize'],
 						'urls': filter(lambda x: x, formData['urls'].splitlines())}
-			if res_inf['tech'] == TypeName.FULL_VIRTUALIZATION:
+			if res_inf['type'] == TypeName.FULL_VIRTUALIZATION:
 				attrs['kblang'] = formData['kblang']
 			api.template_modify(res_id,attrs)
 			return HttpResponseRedirect(reverse("tomato.template.info", kwargs={"res_id": res_id}))
 		label = request.POST["label"]
 		UserError.check(label, UserError.INVALID_DATA, "Form transmission failed.")
-		return render(request, "form.html", {'label': label, 'form': form, "heading":"Edit Template Data for '"+label+"' ("+res_inf['tech']+")"})
+		return render(request, "form.html", {'label': label, 'form': form, "heading":"Edit Template Data for '"+label+"' ("+res_inf['type']+")"})
 	else:
 		UserError.check(res_id, UserError.INVALID_DATA, "No resource specified.")
 		res_inf['res_id'] = res_id
 		res_inf['creation_date'] = datetime.date.fromtimestamp(float(res_inf['creation_date'] or "0.0"))
 		res_inf['urls'] = "\n".join(res_inf['urls'])
+<<<<<<< HEAD
 		form = EditTemplateForm(res_id, (res_inf['tech']==TypeName.FULL_VIRTUALIZATION), res_inf)
 	return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['tech']+")"})
+=======
+		form = EditTemplateForm(res_id, (res_inf['type']==TypeName.FULL_VIRTUALIZATION), res_inf)
+		return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['type']+")"})
+>>>>>>> glab/master

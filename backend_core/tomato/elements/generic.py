@@ -28,6 +28,7 @@ import time
 from ..lib.constants import StateName, ActionName, TypeTechTrans
 from ..lib.references import Reference
 
+
 ST_CREATED = StateName.CREATED
 ST_PREPARED = StateName.PREPARED
 ST_STARTED = StateName.STARTED
@@ -56,13 +57,12 @@ class VMElement(Element):
 	PROFILE_ATTRS = []
 	
 	#for every subclass which supports RexTFV: create a process which calls this function on every VMElement with  0 != next_sync < time.time()
-	def updateInfo(self): 
-		if self.element is None:
-			return
+	def updateInfo(self):
+		#Todo: Check if lastSync should be set to 0 in order to avoid unnaccessary updates
 		try:
 			self.element.updateInfo()
 		except:
-			pass
+			return
 		
 		self.lastSync = time.time()
 		
@@ -72,12 +72,12 @@ class VMElement(Element):
 			self.nextSync = int(time.time()) + (time_passed / 24)
 		else: # more than one day:
 			self.nextSync = 0 #the process which syncs everything every hour is still active. do nothing more.
-		self.save()
+		self.update_or_save(element=self.element, nextSync=self.nextSync, lastSync=self.lastSync)
 		
 	def set_rextfv_last_started(self):
 		self.rextfvLastStarted = int(time.time())
 		self.nextSync = int(time.time()) + 1 #make sure sync process will be triggered.
-		self.save()
+		self.update_or_save(rextfvLastStarted=self.rextfvLastStarted, nextSync=self.nextSync)
 	
 	def init(self, topology, *args, **kwargs):
 		self.state = ST_CREATED
@@ -91,14 +91,14 @@ class VMElement(Element):
 		elements.Element.init(self, topology, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
 			self.name = self.TYPE + str(self.id)
-		self.save()
 		self.rextfvLastStarted = 0
 		self.nextSync = 0
+		self.update_or_save(name=self.name, rextfvLastStarted=self.rextfvLastStarted, nextSync=self.nextSync)
 
 	@property
 	def mainElement(self):
 		return self.element
-	
+
 	def _nextIfaceName(self):
 		ifaces = self.children
 		num = 0
@@ -163,7 +163,7 @@ class VMElement(Element):
 				for iface in self.children:
 					iface._remove()
 				self.element = None
-			self.save()
+			self.update_or_save(element=self.element)
 			
 	def action_change_template(self, template):
 		self.modify_template(template)
@@ -190,12 +190,12 @@ class VMElement(Element):
 		})
 		attrs.update(self._profileAttrs)
 		self.element = _host.createElement(type_, parent=None, attrs=attrs, ownerElement=self)
-		self.save()
+		self.update_or_save(element=self.element)
 		for iface in self.children:
 			iface._create()
 		self.element.action(ActionName.PREPARE)
 		self.setState(ST_PREPARED, True)
-		
+
 	def action_destroy(self):
 		if isinstance(self.element, HostElement):
 			try:
@@ -210,9 +210,12 @@ class VMElement(Element):
 			for iface in self.children:
 				iface.triggerConnectionStop()
 				iface._remove()
-			self.element.remove()
+
+			hostElement = self.element
 			self.element = None
+			hostElement.remove()
 			self.customTemplate = False
+			self.update_or_save(element=self.element, customTemplate=self.customTemplate)
 		self.setState(ST_CREATED, True)
 		
 	def action_stop(self):
@@ -238,7 +241,7 @@ class VMElement(Element):
 
 	def after_upload_use(self):
 		self.customTemplate = True
-		self.save()
+		self.update_or_save(customTemplate=self.customTemplate)
 
 	ATTRIBUTES = Element.ATTRIBUTES.copy()
 	ATTRIBUTES.update({
@@ -253,7 +256,7 @@ class VMElement(Element):
 	ACTIONS = Element.ACTIONS.copy()
 	ACTIONS.update({
 		Entity.REMOVE_ACTION: StatefulAction(Element._remove, check=Element.checkRemove, allowedStates=[ST_CREATED]),
-		ActionName.START: StatefulAction(action_start, allowedStates=[ST_CREATED, ST_PREPARED], stateChange=ST_STARTED),
+		ActionName.START: StatefulAction(action_start, after=after_start, allowedStates=[ST_CREATED, ST_PREPARED], stateChange=ST_STARTED),
 		ActionName.STOP: StatefulAction(action_stop, allowedStates=[ST_STARTED], stateChange=ST_PREPARED),
 		ActionName.PREPARE: StatefulAction(action_prepare, check=Element.checkTopologyTimeout, allowedStates=[ST_CREATED], stateChange=ST_PREPARED),
 		ActionName.DESTROY: StatefulAction(action_destroy, allowedStates=[ST_PREPARED, ST_STARTED], stateChange=ST_CREATED),
@@ -266,14 +269,16 @@ class MultiTechVMElement(VMElement):
 	tech = StringField(required=False, default=None)
 
 	def modify_tech(self, tech):
-		if tech is not None:
+		if tech:
 			UserError.check(tech in self.TECHS, UserError.INVALID_VALUE, "tech '%s' not supported for type '%s'" % (tech, self.TYPE), data={"tech": tech, "type": self.TYPE})
-		self.tech = tech
+			self.tech = tech
+		else:
+			self.tech = None
 
 	def _get_elementTypeConfigurations(self):
 		if self.tech:
 			return [[self.tech, TypeTechTrans.TECH_TO_CHILD_TECH[self.tech]]]
-		return [[k, v] for k, v in TypeTechTrans.TECH_TO_CHILD_TECH.iteritems()]
+		return [[k, v] for k, v in TypeTechTrans.TECH_TO_CHILD_TECH.iteritems() if k in self.TECHS]
 
 	def get_tech_attribute(self):
 		return self.element.type if self.element else self.tech
@@ -290,7 +295,7 @@ class MultiTechVMElement(VMElement):
 
 	ATTRIBUTES = VMElement.ATTRIBUTES.copy()
 	ATTRIBUTES.update({
-		"tech": StatefulAttribute(get=lambda self: self.get_tech_attribute(), label="Tech", set=modify_tech, writableStates=[ST_CREATED], schema=schema.Identifier())
+		"tech": StatefulAttribute(get=lambda self: self.get_tech_attribute(), label="Tech", set=modify_tech, writableStates=[ST_CREATED])
 	})
 
 class VMInterface(Element):
@@ -312,6 +317,7 @@ class VMInterface(Element):
 		elements.Element.init(self, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
 			self.name = self.parent._nextIfaceName()
+			self.update_or_save(name=self.name)
 
 	@property
 	def mainElement(self):
@@ -326,13 +332,14 @@ class VMInterface(Element):
 		assert parEl
 		attrs = self._remoteAttrs
 		self.element = parEl.createChild(self._create_type, attrs=attrs, ownerElement=self)
-		self.save()
+		self.update_or_save(element=self.element)
 		
 	def _remove(self, recurse=None):
 		if isinstance(self.element, HostElement):
-			self.element.remove()
+			hostElement = self.element
 			self.element = None
-			self.save()
+			hostElement.remove()
+			self.update_or_save(element=self.element)
 
 	@property
 	def readyToConnect(self):

@@ -46,7 +46,7 @@ class ExternalNetwork(Element):
 		Element.init(self, *args, **kwargs)
 		if not self.name:
 			self.name = self.TYPE + str(self.id)
-		self.save()
+			self.update_or_save(name=self.name)
 
 	def check_kind(self, val):
 		network = Network.get(val)
@@ -124,7 +124,7 @@ class ExternalNetworkEndpoint(Element, ConnectingElement):
 		elements.Element.init(self, *args, **kwargs) #no id and no attrs before this line
 		if not self.name:
 			self.name = self.parent._nextName("port")
-		self.save()
+			self.update_or_save(name=self.name)
 
 	@property
 	def mainElement(self):
@@ -143,7 +143,7 @@ class ExternalNetworkEndpoint(Element, ConnectingElement):
 				for iface in self.children:
 					iface._remove()
 				self.element = None
-			self.save()
+			self.update_or_save(element=self.element)
 
 	def action_start(self):
 		hPref, sPref = self.getLocationPrefs()

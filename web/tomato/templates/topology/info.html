@@ -12,7 +12,6 @@
 <link type="text/css" href="/style/pretty-json.css" rel="stylesheet" />
 <link type="text/css" href="style/button.css" rel = "stylesheet">
 
-
 <script language="JavaScript" type="text/javascript" src="js/jquery-ui.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/ui.ribbon.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/jquery.contextMenu.js"></script>
@@ -35,7 +34,8 @@
 <script language="JavaScript" type="text/javascript" src="js/editor/form_elements/template_element.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/editor/form_elements/textarea_element.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/editor/form_elements/text_element.js"></script>
-	
+<script language="JavaScript" type="text/javascript" src="js/editor/form_elements/command_text_element.js"></script>
+
 <script language="JavaScript" type="text/javascript" src="js/editor/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/editor/menus/menu_group.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/editor/menus/menu_tab.js"></script>
@@ -130,7 +130,8 @@
 	</div>
 </div>
 
-<script language="JavaScript" type="text/javascript"> 
+<script language="JavaScript" type="text/javascript">
+
 	$(window).resize(function() {
 		var margin = ( $(this).width() > 1600 ) ? "{{editor.size.marginleft}}px" : "0px"
 	
@@ -159,6 +160,7 @@
 		{% else %}
 			tutorial_show:false,
 		{% endif %}
+
 		timeout_settings: {{timeout_settings|jsonify}},
 		sites: {{sites_json|safe}},
 		resources: {{res_json|safe}},
