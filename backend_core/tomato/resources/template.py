@@ -253,6 +253,7 @@ class Template(LockedEntity, BaseDocument):
 							schema=schema.String(options=kblang_options.keys())),
 		"nlXTP_installed": Attribute(field=nlXTPInstalled),
 		"show_as_common": Attribute(field=showAsCommon),
+		"customize": Attribute(field=customize),
 		"creation_date": Attribute(field=creationDate, schema=schema.Number(null=True)),
 		"icon": Attribute(field=icon),
 		"size": Attribute(get=lambda obj: float(obj.size) if obj.size else obj.size, readOnly=True,
