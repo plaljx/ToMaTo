@@ -225,10 +225,5 @@ def edit(api, request, res_id=None):
 		elif origData['type'] == TypeName.CONTAINER_VIRTUALIZATION:
 			form = EditContainerBasedForm(res_id, origData)
 		else:
-<<<<<<< HEAD
 			form = EditFULL_VIRTUALIZATIONForm(res_id, origData)
 		return render(request, "form.html", {'form': form, "heading":_("Edit ")+res_info['type']+_(" Device Profile '")+res_info['label']+"'"})
-=======
-			form = EditFULL_VIRTUALIZATIONForm(res_id, origData)
-		return render(request, "form.html", {'form': form, "heading":"Edit "+res_info['type']+" Device Profile '"+res_info['label']+"'"})
->>>>>>> glab/master

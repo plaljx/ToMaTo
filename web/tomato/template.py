@@ -181,15 +181,10 @@ def add(api, request, type=None):
 						'creation_date':dateToTimestamp(creation_date) if creation_date else None,
 						'icon':formData['icon'],
 						'show_as_common':formData['show_as_common'],
-<<<<<<< HEAD
 						'urls': filter(lambda x: x, formData['urls'].splitlines()),
 						'customize': formData['customize']
 					}
 			if formData['type'] == TypeName.FULL_VIRTUALIZATION:
-=======
-						'urls': filter(lambda x: x, formData['urls'].splitlines())}
-			if formData['type'] == TypeName.FULL_VIRTUALIZATION:
->>>>>>> glab/master
 				attrs['kblang'] = formData['kblang']
 			res = api.template_create(formData['type'], formData['name'], attrs)
 			return HttpResponseRedirect(reverse("tomato.template.info", kwargs={"res_id": res["id"]}))
@@ -197,15 +192,9 @@ def add(api, request, type=None):
 			return render(request, "form.html", {'form': form, "heading":_("Add Template")})
 	else:
 		form = AddTemplateForm()
-<<<<<<< HEAD
-		if tech:
-			form.fields['tech'].initial = tech
-		return render(request, "form.html", {'form': form, "heading":_("Add Template"), 'hide_errors':True})
-=======
 		if type:
 			form.fields['type'].initial = type
-		return render(request, "form.html", {'form': form, "heading":"Add Template", 'hide_errors':True})
->>>>>>> glab/master
+		return render(request, "form.html", {'form': form, "heading":_("Add Template"), 'hide_errors':True})
 
 @wrap_rpc
 def remove(api, request, res_id=None):
@@ -249,10 +238,6 @@ def edit(api, request, res_id=None):
 		res_inf['res_id'] = res_id
 		res_inf['creation_date'] = datetime.date.fromtimestamp(float(res_inf['creation_date'] or "0.0"))
 		res_inf['urls'] = "\n".join(res_inf['urls'])
-<<<<<<< HEAD
-		form = EditTemplateForm(res_id, (res_inf['tech']==TypeName.FULL_VIRTUALIZATION), res_inf)
-	return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['tech']+")"})
-=======
 		form = EditTemplateForm(res_id, (res_inf['type']==TypeName.FULL_VIRTUALIZATION), res_inf)
 		return render(request, "form.html", {'label': res_inf['label'], 'form': form, "heading":"Edit Template Data for '"+str(res_inf['label'])+"' ("+res_inf['type']+")"})
->>>>>>> glab/master
+

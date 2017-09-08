@@ -71,6 +71,7 @@ class SubTopology(Entity, BaseDocument):
 	@property
 	def elements(self):
 		# return elements.Element.objects(subTopology=self)
+		return None
 
 	@property
 	def connections(self):

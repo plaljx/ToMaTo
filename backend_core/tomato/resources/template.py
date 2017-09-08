@@ -127,43 +127,6 @@ class Template(LockedEntity, BaseDocument):
 		if self.id:
 			self.delete()
 
-<<<<<<< HEAD
-	ACTIONS = {
-		Entity.REMOVE_ACTION: Action(fn=remove)
-	}
-	ATTRIBUTES = {
-		"id": IdAttribute(),
-		"tech": Attribute(field=tech, schema=schema.String(options=PATTERNS.keys())),
-		"name": Attribute(field=name, schema=schema.Identifier()),
-		"popularity": Attribute(field=popularity, readOnly=True, schema=schema.Number(minValue=0)),
-		"urls": Attribute(field=urls, schema=schema.List(items=schema.URL()), set=lambda obj, value: obj.modify_urls(value)),
-		"all_urls": Attribute(schema=schema.List(items=schema.URL()), readOnly=True, get=lambda obj: obj.all_urls),
-		"preference": Attribute(field=preference, schema=schema.Number(minValue=0)),
-		"label": Attribute(field=label, schema=schema.String()),
-		"description": Attribute(field=description, schema=schema.String()),
-		"restricted": Attribute(field=restricted, schema=schema.Bool()),
-		"subtype": Attribute(field=subtype, schema=schema.String()),
-		"kblang": Attribute(field=kblang, set=lambda obj, value: obj.modify_kblang(value),
-			schema=schema.String(options=kblang_options.keys())),
-		"nlXTP_installed": Attribute(field=nlXTPInstalled),
-		"show_as_common": Attribute(field=showAsCommon),
-		"customize": Attribute(field=customize),
-		"creation_date": Attribute(field=creationDate, schema=schema.Number(null=True)),
-		"icon": Attribute(field=icon),
-		"size": Attribute(get=lambda obj: float(obj.size) if obj.size else obj.size, readOnly=True, schema=schema.Number()),
-		"checksum": Attribute(readOnly=True, field=checksum, schema=schema.String()),
-		"ready": Attribute(readOnly=True, get=getReadyInfo, schema=schema.StringMap(items={
-				'backend': schema.Bool(),
-				'hosts': schema.StringMap(items={
-					'ready': schema.Int(),
-					'total': schema.Int()
-				})
-			})
-		)
-	}
-
-=======
->>>>>>> glab/master
 	def info_for_hosts(self):
 		return {
 			"type": self.type,
