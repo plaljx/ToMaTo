@@ -449,9 +449,11 @@ class Host(Entity, BaseDocument):
 		logging.logMessage("accounting_sync begin", category="host", name=self.name)
 		try:
 			orig_data = self.getProxy().accounting_statistics(type="single", after=self.accountingTimestamp)
+			print "orig_data:" + orig_data +"\n"
 			data = {"elements": {}, "connections": {}}
 			max_timestamp = self.accountingTimestamp
 
+			print self.elements.all()
 			# check for completeness
 			for el in self.elements.all():
 				if not str(el.num) in orig_data["elements"]:
