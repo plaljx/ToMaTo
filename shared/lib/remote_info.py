@@ -232,6 +232,7 @@ class UsageObj(object):
 	def get_usage(self, hide_no_such_record_error=False):
 		if self._usage is None or time.time()-self._usage_timestamp > 60:
 			try:
+				print "\n" + self._class_name + " " +  self._id + "\n"
 				self._usage = get_backend_accounting_proxy().get_record(self._class_name, self._id)
 			except UserError as e:
 				if hide_no_such_record_error:

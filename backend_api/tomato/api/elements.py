@@ -302,6 +302,7 @@ def element_usage(id): #@ReservedAssignment
 	  :doc:`/docs/accountingdata`.
 	"""
 	elem = get_element_info(id)
+	print elem
 	getCurrentUserInfo().check_may_view_element(elem)
 	print  elem.get_usage(hide_no_such_record_error=False)
 	return elem.get_usage(hide_no_such_record_error=True)
