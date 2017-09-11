@@ -546,7 +546,7 @@ var Editor = Class.extend({
 		}));
 
 
-		var group = tab.addGroup(gettext("Management");
+		var group = tab.addGroup(gettext("Management"));
 
 		group.addElement(Menu.button({  // by Chang Rui
 			label: gettext("Save As Scenario"),
