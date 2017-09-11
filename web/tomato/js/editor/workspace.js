@@ -6,6 +6,70 @@ var Workspace = Class.extend({
 		container.addClass("tomato").addClass("workspace");
 		container[0].obj = editor.topology;
 		this.container.click(function(){});
+    	this.size = {x: this.container.width(), y: this.container.height()};
+    	this.canvas = Raphael(this.container[0], this.size.x, this.size.y);
+    	var c = this.canvas;
+		var fs = this.editor.options.frame_size;
+    	this.canvas.absPos = function(pos) {
+    		return {x: fs + pos.x * (c.width-2*fs), y: fs + pos.y * (c.height-2*fs)};
+    	}
+    	this.canvas.relPos = function(pos) {
+    		return {x: (pos.x - fs) / (c.width-2*fs), y: (pos.y - fs) / (c.height-2*fs)};
+    	}
+    	
+    	//tutorial UI
+    	this.tutorialWindow = new TutorialWindow({ 
+			autoOpen: false, 
+			draggable: true,  
+			resizable: false, 
+			title: ".", 
+			modal: false, 
+			buttons: {},
+			width:500,
+			closeOnEscape: false,
+			tutorialVisible:this.editor.options.tutorial_show,
+			tutorial_state:this.editor.options.tutorial_state,
+			hideCloseButton: true,
+			editor: this.editor
+		});
+    	
+    	this.permissionsWindow = new PermissionsWindow({
+    		autoOpen: false,
+    		draggable: true,
+    		resizable: false,
+    		title: "Permissions",
+    		modal: false,
+    		width: 500,
+    		topology: this.editor.topology,
+    		isGlobalOwner: this.editor.options.isGlobalOwner, //todo: set value depending on user permissions
+    		ownUserId: this.editor.options.user.id,
+    		permissions: this.editor.options.permission_list
+    	});
+    	
+    	var t = this;
+    	this.editor.listeners.push(function(obj){
+    		t.tutorialWindow.triggerProgress(obj);
+    	});
+    	
+    	
+		this.connectPath = this.canvas.path("M0 0L0 0").attr({"stroke-dasharray": "- "});
+		this.container.click(function(evt){
+			t.onClicked(evt);
+		});
+		this.container.mousemove(function(evt){
+			t.onMouseMove(evt);
+		});
+		this.busyIcon = this.canvas.image("img/loading_big.gif", this.size.x/2, this.size.y/2, 32, 32);
+		this.busyIcon.attr({opacity: 0.0});
+	},
+	// With old SubTopology
+	_old_init: function(container, editor) {
+		this.container = container;
+		this.editor = editor;
+		container.addClass("ui-widget-content").addClass("ui-corner-all")
+		container.addClass("tomato").addClass("workspace");
+		container[0].obj = editor.topology;
+		this.container.click(function(){});
 		this.size = {x: this.container.width(), y: this.container.height()};
 
 
@@ -110,74 +174,12 @@ var Workspace = Class.extend({
 
 
 	},
-
-	/**
-	 * Send `add sub-topology` ajax request, and add the sub-topo entrance in the bottom tab if success
-	 * @param {string} canvasname - the name of the added sub topology
-	 */
-	addCanvas:function(canvasname){
-		var t = this;
-		// this.canvas_dict[canvasname] = Raphael(this.container[0], this.size.x, this.size.y);
-		// this.canvas_dict[canvasname].canvas.id = canvasname;
-		// this.canvas_dict[canvasname].workspace = this;
-		// this.canvas_dict[canvasname].connectPath = this.canvas_dict[canvasname].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-		// $("#" + canvasname).hide();
-		var data = {
-			'name': canvasname
-		};
-		ajax({
-			url: 'topology/'+ this.editor.topology.id + '/subtopology/add',
-			data: data,
-			successFn: function(result){
-				t.canvas_dict[result.id] = Raphael(t.container[0], t.size.x, t.size.y);
-				t.canvas_dict[result.id].canvas.id = result.id;
-				t.canvas_dict[result.id].workspace = t;
-				t.canvas_dict[result.id].connectPath = t.canvas_dict[result.id].path("M0 0L0 0").attr({"stroke-dasharray": "- "});
-				$("#" + result.id).hide();
-				t.editor.topology.subtopology_tabMenu(result.name, result.id);
-			},
-			errorFn: function(error){
-				new errorWindow({error:error});
-			}
-		})
-	},
-
-	/**
-	 * Send `remove sub-topology` ajax request, and remove it from tab if success
-	 * @param {string} canvasname - the name of removed sub topology
-	 */
-	removeCanvas:function (canvasname) {
-		var t = this;
-		var data = {
-			'name': canvasname
-		};
-		ajax({
-			url: 'topology/' + this.editor.topology.id + '/subtopology/remove',
-			data: data,
-			successFn: function(result) {
-				// TODO: remove sub-topo entrance from bottom tab
-			},
-			errorFn: function (error) {
-				new errorWindow({error:error});
-			}
-		});
-	},
-
-	tabCanvas:function(canvasId){
-
-		var t = this;
-		this.canvas = this.canvas_dict[canvasId];
-		this.connectPath = this.canvas.connectPath;
-		$('#workspace>svg').hide();
-		$('#' + canvasId).show();
-
-	},
-
-	hideCanvas:function(){
-		$('#workspace>svg').hide()
-	},
-
-
+	
+	// SubTopology old
+	// addCanvas(canvasName): send ajax request and add tab in bottom sub-menu
+	// removeCanvas(canvasName): send ajax request
+	// tabCanvas(canvasName): change canvas ?
+	// hideCanvas(canvasName): hide canvas
 
 	setBusy: function(busy) {
 		this.busyIcon.attr({opacity: busy ? 1.0 : 0.0});
@@ -198,12 +200,10 @@ var Workspace = Class.extend({
 		switch (this.editor.mode) {
 			case Mode.position:
 				var pos;
-				if (evt.offsetX) {
-					pos = this.relPos({x: evt.offsetX, y: evt.offsetY});
-				}
+				if (evt.offsetX) pos = this.canvas.relPos({x: evt.offsetX, y: evt.offsetY});
 				else {
 					var objPos = this.container.offset();
-					pos = this.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
+					pos = this.canvas.relPos({x: evt.pageX - objPos.left, y: evt.pageY - objPos.top});
 				}
 				this.editor.positionElement(pos);
 				break;
@@ -212,7 +212,7 @@ var Workspace = Class.extend({
 		}
 	},
 	onOptionChanged: function(name) {
-			this.tutorialWindow.updateText();
+    		this.tutorialWindow.updateText();
 	},
 	onModeChanged: function(mode) {
 		for (var name in Mode) this.container.removeClass("mode_" + Mode[name]);

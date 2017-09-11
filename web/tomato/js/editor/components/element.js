@@ -24,9 +24,7 @@ var Element = Component.extend({
 		return (!this.editor.options.fixed_pos) && this.editor.mode == Mode.select;
 	},
 	isConnectable: function() {
-		if (this.connection) {
-			return false;
-		}
+		if (this.connection) return false;
 		if (! this.caps.children) return false;
 		for (var ch in this.caps.children)
 			if (this.caps.children[ch].indexOf(this.data.state) >= 0)
@@ -152,7 +150,9 @@ var Element = Component.extend({
 	},
 	getPos: function() {
 		if (! this.data._pos) {
-			this.data._pos = {x: Math.random(), y: Math.random(), canvas:this.editor.workspace.canvas.canvas.id};
+			this.data._pos = {x: Math.random(), y: Math.random()};
+			// SubTopology old
+			// this.data._pos = {x: Math.random(), y: Math.random(), canvas:this.editor.workspace.canvas.canvas.id};
 			this.modify_value("_pos", this.data._pos);
 		}
 		return this.data._pos;
@@ -171,11 +171,15 @@ var Element = Component.extend({
 		}
 	},
 	getAbsPos: function() {
-		return this.canvas.workspace.absPos(this.getPos());
+		return this.canvas.absPos(this.getPos());
+		// SubTopology old
+		// return this.canvas.workspace.absPos(this.getPos());
 	},
 	setAbsPos: function(pos) {
 		var grid = this.editor.options.grid_size;
 		if (this.editor.options.snap_to_grid) pos = {x: Math.round(pos.x/grid)*grid, y: Math.round(pos.y/grid)*grid};
+		this.setPos(this.canvas.relPos(pos));
+		// SubTopology old
 		this.setPos(this.canvas.workspace.relPos(pos));
 	},
 	openConsole: function() {
@@ -273,6 +277,8 @@ var Element = Component.extend({
 				iframe.off("load");
 				iframe.load(function(){
 					iframe.remove();
+					// ??
+					// this.info.remove();
 					this.info = null;	
 					el.action(use_action);
 					$('#upload_from').remove();

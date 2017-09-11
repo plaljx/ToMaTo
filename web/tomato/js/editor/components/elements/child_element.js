@@ -18,9 +18,6 @@ var ChildElement = Element.extend({
 		return this._super() && !this.busy;
 	},
 	paint: function() {
-		console.log(this.parent)
-		console.log(this)
-		// console.log(this.connetcion)
 		var pos = this.getHandlePos();
 		this.circle = this.canvas.circle(pos.x, pos.y, settings.childElementRadius).attr({fill: "#CDCDB3"});
 		$(this.circle.node).attr("class", "tomato element");

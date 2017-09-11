@@ -9,12 +9,12 @@ var Component = Class.extend({
 
 		this.trafficWindow = new TrafficWindow({
 			autoOpen: false,
-    		draggable: true,
-    		resizable: false,
-    		title:"Traffics",
-    		compoent:this,
-    		modal: false,
-    		width: 500
+			draggable: true,
+			resizable: false,
+			title:"Traffics",
+			compoent:this,
+			modal: false,
+			width: 500
 		});
 	},	
 	paint: function() {
@@ -213,11 +213,11 @@ var Component = Class.extend({
 	},
 	modify_value: function(name, value) {
 		var attrs = {};
-		//fiexd the element's postion's modify for subtopology
 		attrs[name] = value;
-		if(name == "_pos"){
-			attrs[name].canvas = this.editor.workspace.canvas.canvas.id;
-		}
+		// SubTopology old
+		// 	if(name == "_pos"){
+		//		attrs[name].canvas = this.editor.workspace.canvas.canvas.id;
+		//	}
 		this.modify(attrs);
 	},
 	action: function(action, options) {
@@ -277,9 +277,4 @@ var Component = Class.extend({
 		//this.trafficWindow.createTrafficList();
 		//this.trafficWindow.show();
 	},
-
-	//topgroup
-	// showLinkToTopgroup:function(){
-
-	// },
 });

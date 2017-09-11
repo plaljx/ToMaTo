@@ -65,6 +65,22 @@ var Connection = Component.extend({
 		}
 	},
 	paint: function() {
+		this.path = this.canvas.path(this.getPath());
+		this.path.toBack();
+		var pos = this.getAbsPos();
+		var width = settings.connectionHandleWidth;
+		this.handle = this.canvas.rect(pos.x-(width/2), pos.y-(width/2), width, width).attr({fill: this.getHandleColor(), transform: "R"+this.getAngle()});
+		$(this.handle.node).attr("class", "tomato connection");
+		this.handle.node.obj = this;
+		var t = this;
+		$(this.handle.node).click(function() {
+			t.onClicked();
+		})
+		this.paintUpdate();
+		for (var i=0; i<this.elements.length; i++) this.elements[i].paintUpdate();
+	},
+	// SubTopology old
+	_old_paint: function(){
 		if(this.elements[0].canvas != this.elements[1].canvas){
 			this.path = this.canvas.path(this.getPath());
 			this.path.toBack();
@@ -219,7 +235,7 @@ var Connection = Component.extend({
 	},
 	remove: function(callback, ask) {
 		if (this.busy) return;
-		if (ask && this.editor.options.safe_mode && ! confirm(gettext("Do you want to delete this connection?"))) return;
+		if (ask && this.editor.options.safe_mode && ! confirm(gettext("Do you want to delete this connection?"))) return;		
 		this.setBusy(true);
 		this.triggerEvent({operation: "remove", phase: "begin"});
 		var t = this;

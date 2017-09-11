@@ -5,65 +5,51 @@ var Topology = Class.extend({
 		this.connections = {};
 		this.pendingNames = [];
 	},
-	_getCanvas: function(canvas_id) {
-		// this.editor.workspace.tabCanvas(canvasname)
-		if(canvas_id){
+	_getCanvas: function() {
+		// SubTopology old, canvas_id
+		/*
+		if(canvas_id)
 			return this.editor.workspace.canvas_dict[canvas_id];
-		}else{
-			return this.editor.workspace.canvas;
-		}
-
+		*/
+		return this.editor.workspace.canvas;
 	},
-	/*
-	TODO: May remove the `canvas` parameter, use sub topo id from data `el`
-	 */
 	loadElement: function(el) {
 		var elObj;
 		switch (el.type) {
 			case "full":
 			case "container":
 			case "repy":
-				// elObj = new VMElement(this, el, this._getCanvas(el._pos['canvas']));
-				elObj = new VMElement(this, el, this._getCanvas(el.sub_topology));
+				elObj = new VMElement(this, el, this._getCanvas());
 				break;
-			
 			case "full_interface":
 			case "repy_interface":
-				// elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
-				elObj = new VMInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology));
+				elObj = new VMInterfaceElement(this, el, this._getCanvas());
 				break;
 			case "container_interface":
-				// elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas']));
-				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology));
+				elObj = new VMConfigurableInterfaceElement(this, el, this._getCanvas());
 				break;
 			case "external_network":
-				// elObj = new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
-				elObj = new ExternalNetworkElement(this, el, this._getCanvas(el.sub_topology));
+				elObj = new ExternalNetworkElement(this, el, this._getCanvas());
 				break;
 			case "external_network_endpoint":
 				//hide external network endpoints with external_network parent but show endpoints without parent
-				// elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos["canvas"])) : new ExternalNetworkElement(this, el, this._getCanvas(el._pos["canvas"]));
-                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new ExternalNetworkElement(this, el, this._getCanvas(el.sub_topology));
-                break;
-            case "tinc_vpn":
-                // elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
-                elObj = new VPNElement(this, el, this._getCanvas(el.sub_topology));
-                break;
-            case "tinc_endpoint":
-                //hide tinc endpoints with tinc_vpn parent but show endpoints without parent
-                // elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
-                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new VPNElement(this, el, this._getCanvas(el.sub_topology)) ;
-                break;
-            case "vpncloud":
-                // elObj = new VPNElement(this, el, this._getCanvas(el._pos["canvas"]));
-                elObj = new VPNElement(this, el, this._getCanvas(el.sub_topology));
-                break;
-            case "vpncloud_endpoint":
-                //hide vpncloud endpoints with vpcloud parent but show endpoints without parent
-                // elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data._pos['canvas'])) : new VPNElement(this, el, this._getCanvas(el._pos["canvas"])) ;
-                elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas(this.elements[el.parent].data.sub_topology)) : new VPNElement(this, el, this._getCanvas(el.sub_topology)) ;
-                break;
-            default:
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new ExternalNetworkElement(this, el, this._getCanvas()) ;
+				break;
+			case "tinc_vpn":
+				elObj = new VPNElement(this, el, this._getCanvas());
+				break;
+			case "tinc_endpoint":
+				//hide tinc endpoints with tinc_vpn parent but show endpoints without parent
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new VPNElement(this, el, this._getCanvas()) ;
+				break;
+			case "vpncloud":
+				elObj = new VPNElement(this, el, this._getCanvas());
+				break;
+			case "vpncloud_endpoint":
+				//hide vpncloud endpoints with vpcloud parent but show endpoints without parent
+				elObj = el.parent ? new SwitchPortElement(this, el, this._getCanvas()) : new VPNElement(this, el, this._getCanvas()) ;
+				break;
+			default:
 				elObj = new UnknownElement(this, el, this._getCanvas());
 				break;
 		}
@@ -77,14 +63,16 @@ var Topology = Class.extend({
 		return elObj;
 	},
 	loadConnection: function(con, elements) {
-		// var conObj = new Connection(this, con, this._getCanvas());
-		var tmp_canvas;
+		var conObj = new Connection(this, con, this._getCanvas());
+		// SubTopology old
+		/*
 		if(con.elements){
 			tmp_canvas = this.elements[con.elements[0]].canvas;
 		}else{
 			tmp_canvas = elements[0].canvas;
 		}
 		var conObj = new Connection(this, con, tmp_canvas);
+		*/
 		if (con.id) this.connections[con.id] = conObj;
 		if (con.elements) { //elements are given by id
 			for (var j=0; j<con.elements.length; j++) {
@@ -114,7 +102,6 @@ var Topology = Class.extend({
 
 		this.onUpdate();
 	},
-	
 	setBusy: function(busy) {
 		this.busy = busy;
 	},
@@ -158,7 +145,7 @@ var Topology = Class.extend({
 				}
 			}
 		});
-		this.configWindow.add(new TextElement({
+        this.configWindow.add(new TextElement({
 				label: gettext("Name"),
 				name: "name",
 				value: this.data.name,
@@ -181,18 +168,18 @@ var Topology = Class.extend({
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/modify',
-			data: attrs,
-			successFn: function(result) {
+		 	data: attrs,
+		 	successFn: function(result) {
 				t.editor.triggerEvent({component: "topology", object: this, operation: "modify", phase: "end", attrs: attrs});
-			},
-			errorFn: function(error) {
-				new errorWindow({error:error});
+		 	},
+		 	errorFn: function(error) {
+		 		new errorWindow({error:error});
 				t.editor.triggerEvent({component: "topology", object: this, operation: "modify", phase: "error", attrs: attrs});
-			}
+		 	}
 		});
 		for (var name in attrs) {
-			this.data[name] = attrs[name];
-			if (name == "name") editor.workspace.updateTopologyTitle();
+		    this.data[name] = attrs[name];
+    		if (name == "name") editor.workspace.updateTopologyTitle();
 		}
 	},
 	action: function(action, options) {
@@ -202,16 +189,16 @@ var Topology = Class.extend({
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/action',
-			data: {action: action, params: params},
-			successFn: function(result) {
-				var data = result[1];
-				t.data = data;
+		 	data: {action: action, params: params},
+		 	successFn: function(result) {
+		 		var data = result[1];
+		 		t.data = data;
 				t.editor.triggerEvent({component: "topology", object: this, operation: "action", phase: "end", action: action, params: params});
-			},
-			errorFn: function(error) {
-				new errorWindow({error:error});
+		 	},
+		 	errorFn: function(error) {
+		 		new errorWindow({error:error});
 				t.editor.triggerEvent({component: "topology", object: this, operation: "action", phase: "error", action: action, params: params});
-			}
+		 	}
 		});
 	},
 	modify_value: function(name, value) {
@@ -277,12 +264,7 @@ var Topology = Class.extend({
 		obj.setBusy(true);
 		this.pendingNames.push(data.name);
 
-		// if(!data._pos['canvas'] && !data.parent){
-		// 	console.log("no canvas");
-		// 	data._pos['canvas'] = this.workspace.canvas.canvas.id;
-		// }
 		var t = this;
-		console.log(data)
 		ajax({
 			url: "topology/" + this.id + "/create_element",
 			data: data,
@@ -297,7 +279,7 @@ var Topology = Class.extend({
 				t.onUpdate();
 			},
 			errorFn: function(error) {
-				new errorWindow({error:error});
+		 		new errorWindow({error:error});
 				obj.paintRemove();
 				t.pendingNames.remove(data.name);
 				t.editor.triggerEvent({component: "element", object: obj, operation: "create", phase: "error", attrs: data});
@@ -309,27 +291,19 @@ var Topology = Class.extend({
 		if (el1 == el2) return;
 		if (! el1.isConnectable()) return;
 		if (! el2.isConnectable()) return;
-		console.log(data);
 		var ids = 0;
 		var t = this;
 		var obj;
 		var callback = function(ready) {
-			console.log("callback")
-			console.log(ready)
 			ids++;
 			if (ids < 2) return;
 			t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "begin", attrs: data});
 			data.elements = [el1.id, el2.id];
-			// data.canvas = this.editor.workspace.canvas.canvas.id;
-			console.log(el1)
-			// data.canvas = el1.
-			console.log(data)
 			ajax({
 				url: "connection/create",
 				data: data,
 				successFn: function(data) {
 					t.connections[data.id] = obj;
-					console.log(obj)
 					obj.updateData(data);
 					t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "end", attrs: data});
 					t.onUpdate();
@@ -337,13 +311,12 @@ var Topology = Class.extend({
 					el2.onConnected();
 				},
 				errorFn: function(error) {
-					new errorWindow({error:error});
+			 		new errorWindow({error:error});
 					obj.paintRemove();
 					t.editor.triggerEvent({component: "connection", object: obj, operation: "create", phase: "error", attrs: data});
 				}
 			});
 		};
-
 		el1 = el1.getConnectTarget(callback);
 		el2 = el2.getConnectTarget(callback);
 		data = data || {};
@@ -471,32 +444,32 @@ var Topology = Class.extend({
 		var t = this;
 		ajax({
 			url: 'topology/'+this.id+'/info',
-			data: {},
-			successFn: function(result) {
-				var win = new Window({
-					title: "Debug info",
-					width: 500,
-					buttons: {
-						Close: function() {
-							win.hide();
-						}
+		 	data: {},
+		 	successFn: function(result) {
+		 		var win = new Window({
+		 			title: "Debug info",
+		 			width: 500,
+		 			buttons: {
+		 				Close: function() {
+		 					win.hide();
+		 				}
 					}
-				});
-				div = $('<div></div>');
-				new PrettyJSON.view.Node({
-					data: result,
-					el: div
-				});
-				win.add(div);
-				win.show();
-			},
-			errorFn: function(error) {
-				new errorWindow({error:error});
-			}
+		 		});
+		 		div = $('<div></div>');
+		 		new PrettyJSON.view.Node({
+		 			data: result,
+		 			el: div
+		 		});
+		 		win.add(div);
+		 		win.show();
+		 	},
+		 	errorFn: function(error) {
+		 		new errorWindow({error:error});
+		 	}
 		});
 	},
 	showUsage: function() {
-		window.open('/topology/'+this.id+'/usage', '_blank', 'innerHeight=450,innerWidth=650,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');
+  		window.open('/topology/'+this.id+'/usage', '_blank', 'innerHeight=450,innerWidth=650,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');
 		this.editor.triggerEvent({component: "topology", object: this, operation: "usage-dialog"});
 	},
 	notesDialog: function() {
@@ -504,7 +477,7 @@ var Topology = Class.extend({
 		var ta = $('<textarea cols=60 rows=20 class="notes"></textarea>');
 		ta.text(this.data._notes || "");
 		dialog.append(ta);
-		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">' + gettext('Open Window with Editor') + '</input>');
+		var openWithEditor_html = $('<input type="checkbox" name="openWithEditor">' + gettext('Open Window with Editor') + '</input>');		
 		var openWithEditor = openWithEditor_html[0];
 		if (this.data._notes_autodisplay) {
 			openWithEditor.checked = true;
@@ -524,13 +497,13 @@ var Topology = Class.extend({
 			modal: true,
 			buttons: {
 				Save: function() {
-					dialog.dialog("close");
-					t.modify_value("_notes", ta.val());
-					t.modify_value("_notes_autodisplay", openWithEditor.checked)
-				},
-				Close: function() {
-					dialog.dialog("close");
-				}
+		        	dialog.dialog("close");
+			      	t.modify_value("_notes", ta.val());
+			      	t.modify_value("_notes_autodisplay", openWithEditor.checked)
+			    },
+		        Close: function() {
+		        	dialog.dialog("close");
+		        }
 			}
 		});
 	},
@@ -573,257 +546,21 @@ var Topology = Class.extend({
 		this.rename = new InputWindow(windowOptions);
 		this.rename.show();
 	},
-	subtopolgy_addDialog:function(){
-		var t = this;
-		var name;
-		var dialog = new AttributeWindow({
-			title: gettext('add subtopology'),
-			width: 550,
-			buttons: [
-			{
-				text: gettext('Save'),
-				click:function(){
-					canvasname = name.getValue();
-					// t.editor.addSubtopology(canvasname)
-					t.editor.workspace.addCanvas(canvasname);
-					// t.subtopology_tabMenu(canvasname)
-					dialog.hide()
-				}
-			},
-			{
-				text:gettext('Cancel'),
-				click:function(){
-					dialog.hide()
-				}
-			}
-			]
 
-		});
-		name = dialog.add(new TextElement({
-			name: "name",
-			label: gettext("Name"),
-			help_text: gettext("The name of your subtopology"),
-		}));
-		dialog.show()
-	},
-	subtopolgy_removeDialog:function() {
-		var t = this;
-		var name;
-		var dialog = new AttributeWindow({
-			title: gettext("remove subtopology"),
-			width: 550,
-			buttons: [
-				{
-					text: gettext('Remove'),
-					click: function() {
-						t.editor.workspace.removeCanvas(name.getValue());
-					}
-				},
-				{
-					text: gettext('Cancel'),
-					click: function(){
-						dialog.hide();
-					}
-				}
-			],
-		});
-		name = dialog.add(new TextElement({
-			name: "name",
-			label: gettext("Name"),
-			help_text: gettext("The name of removed subtopology"),
-		}));
-		dialog.show();
-	},
-	subtopology_tabMenu:function(name, id){
-		var t = this;
-		// var name;
-		$("#subtopology_tab").append('<button type="button" class="button button-pill button-action" id ="tab_' + id + '" >' + name +'</button>');
-		$('#tab_' + id).click(function(){
-			// var canvasName = $('#tab_' + id).text();
-			t.editor.workspace.hideCanvas();
-			t.editor.workspace.tabCanvas(id);
-		})
-	},
-	subtopologyGroupDialog:function() {
-		var t = this;
-		var subTopology, group;
-		var dialog = new AttributeWindow({
-			title: gettext("Add group to subtopology"),
-            width: 500,
-            buttons: [
-                {
-                    text: gettext("Ok"),
-                    click: function(){
-                        var data = {
-                            "topology_id": t.id,
-                            "sub_topology": subTopology.getValue(),
-                            "group": group.getValue()
-                        };
-                        t.setSubtopologyGroup(data);
-                        if (dialog !== null) {
-                            dialog.remove()
-                        }
-                        dialog = null;
-                    }
-                },
-				{
-					text: gettext("Cancel"),
-					click: function() {
-						if (dialog != null) {
-							dialog.remove();
-						}
-						dialog = null;
-					}
-				}
-			]
-		});
-		subTopology = dialog.add(new TextElement({
-			name: "sub_topology",
-			label: gettext("Sub Topology"),
-			help_text: gettext("The name of sub topology."),
-		}));
-		group = dialog.add(new TextElement({
-			name: "group",
-			label: gettext("Group"),
-			help_text: gettext("The name of group"),
-		}));
-		dialog.show();
-	},
-	setSubtopologyGroup: function(data) {
-		var t = this;
-		ajax({
-			url: 'topology/'+ data['topology_id'] + '/subtopology/' + data['sub_topology'] + '/add_group',
-			data: {
-				group: data["group"]
-			},
-			successFn: function (result) {
-
-			},
-			errorFn: function (error) {
-				new errorWindow({error:error});
-			},
-		})
-	},
-	// subtopology_tabDialog: function(){
-	// 	var t = this
-	// 	var name
-	// },
-	// topgroup_createDialog:function(){
+	// SubTopology old
+	// ================================
+	// subtopology_addDialog
+	// subtopology_removeDialog
+	// subtopologyGroupDialog
+	// subtopology_tabMenu:function(name, id){
 	// 	var t = this;
-	// 	var dialog;
-	// 	var name,
-	// 	dialog = new AttributeWindow({
-	// 		title: gettext('Create Topgroup'),
-	// 		width: 550,
-	// 		buttons: [
-	// 		{
-	// 			text: gettext('Save'),
-	// 			click:function(){
-	// 				var data = {
-	// 					'name': name.getValue(),
-	// 					'id':t.id,
-	// 				}
-	// 				t.topgroup_create(data)
-	// 				dialog.hide()
-	// 			}
-	// 		},
-	// 		{
-	// 			text:gettext('Cancel'),
-	// 			click:function(){
-	// 				dialog.hide()
-	// 			}
-	// 		}
-	// 		]
-	//
+	// 	// var name;
+	// 	$("#subtopology_tab").append('<button type="button" class="button button-pill button-action" id ="tab_' + id + '" >' + name +'</button>');
+	// 	$('#tab_' + id).click(function(){
+	// 		// var canvasName = $('#tab_' + id).text();
+	// 		t.editor.workspace.hideCanvas();
+	// 		t.editor.workspace.tabCanvas(id);
 	// 	})
-	// 	name = dialog.add(new TextElement({
-	 //        name: "name",
-	 //        label: gettext("Name"),
-	 //        help_text: gettext("The name of your topgroup(unique)"),
-	 //    }));
-	// 	dialog.show()
-	// },
-	// topgroup_remove:function(){
-
-	// },
-	// topgroup_adddDialog:function(){
-	// 	var t = this;
-	// 	var dialog;
-	// 	var name;
-	// 	var choices = {};
-	// 	ajax({
-	// 		url : 'topgroup/' + this.id + '/list',
-	// 		// data : data,
-	// 		synchronous: true,
-	// 		successFn: function(result){
-	// 			// console.log(choices)
-	// 			for (var i = 0; i  < result.length; i ++){
-	// 				choices[result[i]] = result[i]
-	// 			}
-	// 			console.log(choices)
-	// 			console.log(result)
-	// 		},
-	// 		errorFn:function(error){
-	// 			new errorWindow({error:error})
-	// 		}
-	// 	})
-	// 	dialog = new AttributeWindow({
-	// 		title: gettext('Add to Topgroup'),
-	// 		width: 550,
-	// 		buttons: [
-	// 		{
-	// 			text: gettext('Save'),
-	// 			click:function(){
-	// 				var data = {
-	// 					'name': choice.getValue(),
-	// 					'id':t.id,
-	// 				}
-	// 				t.topgroup_add(data)
-	// 				dialog.hide()
-	// 			}
-	// 		},
-	// 		{
-	// 			text:gettext('Cancel'),
-	// 			click:function(){
-	// 				dialog.hide()
-	// 			}
-	// 		}
-	// 		]
-    //
-	// 	})
-	// 	// name = dialog.add(new TextElement({
-	// 	choice = dialog.add(new ChoiceElement({
-	// 		name: gettext('topgroupname'),
-	// 		label: gettext('topgroupname'),
-	// 		choices: choices,
-	// 	}))
-	// 	dialog.show()
-	// },
-	// topgroup_create: function(data){
-	// 	var t = this;
-	// 	ajax({
-	// 		url: 'topgroup/'+ t.id + '/create',
-	// 		data: data,
-	// 		successFn:function(result){
-	// 		},
-	// 		errorFn:function(error){
-	// 			new errorWindow({error:error});
-	// 		}
-	// 	})
-    //
-	// },
-	// topgroup_add: function(data){
-	// 	var t = this;
-	// 	ajax({
-	// 		url: 'topgroup/'+ t.id + '/add',
-	// 		data: data,
-	// 		successFn:function(result){
-	// 		},
-	// 		errorFn:function(error){
-	// 			new errorWindow({error:error});
-	// 		}
-	// 	})
-    //
 	// },
 	renewDialog: function() {
 		var t = this;
@@ -836,7 +573,7 @@ var Topology = Class.extend({
 			height: 400,
 			buttons: may_renew ? [
 						{
-							text: gettext("Save"),
+							text: gettext("Save"),	
 							click: function() {
 								t.action("renew", {params:{
 									"timeout": parseFloat(timeout.getValue())
@@ -845,7 +582,7 @@ var Topology = Class.extend({
 							}
 						},
 						{
-							text: gettext("Close"),
+							text: gettext("Close"),				
 							click: function() {
 								dialog.remove();
 							}
@@ -963,7 +700,7 @@ var Topology = Class.extend({
 		dialog.show();
 	},
 	tabbedConsoleWindow: function() {
-		window.open('../topology/'+this.id+'/tabbed-console', '_blank', "innerWidth=760,innerheight=483,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");
+	    window.open('../topology/'+this.id+'/tabbed-console', '_blank', "innerWidth=760,innerheight=483,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");
 	},
 	initialDialog: function() {
 		var t = this;

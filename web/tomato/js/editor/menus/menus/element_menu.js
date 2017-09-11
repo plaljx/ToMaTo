@@ -43,6 +43,7 @@ var createElementMenu = function(obj) {
 						obj.editor.onElementConnectTo(obj);
 					}
 				} : null,
+				// ---
 				"connect to other topology":obj.isConnectable()?{
 					name:gettext("connect to other topology"),
 					icon:"connect",
@@ -63,7 +64,7 @@ var createElementMenu = function(obj) {
 					}
 				} : null,
 				"prepare": obj.actionEnabled("prepare") ? {
-					name:gettext("Prepare"),
+					name:gettext("Prepare"),					
 					icon:"prepare",
 					callback: function(){
 						obj.action_prepare();
@@ -241,6 +242,7 @@ var createElementMenu = function(obj) {
 						obj.remove(null, true);
 					}
 				} : null,
+				// ---
 				"move":{
 					name : gettext("Move to other topology"),
 					icon : "remove",
@@ -264,28 +266,14 @@ var createElementMenu = function(obj) {
                 menu.items["connect to other topology"].items[element] = tmp;
             }
         }
-    }
-	// for (var n = 0; n < obj.editor.workspace.subtopologyList.length; n++){
-	// 	var tmp = {
-	// 		name : obj.editor.workspace.subtopologyList[n],
-	// 		icon: "debug",
-	// 		callback: function () {
-	// 			console.log(obj)
-	// 			// obj.data._pos["canvas"] = obj.editor.workspace.subtopologyList[n]
-	// 			var pos = obj.getPos()
-	// 			pos.canvas = obj.editor.workspace.subtopologyList[n]
-	// 			obj.modify_value("_pos", pos)
-	// 		}
-	// 	}
-	// 	menu.items["move"].items[obj.editor.workspace.subtopologyList[n]] = tmp;
-	// }
+	}
 	for (var name in menu.items) {
 		if (! menu.items[name]) {
 			delete menu.items[name];
 			continue;
 		}
 		var menu2 = menu.items[name];
-		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2];
+		if (menu2.items) for (var name2 in menu2.items) if (! menu2.items[name2]) delete menu2.items[name2]; 
 	}
 	return menu;
 };

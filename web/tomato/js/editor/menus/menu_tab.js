@@ -20,7 +20,6 @@ var MenuTab = Class.extend({
 			default:
 			this.name = name
 		}
-		console.log(this.name);
 		this.div = $('<div id="menu_tab_'+this.name+'"></div>');
 		this.link = $('<li><a href="'+window.location+'#menu_tab_'+this.name+'"><span><label>'+name+'</label></span></a></li>');
 		this.panel = $('<ul></ul>');

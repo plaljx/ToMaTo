@@ -81,8 +81,9 @@ var IconElement = Element.extend({
 		return this.rect[0];
 	},
 	paint: function() {
-		console.log(this.canvas)
-		var pos = this.canvas.workspace.absPos(this.getPos());
+		var pos = this.canvas.absPos(this.getPos());
+		// SubTopology old
+		// var pos = this.canvas.workspace.absPos(this.getPos());
 		this.icon = this.canvas.image(this.iconUrl(), pos.x-this.iconSize.x/2, pos.y-this.iconSize.y/2-5, this.iconSize.x, this.iconSize.y);
 		if(editor.options.element_name_on_top) {
 			
@@ -90,7 +91,7 @@ var IconElement = Element.extend({
 		} else {
 			this.text = this.canvas.text(pos.x, pos.y+this.iconSize.y/2, this.data.name);
 		}
-		// console.log(pos.x+this.iconSize.x/2-10, pos.y+this.iconSize.y/2-15)
+		
 		this.stateIcon = this.canvas.image("img/pixel.png", pos.x+this.iconSize.x/2-10, pos.y+this.iconSize.y/2-15, 16, 16);
 		this.errIcon = this.canvas.image("img/pixel.png", pos.x+this.iconSize.x/2, pos.y-this.iconSize.y/2-10, 16, 16);
 		this.rextfvIcon = this.canvas.image("img/pixel.png", pos.x+this.iconSize.x/2, pos.y-this.iconSize.y/2+8, 16, 16);
