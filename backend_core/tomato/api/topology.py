@@ -26,12 +26,12 @@ def _getTopology(id_):
 	UserError.check(top, code=UserError.ENTITY_DOES_NOT_EXIST, message="Topology with that id does not exist", data={"id": id_})
 	return top
 
-def _getSubTopology(topo_id, sub_topology):
+def _getSubTopology(topo_id, sub_topo_id):
 	from mongoengine import NotUniqueError, DoesNotExist    # TODO: review the exception handling
 	top = topology.get(topo_id)
 	# TODO: Permission checking
 	try:
-		return topology.SubTopology.objects.get(topology=top, name=sub_topology)
+		return topology.SubTopology.objects.get(topology=top, id=sub_topology)
 	except DoesNotExist:
 		raise
 	except NotUniqueError:
@@ -297,24 +297,24 @@ def topology_get_sub_topologies(topo_id):
 	topo = _getTopology(topo_id)
 	return topo.get_sub_topologies()
 
+def topology_sub_topology_info(topo_id, sub_topo_id):
+	sub_topo = _getSubTopology(sub_topo_id)
+	return sub_topo.info()
+
 def topology_add_sub_topology(topo_id, name):
+	topo = _getTopology(topo_id)
+	return topo.add_sub_topology(name)
+
+def topology_remove_sub_topology(topo_id, sub_topo_id):
 	top = _getTopology(topo_id)
-	return top.add_sub_topology(name)
+	return top.remove_sub_topology(sub_topo_id)
 
-def topology_remove_sub_topology(topo_id, name):
-	top = _getTopology(topo_id)
-	return top.remove_sub_topology(name)
-
-def sub_topology_get_groups(topo_id, sub_topo):
-	st = _getSubTopology(topo_id, sub_topo)
-	return st.get_groups()
-
-def sub_topology_add_group(topo_id, sub_topo, group):
-	st = _getSubTopology(topo_id, sub_topo)
+def sub_topology_add_group(topo_id, sub_topo_id group):
+	st = _getSubTopology(topo_id, sub_topo_id)
 	return st.add_group(group)
 
-def sub_topology_remove_group(topo_id, sub_topo, group):
-	st = _getSubTopology(topo_id, sub_topo)
+def sub_topology_remove_group(topo_id, sub_topo_id, group):
+	st = _getSubTopology(topo_id, sub_topo_id)
 	return st.remove_group(group)
 
 

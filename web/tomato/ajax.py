@@ -175,78 +175,52 @@ def topology_add_group(api, request, topl_id, group):
 def topology_remove_group(api, request, topl_id, group):
 	return api.topology_remove_group(topl_id, group)
 
-# #  topgroup
-# @wrap_json
-# def topgroup_create(api, request, top_id = None, **data):
-# 	res = api.topgroup_create(top_id, **data)
-# 	return res
-#
-# @wrap_json
-# def topgroup_add(api, request, top_id = None, **data):
-# 	res = api.topgroup_addtop(top_id, **data)
-# 	return res
-#
-# @wrap_json
-# def topgroup_delete(api, request, top_id = None, **data):
-# 	res = api.topgroup_delete(**data)
-# 	return res
-#
-# @wrap_json
-# def topgroup_list(api, requset, top_id = None, **data):
-# 	res = api.topgroup_list(top_id ,**data)
-# 	return res
-#
-# @wrap_json
-# def topgroup_info(api, request, top_id = None, **data):
-# 	res = api.topgroup_info(top_id, **data)
-# 	return res
-#
-# @wrap_json
-# def groupconnection_create(api, request, elements, **data):
-# 	res = api.groupconnection_create(elements[0], elements[1], data)
-# 	return res
 
 
-# subtopology
-@wrap_json
-def subtopology_add(api, request, top_id, **data):
-	res = api.subtopology_add(top_id, **data)
-	return res
-
-@wrap_json
-def subtopology_get(api, request, top_id, **data):
-	res = api.subtopology_get(top_id, **data)
-	return res
-
-# New Sub Topology
 @wrap_json
 def topology_get_sub_topologies(api, request, topo_id):
 	"""
-	Get list of subtopology info
+	/ajax/topology/<topo_id>/subtopology
 	"""
 	return api.topology_get_sub_topologies(topo_id)
 
 @wrap_json
 def topology_add_sub_topology(api, request, topo_id, **data):
+	"""
+	/ajax/topology/<topo_id>/subtopology/add
+	data: {name: <sub_topo_name>}
+	"""
 	name = data.get('name')
 	return api.topology_add_sub_topology(topo_id, name)
 
 @wrap_json
-def topology_remove_sub_topology(api, request, topo_id, **data):
-	name = data.get('name')
-	return api.topology_remove_sub_topology(topo_id, name)
+def topology_sub_topology_info(api, request, topo_id, sub_topo_id):
+	"""
+	/ajax/topology/<topo_id>/subtopology/<subtopo_id>
+	"""
+	return api.topology_sub_topology_info(topo_id, sub_topo_id)
 
 @wrap_json
-def sub_topology_get_groups(api, request, topo_id, sub_topo):
-	# TODO: may change this to `sub_topology_info`
-	return api.sub_topology_get_groups(topo_id, sub_topo)
+def topology_remove_sub_topology(api, request, topo_id, sub_topo_id):
+	"""
+	/ajax/topology/<topo_id>/subtopology/<sub_topo_id>/remove
+	"""
+	return api.topology_remove_sub_topology(topo_id, sub_topo_id)
 
 @wrap_json
 def sub_topology_add_group(api, request, topo_id, sub_topo, **data):
+	"""
+	/ajax/topology/<topo_id>/subtopology/<sub_topo_id>/add_group
+	data: {name: <group_name>}
+	"""
 	group = data.get('group')
-	return api.sub_topology_add_group(topo_id, sub_topo, group)
+	return api.sub_topology_add_group(topo_id, sub_topo_id, group)
 
 @wrap_json
 def sub_topology_remove_group(api, request, topo_id, sub_topo, **data):
+	"""
+	/ajax/topology/<topo_id>/subtopology/<sub_topo_id>/remove_group
+	data: {name: <group_name>}
+	"""
 	group = data.get('group')
 	return api.sub_topology_remove_group(topo_id, sub_topo, group)

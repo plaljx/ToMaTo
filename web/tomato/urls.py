@@ -249,29 +249,6 @@ urlpatterns = patterns('',
 	url(r'^vulnerability/(?P<res_id>\w{24})/remove/$', 'tomato.vulnerability.remove', name='vulnerability_remove'),
 
 
-	# topgroup
-	# (r'^ajax/topgroup/(?P<top_id>\w{24})/create$', 'tomato.ajax.topgroup_create'),
-	# (r'^ajax/topgroup/(?P<top_id>\w{24})/add$', 'tomato.ajax.topgroup_add'),
-	# (r'^ajax/topgroup/(?P<top_id>\w{24})/list$', 'tomato.ajax.topgroup_list'),
-	# (r'^ajax/topgroup/(?P<top_id>\w{24})/gettopgroupinfo$', 'tomato.ajax.topgroup_info'),
-	#
-	# (r'^ajax/groupconnection/create$', 'tomato.ajax.groupconnection_create'),
-
-
-	# subtopology
-	# (r'^ajax/topology/(?P<top_id>\w{24})/addsubtopology$', 'tomato.ajax.subtopology_add'),
-	# (r'^ajax/topology/(?P<top_id>\w{24})/getsubtopology$', 'tomato.ajax.subtopology_get'),
-	# (r'^ajax/topology/(?P<top_id>\w{24})/removesubtopology$', 'tomato.ajax.subtopology_remove')
-
-	# New Sub Topology
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/add$', 'tomato.ajax.topology_add_sub_topology'),
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/remove$', 'tomato.ajax.topology_remove_sub_topology'),
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology$', 'tomato.ajax.topology_get_sub_topologies'),
-	# url(r'ajax/topology/(?P<topo_id>\w{24})/sub/(?P<sub_topo_id>\w{24})'),
-	# Sub-Topology & Groups
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo>\w+)/add_group', 'tomato.ajax.sub_topology_add_group'),
-	(r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo>\w+)/remove_group', 'tomato.ajax.sub_topology_remove_group'),
-	# (r'^ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<name>\w+)', 'tomato.ajax.topology_get_sub_topology'),
 
 	# Group
 	url(r'^group/$', 'tomato.admin.group.list_', {"user": None, "role": None}, name='admin_group_list'), # admin_group_list_all
@@ -296,6 +273,13 @@ urlpatterns = patterns('',
 	url(r'^ajax/topology/(?P<topl_id>\w{24})/group_info/(?P<group>\w+)/remove$', 'tomato.ajax.topology_remove_group'),
 	url(r'^ajax/group/(?P<group>\w+)/info$', 'tomato.ajax.group_info'),
 
+	# Sub Topology
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology', 'tomato.ajax.topology_get_sub_topologies'),
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology/add', 'tomato.ajax.topology_add_sub_topology'),
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo_id>\w{24})', 'tomato.ajax.topology_sub_topology_info'),
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo_id>\w{24})/remove', 'tomato.ajax.topology_remove_sub_topology'),
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo_id>\w{24})/add_group', 'tomato.ajax.sub_topology_add_group'),
+	url(r'ajax/topology/(?P<topo_id>\w{24})/subtopology/(?P<sub_topo_id>\w{24})/remove_group', 'tomato.ajax.sub_topology_remove_group'),
 )
 urlpatterns += i18n_patterns('', url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog',js_info_dict, name='js_catalog'), )
 

@@ -284,22 +284,22 @@ def topology_add_sub_topology(topo_id, name):
 	# TODO: Permission Checking
 	return get_backend_core_proxy().topology_add_sub_topology(topo_id, name)
 
-def topology_remove_sub_topology(topo_id, name):
+def topology_sub_topology_info(topo_id, sub_topo_id):
 	# TODO: Permission Checking
-	return get_backend_core_proxy().topology_remove_sub_topology(topo_id, name)
+	return get_backend_core_proxy().topology_sub_topology_info(topo_id, sub_topo_id)
 
-def sub_topology_get_groups(topo_id, sub_topo):
+def topology_remove_sub_topology(topo_id, sub_topo_id):
 	# TODO: Permission Checking
-	return get_backend_core_proxy().sub_topology_get_groups(topo_id, sub_topo)
+	return get_backend_core_proxy().topology_remove_sub_topology(topo_id, sub_topo_id)
 
-def sub_topology_add_group(topo_id, sub_topo, group):
+def sub_topology_add_group(topo_id, sub_topo_id, group):
 	# TODO: Permission Checking
 	UserError.check(
 		get_backend_users_proxy().group_exists(group),
 		code=UserError.ENTITY_DOES_NOT_EXIST,
 		message="User with that name does not exist")
-	return get_backend_core_proxy().sub_topology_add_group(topo_id, sub_topo, group)
+	return get_backend_core_proxy().sub_topology_add_group(topo_id, sub_topo_id, group)
 
-def sub_topology_remove_group(topo_id, sub_topo, group):
+def sub_topology_remove_group(topo_id, sub_topo_id, group):
 	# TODO: Permission Checking
-	return get_backend_core_proxy().sub_topology_remove_group(topo_id, sub_topo, group)
+	return get_backend_core_proxy().sub_topology_remove_group(topo_id, sub_topo_id, group)

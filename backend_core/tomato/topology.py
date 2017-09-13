@@ -388,17 +388,17 @@ class Topology(Entity, BaseDocument):
 				message="Sub topology already exists",
 				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name})
 
-	def remove_sub_topology(self, sub_topo_name):
+	def remove_sub_topology(self, sub_topo_id):
 		try:
+			to_remove = SubTopology.objects.get(id=sub_topo_id)
 			UserError.check(
-				sub_topo_name != SubTopology.get_default_name(),
+				to_remove.name != SubTopology.get_default_name(),
 				code=UserError.INVALID_VALUE,
 				message="Cannot remove the default sub-topology",
 				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
 			)
-			sub_topo = self._get_sub_topology(sub_topo_name)
-			sub_topo.remove()
 			# self.sub_topologies.remove(sub_topo)  # this is done by reverse delete rule
+			to_remove.remove()
 			self.save()
 			return True
 		except DoesNotExist:
