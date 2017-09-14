@@ -41,7 +41,7 @@ class Element(LockedStatefulEntity, BaseDocument):
 	"""
 	topology = ReferenceField(Topology, required=True, reverse_delete_rule=DENY)
 	topologyId = ReferenceFieldId(topology)
-	subTopology = ReferenceField(SubTopology, reverse_delete_rule=DENY)  # TODO: think of `required=True`
+	subTopology = ReferenceField(SubTopology, reverse_delete_rule=DENY)
 	subTopologyId = ReferenceFieldId(subTopology)
 	state = StringField(choices=['default', 'created', 'prepared', 'started'], required=True)
 	parent = GenericReferenceField()
@@ -101,7 +101,7 @@ class Element(LockedStatefulEntity, BaseDocument):
 			UserError.check(parent.state in parent.CAP_CHILDREN[self.type], code=UserError.INVALID_STATE,
 				message="Parent does not allow children of this type in its current state",
 				data={"parent_type": parent.type, "type": self.type, "parent_state": parent.state})
-			self.subTopology = parent.subTopology
+			self.subTopology = None  # None for child elems
 		else:
 			UserError.check(None in self.CAP_PARENT, code=UserError.INVALID_CONFIGURATION, message="Type needs parent",
 				data={"type": self.type})
@@ -131,6 +131,28 @@ class Element(LockedStatefulEntity, BaseDocument):
 			if key in allowed:
 				attrs[key] = value
 		return attrs
+	
+	def getSubTopology(self):
+		if self.parent:
+			return self.parent.subTopologyId
+		return self.subTopologyId
+	
+	def setSubTopology(self, st_id):
+		if self.parent:  # raise error, or just ignore?
+			raise UserError(
+				code=UserError.INVALID_CONFIGURATION,
+				message="Cannot set subtopology for a child element",
+				data={"element_id": self.idStr, "parent": self.parent.idStr}
+			)
+		try:
+			st = SubTopology.objects.get(id=st_id)
+			self.subTopology = st
+		except DoesNotExist:
+			raise UserError(
+				code=UserError.ENTITY_DOES_NOT_EXIST,
+				message="SubTopology with that Id does not exist",
+				data={"element_id": self.idStr, "sub_topology_id": st_id}
+			)
 
 	def checkTopologyTimeout(self):
 		return self.topology.checkTimeout()
@@ -410,7 +432,7 @@ class Element(LockedStatefulEntity, BaseDocument):
 		"type": Attribute(field=type, readOnly=True, schema=schema.Identifier()),
 		"tech": Attribute(field=type, label="Tech", readOnly=True, schema=schema.Identifier()),
 		"topology": Attribute(field=topologyId, readOnly=True, schema=schema.Identifier()),
-		"sub_topology": Attribute(field=subTopologyId, readOnly=True, schema=schema.Identifier()),
+		"sub_topology": Attribute(get=getSubTopology, set=setSubTopology),
 		"parent": Attribute(field=parentId, readOnly=True, schema=schema.Identifier(null=True)),
 		"state": Attribute(field=state, readOnly=True, schema=schema.Identifier()),
 		"children": Attribute(field=childrenIds, readOnly=True, schema=schema.List(items=schema.Identifier())),

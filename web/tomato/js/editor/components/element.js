@@ -180,7 +180,7 @@ var Element = Component.extend({
 		if (this.editor.options.snap_to_grid) pos = {x: Math.round(pos.x/grid)*grid, y: Math.round(pos.y/grid)*grid};
 		this.setPos(this.canvas.relPos(pos));
 		// SubTopology old
-		this.setPos(this.canvas.workspace.relPos(pos));
+		// this.setPos(this.canvas.workspace.relPos(pos));
 	},
 	openConsole: function() {
 	    window.open('../element/'+this.id+'/console', '_blank', "innerWidth=745,innerheight=400,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no");

@@ -70,8 +70,7 @@ class SubTopology(Entity, BaseDocument):
 
 	@property
 	def elements(self):
-		# return elements.Element.objects(subTopology=self)
-		return None
+		return elements.Element.objects(subTopology=self)
 
 	@property
 	def connections(self):
@@ -395,7 +394,7 @@ class Topology(Entity, BaseDocument):
 				to_remove.name != SubTopology.get_default_name(),
 				code=UserError.INVALID_VALUE,
 				message="Cannot remove the default sub-topology",
-				data={"topology": self.name, "id": self.idStr, "sub_topology": sub_topo_name}
+				data={"topology": self.name, "id": self.idStr, "sub_topology": to_remove.name}
 			)
 			# self.sub_topologies.remove(sub_topo)  # this is done by reverse delete rule
 			to_remove.remove()

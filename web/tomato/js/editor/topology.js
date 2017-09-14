@@ -1,6 +1,8 @@
 var Topology = Class.extend({
 	init: function(editor) {
 		this.editor = editor;
+		this.sub_topologies = [];  // only data, not a concrete obj
+		this.current_subtopology_id = null;
 		this.elements = {};
 		this.connections = {};
 		this.pendingNames = [];
@@ -12,6 +14,13 @@ var Topology = Class.extend({
 			return this.editor.workspace.canvas_dict[canvas_id];
 		*/
 		return this.editor.workspace.canvas;
+	},
+	// load sub-topology: add tab to tab-list, and add data to this.sub_topologies
+	loadSubTopology: function(st) {
+		st.elements = [];  // added when load elements
+		this.sub_topologies.push(st);
+		this.editor.subtopology_tab.addTab(st.id, st.name);
+		return st;
 	},
 	loadElement: function(el) {
 		var elObj;
@@ -53,7 +62,13 @@ var Topology = Class.extend({
 				elObj = new UnknownElement(this, el, this._getCanvas());
 				break;
 		}
-		if (el.id) this.elements[el.id] = elObj;
+		if (el.id) {
+			this.elements[el.id] = elObj;
+			for (var i=0; i<this.sub_topologies.length; i++) {
+				if (el.sub_topology === this.sub_topologies[i].name)
+					this.sub_topologies[i].elements.push(elObj);
+			}
+		}
 		if (el.parent) {
 			//parent id is less and thus objects exists
 			elObj.parent = this.elements[el.parent];
@@ -88,9 +103,14 @@ var Topology = Class.extend({
 		conObj.paint();
 		return conObj;
 	},
+	// Iterate all elements and connections, and load them
+	// Add: load sub topologies as well
 	load: function(data) {
 		this.data = data;
 		this.id = data.id;
+		this.sub_topologies = [];
+		data.sub_topologies.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);})
+		for (var i=0; i<data.sub_topologies.length; i++) this.loadSubTopology(data.sub_topologies[i]);
 		this.elements = {};
 		//sort elements by id so parents get loaded before children
 		data.elements.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);});
@@ -101,6 +121,8 @@ var Topology = Class.extend({
 		this.editor.optionsManager.loadOpts();
 
 		this.onUpdate();
+
+		this.switchSubTopology(this.sub_topologies[0].id);
 	},
 	setBusy: function(busy) {
 		this.busy = busy;
@@ -259,6 +281,8 @@ var Topology = Class.extend({
 	},
 	createElement: function(data, callback) {
 		if (!data.parent) data.name = data.name || this.nextElementName(data);
+		// `sub_topology` field for a child element should be null/None
+		if (!data.parent) data.sub_topology = this.current_subtopology_id;
 		var obj = this.loadElement(data);
 		this.editor.triggerEvent({component: "element", object: obj, operation: "create", phase: "begin", attrs: data});
 		obj.setBusy(true);
@@ -814,5 +838,114 @@ var Topology = Class.extend({
 				con.setSegment(num);
 			}
 		}
-	}
+	},
+	createSubTopology: function(name) {
+		var t = this;
+		var data = {
+			'name': name
+		};
+		ajax({
+			url: 'topology/'+ this.editor.topology.id + '/subtopology/add',
+			data: data,
+			successFn: function(result){
+				t.editor.subtopology_tab.addTab(result.id, result.name);
+			},
+			errorFn: function(error){
+				new errorWindow({error: error});
+			},
+		});
+	},
+	// TODO: remove elems and conns first
+	// TODO: switch to other sub-topology after remove
+	removeSubTopology: function(st_id) {
+		if(!confirm(gettext("Are you sure you want to remove the sub topology?")))
+			return;
+		var t = this;
+		var removeFunc = ajax({
+			url: 'topology/' + this.editor.topology.id + '/subtopology/' + st_id + '/remove',
+			successFn: function(result) {
+				t.editor.subtopology_tab.removeTabById(st_id);
+			},
+			errorFn: function(error) {
+				new errorWindow({error: error});
+			}
+		});
+	},
+	// `paint()` some elements and conns in specified sub-topo
+	// and `paintRemove()` other elements and conns
+	switchSubTopology: function(sub_topo) {
+		var t = this;
+
+		console.log("Switch Sub-Topo: " + sub_topo);
+		// in the case if sub_topo is Id or data object
+		var st_id = sub_topo.id ? sub_topo.id : sub_topo;
+		for (var elId in t.elements) 
+			t.elements[elId].paintRemove();
+		for (var connId in t.connections) 
+			t.connections[connId].paintRemove();
+		for (var elId in t.elements)
+			if (t.elements[elId].data['sub_topology'] === st_id)
+				t.elements[elId].paint();
+		// TODO: show connections
+		this.current_subtopology_id = st_id;
+	},
+	subtopolgyAddDialog: function(){
+		var t = this;
+		var name;
+		var dialog = new AttributeWindow({
+			title: gettext('add subtopology'),
+			width: 550,
+			buttons: [
+			{
+				text: gettext('Save'),
+				click:function(){
+					st_name = name.getValue();
+					t.createSubTopology(st_name);
+
+					dialog.hide()
+				}
+			},
+			{
+				text:gettext('Cancel'),
+				click:function(){
+					dialog.hide()
+				}
+			}
+			]
+		});
+		name = dialog.add(new TextElement({
+			name: "name",
+			label: gettext("Name"),
+			help_text: gettext("The name of your subtopology"),
+		}));
+		dialog.show()
+	},
+	subtopolgyRemoveDialog:function() {
+		// var t = this;
+		// var name;
+		// var dialog = new AttributeWindow({
+		// 	title: gettext("remove subtopology"),
+		// 	width: 550,
+		// 	buttons: [
+		// 		{
+		// 			text: gettext('Remove'),
+		// 			click: function() {
+		// 				t.removeSubTopology();
+		// 			}
+		// 		},
+		// 		{
+		// 			text: gettext('Cancel'),
+		// 			click: function(){
+		// 				dialog.hide();
+		// 			}
+		// 		}
+		// 	],
+		// });
+		// name = dialog.add(new TextElement({
+		// 	name: "name",
+		// 	label: gettext("Name"),
+		// 	help_text: gettext("The name of removed subtopology"),
+		// }));
+		// dialog.show();
+	},
 });

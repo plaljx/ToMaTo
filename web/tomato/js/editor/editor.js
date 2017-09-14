@@ -31,6 +31,7 @@ var Editor = Class.extend({
 		this.listeners = [];
 		this.capabilities = this.options.capabilities;
 		this.menu = new Menu(this.options.menu_container);
+		this.subtopology_tab = new SubTopologyTab(this.options.subtopology_tab_container, this);  // Sub Topology Tab
 		this.topology = new Topology(this);
 		this.workspace = new Workspace(this.options.workspace_container, this);
 		this.sites = this.options.sites;

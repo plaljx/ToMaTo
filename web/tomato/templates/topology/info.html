@@ -88,6 +88,7 @@
 	
 <script language="JavaScript" type="text/javascript" src="js/editor/editor.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="js/editor/subtopology_tab.js"></script>
 
 {% if tutorial_info.state.enabled %}
 	<script language="JavaScript" type="text/javascript" src="js/editor_tutorial_help.js"></script>
@@ -114,20 +115,12 @@
 	<div id="browser_issues"></div>
 	<h1 id="topology_name">{%trans 'Topology'%} '{{top.name}}'</h1>
 	<div id="menu" style="width:100%;"></div>
+	<div id="subtopology_tab" style="width:100%;"></div>
 	<div id="workspace" style="width:100%; height:{{editor.size.height}}px;"></div>
-	<div id="tab_menu">
-		<!-- <a href="http://www.bootcss.com/" class="button button-tiny">Go</a>
-  		<a href="http://www.bootcss.com/" class="button button-rounded button-tiny">Go</a>
-  		<a href="http://www.bootcss.com/" class="button button-pill button-tiny">Go</a>
-  		<button class="button button-square button-tiny"><i class="fa fa-plus"></i></button>
-  		<button class="button button-box button-tiny"><i class="fa fa-plus"></i></button>
-  		<button class="button button-circle button-tiny"><i class="fa fa-plus"></i></button> -->
-  		<div class="button-group" id="subtopology_tab"><!-- 
-   			<button type="button" class="button button-pill button-action">Option 1</button>
-    		<button type="button" class="button button-pill button-action">Option 2</button>
-    		<button type="button" class="button button-pill button-action">Option 3</button> -->
+	<!-- <div id="tab_menu">
+  		<div class="button-group" id="subtopology_tab">
   		</div>
-	</div>
+	</div> -->
 </div>
 
 <script language="JavaScript" type="text/javascript">
@@ -137,6 +130,7 @@
 	
 		$("#topology_name").css("margin-left", margin);
 		$("#menu").css("margin-left", margin);
+		$("#subtopology_tab").css("margin-left", margin);
 		$("#workspace").css("margin-left", margin);
 	
 	});
@@ -151,8 +145,8 @@
 	{% endif %}
 	
 	var editor = new Editor({
-		tab_menu_container: $('#tab_menu'),
 		menu_container: $('#menu'),
+		subtopology_tab_container: $('#subtopology_tab'),
 		workspace_container: $('#workspace'),
 		{% if tutorial_info.state.enabled %}
 			tutorial_show: true,
