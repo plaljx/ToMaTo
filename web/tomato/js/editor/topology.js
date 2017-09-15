@@ -855,21 +855,46 @@ var Topology = Class.extend({
 			},
 		});
 	},
-	// TODO: remove elems and conns first
-	// TODO: switch to other sub-topology after remove
-	removeSubTopology: function(st_id) {
-		if(!confirm(gettext("Are you sure you want to remove the sub topology?")))
+	// remove the elems in the sub-topo
+	// and try to remove the sub-topo itself
+	// switch to first available sub-topo after successful removing
+	removeSubTopology: function (st_id) {
+		if (!confirm(gettext("Are you sure you want to remove the sub topology?")))
 			return;
 		var t = this;
-		var removeFunc = ajax({
-			url: 'topology/' + this.editor.topology.id + '/subtopology/' + st_id + '/remove',
-			successFn: function(result) {
-				t.editor.subtopology_tab.removeTabById(st_id);
-			},
-			errorFn: function(error) {
-				new errorWindow({error: error});
-			}
-		});
+		var removeSubTopology = function () {
+			ajax({
+				url: 'topology/' + t.editor.topology.id + '/subtopology/' + st_id + '/remove',
+				successFn: function (result) {
+					t.editor.subtopology_tab.removeTabById(st_id);
+					t.switchSubTopology(t.sub_topologies[0]);
+				},
+				errorFn: function (error) {
+					new errorWindow({ error: error });
+				}
+			});
+		};
+		t.action_delegate("stop", {noask: true, noUpdate: true, callback: function() {
+			t.action_delegate("destroy", {noask: true, noUpdate: true, callback: function(){
+				if (t.subtpologyElementCount(st_id)) {
+					for (var elId in t.elements) {
+						if (t.elements[elId].parent) continue;
+						console.log(t.elements[elId].data.sub_topology);
+						if (t.elements[elId].data.sub_topology === st_id) {
+							console.log("remove elem:" + t.elements[elId].data.id);
+							t.elements[elId].remove(function(){
+								if (! t.subtpologyElementCount(st_id))
+								removeSubTopology(st_id);
+							}, false);
+						}
+					}
+				}
+				else 
+					removeSubTopology(st_id);
+			}});
+		}});
+		
+		
 	},
 	// `paint()` some elements and conns in specified sub-topo
 	// and `paintRemove()` other elements and conns
@@ -883,11 +908,29 @@ var Topology = Class.extend({
 			t.elements[elId].paintRemove();
 		for (var connId in t.connections) 
 			t.connections[connId].paintRemove();
-		for (var elId in t.elements)
+		for (var connId in t.connections) {
+			if (t.connections[connId].elements[0].data['sub_topology'] === st_id
+			 || t.connections[connId].elements[1].data['sub_topology'] === st_id) {
+				t.connections[connId].paint();
+			 }
+		}
+		for (var elId in t.elements) {
 			if (t.elements[elId].data['sub_topology'] === st_id)
 				t.elements[elId].paint();
+			else if (t.elements[elId].parent && t.elements[elId].parent.data['sub_topology'] === st_id)
+				t.elements[elId].paint();
+		}
 		// TODO: show connections
 		this.current_subtopology_id = st_id;
+	},
+	subtpologyElementCount: function(st_id) {
+		var count = 0;
+		for (var elId in this.elements){
+			if (this.elements[elId].data.sub_topology === st_id)
+				count ++;
+		}
+		console.log("count: " + count);
+		return count;
 	},
 	subtopolgyAddDialog: function(){
 		var t = this;
@@ -919,33 +962,5 @@ var Topology = Class.extend({
 			help_text: gettext("The name of your subtopology"),
 		}));
 		dialog.show()
-	},
-	subtopolgyRemoveDialog:function() {
-		// var t = this;
-		// var name;
-		// var dialog = new AttributeWindow({
-		// 	title: gettext("remove subtopology"),
-		// 	width: 550,
-		// 	buttons: [
-		// 		{
-		// 			text: gettext('Remove'),
-		// 			click: function() {
-		// 				t.removeSubTopology();
-		// 			}
-		// 		},
-		// 		{
-		// 			text: gettext('Cancel'),
-		// 			click: function(){
-		// 				dialog.hide();
-		// 			}
-		// 		}
-		// 	],
-		// });
-		// name = dialog.add(new TextElement({
-		// 	name: "name",
-		// 	label: gettext("Name"),
-		// 	help_text: gettext("The name of removed subtopology"),
-		// }));
-		// dialog.show();
 	},
 });
