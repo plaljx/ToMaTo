@@ -217,10 +217,24 @@ var createElementMenu = function(obj) {
 				"traffic_customize" : obj.trafficAvailable() ? {
 					name:gettext("Traffic Customize"),
 					icon:"configure",
-					callback:function(){
-						obj.showTrafficWindow();
-					}
+					items:{
+						"Mgen": {
+							name:gettext("Mgen"),
+							icon:"configure",
+							callback: function() {
+								obj.showTemplateWindow(1);
+							}
+						},
+						"D_ITG": {
+							name:gettext("D-ITG"),
+							icon:"configure",
+							callback: function(){
+								obj.showTemplateWindow(2);
+							}
+						},
+					},
 				}:null,
+
 				"debug": obj.editor.options.debug_mode ? {
 					name:gettext('Debug'),
 					icon:'debug',
