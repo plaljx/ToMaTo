@@ -222,14 +222,14 @@ var createElementMenu = function(obj) {
 							name:gettext("Mgen"),
 							icon:"configure",
 							callback: function() {
-								obj.showTemplateWindow(1);
+								obj.showTrafficWindow(1);
 							}
 						},
 						"D_ITG": {
 							name:gettext("D-ITG"),
 							icon:"configure",
 							callback: function(){
-								obj.showTemplateWindow(2);
+								obj.showTrafficWindow(2);
 							}
 						},
 					},
