@@ -792,7 +792,8 @@ var Topology = Class.extend({
 	onUpdate: function() {
 		this.checkNetworkLoops();
 		var segments = this.getNetworkSegments();
-		this.colorNetworkSegments(segments);
+		// TODO: Check this
+		// this.colorNetworkSegments(segments);
 		this.editor.triggerEvent({component: "topology", object: this, operation: "update"});
 	},
 	getNetworkSegments: function() {
@@ -859,7 +860,7 @@ var Topology = Class.extend({
 	// and try to remove the sub-topo itself
 	// switch to first available sub-topo after successful removing
 	removeSubTopology: function (st_id) {
-		if (!confirm(gettext("Are you sure you want to remove the sub topology?")))
+		if (!confirm(gettext("Are you sure you want to remove the sub topology?\nThis will DESTROY the whole topology!")))
 			return;
 		var t = this;
 		var removeSubTopology = function () {
