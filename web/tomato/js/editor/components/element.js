@@ -456,12 +456,8 @@ var Element = Component.extend({
 					text: gettext("Execute"),
 					id: "execute_dialog_execute_button",
 					click: function() {
-						console.log(path.getValue())
-						console.log(args.getValue())
 						var pathValue = path.getValue();
 						var argsValue = args.getValue().split(/ +/);
-						console.log(pathValue);
-						console.log(argsValue);
 						t.execute_command(pathValue, argsValue);
 						if (dialog != null) {
 							dialog.remove();
@@ -508,12 +504,45 @@ var Element = Component.extend({
 			url: 'element/' + t.id + '/exec',
 			data: data,
 			successFn: function(result) {
-				console.log(result);
+				var return_code = result["return_code"];
+				var output = result["output"];
+				t.execute_result_dialog(return_code, output);
 			},
 			errorFn: function(error) {
 				new errorWindow({error: error});
 			},
 		});
+	},
+	execute_result_dialog: function(return_code, output) {
+		var t = this;
+		var return_code_text, output_text;
+		var dialog = new AttributeWindow({
+			title: gettext("Execute Result"),
+			width: 650,
+			buttons: [
+				{
+					text: gettext("OK"),
+					click: function() {
+						if (dialog)
+							dialog.remove();
+						dialog = null;
+					}
+				},
+			]
+		});
+		return_code_text = dialog.add(new TextElement({
+			name: "return_code",
+			label: gettext("Return Code"),
+			// disabled: true,
+			value: return_code,
+		}));
+		output_text = dialog.add(new TextAreaElement({
+			name: "output",
+			label: gettext("Output"),
+			// disabled: true,
+			value: output,
+		}));
+		dialog.show();
 	}
 });
 

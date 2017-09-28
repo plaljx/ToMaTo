@@ -260,6 +260,26 @@ var createElementMenu = function(obj) {
 						obj.execute_dialog();
 					}
 				} : null,
+				"tools": true ? {
+					name:gettext("Tools"),
+					icon:"console",
+					items:{
+						"ifconfig -a": {
+							name:"ifconfig -a",
+							icon:"console",
+							callback: function(){
+								obj.execute_command("ifconfig", ["-a"]);
+							}
+						},
+						"ip addr": {
+							name:"ip addr",
+							icon:"console",
+							callback: function(){
+								obj.execute_command("ip", ["addr"]);
+							}
+						}
+					}
+				} : null,
 			}
 		};
 	}
