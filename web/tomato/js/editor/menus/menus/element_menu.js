@@ -44,11 +44,12 @@ var createElementMenu = function(obj) {
 					}
 				} : null,
 				// ---
-				"connect to other topology":obj.isConnectable()?{
-					name:gettext("connect to other topology"),
-					icon:"connect",
-					items:{}
-				}:null,
+				// TODO: may remove this
+				// "connect to other topology":obj.isConnectable()?{
+				// 	name:gettext("connect to other topology"),
+				// 	icon:"connect",
+				// 	items:{}
+				// }:null,
 				"start": obj.actionEnabled("start") ? {
 					name:gettext('Start'),
 					icon:'start',
@@ -64,7 +65,7 @@ var createElementMenu = function(obj) {
 					}
 				} : null,
 				"prepare": obj.actionEnabled("prepare") ? {
-					name:gettext("Prepare"),					
+					name:gettext("Prepare"),
 					icon:"prepare",
 					callback: function(){
 						obj.action_prepare();
@@ -242,12 +243,23 @@ var createElementMenu = function(obj) {
 						obj.remove(null, true);
 					}
 				} : null,
+				// // ---
+				// TODO: may remove this
+				// "move":{
+				// 	name : gettext("Move to other topology"),
+				// 	icon : "remove",
+				// 	items:{}
+				// },
+				"sep5": "---",
 				// ---
-				"move":{
-					name : gettext("Move to other topology"),
-					icon : "remove",
-					items:{}
-				}
+				"execute": true ? {
+					// TODO: check element type, only VM elements should have this
+					name:gettext('Exec'),
+					icon:"console",
+					callback: function(){
+						obj.execute_dialog();
+					}
+				} : null,
 			}
 		};
 	}

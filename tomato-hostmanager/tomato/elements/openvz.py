@@ -629,6 +629,16 @@ class OpenVZ(elements.RexTFVElement,elements.Element):
 		diskspace = self._diskspace()
 		if diskspace:
 			usage.diskspace = diskspace
+
+	def _exec_command(self, path, args):
+		# may use `vzctl exec` or `vzctl exec2`
+		assert self.state == StateName.STARTED
+		commd = ["vzctl", "exec2", str(self.vmid)] + [path] + args
+		try:
+			return_code, output = cmd.runUnchecked(commd)
+			return { "return_code": return_code, "output": output }
+		except Error as e:
+			raise e
 			
 OpenVZ.__doc__ = DOC			
 
@@ -806,16 +816,6 @@ class OpenVZ_Interface(elements.Element):
 		if net.ifaceExists(ifname):
 			traffic = sum(net.trafficInfo(ifname))
 			usage.updateContinuous("traffic", traffic, data)
-
-	def _exec_command(self, path, args):
-		# may use `vzctl exec` or `vzctl exec2`
-		assert self.state == StateName.STARTED
-		commd = ["vzctl", "exec2", str(self.vmid)] + [path] + args
-		try:
-			return_code, output = cmd.runUnchecked(commd)
-			return { "return_code": return_code, "output": output }
-		except Error as e:
-			raise e
 
 OpenVZ_Interface.__doc__ = DOC_IFACE
 

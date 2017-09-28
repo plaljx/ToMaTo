@@ -178,17 +178,17 @@ def element_info(id, fetch=False): #@ReservedAssignment
 	
 	Parameter *id*:
 	  The parameter *id* identifies the element by giving its unique id.
-
+	
 	Parameter *fetch*:
 	  The parameter *fetch* forces the backend to update the state and type informations of an element by
 	  informations from the host of the element.
-
+	
 	Return value:
 	  The return value of this method is a dict containing information
 	  about this element. The information that is returned depends on the
 	  *type* and *state* of this element but the following information is 
 	  always returned. 
-
+	
 	``id``
 	  The unique id of the element.
 	  
@@ -217,8 +217,8 @@ def element_info(id, fetch=False): #@ReservedAssignment
 	``attrs``
 	  A dict of attributes of this element. The contents of this field depends
 	  on the *type* and *state* of the element. If this element does not have
-	  attributes, this field is ``{}``.	
-
+	  attributes, this field is ``{}``.
+	
 	``cap_actions``
 	  A list of actions that are available on this element. The available 
 	  actions depend on the element type and state. If the action list contains
@@ -284,7 +284,7 @@ def element_info(id, fetch=False): #@ReservedAssignment
 	return el.info()
 
 def element_execute_command(id, path, args=None):
-  """
+	"""
 	Execute command / executable on VM element.
 
 	Parameter *id*:
@@ -298,10 +298,10 @@ def element_execute_command(id, path, args=None):
 	
 	Return value:
 	  A dict containing execute results
-
+	
 		``return_code``
 		The return value got after execution
-
+	
 		``output``
 	  The output got after execution
 	

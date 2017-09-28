@@ -31,7 +31,8 @@ from debug import debug_stats, debug_services_reachable, debug_run_internal_api_
 from dumpmanager import errordump_info, errordump_list, errordumps_force_refresh, errorgroup_favorite,\
 	errorgroup_hide, errorgroup_info, errorgroup_list, errorgroup_modify, errorgroup_remove, errordump_store
 
-from elements import element_info, element_action, element_create, element_modify, element_remove, element_usage
+from elements import element_info, element_action, element_create, element_modify, element_remove, element_usage,\
+	element_execute_command
 
 from host import host_users, host_info, host_create, host_list, host_action, host_modify, host_remove, host_usage
 

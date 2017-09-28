@@ -444,6 +444,76 @@ var Element = Component.extend({
 		var name = this.data.name;
 		if (this.parent) name = this.parent.name() + "." + name;
 		return name;
+	},
+	execute_dialog: function() {
+		var t = this;
+		var path, args;
+		var dialog = new AttributeWindow({
+			title: gettext("Execute Command"),
+			width: 500,
+			buttons: [
+				{
+					text: gettext("Execute"),
+					id: "execute_dialog_execute_button",
+					click: function() {
+						console.log(path.getValue())
+						console.log(args.getValue())
+						var pathValue = path.getValue();
+						var argsValue = args.getValue().split(/ +/);
+						console.log(pathValue);
+						console.log(argsValue);
+						t.execute_command(pathValue, argsValue);
+						if (dialog != null) {
+							dialog.remove();
+							dalog = null;
+						}
+					}
+				},
+				{
+					text: gettext("Cancel"),
+					id: "execute_dialog_cancel_button",
+					click: function() {
+						if (dialog)
+							dialog.remove();
+						dialog = null;
+					}
+				},
+			],
+		});
+		path = dialog.add(new TextElement({
+			name: "path",
+			label: gettext("Path"),
+			help_text: gettext("The executable name or path"),
+			onChangeFct: function() {
+				if (this.value == '')
+					$('#execute_dialog_execute_button').button('disable');
+				else
+					$('#execute_dialog_execute_button').button('enable');
+			}
+		}));
+		args = dialog.add(new TextElement({
+			name: "args",
+			label: gettext("Args"),
+			help_text: gettext("Optional execute arguments, separate by space"),
+		}));
+		dialog.show();
+	},
+	execute_command: function(path, args) {
+		var t = this;
+		data = {
+			path: path,
+			args: args
+		}
+		ajax({
+			url: 'element/' + t.id + '/exec',
+			data: data,
+			successFn: function(result) {
+				console.log(result);
+			},
+			errorFn: function(error) {
+				new errorWindow({error: error});
+			},
+		});
 	}
 });
 

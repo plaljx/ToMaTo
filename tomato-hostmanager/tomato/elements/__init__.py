@@ -345,12 +345,12 @@ class Element(db.ChangesetMixin, attributes.Mixin, models.Model):
 	def exec_command(self, path, args=None):
 		# if need to set `busy` ?
 		if not args:
-    		args=[]
+			args = []
 		self.checkAction(ActionName.EXEC)
-		logging.logMessage("exec start", category="element", id=self.id, command=_command)
+		logging.logMessage("exec start", category="element", id=self.id, path=path, args=args)
 		res = self._exec_command(path, args)
-		logging.logMessage("exec end", category="element", id=self.id, command=_command, res=res)
-
+		logging.logMessage("exec end", category="element", id=self.id, path=path, args=args, res=res)
+		return res
 
 class RexTFVElement:
 	lock = Lock()

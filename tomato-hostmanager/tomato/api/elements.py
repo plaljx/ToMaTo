@@ -248,18 +248,18 @@ def element_list(type_filter=None):
 
 
 def element_execute_command(id, path, args=None):
-  """
+	"""
 	Execute command on the element. Only valid for VM element.
 
 	Parameter *id*
 	  The unique id of the element.
-	
+
 	Parameter *path*
 	  Command name or path
-	
+
 	Parameter *args*
 	  Optional execute arguments
-	
+
 	Return value:
 	  A dict containing execute results
 
@@ -268,7 +268,7 @@ def element_execute_command(id, path, args=None):
 
 		``output``
 	  The output got after execution
-	
+
 	Exceptions:
 		TODO
 	"""
