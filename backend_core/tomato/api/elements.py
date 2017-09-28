@@ -283,6 +283,37 @@ def element_info(id, fetch=False): #@ReservedAssignment
 		el.fetchInfo()
 	return el.info()
 
+def element_execute_command(id, path, args=None):
+  """
+	Execute command / executable on VM element.
+
+	Parameter *id*:
+	  The parameter *id* identifies the element by giving its unique id.
+	
+	Parameter *path*:
+		The name of command / the path of executable
+	
+	Parameter *args*:
+	  Optional execute arguments as a list
+	
+	Return value:
+	  A dict containing execute results
+
+		``return_code``
+		The return value got after execution
+
+		``output``
+	  The output got after execution
+	
+	Exceptions:
+		TODO
+	"""
+	el = _getElement(id)
+	if not args:
+		args = []
+	res = el.execute_command(path, args)
+	return res
+
 from ..elements import Element
 from .topology import _getTopology
 from ..lib.error import UserError

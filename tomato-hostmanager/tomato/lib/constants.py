@@ -12,6 +12,8 @@ class ActionName:
 	REXTFV_UPLOAD_USE = "rextfv_upload_use"
 	CHANGE_TEMPLATE = "change_template"
 
+	EXEC = "exec" # execute a command specified by user, not modify attribute
+
 class StateName:
 	CREATED = "created"
 	PREPARED = "prepared"

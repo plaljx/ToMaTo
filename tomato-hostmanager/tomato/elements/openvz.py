@@ -185,8 +185,9 @@ class OpenVZ(elements.RexTFVElement,elements.Element):
 		ActionName.REXTFV_UPLOAD_USE: [StateName.PREPARED,StateName.STARTED],
 		"download_grant": [StateName.PREPARED],
 		"rextfv_download_grant": [StateName.PREPARED,StateName.STARTED],
-		"execute": [StateName.STARTED],
+		"execute": [StateName.STARTED], # for attribute modifying
 		elements.REMOVE_ACTION: [StateName.CREATED],
+		ActionName.EXEC: [StateName.STARTED], # for execute any commands, 'exec'
 	}
 	CAP_NEXT_STATE = {
 		ActionName.PREPARE: StateName.PREPARED,
@@ -805,7 +806,17 @@ class OpenVZ_Interface(elements.Element):
 		if net.ifaceExists(ifname):
 			traffic = sum(net.trafficInfo(ifname))
 			usage.updateContinuous("traffic", traffic, data)
-			
+
+	def _exec_command(self, path, args):
+		# may use `vzctl exec` or `vzctl exec2`
+		assert self.state == StateName.STARTED
+		commd = ["vzctl", "exec2", str(self.vmid)] + [path] + args
+		try:
+			return_code, output = cmd.runUnchecked(commd)
+			return { "return_code": return_code, "output": output }
+		except Error as e:
+			raise e
+
 OpenVZ_Interface.__doc__ = DOC_IFACE
 
 def register(): #pragma: no cover

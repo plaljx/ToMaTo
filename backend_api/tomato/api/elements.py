@@ -305,3 +305,35 @@ def element_usage(id): #@ReservedAssignment
 	getCurrentUserInfo().check_may_view_element(elem)
 	print  elem.get_usage(hide_no_such_record_error=False)
 	return elem.get_usage(hide_no_such_record_error=True)
+
+def element_execute_command(id, path, args=None):
+  """
+	Execute command on the element. Only valid for VM element.
+
+	Parameter *id*
+	  The unique id of the element.
+	
+	Parameter *path*
+	  Command name or path
+	
+	Parameter *args*
+	  Optional execute arguments
+	
+	Return value:
+	  A dict containing execute results
+
+		``return_code``
+		The return value got after execution
+
+		``output``
+	  The output got after execution
+	
+	Exceptions:
+		TODO
+	"""
+	# TODO: permission checking
+	from ..lib.service import get_backend_core_proxy
+	if not args:
+		args = []
+	res = get_backend_core_proxy().execute_command(id, path, args)
+	return res

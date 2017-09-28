@@ -188,6 +188,7 @@ class KVMQM(elements.RexTFVElement,elements.Element):
 		"download_grant": [StateName.PREPARED],
 		"rextfv_download_grant": [StateName.PREPARED,StateName.STARTED],
 		elements.REMOVE_ACTION: [StateName.CREATED],
+		# ActionName.EXEC: [StateName.STARTED], # execute a command specified by user
 	}
 	CAP_NEXT_STATE = {
 		ActionName.PREPARE: StateName.PREPARED,
@@ -598,6 +599,10 @@ class KVMQM_Interface(elements.Element):
 			if net.ifaceExists(ifname):
 				traffic = sum(net.trafficInfo(ifname))
 				usage.updateContinuous("traffic", traffic, data)
+	
+	def _exec_command(self, path, args):
+		# TODO
+		raise Error('Not Implemented for type KVMQM')
 			
 KVMQM_Interface.__doc__ = DOC_IFACE
 

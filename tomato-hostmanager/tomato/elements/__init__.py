@@ -27,7 +27,7 @@ from ..lib.attributes import Attr  # @UnresolvedImport
 from ..lib.decorators import *
 from .. import config, dump, scheduler
 from ..lib.cmd import path  # @UnresolvedImport
-from ..lib.constants import StateName
+from ..lib.constants import StateName, ActionName
 
 TYPES = {}
 REMOVE_ACTION = "(remove)"
@@ -341,6 +341,15 @@ class Element(db.ChangesetMixin, attributes.Mixin, models.Model):
 
 	def updateUsage(self, usage, data):
 		pass
+
+	def exec_command(self, path, args=None):
+		# if need to set `busy` ?
+		if not args:
+    		args=[]
+		self.checkAction(ActionName.EXEC)
+		logging.logMessage("exec start", category="element", id=self.id, command=_command)
+		res = self._exec_command(path, args)
+		logging.logMessage("exec end", category="element", id=self.id, command=_command, res=res)
 
 
 class RexTFVElement:

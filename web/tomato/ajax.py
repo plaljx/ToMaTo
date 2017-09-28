@@ -69,6 +69,15 @@ def element_remove(api, request, id): #@ReservedAssignment
 	return res
 
 @wrap_json
+def element_execute_command(api, request, id, **data):
+    # /ajax/element/<id>/exec
+	# data: { path: <str>, args: <list> }
+	# res: { return_code: <number>, output: <str>}
+	path, args = data['path'], data['args']
+	res = api.element_execute_command(id, path, args)
+	return res
+
+@wrap_json
 def connection_create(api, request, elements, **attrs):
 	info = api.connection_create(elements[0], elements[1], attrs)
 	return info

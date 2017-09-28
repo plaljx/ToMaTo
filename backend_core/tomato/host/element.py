@@ -136,6 +136,11 @@ class HostElement(HostObject):
 		except:
 			wrap_and_handle_current_exception(re_raise=False, data={'host': self.host.address if self.host else None})
 
+	def execute_command(self, path, args=None):
+		if not args:
+			args = []
+		res = self.host.getProxy().element_execute_command(self.num, path, args)
+		return res
 
 def list():
 	return [e.id for e in HostElement.objects.all()]

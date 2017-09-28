@@ -243,6 +243,12 @@ class VMElement(Element):
 		self.customTemplate = True
 		self.update_or_save(customTemplate=self.customTemplate)
 
+	def execute_command(self, path, args=None):
+		if not args:
+			args = []
+		res = self.element.execute_command(path, args)
+		return res
+
 	ATTRIBUTES = Element.ATTRIBUTES.copy()
 	ATTRIBUTES.update({
 		"site": StatefulAttribute(get=lambda self: self.site.name if self.site else None, set=modify_site, writableStates=[ST_CREATED]),
