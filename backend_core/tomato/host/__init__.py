@@ -449,18 +449,17 @@ class Host(Entity, BaseDocument):
 		logging.logMessage("accounting_sync begin", category="host", name=self.name)
 		try:
 			orig_data = self.getProxy().accounting_statistics(type="single", after=self.accountingTimestamp)
-			print "orig_data:" + orig_data +"\n"
+			logging.logMessage("orig_date: ",  category="origin_date: ", name=orig_data)
 			data = {"elements": {}, "connections": {}}
 			max_timestamp = self.accountingTimestamp
 
-			print self.elements.all()
 			# check for completeness
 			for el in self.elements.all():
 				if not str(el.num) in orig_data["elements"]:
-					print >>sys.stderr, "Missing accounting data for element #%d on host %s" % (el.num, self.name)
+					print >>sys.stderr, "Missing accounting data for element #%s on host %s" % (str(el.num), self.name)
 			for con in self.connections.all():
 				if not str(con.num) in orig_data["connections"]:
-					print >>sys.stderr, "Missing accounting data for connection #%d on host %s" % (con.num, self.name)
+					print >>sys.stderr, "Missing accounting data for connection #%s on host %s" % (str(con.num), self.name)
 					continue
 
 			# transform
@@ -825,7 +824,7 @@ def synchronizeHost(host_name):
 				host.update()
 				host.synchronizeResources()
 			except Exception as e:
-				print >>sys.stderr, "Error updating host information from %s" % host
+				print >>sys.stderr, "Error updating host information from %s" % host_name
 				if isinstance(e, TransportError):
 					e.todump = False
 				else:
@@ -853,7 +852,7 @@ def updateAccounting(host_name):
 	try:
 		host.updateAccountingData()
 	except Exception as e:
-		print >>sys.stderr, "Error updating accounting information from %s" % host
+		print >>sys.stderr, "Error updating accounting information from %s" % host_name
 		if isinstance(e, TransportError):
 			e.todump = False
 		else:
