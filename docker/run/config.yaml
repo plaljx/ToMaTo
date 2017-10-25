@@ -26,10 +26,10 @@ services:
     protocol: sslrpc2
   web:
     host: dockerhost
-    port: 8080
+    port: 80
     protocol: http
 
-web-url: http://127.0.0.1:8080
+web-url: http://127.0.0.1:80
 
 external-urls:
   aup:        http://tomato-lab.org/aup

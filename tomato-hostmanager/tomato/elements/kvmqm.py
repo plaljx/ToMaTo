@@ -188,7 +188,7 @@ class KVMQM(elements.RexTFVElement,elements.Element):
 		"download_grant": [StateName.PREPARED],
 		"rextfv_download_grant": [StateName.PREPARED,StateName.STARTED],
 		elements.REMOVE_ACTION: [StateName.CREATED],
-		# ActionName.EXEC: [StateName.STARTED], # execute a command specified by user
+		ActionName.EXEC: [StateName.STARTED], # execute a command specified by user
 	}
 	CAP_NEXT_STATE = {
 		ActionName.PREPARE: StateName.PREPARED,
@@ -485,6 +485,81 @@ class KVMQM(elements.RexTFVElement,elements.Element):
 			usage.memory = memory
 			usage.updateContinuous("cputime", cputime, data)
 		usage.diskspace = io.getSize(self._imagePathDir())
+
+	def _qgaPath(self):
+		return "/var/run/qemu-server/%d.qga" % self.vmid
+
+	def _qgaExists(self):
+		qga_path = self._qgaPath
+		return os.path.exists(qga_path)
+
+	def checkQgaSocketExists(self):
+		import stat
+		qga_path = self._qgaPath()
+		if not os.path.exists(qga_path):
+			raise UserError(UserError.INVALID_VALUE, "QGA Socket file does not exist, check `agent` is set to `True`")
+		if not stat.S_ISSOCK(os.stat(qga_path).st_mode):
+			raise UserError(UserError.INVALID_VALUE, "QGA file exists but it's not a socket, weird")
+
+	def _qgaCheck(self):
+		# May use `guest-sync` to check whether GA works
+		# The `guest-sync` command is issued with a timeout which if hit guest agent is considered as not present.
+		pass
+
+	def _exec_command(self, path, args):
+		import socket, json, time, base64
+
+		print self._qgaPath()
+
+		self.checkQgaSocketExists()
+		s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+		try:
+			s.connect(self._qgaPath())
+			# send execute command
+			command = {
+				"execute": "guest-exec",
+				"arguments": {
+					"path": path,
+					"capture-output": True
+				},
+			}
+			if args:
+				command["arguments"]["arg"] = args
+			command = json.dumps(command)
+			print command
+
+			s.sendall(command)
+
+			# recv pid
+			res = s.recv(65536) # TODO, change to make sure could receive all
+			res = json.loads(res)
+			print res
+			pid = res["return"]["pid"]
+
+			# send execute status command
+
+			command = {
+				"execute": "guest-exec-status",
+				"arguments": { "pid": pid }
+			}
+			command = json.dumps(command)
+			exited = False
+			while not exited:
+				s.sendall(command)
+				res = s.recv(65536) # TODO: change to make sure could receive all
+				res = json.loads(res)
+				print res
+				res = res["return"] # res: { exited, exitcode, signal, out-data, err-data, out-truncated, err-truncated }
+				exited = res["exited"]
+				time.sleep(0.2)
+
+			exitcode, out_data = res["exitcode"], res["out-data"]
+			out_data = base64.b64decode(out_data)
+			return { "return_code": exitcode, "output": out_data }
+		finally:
+			s.close()
+
 		
 KVMQM.__doc__ = DOC
 
@@ -599,10 +674,7 @@ class KVMQM_Interface(elements.Element):
 			if net.ifaceExists(ifname):
 				traffic = sum(net.trafficInfo(ifname))
 				usage.updateContinuous("traffic", traffic, data)
-	
-	def _exec_command(self, path, args):
-		# TODO
-		raise Error('Not Implemented for type KVMQM')
+
 			
 KVMQM_Interface.__doc__ = DOC_IFACE
 
