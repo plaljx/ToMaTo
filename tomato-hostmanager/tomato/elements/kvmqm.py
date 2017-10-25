@@ -505,8 +505,14 @@ class KVMQM(elements.RexTFVElement,elements.Element):
 		# May use `guest-sync` to check whether GA works
 		# The `guest-sync` command is issued with a timeout which if hit guest agent is considered as not present.
 		pass
-
+	
 	def _exec_command(self, path, args):
+    	from ..lib.qemu_agent import execute_and_get_output
+    	return_code, output, err = execute_and_get_output(path, args)
+		# TODO: if err, deal with it
+		return { "return_code": exitcode, "output": output }
+
+	def _exec_command_old(self, path, args):
 		import socket, json, time, base64
 
 		print self._qgaPath()

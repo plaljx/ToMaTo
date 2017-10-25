@@ -1,6 +1,6 @@
 from . import Error, SUPPORT_CHECK_PERIOD
 from .util.cmd import run
-import os, socket, contextlib, json, subprocess, os
+import os, socket, contextlib, json, subprocess, os, base64, uuid
 
 
 SOCK_BUF_LEN = 65536
@@ -9,9 +9,15 @@ SOCK_TIMEOUT = 3  # seconds
 
 class QemuAgentError(Error):
     CODE_UNKNOWN = "qemu_agent.unknown"
-    CODE_UNSUPPORTED = "qemu_agent.unsupported"
-    CODE_FAILED_TO_SET = "qemu_agent.failed_to_set"
+    CODE_UNSUPPORTED = "qemu_agent.unsupported"     # qga functions not supported, usually because qga not working properly on guest
+    CODE_FAILED_TO_SET = "qemu_agent.failed_to_set" # failed change qemu settings on host machine
+    CODE_SYNC_FAILED = "qemu_agent.sync_failed"     # can not get synchronized
+    CODE_EXECUTE_ERROR = "qemu_agent.execute_error" # get error message from qga resnponse
 
+
+def random_64bit_int():
+    """generate a random 64-bit long integer"""
+    return uuid.uuid1().int >> 64
 
 def qga_path(vmid):
     """path of qga socket"""
@@ -37,7 +43,11 @@ def qga_enable(vmid):
     output, err = proc.communicate()
     return_code = proc.returncode
     if return_code != 0
-        raise QemuAgentError(code=QemuAgentError.CODE_FAILED_TO_SET, message="qm failed enable agent", data={err: err})
+        raise QemuAgentError(
+            code=QemuAgentError.CODE_FAILED_TO_SET,
+            message="qm failed enable agent",
+            data={"return_code": return_code,"output": output, "err": err}
+        )
     return True
 
 
@@ -59,8 +69,6 @@ def _get_connected_socket(vmid):
         raise e
     finally:
         s.close()
-    pass
-
 
 def _qga_send(vmid, data_obj):
     """
@@ -92,7 +100,8 @@ def _qga_recv(vmid):
         a dict contains json data from qga socket
 
     Raises:
-        socket.timeout
+        socket.timeout: if receiving timeout
+        TypeError: if JSON stringify or parse failed
     """
     with _get_connected_socket(vmid) as s:
         buf, data = '', None
@@ -117,7 +126,8 @@ def _qga_recv_delimited(vmid):
         a dict contains json data from qga socket
 
     Raise:
-        socket.timeout
+        socket.timeout: if receiving timeout
+        TypeError: if JSON stringify or parse failed
     """
     with _get_connected_socket(vmid) as s:
         buf, data = '', None
@@ -132,74 +142,120 @@ def _qga_recv_delimited(vmid):
         return json.loads(buf)
 
 
-# TODO
-def guest_sync_delimited(vmid, _id):
-    """
-    Echo back a unique integer value, and prepend to response a leading sentinel byte (0xFF) the client can check scan for.
-    After this '\xff{"return": <id>}' should be recved from qga socket
+# def guest_sync_delimited(vmid, _id=None):
+#     """
+#     Send a `guest_sync_delimited` command to qga socket
 
-    Args:
-        vmid (int): vmid
-        _id (int): randomly generated 64-bit integer
-    """
-    data = { "execute": "guest-sync-delimited", "arguments": { "id": _id } }
-    # recv data starts with a '0xFF'
-    pass
+#     > Echo back a unique integer value, and prepend to response a leading sentinel byte (0xFF) the client can check scan for.
+#     > After this '\xff{"return": <id>}' should be recved from qga socket
 
-# TODO
-def guest_sync(vmid, _id):
-    """
-    Echo back a unique integer value
-    After this '{"return": <id>}' should be recved from qga socket
+#     Args:
+#         vmid (int): vmid
+#         _id (int): randomly generated 64-bit integer
+#     """
+#     if not _id:
+#         _id = random_64bit_int()
+#     data = {"execute": "guest-sync-delimited", "arguments": {"id": _id}}
+#     return _qga_send(vmid, data)
 
-    Args:
-        vmid (int): vmid
-        _id (int): randomly generated 64-bit integer
-    """
-    data = { "execute": "guest-sync"}
-    pass
+# def guest_sync(vmid, _id):
+#     """
+#     Send a `guest_sync` command to qga socket
 
-# TODO
+#     > Echo back a unique integer value
+#     > After this '{"return": <id>}' should be recved from qga socket
+
+#     Args:
+#         vmid (int): vmid
+#         _id (int): randomly generated 64-bit integer
+#     """
+#     if not _id:
+#         _id = random_64bit_int()
+#     data = {"execute": "guest-sync", "arguments": {"id": _id}}
+#     return _qga_send(vmid, data)
+
+# def sync(vmid):
+#     """
+#     sync with guest, use guest_sync_delimited
+#     return True if synchronized successfully
+#     """
+#     random_id = random_64bit_int()
+#     guest_sync_delimited(vmid, random_id) # send guest_sync_demilited command
+#     recved = _qga_recv_delimited(vmid)
+#     if recved["return"] != random_id:
+#         raise QemuAgentError(code=QemuAgentError.CODE_SYNC_FAILED, message="qga sync failed", data={"send_id": random_id, "recv_id": recved["return"]})
+#     return True
+
+def sync(vmid):
+    """
+    Get sync with guest
+    """
+    _id = random_64bit_int()
+    guest_sync_delimited = {
+        "execute": "guest-sync-delimited"
+        "arguments": {"id": _id}
+    }
+    try:
+        _qga_send(vmid, json.dumps(guest_sync_delimited))
+        res = _qga_recv_delimited(vmid)
+        if res["return"] != _id:
+            raise QemuAgentError(
+                code=QemuAgentError.CODE_SYNC_FAILED,
+                data={"sent_id": _id, "received_id": res["return"], "received": res}
+            )
+    except Error as e:
+        raise QemuAgentError(
+            code=QemuAgentError.CODE_SYNC_FAILED,
+            message="failed get sync with guest",
+            data={"error": e}
+        )
+    return True
+
+
 def guest_info(vmid):
     """
     Execute the `guest-info` command through Qemu Guest Agent.
-    Get some information about the guest agent.
+    Returned object contains guest agent info
     Require guest machine running Qemu Guest Agent 0.15.0 or higher.
 
     Args:
         vmid (int): vmid
     
     Returns:
-        Object contains guest agent info
-        - return (obj)
-            - version (str): Guest agent version
-            - supported_commands (list of obj): Information about guest agent commands
-                - name (str): name of the command
-                - enabled (bool): whether command is currently enabled by guest admin
-                - success-response (bool): whether command returns a response on success (since 1.7)
+        Dict contains guest agent info
+        - version (str): Guest agent version
+        - supported_commands (list of obj): Information about guest agent commands
+            - name (str): name of the command
+            - enabled (bool): whether command is currently enabled by guest admin
+            - success-response (bool): whether command returns a response on success (since 1.7)
     """
     data = { "command": "guest-info" }
-    pass
+    _qga_send(vmid, data)
+    rtn = _qga_recv(vmid)
+    return rtn["return"]
 
 # TODO
 def guest_ping(vmid):
     """
     Execute the `guest-info` command through Qemu Guest Agent.
     Ping the guest agent, a non-error return implies success.
+    Will get non-error response: `{"return": {}}\n`
     Require guest machine running Qemu Guest Agent 0.15.0 or higher.
 
     Args:
         vmid (int): vmid
     """
     data = { "command": "guest-ping" }
-    pass
+    _qga_send(vmid, data)
+    rtn = _qga_recv(vmid)
+    return rtn
 
-# TODO
 def guest_exec(vmid, path, arg=None, env=None, input_data=None, capture_output=True):
     """
-    Execute the `guest-exec` command through Qemu Guest Agent.
-    Execute a command in the guest.
+    Execute the `guest-exec` command through Qemu Guest Agent, which will execute a command in the guest.
     Require guest machine running Qemu Guest Agent 2.5 or higher.
+    Will return JSON like `{"return": {"pid": 1234567}}`
+    Should check QGA is working properly before execute
 
     Args:
         vmid (int): vmid
@@ -210,22 +266,22 @@ def guest_exec(vmid, path, arg=None, env=None, input_data=None, capture_output=T
         capture-output (boolean): (optional) bool flag to enable capture of stdout/stderr of running process. defaults to false.
     
     Returns:
-        Object
-        - return
-            - pid (int) pid returned from guest-exec
+        pid (int): process id
 
     Raises:
         TODO
     """
     data = { "execute": "guest-exec", "arguments": { "path": path, "capture-output": capture_output } }
     if arg:
-        data["argument"]["arg"] = arg
+        data["argument"]["arg"] = arg  # if arg is None, or arg is []
     if env:
         data["argument"]["env"] = env
     if input_data:
-        data["argument"]["input-data"] = input_data
-    # DO: Get PID and return
-    pass
+        data["argument"]["input-data"] = base64.b64encode(input_data)
+    _qga_send(vmid, data)
+    received = _qga_recv(vmid)
+    pid = received["return"]["pid"]
+    return pid
 
 # TODO
 def guest_exec_status(vmid, pid):
@@ -239,7 +295,7 @@ def guest_exec_status(vmid, pid):
         pid (int): pid of child process in guest OS
     
     Returns:
-        Object. Note: out-data and err-data are present only if `capture-output` was specified for `guest-exec`.
+        Dict contains process status info. Note: out-data and err-data are present only if `capture-output` was specified for `guest-exec`.
         - exited (bool): true if process has already terminated.
         - exitcode (int): (optional) process exit code if it was normally terminated.
         - signal (int): (optional) signal number (linux) or unhandled exception code (windows) if the process was abnormally terminated.
@@ -252,19 +308,9 @@ def guest_exec_status(vmid, pid):
         TODO
     """
     data = { "execute": "guest-exec-status", "arguments": { "pid": pid } }
-    # DO: check until `exited` is True, and return the results
-
-    # note: should do -- received_data = received_data["return"]
-    pass
-
-
-# TODO
-def sync(vmid):
-    """
-    sync with guest, use guest_sync_delimited
-    """
-    pass
-
+    _qga_send(vmid, data)
+    rtn = _qga_recv(vmid)
+    return rtn["return"]
 
 # TODO
 def execute_and_get_output(vmid, path, arg=None, env=None, input_data=None, capture_output=True):
@@ -272,8 +318,18 @@ def execute_and_get_output(vmid, path, arg=None, env=None, input_data=None, capt
     run command on guest and get the output, use `guest_exec` and `guest_exec_status`
     sync with func `sync` first
 
-    Args:
-        vmid (int): vmid
-        cmd (list of str): list of path and 
+    Return (return_code, output)
     """
-    pass
+    # check qga enabled
+    qga_check(vmid)
+    # sync, with timeout setting
+    sync(vmid)
+    # send execute and receive pid
+    pid = guest_exec(vmid, path, arg=arg, env=env, input_data=input_data, capture_output=capture_output=True)
+    
+    # continue sending guest_exec_status, and trying to get execute result
+    while True:
+        status = guest_exec_status(vmid, pid)
+        if status["exited"]:
+            break
+    return (status["exitcode"], status["out-data"], status["err-data"])
