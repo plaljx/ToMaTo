@@ -60,14 +60,13 @@ var TrafficWindow = Window.extend({
 	startSelected:function(){
 		var t = this;
 		var selected = new Array();
-		topology_id = this.compoent.topology.id
 		for(var temp in this.traffics){
 			if(this.traffics[temp].state == "selected"){
 				selected.push(temp);
 			}
 		}
 		ajax({
-			url:'topology/' + topology_id +'/traffic_start',
+			url:'topology/traffic_start',
 			data:{selected:selected},
 			successFn:function(data){
 				//todo
