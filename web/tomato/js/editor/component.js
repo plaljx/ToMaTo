@@ -13,7 +13,7 @@ var Component = Class.extend({
     		title:"Traffics",
     		compoent:this,
     		modal: false,
-    		width: 600
+    		width: 500
 		});
 	},	
 	paint: function() {

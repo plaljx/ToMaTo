@@ -98,7 +98,7 @@ var TrafficWindow = Window.extend({
 	createTrafficListTwo:function(){
 		var t = this;
 		this.trafficTable =  $('<div />');
-		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-3"><h4>Name</h4></div><div class="col-sm-3"><h4>Source IP</h4></div><div class="col-sm-3"><h4>Destination IP</h4></div><div class="col-sm-3" /></div>');
+		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-2"><h4>Name</h4></div><div class="col-sm-2"><h4>Source IP</h4></div><div class="col-sm-2"><h4>Destination IP</h4></div><div class="col-sm-2" /></div>');
 		this.trafficTable.append(tableHeader);
 		this.trafficList.empty();
 		this.trafficList.append(this.trafficTable);
@@ -110,10 +110,10 @@ var TrafficWindow = Window.extend({
 	addTrafficToList:function(trafficId){
 		var t = this;
 		var tr = $('<div class="row" />');
-		var td_name = $('<div class="col-sm-3" />');
-		var td_source = $('<div class="col-sm-3" />');
-		var td_perm = $('<div class="col-sm-3" />');
-		var td_buttons = $('<div class="col-sm-3" />');
+		var td_name = $('<div class="col-sm-2" />');
+		var td_source = $('<div class="col-sm-2" />');
+		var td_perm = $('<div class="col-sm-2" />');
+		var td_buttons = $('<div class="col-sm-2" />');
 		var td_icon = $('<div class="col-sm-1" />');
 
 		tr.append(td_icon);
