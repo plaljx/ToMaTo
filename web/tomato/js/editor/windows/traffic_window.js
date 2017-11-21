@@ -98,7 +98,7 @@ var TrafficWindow = Window.extend({
 	createTrafficListTwo:function(){
 		var t = this;
 		this.trafficTable =  $('<div />');
-		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-5"><h4>Name</h4></div><div class="col-sm-3"><h4>Destination IP</h4></div><div class="col-sm-3" /></div>');
+		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-5"><h4>Name</h4></div><div class="col-sm-3"><h4>Source IP</h4></div><div class="col-sm-3"><h4>Destination IP</h4></div><div class="col-sm-3" /></div>');
 		this.trafficTable.append(tableHeader);
 		this.trafficList.empty();
 		this.trafficList.append(this.trafficTable);
@@ -111,18 +111,21 @@ var TrafficWindow = Window.extend({
 		var t = this;
 		var tr = $('<div class="row" />');
 		var td_name = $('<div class="col-sm-5" />');
+		var td_source = $('<div class="col-sm-3" />');
 		var td_perm = $('<div class="col-sm-3" />');
 		var td_buttons = $('<div class="col-sm-3" />');
 		var td_icon = $('<div class="col-sm-1" />');
 
 		tr.append(td_icon);
 		tr.append(td_name);
+		tr.append(td_source);
 		tr.append(td_perm);
 		tr.append(td_buttons);
 
 		this.trafficListFinder[trafficId] = {
 				td_icon: td_icon,
 				td_name: td_name,
+				td_source: td_source,
 				td_perm: td_perm,
 				td_buttons: td_buttons,
 				tr: tr
@@ -134,13 +137,16 @@ var TrafficWindow = Window.extend({
 	drawView:function(trafficId){
 		var t = this;
 		var dest_ip = '<div class="hoverdescription">'+this.traffics[trafficId].dest_ip+'</div>';//show the destination ip address of the traffic
+		var td_source = this.trafficListFinder[trafficId].td_source
 		var td_perm = this.trafficListFinder[trafficId].td_perm;
 		var td_buttons = this.trafficListFinder[trafficId].td_buttons;
 		var td_name = this.trafficListFinder[trafficId].td_name;
 
-		td_perm.empty();
+		td_perm.empty();;
+		td_source.empty()
 		td_buttons.empty();
 		td_name.append(this.traffics[trafficId].traffic_name);
+		td_source.append(this.traffics[trafficId].source_ip);
 		td_perm.append(dest_ip);
 		var editButton = $('<img src="/img/pencil.png" title="modify the traffic" style="cursor:pointer;" />');
 		editButton.click(function(){
