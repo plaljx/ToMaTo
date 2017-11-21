@@ -233,6 +233,11 @@ var TrafficWindow = Window.extend({
 			value:this.traffics[trafficId].off_time
 		}));
 		modifyWindow.add(new TextElement({
+			label:"Source ip",
+			name:"source_ip",
+			value:this.traffics[trafficId].source_ip
+		}));
+		modifyWindow.add(new TextElement({
 			label:"Source port",
 			name:"src_port",
 			value:this.traffics[trafficId].src_port
@@ -298,7 +303,7 @@ var TrafficWindow = Window.extend({
 							text:"Save",
 							click: function() {
 								var values =  traffic.getValues();
-								values.element_id = t.compoent.id
+								values.element_id = t.compoent.ipToId(values.source_ip)
 								if(t.traffics[values.traffic_name]){
 									alert("The name of traffic is existing,please change the name!");
 								}
