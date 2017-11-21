@@ -103,7 +103,7 @@ class Traffic(BaseDocument):
 		action_use = "rextfv_upload_use"
 		traffic_info = get(traffic_id).info()
 
-		element_id = traffic_info.element_id
+		element_id = traffic_info["element_id"]
 		pack_dir = traffic.make_mgen_pack(traffic_info)
 		element_info = Element.get(element_id).info()
 		key = Element.get(element_id).action(action)
