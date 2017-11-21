@@ -46,8 +46,9 @@ var TrafficWindow = Window.extend({
 	getTraffics:function(){
 		var t = this;
 		var res = [];
+		topology_id = this.compoent.topology.id
 		ajax({
-	 		url:'element/'+t.compoent.id+'/traffic_list',
+	 		url:'topology/'+topology_id+'/traffic_list',
 	 		//async :false,
 	 		successFn:function(data){
 	 			res = data;
@@ -59,13 +60,14 @@ var TrafficWindow = Window.extend({
 	startSelected:function(){
 		var t = this;
 		var selected = new Array();
+		topology_id = this.compoent.topology.id
 		for(var temp in this.traffics){
 			if(this.traffics[temp].state == "selected"){
 				selected.push(temp);
 			}
 		}
 		ajax({
-			url:'element/' + t.compoent.id +'/traffic_start',
+			url:'topology/' + topology_id +'/traffic_start',
 			data:{selected:selected},
 			successFn:function(data){
 				//todo
@@ -77,8 +79,9 @@ var TrafficWindow = Window.extend({
 	},
 	createTrafficList:function(){
 		var t = this ;
+		topology_id = this.compoent.topology.id
 		ajax({
-	 		url:'element/'+t.compoent.id+'/traffic_list',
+	 		url:'topology/'+topology_id+'/traffic_list',
 	 		successFn:function(data){
 	 			var res = data ;
 	 			for(var i = 0 ; i < res.length ; i++){
@@ -274,7 +277,7 @@ var TrafficWindow = Window.extend({
 	removeTraffic:function(trafficId){
 		this.trafficListFinder[trafficId].tr.remove();
 		ajax({
-			url:'element/'+this.traffics[trafficId].id+'/traffic_remove',
+			url:'topology/'+this.traffics[trafficId].id+'/traffic_remove',
 			successFn:function(data){
 				//todo
 			}
@@ -285,6 +288,7 @@ var TrafficWindow = Window.extend({
 	addNewTraffic:function(){
 		var t = this;
 		var traffic;
+		topology_id = this.compoent.topology.id
 		traffic = new AttributeWindow({
 			title:"Attributes",
 			width: 500,
@@ -294,12 +298,13 @@ var TrafficWindow = Window.extend({
 							text:"Save",
 							click: function() {
 								var values =  traffic.getValues();
+								values.element_id = t.compoent.id
 								if(t.traffics[values.traffic_name]){
 									alert("The name of traffic is existing,please change the name!");
 								}
 								else{
 								ajax({
-									url:'element/'+t.compoent.id+'/traffic_create',
+									url:'topology/'+topology_id+'/traffic_create',
 									data:values,
 									successFn:function(data){
 										t.traffics[data.id] = data;
@@ -334,6 +339,11 @@ var TrafficWindow = Window.extend({
 			label:"Off time",
 			name:"off_time",
 			value:"20.0"
+		}));
+		traffic.add(new TextElement({
+			label:"Source IP",
+			name:"source_ip",
+			value:""
 		}));
 		traffic.add(new TextElement({
 			label:"Source port",

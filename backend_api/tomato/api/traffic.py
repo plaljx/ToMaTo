@@ -1,14 +1,14 @@
 from ..lib.service import get_backend_core_proxy
 
-def traffic_create(element_id, attrs=None):
+def traffic_create(topology_id, attrs=None):
 	if not attrs:
 		attrs = {}
-	res = get_backend_core_proxy().traffic_create(element_id, attrs)
+	res = get_backend_core_proxy().traffic_create(topology_id, attrs)
 	return res
 
-def traffic_list(element_fileter=None):
-	print element_fileter
-	res = get_backend_core_proxy().traffic_list(element_fileter = element_fileter)
+def traffic_list(topology_fileter=None):
+	print topology_fileter
+	res = get_backend_core_proxy().traffic_list(topology_fileter = topology_fileter)
 	return res
 
 def traffic_info(id):
@@ -25,9 +25,9 @@ def traffic_modify(id, attrs=None):
 	res = get_backend_core_proxy().traffic_modify(id, attrs)
 	return res
 
-def traffic_start(element_id , trafficIds):
+def traffic_start(trafficIds):
 	print trafficIds[0]
-	res = get_backend_core_proxy().traffic_start(element_id,trafficIds)
+	res = get_backend_core_proxy().traffic_start(trafficIds)
 	return res
 
 def ditg_start(element_id , attrs = None):

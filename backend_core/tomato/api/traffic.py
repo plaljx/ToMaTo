@@ -7,8 +7,8 @@ def _getTraffic(id_):
 	res = traffic.get(id_)
 	return res
 
-def traffic_list(element_fileter=None):
-	res = traffic.getAll(element_id=element_fileter) if element_fileter else traffic.getAll()
+def traffic_list(topology_fileter=None):
+	res = traffic.getAll(topology_id=topology_fileter) if topology_fileter else traffic.getAll()
 	return [r.info() for r in res]
 
 def traffic_create(element_id, attrs=None):
@@ -28,9 +28,9 @@ def traffic_modify(id, attrs=None):
 	res = traffic.modify(**attrs)
 	return res
 
-def traffic_start(element_id, traffic_ids):
+def traffic_start(traffic_ids):
     for traffic_id in traffic_ids:
-        res = traffic.Traffic.traffic_start(element_id, traffic_id)
+        res = traffic.Traffic.traffic_start(traffic_id)
     return res
 
 def ditg_start(element_id, attrs=None):

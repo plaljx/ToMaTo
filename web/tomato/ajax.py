@@ -134,13 +134,13 @@ def traffic_info(api, request, id):
 	return info
 
 @wrap_json
-def traffic_create(api, request, element_id,**attrs):
-	res = api.traffic_create(element_id, attrs)
+def traffic_create(api, request, topology_id,**attrs):
+	res = api.traffic_create(topology_id, attrs)
 	return res
 
 @wrap_json
-def traffic_list(api, request, element_id=None):
-	res = api.traffic_list(element_id)
+def traffic_list(api, request, topology_id=None):
+	res = api.traffic_list(topology_id)
 	return res
 
 @wrap_json
@@ -154,11 +154,11 @@ def traffic_modify(api, request,element_id, **attrs):
 	return res
 
 @wrap_json
-def traffic_start(api, request,element_id,selected):
+def traffic_start(api, request,selected):
 	#selected:The Array of traffics' id which are selected to start
 	if not selected:
 		return 	None
-	res = api.traffic_start(element_id, selected)
+	res = api.traffic_start(selected)
 	return res
 
 #start the configured D-ITG traffic

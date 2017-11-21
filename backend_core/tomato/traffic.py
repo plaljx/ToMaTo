@@ -5,11 +5,13 @@ from .elements import Element
 
 class Traffic(BaseDocument):
 
-	element_id = StringField(required=True)
+	topology_id = StringField(required=True)
+	element_id =  StringField(required=True)
 	traffic_name = StringField(required=True)
 	flow_number = IntField(default=1)#@unresolved
 	start_time = StringField(default='0')#@unresolved
 	off_time = StringField()
+	source_ip = StringField()
 	src_port = StringField()
 	dest_ip = StringField()
 	dest_port = StringField()
@@ -18,8 +20,8 @@ class Traffic(BaseDocument):
 	tos = StringField(default='0') #@unresolved
 	extra_param = StringField()
 
-	def init(self,element_id, **attrs):
-		self.element_id = element_id
+	def init(self,topology_id, **attrs):
+		self.topology_id = topology_id
 		self.modify(**attrs)
 		self.save()
 
@@ -36,6 +38,8 @@ class Traffic(BaseDocument):
 		return {
 			"id":self.id.__str__(),
 			"element_id":self.element_id,
+			"topology_id":self.topology_id,
+			"source_ip":self.source_ip,
 			"src_port":self.src_port,
 			"tos":self.tos,
 			"start_time":self.start_time,
@@ -87,12 +91,19 @@ class Traffic(BaseDocument):
 	def modify_tos(self, val):
 		self.tos = val
 
+	def modify_element_id(self, val):
+		self.element_id = val
+
+	def modify_source_ip(self, val):
+		self.source_ip = val
+
 	@classmethod
-	def traffic_start(cls, element_id, traffic_id):
+	def traffic_start(cls, traffic_id):
 		action = "rextfv_upload_grant"
 		action_use = "rextfv_upload_use"
 		traffic_info = get(traffic_id).info()
 
+		element_id = traffic_info.element_id
 		pack_dir = traffic.make_mgen_pack(traffic_info)
 		element_info = Element.get(element_id).info()
 		key = Element.get(element_id).action(action)
@@ -111,11 +122,11 @@ def get(id_, **kwargs):
 def getAll(**kwargs):
 	return list(Traffic.objects.filter(**kwargs))
 
-def create(element_id, **attrs):
+def create(topology_id, **attrs):
 	res = Traffic()
 	print attrs
 	try:
-		res.init(element_id, **attrs)
+		res.init(topology_id, **attrs)
 	except Exception, e:
 		if res.id.__str__():
 			try:
