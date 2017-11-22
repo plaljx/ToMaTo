@@ -226,5 +226,8 @@ var Connection = Component.extend({
 	},
 	name_vertical: function() {
 		return this.fromElement().name() + "<br/>&#x21C5;<br/>" + this.toElement().name();
-	}
+	},
+	trafficAnalyzer:function () {
+		window.open('http://10.117.2.54:8000','_blank', 'innerHeight=450,innerWidth=650,status=no,toolbar=no,menubar=no,location=no,hotkeys=no,scrollbars=no');
+    }
 });

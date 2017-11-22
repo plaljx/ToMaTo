@@ -48,6 +48,13 @@ var createConnectionMenu = function(obj) {
 				icon:"no-capture"
 			} : null,
 			"sep2": "---",
+			"traffic_analyzer": {
+				name:'Traffic Analyzer',
+				icon:'usage',
+				callback: function(){
+					obj.trafficAnalyzer();
+				}
+			},
 			"configure": {
 				name:'Configure',
 				icon:'configure',
