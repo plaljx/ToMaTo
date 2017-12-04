@@ -77,7 +77,7 @@ var ConnectionAttributeWindow = AttributeWindow.extend({
 			
 			tab_content.append(link_emulation);
 			this.table.append(tab_content);
-			panels.append($('<li class="active"><a href="#Link_Emulation" data-toggle="tab">Link Emulation</a></li>'));
+			panels.append($('<li class="active"><a href="#Link_Emulation" data-toggle="tab">连接配置</a></li>'));
 		}
 		if (con.attrEnabled("capturing")) {
 			var t = this;
@@ -93,7 +93,7 @@ var ConnectionAttributeWindow = AttributeWindow.extend({
 			});
 			this.elements.push(el);
 			packet_capturing.append($('<div class="form-group" />')
-					.append($('<label class="col-sm-6 control-label">Enabled</label>'))
+					.append($('<label class="col-sm-6 control-label">启动</label>'))
 					.append($('<div class="col-sm-6" />')
 					.append(el.getElement())));
 
@@ -118,7 +118,7 @@ var ConnectionAttributeWindow = AttributeWindow.extend({
 
 			tab_content.append(packet_capturing);
 			this.table.append(tab_content);
-			panels.append($('<li><a href="#Packet_capturing" data-toggle="tab">Packet capturing</a></li>'));
+			panels.append($('<li><a href="#Packet_capturing" data-toggle="tab">流量捕获</a></li>'));
 		}
 	},
 	updateEmulationStatus: function(enabled) {

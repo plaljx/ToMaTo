@@ -10,7 +10,7 @@ var Component = Class.extend({
 			autoOpen: false,
     		draggable: true,
     		resizable: false,
-    		title:"Traffics",
+    		title:"流量生成配置记录",
     		compoent:this,
     		modal: false,
     		width: 500

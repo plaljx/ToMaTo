@@ -173,7 +173,7 @@ var Connection = Component.extend({
 		var wsPos = this.editor.workspace.container.position();
 		var t = this;
 		this.configWindow = new ConnectionAttributeWindow({
-			title: "Attributes",
+			title: "属性",
 			width: 500,
 			buttons: {
 				Save: function() {

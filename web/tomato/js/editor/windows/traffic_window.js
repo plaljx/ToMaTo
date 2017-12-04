@@ -6,21 +6,21 @@ var TrafficWindow = Window.extend({
 		this.traffics = {};
 
 		var closebutton = {
-			text:"Close",
+			text:"关闭",
 			id:"trawindow-close-button",
 			click:function(){
 				t.remove();
 			}
 		};
 		var addbutton = {
-			text:"Add Traffic",
+			text:"新建记录",
 			id:"trawindow-add-button",
 			click:function(){
 				t.addNewTraffic();
 			}
 		};
 		var startbutton = {
-			text:"Start Selected",
+			text:"启动选中流量",
 			id:"trawindow-start-button",
 			click:function(){
 				t.startSelected();
@@ -98,7 +98,7 @@ var TrafficWindow = Window.extend({
 	createTrafficListTwo:function(){
 		var t = this;
 		this.trafficTable =  $('<div />');
-		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-2"><h4>Name</h4></div><div class="col-sm-2"><h4>Source IP</h4></div><div class="col-sm-2"><h4>Destination IP</h4></div><div class="col-sm-2" /></div>');
+		var tableHeader = $('<div class="row"><div class="col-sm-1" /><div class="col-sm-2"><h4>名称</h4></div><div class="col-sm-3"><h4>源主机IP</h4></div><div class="col-sm-3"><h4>目的主机IP</h4></div><div class="col-sm-2" /></div>');
 		this.trafficTable.append(tableHeader);
 		this.trafficList.empty();
 		this.trafficList.append(this.trafficTable);
@@ -111,8 +111,8 @@ var TrafficWindow = Window.extend({
 		var t = this;
 		var tr = $('<div class="row" />');
 		var td_name = $('<div class="col-sm-2" />');
-		var td_source = $('<div class="col-sm-2" />');
-		var td_perm = $('<div class="col-sm-2" />');
+		var td_source = $('<div class="col-sm-3" />');
+		var td_perm = $('<div class="col-sm-3" />');
 		var td_buttons = $('<div class="col-sm-2" />');
 		var td_icon = $('<div class="col-sm-1" />');
 
@@ -208,18 +208,18 @@ var TrafficWindow = Window.extend({
 		var t = this;
 		var modifyWindow;
 		modifyWindow = new AttributeWindow({
-			title :"Attributes",
+			title :"属性",
 			width:500,
 			height:800,
 			buttons:[{
-				text:"Modify",
+				text:"修改",
 				click:function(){
 					//todo:modify
 					modifyWindow.remove();
 					}
 				},
 				{
-					text:"Close",
+					text:"关闭",
 					click:function(){
 						modifyWindow.remove();
 					}
@@ -228,32 +228,32 @@ var TrafficWindow = Window.extend({
 
 		});
 		modifyWindow.add(new TextElement({
-			label:"Start time",
+			label:"开始时间",
 			name:"start_time",
 			value:this.traffics[trafficId].start_time
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Off time",
+			label:"持续是将",
 			name:"off_time",
 			value:this.traffics[trafficId].off_time
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Source ip",
+			label:"源主机IP",
 			name:"source_ip",
 			value:this.traffics[trafficId].source_ip
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Source port",
+			label:"源主机端口",
 			name:"src_port",
 			value:this.traffics[trafficId].src_port
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Destination IP",
+			label:"目的主机IP",
 			name:"dest_ip",
 			value:this.traffics[trafficId].dest_ip
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Destination Port",
+			label:"目的主机端口",
 			name:"dest_port",
 			value:this.traffics[trafficId].dest_port
 		}));
@@ -263,10 +263,10 @@ var TrafficWindow = Window.extend({
 			name:"tos",
 			value:this.traffics[trafficId].tos
 		}));
-		*/ß
+		*/
 		var protocolChoices = {"TCP":"TCP", "UDP":"UDP"};
 		modifyWindow.add(new ChoiceElement({
-			label:"Protocal",
+			label:"协议",
 			name:"protocol",
 			choices:protocolChoices
 		}));
@@ -275,12 +275,12 @@ var TrafficWindow = Window.extend({
 		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
 		"JITTER [10.0 125 0.5]":"JITTER 10kbps 0.05-0.15s"};
 		modifyWindow.add(new ChoiceElement({
-			label:"Pattern",
+			label:"模式",
 			name:"pattern",
 			choices:patternChoices
 		}));
 		modifyWindow.add(new TextElement({
-			label:"Extra Param",
+			label:"额外参数",
 			name:"extra_param",
 			value:this.traffics[trafficId].extra_param
 		}));
@@ -302,12 +302,12 @@ var TrafficWindow = Window.extend({
 		var traffic;
 		topology_id = this.compoent.topology.id
 		traffic = new AttributeWindow({
-			title:"Attributes",
+			title:"属性",
 			width: 500,
 			height: 800,
             buttons: [
 						{
-							text:"Save",
+							text:"保存",
 							click: function() {
 								var values =  traffic.getValues();
 								values.element_id = t.compoent.ipToId(values.source_ip)
@@ -328,7 +328,7 @@ var TrafficWindow = Window.extend({
 							}}
 						},
 						{
-							text:"Close",
+							text:"关闭",
 							click: function() {
 								traffic.remove();
 							}
@@ -338,43 +338,43 @@ var TrafficWindow = Window.extend({
 
 		});
 		traffic.add(new TextElement({
-			label:"Name",
+			label:"名称",
 			name:"traffic_name",
 			value:"instance"
 		}));
 		traffic.add(new TextElement({
-			label:"Start time",
+			label:"开始时间",
 			name:"start_time",
 			value:"0"
 		}));
 		traffic.add(new TextElement({
-			label:"Off time",
+			label:"持续时间",
 			name:"off_time",
 			value:"20.0"
 		}));
 		traffic.add(new TextElement({
-			label:"Source IP",
+			label:"源主机IP",
 			name:"source_ip",
 			value:""
 		}));
 		traffic.add(new TextElement({
-			label:"Source port",
+			label:"源主机端口",
 			name:"src_port",
 			value:"5001"
 		}));
 		traffic.add(new TextElement({
-			label:"Destination IP",
+			label:"目的主机IP",
 			name:"dest_ip",
 			value:""
 			//value:"10.109.241.66"
 		}));
 		traffic.add(new TextElement({
-			label:"Destination Port",
+			label:"目的主机端口",
 			name:"dest_port",
 			value:"5001"
 		}));
 		traffic.add(new ChoiceElement({
-			label:"Protocal",
+			label:"协议",
 			name:"protocol",
 			choices:{"UDP":"UDP" , "TCP":"TCP","SINK":"SINK"}
 		}));
@@ -390,12 +390,12 @@ var TrafficWindow = Window.extend({
 		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
 		"JITTER [10.0 125 0.5]":"JITTER 10kbps 0.05-0.15s"};
 		traffic.add(new ChoiceElement({
-			label:"Pattern",
+			label:"模式",
 			name:"pattern",
 			choices:patternChoices
 		}));
 		traffic.add(new TextElement({
-			label:"Extra Param",
+			label:"额外参数",
 			name:"extra_param",
 			value:""
 		}));
