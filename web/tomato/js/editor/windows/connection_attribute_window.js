@@ -109,10 +109,19 @@ var ConnectionAttributeWindow = AttributeWindow.extend({
 				}
 				this.capturing_elements.push(el);
 				this.elements.push(el);
-				packet_capturing.append($('<div class="form-group" />')
-					.append($('<label class="col-sm-6 control-label">').append(con.caps.attributes[name].label))
-					.append($('<div class="col-sm-6" />').append(el.getElement()))
-				);
+				if(name == "capture_mode") {
+                    packet_capturing.append($('<div class="form-group" />')
+                        .append($('<label class="col-sm-6 control-label">').append("捕获模式"))
+                        .append($('<div class="col-sm-6" />').append(el.getElement()))
+                    );
+                }
+                else{
+					packet_capturing.append($('<div class="form-group" />')
+                        .append($('<label class="col-sm-6 control-label">').append("过滤条件"))
+                        .append($('<div class="col-sm-6" />').append(el.getElement()))
+                    );
+				}
+
 			}
 			this.updateCapturingStatus(con.data.capturing);
 

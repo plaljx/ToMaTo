@@ -176,7 +176,7 @@ var Connection = Component.extend({
 			title: "属性",
 			width: 500,
 			buttons: {
-				Save: function() {
+				保存: function() {
 					t.configWindow.hide();
 					var values = t.configWindow.getValues();
 					for (var name in values) if (values[name] === t.data[name]) delete values[name];
@@ -184,7 +184,7 @@ var Connection = Component.extend({
 					t.configWindow.remove();
 					t.configWindow = null;
 				},
-				Cancel: function() {
+				取消: function() {
 					t.configWindow.remove();
 					t.configWindow = null;
 				} 
