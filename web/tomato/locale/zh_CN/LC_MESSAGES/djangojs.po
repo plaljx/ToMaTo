@@ -487,6 +487,101 @@ msgstr "网段不能包含多个出口。这可能导致一个环的出现，并
 msgid "'"
 msgstr ""
 
+#: js/editor/windows/traffic_window.js:9 js/editor/windows/traffic_window.js:222 js/editor/windows/traffic_window.js:331
+msgid "Close"
+msgstr "关闭"
+
+#: js/editor/windows/traffic_window.js:16
+msgid "Add Traffic"
+msgstr "新建记录"
+
+#: js/editor/windows/traffic_window.js:23
+msgid "Start Selected"
+msgstr "启动选中流量"
+
+#: js/editor/windows/traffic_window.js:101
+msgid "Name"
+msgstr "名称"
+
+#: js/editor/windows/traffic_window.js:101
+msgid "Source IP"
+msgstr "源主机IP"
+
+#: js/editor/windows/traffic_window.js:101
+msgid "Destination IP"
+msgstr "目的主机IP"
+
+#: js/editor/windows/traffic_window.js:211 js/editor/windows/traffic_window.js:305 js/editor/components/connection.js:176
+msgid "Attributes"
+msgstr "属性"
+
+#: js/editor/windows/traffic_window.js:215
+msgid "Modify"
+msgstr "修改"
+
+#: js/editor/windows/traffic_window.js:231 js/editor/windows/traffic_window.js:346
+msgid "Start time"
+msgstr "开始时间"
+
+#: js/editor/windows/traffic_window.js:236 js/editor/windows/traffic_window.js:351
+msgid "Off time"
+msgstr "持续时间"
+
+#: js/editor/windows/traffic_window.js:241 js/editor/windows/traffic_window.js:356
+msgid "Source ip"
+msgstr "源主机IP"
+
+#: js/editor/windows/traffic_window.js:246 js/editor/windows/traffic_window.js:361
+msgid "Source port"
+msgstr "源主机端口"
+
+#: js/editor/windows/traffic_window.js:251 js/editor/windows/traffic_window.js:366
+msgid "Destination IP"
+msgstr "目的主机IP"
+
+#: js/editor/windows/traffic_window.js:256 js/editor/windows/traffic_window.js:372
+msgid "Destination Port"
+msgstr "目的主机端口"
+
+#: js/editor/windows/traffic_window.js:269 js/editor/windows/traffic_window.js:377
+msgid "Protocal"
+msgstr "协议"
+
+#: js/editor/windows/traffic_window.js:278 js/editor/windows/traffic_window.js:393
+msgid "Pattern"
+msgstr "模式"
+
+#: js/editor/windows/traffic_window.js:283 js/editor/windows/traffic_window.js:398
+msgid "Extra Param"
+msgstr "其他参数"
+
+#: js/editor/windows/traffic_window.js:310
+msgid "Save"
+msgstr "保存"
+
+#: js/editor/windows/traffic_window.js:341
+msgid "Name"
+msgstr "名称"
+
+
+#: js/editor/component.js:13
+msgid "Traffics"
+msgstr "流量配置记录"
+
+#: js/editor/windows/connection_attribute_window.js:80
+msgid "Link Emulation"
+msgstr "网络配置"
+
+#: js/editor/windows/connection_attribute_window.js:121
+msgid "Packet capturing"
+msgstr "流量捕获"
+
+#: js/editor/windows/connection_attribute_window.js:96
+msgid "Enabled"
+msgstr "启动"
+
+msgid
+
 #~ msgid "Notes for Topology"
 #~ msgstr "拓扑笔记"
 

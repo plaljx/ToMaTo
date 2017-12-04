@@ -257,11 +257,13 @@ var TrafficWindow = Window.extend({
 			name:"dest_port",
 			value:this.traffics[trafficId].dest_port
 		}));
+		/*
 		modifyWindow.add(new TextElement({
 			label:"Type of Server",
 			name:"tos",
 			value:this.traffics[trafficId].tos
 		}));
+		*/ß
 		var protocolChoices = {"TCP":"TCP", "UDP":"UDP"};
 		modifyWindow.add(new ChoiceElement({
 			label:"Protocal",
@@ -376,11 +378,13 @@ var TrafficWindow = Window.extend({
 			name:"protocol",
 			choices:{"UDP":"UDP" , "TCP":"TCP","SINK":"SINK"}
 		}));
+		/*
 		traffic.add(new TextElement({
 			label:"Type of Server",
 			name:"tos",
 			value:"0"
 		}));
+		*/
 		var patternChoices = {"PERIODIC [1.0 125]":"1kbps" , "PERIODIC [10.0 125]":"10kbps",
 		"PERIODIC [10.0 1250]":"100kbps" ,"PERIODIC [50.0 1280]":"512kbps",
 		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
