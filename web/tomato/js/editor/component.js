@@ -315,7 +315,7 @@ var Component = Class.extend({
 		for(var i = 0 ; i < this.topology.data.elements.length; i++){
 			var order = this.topology.data.elements[i];
 			if(order.tech == "openvz_interface"){
-				if(order.ip4address == ip||order.ip4address == (ip+"/24")){
+				if(order.ip4address == ip||order.ip4address == (ip+"/24")||order.ip4address == (ip+"/22")){
 					return order.parent;
 				}
 			}

@@ -9,7 +9,7 @@ var TrafficWindow = Window.extend({
 			text:"关闭",
 			id:"trawindow-close-button",
 			click:function(){
-				t.remove();
+				t.showResult();
 			}
 		};
 		var addbutton = {
@@ -296,6 +296,36 @@ var TrafficWindow = Window.extend({
 		});
 		delete this.traffics[trafficId];
 		delete this.userListFinder[trafficId];
+	},
+	showResult:function(){
+		var t = this;
+		var test;
+		resultWindow = new AttributeWindow({
+			title :"处理结果",
+			width:500,
+			height:200,
+			buttons:[
+				{
+					text:"关闭",
+					click:function(){
+						resultWindow.remove();
+					}
+				}
+			],
+
+		});
+		dialog.add(new TextAreaElement({
+            name: "源主机IP",
+            label: gettext("source_ip"),
+			value:"10.0.0.2, 10.0.0.3, 10.0.1.1, 10.0.3.1, 10.0.3.2",
+			disabled: true
+        }));
+		resultWindow.add(new TextElement({
+			label:"流量生成工具",
+			name:"traffic_tool",
+			value:"MGEN",
+			disabled: true
+		}));
 	},
 	addNewTraffic:function(){
 		var t = this;
