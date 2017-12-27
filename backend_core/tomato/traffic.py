@@ -168,22 +168,21 @@ def ditg_start(element_id , **attrs):
 	return res
 
 def get_usages(element_ids):
-	usages = dict()
-	useage_ratio = dict()
+	usages = {}
+	useage_ratio = {}
 	for id in element_ids:
 		temp = Element.getUsage(id)
 		usages[id] = temp
-		useage_ratio[id] = {
-			"cpu" :100 * float(temp["cpu"]),
-			"memory" : 100 * float(temp["memory"]) /(1024*1024*temp("ram")),
-			"traffic" : 100 * float(temp["traffic"]) / (60 * 10000 )
-		}
+		cpu = 100 * float(temp["cpu"])
+		memory = (100 * float(temp["memory"])) /(1024*1024*float(temp("ram")))
+		traffic = (100 * float(temp["traffic"])) / (60 * 10000 )
+		useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
 	print usages
 	print useage_ratio
 	return useage_ratio
 
 def calculate_load(usages, a=0.4, b=0.3, c=0.3):
-	load = dict()
+	load = {}
 	for  key in usages:
 		load[key] = usages[key]["cpu"] * 0.4 + usages[key]["memory"] * 0.3 + usages[key]["traffic"]
 	return load
@@ -193,12 +192,14 @@ def choose_vms(elemet_ids, number):
 	load = calculate_load(usages)
 	#sort
 	load = sorted(load.iteritems(), key=lambda d: d[1], reverse=False)
-	print "load:"+load
+	print "load:"
+	print load
 	i = 0
-	result  = list()
+	result  = []
 	while i < number and i < len(load):
 		result.append(load[i][0])
-	print "result:"+result
+	print "result:"
+	print result
 	return result
 
 def test_usages():
