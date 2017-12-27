@@ -203,8 +203,8 @@ def choose_vms(elemet_ids, number):
 
 def test_usages():
 	elementids = ["5a436a89a67da503ac2df973", "5a436a90a67da503ac2df977","5a436a8ca67da503ac2df975", "5a436a8ba67da503ac2df974", "5a436a8ea67da503ac2df976"]
-	choose_vms(elementids, 4)
-	return None
+	result = choose_vms(elementids, 4)
+	return result
 
 
 
