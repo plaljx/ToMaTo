@@ -166,3 +166,45 @@ def ditg_start(element_id , **attrs):
 	upload = traffic.send_pack(sender_element.info(), sender_dir, sender_key)
 	res = sender_element.action(action_use)
 	return res
+
+def get_usages(element_ids):
+	usages = dict()
+	useage_ratio = dict()
+	for id in element_ids:
+		temp = Element.getUsage(id)
+		usages[id] = temp
+		useage_ratio[id] = {
+			"cpu" :100 * float(temp["cpu"]),
+			"memory" : 100 * float(temp["memory"]) /(1024*1024*temp("ram")),
+			"traffic" : 100 * float(temp["traffic"]) / (60 * 10000 )
+		}
+	print usages
+	print useage_ratio
+	return useage_ratio
+
+def calculate_load(usages, a=0.4, b=0.3, c=0.3):
+	load = dict()
+	for  key in usages:
+		load[key] = usages[key]["cpu"] * 0.4 + usages[key]["memory"] * 0.3 + usages[key]["traffic"]
+	return load
+
+def choose_vms(elemet_ids, number):
+	usages = get_usages(elemet_ids)
+	load = calculate_load(usages)
+	#sort
+	load = sorted(load.iteritems(), key=lambda d: d[1], reverse=False)
+	print "load:"+load
+	i = 0
+	result  = list()
+	while i < number and i < len(load):
+		result.append(load[i][0])
+	print "result:"+result
+	return result
+
+def test_usages():
+	elementids = ["5a436a89a67da503ac2df973", "5a436a90a67da503ac2df977","5a436a8ca67da503ac2df975", "5a436a8ba67da503ac2df974", "5a436a8ea67da503ac2df976"]
+	choose_vms(elementids, 4)
+	return None
+
+
+

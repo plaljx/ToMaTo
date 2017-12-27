@@ -353,6 +353,13 @@ class Element(LockedStatefulEntity, BaseDocument):
 			return None
 
 	@classmethod
+	def getUsage(cls, id_):
+		try:
+			return cls.objects.get(id=id_).get_usage()
+		except cls.DoesNotExist:
+			return None
+
+	@classmethod
 	def create(cls, top, type_=None, parent=None, **attrs):
 		if not type_:
 			type_ = cls.TYPE

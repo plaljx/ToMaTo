@@ -136,6 +136,10 @@ class HostElement(HostObject):
 		except:
 			wrap_and_handle_current_exception(re_raise=False, data={'host': self.host.address if self.host else None})
 
+	def getUsage(self):
+		usage = self.host.getProxy().get_usage(self.num)
+		return usage
+
 
 def list():
 	return [e.id for e in HostElement.objects.all()]

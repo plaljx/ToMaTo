@@ -240,6 +240,9 @@ class VMElement(Element):
 		self.customTemplate = True
 		self.save()
 
+	def get_usage(self):
+		return self.element.getUsage()
+
 	ATTRIBUTES = Element.ATTRIBUTES.copy()
 	ATTRIBUTES.update({
 		"site": StatefulAttribute(get=lambda self: self.site.name if self.site else None, set=modify_site, writableStates=[ST_CREATED]),
