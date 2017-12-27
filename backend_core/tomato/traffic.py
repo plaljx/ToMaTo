@@ -174,7 +174,7 @@ def get_usages(element_ids):
 		temp = Element.getUsage(id)
 		usages[id] = temp
 		cpu = 100 * float(temp["cpu"])
-		memory = (100 * float(temp["memory"])) /(1024*1024*float(temp("ram")))
+		memory = (100 * float(temp["memory"])) /(1024*1024*float(temp["ram"]))
 		traffic = (100 * float(temp["traffic"])) / (60 * 10000 )
 		useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
 	print usages
@@ -198,6 +198,7 @@ def choose_vms(elemet_ids, number):
 	result  = []
 	while i < number and i < len(load):
 		result.append(load[i][0])
+		i = i + 1
 	print "result:"
 	print result
 	return result
