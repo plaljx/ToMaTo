@@ -225,15 +225,12 @@ def traffic_start(traffic_id):
 	return None
 
 def choose_tool(traffic_info):
-	#todo匹配选择流量生成工具
 	return None
 
 def get_source_command(tool, traffic_info):
-	#todo创建源主机控制命令
 	return None
 
 def get_dest_command(tool, traffic_info):
-	#todo创建目标主机控制命令
 	return None
 
 

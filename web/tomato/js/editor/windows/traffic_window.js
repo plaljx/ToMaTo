@@ -341,7 +341,7 @@ var TrafficWindow = Window.extend({
 							click: function() {
 								var values =  traffic.getValues();
 								values.source_element = t.compoent.ipToId(values.source_ip)
-								valuse.dest_element = t.compoent.ipToId(values.dest_ip)
+								values.dest_element = t.compoent.ipToId(values.dest_ip)
 								if(t.traffics[values.traffic_name]){
 									alert("The name of traffic is existing,please change the name!");
 								}
