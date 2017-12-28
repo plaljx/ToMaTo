@@ -17,8 +17,8 @@ class Traffic(BaseDocument):
 	dest_port = StringField()
 	protocol = StringField()
 	pattern = StringField()
-	packet_rate = FloatField()
-	packet_size = FloatField()
+	packet_rate = IntField()
+	packet_size = IntField()
 	tos = StringField() #@unresolved
 	ttl = IntField()
 	file = StringField()
@@ -30,6 +30,9 @@ class Traffic(BaseDocument):
 
 	def modify(self, **attrs):
 		for key in attrs:
+			if attrs[key] == "":
+				del attrs[key]
+		for key in attrs:
 			if hasattr(self, "modify_%s" % key):
 				getattr(self, "modify_%s" % key)(attrs[key])
 			else:
@@ -38,7 +41,7 @@ class Traffic(BaseDocument):
 		return self.info()
 
 	def info(self):
-		return {
+		result = {
 			"id":self.id.__str__(),
 			"source_element":self.source_element,
 			"dest_element":self.dest_element,
@@ -51,10 +54,14 @@ class Traffic(BaseDocument):
 			"off_time":self.off_time,
 			"protocol":self.protocol,
 			"pattern":self.pattern,
+			"packet_size":str(self.packet_size),
+			"packet_rate":str(self.packet_rate),
 			"tos": self.tos,
-			"ttl": self.ttl,
+			"ttl": str(self.ttl),
 			"file": self.file
 		}
+		print result
+		return result
 
 	def remove(self):
 		self.delete()
@@ -92,11 +99,17 @@ class Traffic(BaseDocument):
 	def modify_pattern(self, val):
 		self.pattern = val
 
+	def modify_packet_size(self, val):
+		self.packet_size = int(val)
+
+	def modify_packet_size(self, val):
+		self.packet_size = int(val)
+
 	def modify_tos(self, val):
 		self.tos = val
 
 	def modify_ttl(self, val):
-		self.ttl = val
+		self.ttl = int(val)
 
 	def modify_file(self, val):
 		self.file = val
