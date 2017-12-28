@@ -6,19 +6,22 @@ from .elements import Element
 class Traffic(BaseDocument):
 
 	topology_id = StringField(required=True)
-	element_id =  StringField(required=True)
+	source_element = StringField()
+	dest_element = StringField()
 	traffic_name = StringField(required=True)
-	flow_number = IntField(default=1)#@unresolved
-	start_time = StringField(default='0')#@unresolved
+	start_time = StringField()#@unresolved
 	off_time = StringField()
 	source_ip = StringField()
-	src_port = StringField()
+	source_port = StringField()
 	dest_ip = StringField()
 	dest_port = StringField()
 	protocol = StringField()
 	pattern = StringField()
-	tos = StringField(default='0') #@unresolved
-	extra_param = StringField()
+	packet_rate = FloatField()
+	packet_size = FloatField()
+	tos = StringField() #@unresolved
+	ttl = IntField()
+	file = StringField()
 
 	def init(self,topology_id, **attrs):
 		self.topology_id = topology_id
@@ -37,38 +40,39 @@ class Traffic(BaseDocument):
 	def info(self):
 		return {
 			"id":self.id.__str__(),
-			"element_id":self.element_id,
-			"topology_id":self.topology_id,
+			"source_element":self.source_element,
+			"dest_element":self.dest_element,
+			"traffic_name": self.traffic_name,
 			"source_ip":self.source_ip,
-			"src_port":self.src_port,
-			"tos":self.tos,
+			"source_port":self.source_port,
+			"dest_ip": self.dest_ip,
+			"dest_port": self.dest_port,
 			"start_time":self.start_time,
-			"traffic_name":self.traffic_name,
 			"off_time":self.off_time,
-			"dest_ip":self.dest_ip,
-			"dest_port":self.dest_port,
 			"protocol":self.protocol,
 			"pattern":self.pattern,
-			"extra_param":self.extra_param,
+			"tos": self.tos,
+			"ttl": self.ttl,
+			"file": self.file
 		}
 
 	def remove(self):
 		self.delete()
 
-	def modify_extra_param(self, val):
-		self.extra_param = val
+	def modify_source_element(self, val):
+		self.source_element = val
 
-	def modify_element_id(self, val):
-		self.element_id = val
+	def modify_dest_element(self, val):
+		self.dest_element = val
 
 	def modify_traffic_name(self, val):
 		self.traffic_name = val
 
-	def modify_src_port(self, val):
-		self.src_port = val
+	def modify_source_ip(self, val):
+		self.source_ip = val
 
-	def modify_flow_number(self, val):
-		self.flow_number = val
+	def modify_source_port(self, val):
+		self.source_port = val
 
 	def modify_start_time(self, val):
 		self.start_time = val
@@ -91,26 +95,11 @@ class Traffic(BaseDocument):
 	def modify_tos(self, val):
 		self.tos = val
 
-	def modify_element_id(self, val):
-		self.element_id = val
+	def modify_ttl(self, val):
+		self.ttl = val
 
-	def modify_source_ip(self, val):
-		self.source_ip = val
-
-	@classmethod
-	def traffic_start(cls, traffic_id):
-		action = "rextfv_upload_grant"
-		action_use = "rextfv_upload_use"
-		traffic_info = get(traffic_id).info()
-
-		element_id = traffic_info["element_id"]
-		pack_dir = traffic.make_mgen_pack(traffic_info)
-		element_info = Element.get(element_id).info()
-		key = Element.get(element_id).action(action)
-		upload = traffic.send_pack(element_info ,pack_dir, key)
-		action = Element.get(element_id).action(action_use)
-		return action
-
+	def modify_file(self, val):
+		self.file = val
 
 def get(id_, **kwargs):
 	try:
@@ -207,6 +196,47 @@ def test_usages():
 	elementids = ["5a436a89a67da503ac2df973", "5a436a90a67da503ac2df977","5a436a8ca67da503ac2df975", "5a436a8ba67da503ac2df974", "5a436a8ea67da503ac2df976"]
 	result = choose_vms(elementids, 4)
 	return result
+
+def traffic_start(traffic_id):
+	action = "rextfv_upload_grant"
+	action_use = "rextfv_upload_use"
+	traffic_info = get(traffic_id).info()
+
+	tool = choose_tool(traffic_info)
+	source_command = get_source_command(tool, traffic_info)
+	dest_command = get_dest_command(tool, traffic_info)
+
+	source_dir = traffic.make_command_file(traffic_info, tool, source_command)
+	dest_dir = traffic.make_command_file(traffic_info, tool, dest_command)
+
+	#upload  dest
+	if dest_dir is not None:
+		dest_element = Element.get(traffic_info["dest_element"])
+		key = dest_element.action(action)
+		traffic.send_pack(dest_element.info() ,dest_dir, key)
+		dest_element.action(action_use)
+
+	#upload source
+	if source_dir is not None:
+		source_element = Element.get(traffic_info["source_element"])
+		key = source_element.action(action)
+		traffic.send_pack(source_element.info() ,dest_dir, key)
+		source_element.action(action_use)
+	return None
+
+def choose_tool(traffic_info):
+	#todo匹配选择流量生成工具
+	return None
+
+def get_source_command(tool, traffic_info):
+	#todo创建源主机控制命令
+	return None
+
+def get_dest_command(tool, traffic_info):
+	#todo创建目标主机控制命令
+	return None
+
+
 
 
 

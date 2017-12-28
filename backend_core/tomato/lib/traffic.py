@@ -1,6 +1,38 @@
 import os
 import requests
+import yaml
 
+default_setting = yaml.load("""
+modul: [MGEN]
+attributes: [source_port, dest_ip, dest_port, start_time, off_time, protocol, pattern, packet_size, packet_rate, tos, ttl]
+MGEN:
+  name: MGEN
+  source_port: [True, False]
+  dest_ip: [True, True]
+  dest_port: [True, True]
+  start_time: [True, False]
+  off_time: [True, True]
+  protocol: [True, True, TCP, UDP]
+  pattern: [True, True, PERIODIC, POISSON, BRUST, JITTER]
+  packet_size: [True, True]
+  packet_rate: [True, True]
+  tos: [True, False]
+  priority: 10
+  command:
+    source: MGEN EVENT "+start_time+ ON 1 -source_port- DST +protocol+ +destination_ip+/+destination_port+ -pattern-" EVENT "+off_time+ OFF 1"
+    pattern:
+      PERIODIC: PERIODIC [+packet_rate+, +packet_size+]
+      POISSON: POISSON [+packet_rate%, %packet_size+]
+      BRUST: BRUST [RANDOM +packet_rate+ PERIODIC [+packet_rate+  +packet_size+] EXP 5.0]
+      JITTER: JITTER [+packet_rate+, +packet_size+ .5]
+    source_port: SRC +source_port+
+""")
+
+def get_traffic_modul():
+	return default_setting
+
+def make_command_file(traffic_info, tool, source_command):
+	return None
 
 def make_mgen_pack(traffic_info):
 	if not os.path.exists("/work"):
@@ -51,4 +83,5 @@ def make_ditg_pack(event ,element_id ,  **attrs):
 	os.system("tar czvf %s.tar.gz auto_exec.sh" % element_id)
 	# return "/work/%s.tar.gz" % name
 	return "/ditg/%s/%s.tar.gz" % (element_id, element_id)
+
 

@@ -332,7 +332,7 @@ var TrafficWindow = Window.extend({
 		var traffic;
 		topology_id = this.compoent.topology.id
 		traffic = new AttributeWindow({
-			title:"属性",
+			title:"属性配置",
 			width: 500,
 			height: 800,
             buttons: [
@@ -340,7 +340,8 @@ var TrafficWindow = Window.extend({
 							text:"保存",
 							click: function() {
 								var values =  traffic.getValues();
-								values.element_id = t.compoent.ipToId(values.source_ip)
+								values.source_element = t.compoent.ipToId(values.source_ip)
+								valuse.dest_element = t.compoent.ipToId(values.dest_ip)
 								if(t.traffics[values.traffic_name]){
 									alert("The name of traffic is existing,please change the name!");
 								}
@@ -370,17 +371,7 @@ var TrafficWindow = Window.extend({
 		traffic.add(new TextElement({
 			label:"名称",
 			name:"traffic_name",
-			value:"instance"
-		}));
-		traffic.add(new TextElement({
-			label:"开始时间",
-			name:"start_time",
-			value:"0"
-		}));
-		traffic.add(new TextElement({
-			label:"持续时间",
-			name:"off_time",
-			value:"20.0"
+			value:"名称"
 		}));
 		traffic.add(new TextElement({
 			label:"源主机IP",
@@ -389,8 +380,18 @@ var TrafficWindow = Window.extend({
 		}));
 		traffic.add(new TextElement({
 			label:"源主机端口",
-			name:"src_port",
+			name:"source_port",
 			value:"5001"
+		}));
+		traffic.add(new TextElement({
+			label:"开始时间(s)",
+			name:"start_time",
+			value:"0"
+		}));
+		traffic.add(new TextElement({
+			label:"持续时间(s)",
+			name:"off_time",
+			value:"20.0"
 		}));
 		traffic.add(new TextElement({
 			label:"目的主机IP",
@@ -401,34 +402,40 @@ var TrafficWindow = Window.extend({
 		traffic.add(new TextElement({
 			label:"目的主机端口",
 			name:"dest_port",
-			value:"5001"
+			value:"5002"
 		}));
 		traffic.add(new ChoiceElement({
-			label:"协议",
+			label:"流量协议",
 			name:"protocol",
-			choices:{"UDP":"UDP" , "TCP":"TCP","SINK":"SINK"}
+			choices:{"UDP":"UDP", "TCP":"TCP","ICMP":"ICMP", "SCTP":"SCTP","DNS":"DNS", "Telnet":"Telnet", "VoIP":"VoIP"}
 		}));
-		/*
-		traffic.add(new TextElement({
-			label:"Type of Server",
-			name:"tos",
-			value:"0"
-		}));
-		*/
-		var patternChoices = {"PERIODIC [1.0 125]":"1kbps" , "PERIODIC [10.0 125]":"10kbps",
-		"PERIODIC [10.0 1250]":"100kbps" ,"PERIODIC [50.0 1280]":"512kbps",
-		"POISSON [10.0 125]":"POISSON 10 kbps","POISSON [10.0 1250]":"POISSON 100 kbps",
-		"JITTER [10.0 125 0.5]":"JITTER 10kbps 0.05-0.15s"};
+		var patternChoices = {"PERIODIC":"匀速模式", "POISSON":"泊松模式", "JITTER":"抖动模式", "BRUST":"组合模式"}
 		traffic.add(new ChoiceElement({
-			label:"模式",
+			label:"流量模式",
 			name:"pattern",
 			choices:patternChoices
 		}));
 		traffic.add(new TextElement({
-			label:"额外参数",
-			name:"extra_param",
+			label:"数据包大小(Byte)",
+			name:"packet_size",
 			value:""
 		}));
+		traffic.add(new TextElement({
+			label:"数据包速率(个／s)",
+			name:"packet_rate",
+			value:""
+		}));
+		traffic.add(new TextElement({
+			label:"服务种类",
+			name:"tos",
+			value:""
+		}));
+		traffic.add(new TextElement({
+			label:"TTL",
+			name:"ttl",
+			value:""
+		}));
+
 		traffic.show();
 	}
 });
