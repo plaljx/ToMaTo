@@ -41,8 +41,8 @@ class Traffic(BaseDocument):
 	def info(self):
 		result = {
 			"id":self.id.__str__(),
-			"source_element":self.source_element,
-			"dest_element":self.dest_element,
+			"source_element":self.source_element.__str__(),
+			"dest_element":self.dest_element.__str__(),
 			"traffic_name": self.traffic_name,
 			"source_ip":self.source_ip,
 			"source_port":self.source_port,
@@ -100,8 +100,8 @@ class Traffic(BaseDocument):
 	def modify_packet_size(self, val):
 		self.packet_size = val
 
-	def modify_packet_size(self, val):
-		self.packet_size = val
+	def modify_packet_rate(self, val):
+		self.packet_rate = val
 
 	def modify_tos(self, val):
 		self.tos = val
@@ -219,21 +219,21 @@ def traffic_start(traffic_id):
 	source_command = get_source_command(tool, traffic_info)
 	dest_command = get_dest_command(tool, traffic_info)
 
-	source_dir = traffic.make_command_file(traffic_info, tool, source_command)
-	dest_dir = traffic.make_command_file(traffic_info, tool, dest_command)
+	source_dir = traffic.make_command_file(traffic_info["source_element"], source_command)
+	dest_dir = traffic.make_command_file(traffic_info["dest_element"], dest_command)
 
-	#传输源主机控制命令
+	#send destination vm's command file
 	if dest_dir is not None:
 		dest_element = Element.get(traffic_info["dest_element"])
 		key = dest_element.action(action)
 		traffic.send_file(dest_element.info() ,dest_dir, key)
 		dest_element.action(action_use)
 
-	#传输目的主机控制命令
+	#send source vm's command file
 	if source_dir is not None:
 		source_element = Element.get(traffic_info["source_element"])
 		key = source_element.action(action)
-		traffic.send_pack(source_element.info() ,dest_dir, key)
+		traffic.send_file(source_element.info() ,source_dir, key)
 		source_element.action(action_use)
 	return None
 
@@ -268,21 +268,21 @@ def choose_tool(traffic_info):
 			candidates[tool] = definition[tool]["priority"]
 	#select the tool by priority
 	if candidates:
-		print candidates
+		print "candidates",candidates
 		tool = ""
 		temp = 0
 		for key in candidates:
 			if candidates[key] > temp:
 				tool = key
 				temp = candidates[key]
-		print tool
+		print "final tool:",tool
 		return tool
 	else:
 		return None
 
 def get_source_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	print command
+	print "source_command:",command
 	if command.has_key("source"):
 		return make_command("source", command,traffic_info)
 	else:
@@ -290,7 +290,7 @@ def get_source_command(tool, traffic_info):
 
 def get_dest_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	print command
+	print "dest_command:",command
 	if command.has_key("dest"):
 		return make_command("dest", command,traffic_info)
 	else:
@@ -299,22 +299,32 @@ def get_dest_command(tool, traffic_info):
 def make_command(target, command, traffic_info):
 	formula1 = re.compile('\?.*?\?')
 	formula2 = re.compile('\+.*?\+')
-	str = command[target]
-	add = formula1.findall(str)
+	com = command[target]
+	add = formula1.findall(com)
 	print add
 	while add:
 		for value in add:
 			attribute = value[1:len(value)-1]
 			if command.has_key(attribute):
-				str.replace(value, command[attribute])
-		print str
-		add = formula1.findall(str)
-	add2 = formula2.findall(str)
+				replacestr = ""
+				if not isinstance(command[attribute], basestring):
+					print command[attribute]
+					print traffic_info[attribute]
+					replacestr = command[attribute][traffic_info[attribute]]
+				else:
+					replacestr = command[attribute]
+				print "replace:",type(value),value, type(replacestr),replacestr
+				com = com.replace(value, replacestr)
+				print com
+		print com
+		add = formula1.findall(com)
+	add2 = formula2.findall(com)
 	for value in add2:
 		attribute = value[1:len(value)-1]
-		str.replace(value, traffic_info[attribute])
-	print "last:", str
-	return str
+		print attribute, traffic_info[attribute]
+		com = com.replace(value, traffic_info[attribute])
+	print "final_command:", com
+	return com
 
 
 

@@ -3,7 +3,7 @@ import requests
 import yaml
 
 default_setting = yaml.load("""
-modul: [MGEN]
+tools: [MGEN]
 attributes: [source_port, dest_ip, dest_port, start_time, off_time, protocol, pattern, packet_size, packet_rate, tos, ttl]
 MGEN:
   name: MGEN
@@ -19,41 +19,38 @@ MGEN:
   tos: [True, False]
   priority: 10
   command:
-    source: MGEN EVENT "+start_time+ ON 1 ?source_port? DST +protocol+ +destination_ip+/+destination_port+ ?pattern?" EVENT "+off_time+ OFF 1"
+    source: mgen event "+start_time+ ON 1 +protocol+ ?source_port? DST +dest_ip+/+dest_port+ ?pattern?" event "+off_time+ OFF 1"
     pattern:
-      PERIODIC: PERIODIC [+packet_rate+, +packet_size+]
-      POISSON: POISSON [+packet_rate+, +packet_size+]
+      PERIODIC: PERIODIC [+packet_rate+ +packet_size+]
+      POISSON: POISSON [+packet_rate+ +packet_size+]
       BRUST: BRUST [RANDOM +packet_rate+ PERIODIC [+packet_rate+  +packet_size+] EXP 5.0]
-      JITTER: JITTER [+packet_rate+, +packet_size+ .5]
+      JITTER: JITTER [+packet_rate+ +packet_size+ .5]
     source_port: SRC +source_port+
 """)
 
 def get_traffic_modul():
 	return default_setting
 
-def make_command_file(target, tool, command):
+def make_command_file(target, command):
 	if command is None:
 		return None
 	if not os.path.exists("/work"):
 		os.mkdir("/work")
-	if not os.path.exists("/work/%s" % tool)
-		os.mkdir("/work/%s" % tool)
-	if os.path.exists("/work/%s/%s" % (tool, target) ):
-		os.system("rm  /work/%s/%s/*" % (tool,target))
+	if os.path.exists("/work/%s" % target  ):
+		os.system("rm  /work/%s/*" % target)
 	else:
-		os.mkdir("/work/%s/%s" % (tool, target))
-	f = open("/work/%s/%s/auto_exec.sh" % (tool, target), "w")
+		os.mkdir("/work/%s" % target)
+	f = open("/work/%s/auto_exec.sh" % target, "w")
 	f.write('#!/bin/bash' + '\n' + '%s' % command)
-	os.chdir("/work/%s/%s" % (tool, target))
+	f.close()
+	os.chdir("/work/%s" % target)
 	os.system("tar czvf %s.tar.gz auto_exec.sh" % target)
-	file_dir = "/work/%s/%s/%s.tar.gz" % (tool, target, target)
-	return file_dir
+	return  "/work/%s/%s.tar.gz" % (target, target)
 
-def send_file(element_info , file_dir, key):
+def send_file(element_info, file_dir, key):
 	url = "http://" + str(element_info["host_info"]["address"]) + ":" + str(element_info["host_info"]["fileserver_port"]) + "/" + key + "/upload"
 	print url
-	if os.path.exists(file_dir):
-		print file_dir + " exist"
+	print type(file_dir),file_dir
 	upload = {"file":open(file_dir, "rb")}
 	r = requests.post(url, files=upload)
 	print r.text
