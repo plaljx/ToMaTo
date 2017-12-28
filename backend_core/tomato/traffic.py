@@ -1,3 +1,4 @@
+import re
 from .db import *
 from .lib import traffic
 from .elements import Element
@@ -221,14 +222,14 @@ def traffic_start(traffic_id):
 	source_dir = traffic.make_command_file(traffic_info, tool, source_command)
 	dest_dir = traffic.make_command_file(traffic_info, tool, dest_command)
 
-	#upload  dest
+	#传输源主机控制命令
 	if dest_dir is not None:
 		dest_element = Element.get(traffic_info["dest_element"])
 		key = dest_element.action(action)
-		traffic.send_pack(dest_element.info() ,dest_dir, key)
+		traffic.send_file(dest_element.info() ,dest_dir, key)
 		dest_element.action(action_use)
 
-	#upload source
+	#传输目的主机控制命令
 	if source_dir is not None:
 		source_element = Element.get(traffic_info["source_element"])
 		key = source_element.action(action)
@@ -237,13 +238,88 @@ def traffic_start(traffic_id):
 	return None
 
 def choose_tool(traffic_info):
-	return None
+	definition = traffic.get_traffic_modul()
+	candidates = {}
+	attributes = definition["attributes"]
+	print attributes
+	tools = definition['tools']
+	#traverse all the tools
+	for tool in tools:
+		#travese all the attributes
+		cap = definition[tool]
+		result = True
+		for attribute in attributes:
+			if traffic_info[attribute] != "" :
+				if not cap.has_key(attribute):
+					result = False
+					break
+				else:
+					if len(cap[attribute]) >2:
+						if traffic_info[attribute] not in cap[attribute]:
+							result = False
+							break
+			else:
+				if cap.has_key(attribute):
+					if cap[attribute][1] is True:
+						result = False
+						break
+		#if the tool satisfies all the conditions ,add it to candidates
+		if result is True:
+			candidates[tool] = definition[tool]["priority"]
+	#select the tool by priority
+	if candidates:
+		print candidates
+		tool = ""
+		temp = 0
+		for key in candidates:
+			if candidates[key] > temp:
+				tool = key
+				temp = candidates[key]
+		print tool
+		return tool
+	else:
+		return None
 
 def get_source_command(tool, traffic_info):
-	return None
+	command = traffic.get_traffic_modul()[tool]["command"]
+	print command
+	if command.has_key("source"):
+		return make_command("source", command,traffic_info)
+	else:
+		return None
 
 def get_dest_command(tool, traffic_info):
-	return None
+	command = traffic.get_traffic_modul()[tool]["command"]
+	print command
+	if command.has_key("dest"):
+		return make_command("dest", command,traffic_info)
+	else:
+		return None
+
+def make_command(target, command, traffic_info):
+	formula1 = re.compile('\?.*?\?')
+	formula2 = re.compile('\+.*?\+')
+	str = command[target]
+	add = formula1.findall(str)
+	print add
+	while add:
+		for value in add:
+			attribute = value[1:len(value)-1]
+			if command.has_key(attribute):
+				str.replace(value, command[attribute])
+		print str
+		add = formula1.findall(str)
+	add2 = formula2.findall(str)
+	for value in add2:
+		attribute = value[1:len(value)-1]
+		str.replace(value, traffic_info[attribute])
+	print "last:", str
+	return str
+
+
+
+
+
 
 
 

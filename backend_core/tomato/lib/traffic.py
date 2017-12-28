@@ -31,8 +31,33 @@ MGEN:
 def get_traffic_modul():
 	return default_setting
 
-def make_command_file(traffic_info, tool, source_command):
-	return None
+def make_command_file(target, tool, command):
+	if command is None:
+		return None
+	if not os.path.exists("/work"):
+		os.mkdir("/work")
+	if not os.path.exists("/work/%s" % tool)
+		os.mkdir("/work/%s" % tool)
+	if os.path.exists("/work/%s/%s" % (tool, target) ):
+		os.system("rm  /work/%s/%s/*" % (tool,target))
+	else:
+		os.mkdir("/work/%s/%s" % (tool, target))
+	f = open("/work/%s/%s/auto_exec.sh" % (tool, target), "w")
+	f.write('#!/bin/bash' + '\n' + '%s' % command)
+	os.chdir("/work/%s/%s" % (tool, target))
+	os.system("tar czvf %s.tar.gz auto_exec.sh" % target)
+	file_dir = "/work/%s/%s/%s.tar.gz" % (tool, target, target)
+	return file_dir
+
+def send_file(element_info , file_dir, key):
+	url = "http://" + str(element_info["host_info"]["address"]) + ":" + str(element_info["host_info"]["fileserver_port"]) + "/" + key + "/upload"
+	print url
+	if os.path.exists(file_dir):
+		print file_dir + " exist"
+	upload = {"file":open(file_dir, "rb")}
+	r = requests.post(url, files=upload)
+	print r.text
+	return r.text
 
 def make_mgen_pack(traffic_info):
 	if not os.path.exists("/work"):

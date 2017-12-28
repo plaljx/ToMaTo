@@ -27,18 +27,11 @@ def traffic_modify(id, attrs=None):
 	traffic = _getTraffic(id)
 	res = traffic.modify(**attrs)
 	return res
-'''
-def traffic_start(traffic_ids):
-    for traffic_id in traffic_ids:
-        res = traffic.Traffic.traffic_start(traffic_id)
-    return res
-'''
 
 def traffic_start(traffic_ids):
 	for traffic_id in traffic_ids:
-		res = traffic.Traffic.traffic_start(traffic_id)
-	result = traffic.test_usages()
-	return result
+		res = traffic.traffic_start(traffic_id)
+	return res
 
 def ditg_start(element_id, attrs=None):
 	print attrs
