@@ -17,10 +17,10 @@ class Traffic(BaseDocument):
 	dest_port = StringField()
 	protocol = StringField()
 	pattern = StringField()
-	packet_rate = IntField()
-	packet_size = IntField()
+	packet_rate = StringField()
+	packet_size = StringField()
 	tos = StringField() #@unresolved
-	ttl = IntField()
+	ttl = StringField()
 	file = StringField()
 
 	def init(self,topology_id, **attrs):
@@ -51,10 +51,10 @@ class Traffic(BaseDocument):
 			"off_time":self.off_time,
 			"protocol":self.protocol,
 			"pattern":self.pattern,
-			"packet_size":str(self.packet_size),
-			"packet_rate":str(self.packet_rate),
+			"packet_size":self.packet_size,
+			"packet_rate":self.packet_rate,
 			"tos": self.tos,
-			"ttl": str(self.ttl),
+			"ttl": self.ttl,
 			"file": self.file
 		}
 		print result
@@ -97,16 +97,16 @@ class Traffic(BaseDocument):
 		self.pattern = val
 
 	def modify_packet_size(self, val):
-		self.packet_size = int(val)
+		self.packet_size = val
 
 	def modify_packet_size(self, val):
-		self.packet_size = int(val)
+		self.packet_size = val
 
 	def modify_tos(self, val):
 		self.tos = val
 
 	def modify_ttl(self, val):
-		self.ttl = int(val)
+		self.ttl = val
 
 	def modify_file(self, val):
 		self.file = val

@@ -19,10 +19,10 @@ MGEN:
   tos: [True, False]
   priority: 10
   command:
-    source: MGEN EVENT "+start_time+ ON 1 -source_port- DST +protocol+ +destination_ip+/+destination_port+ -pattern-" EVENT "+off_time+ OFF 1"
+    source: MGEN EVENT "+start_time+ ON 1 ?source_port? DST +protocol+ +destination_ip+/+destination_port+ ?pattern?" EVENT "+off_time+ OFF 1"
     pattern:
       PERIODIC: PERIODIC [+packet_rate+, +packet_size+]
-      POISSON: POISSON [+packet_rate%, %packet_size+]
+      POISSON: POISSON [+packet_rate+, +packet_size+]
       BRUST: BRUST [RANDOM +packet_rate+ PERIODIC [+packet_rate+  +packet_size+] EXP 5.0]
       JITTER: JITTER [+packet_rate+, +packet_size+ .5]
     source_port: SRC +source_port+
