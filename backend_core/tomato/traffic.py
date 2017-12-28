@@ -30,9 +30,6 @@ class Traffic(BaseDocument):
 
 	def modify(self, **attrs):
 		for key in attrs:
-			if attrs[key] == "":
-				del attrs[key]
-		for key in attrs:
 			if hasattr(self, "modify_%s" % key):
 				getattr(self, "modify_%s" % key)(attrs[key])
 			else:
@@ -138,6 +135,7 @@ def create(topology_id, **attrs):
 		raise e
 	return res
 
+'''
 def ditg_start(element_id , **attrs):
 	print attrs
 	if attrs["dns_enable"] == True and attrs["telnet_enable"] == True:
@@ -168,6 +166,7 @@ def ditg_start(element_id , **attrs):
 	upload = traffic.send_pack(sender_element.info(), sender_dir, sender_key)
 	res = sender_element.action(action_use)
 	return res
+'''
 
 def get_usages(element_ids):
 	usages = {}

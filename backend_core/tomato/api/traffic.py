@@ -11,8 +11,8 @@ def traffic_list(topology_fileter=None):
 	res = traffic.getAll(topology_id=topology_fileter) if topology_fileter else traffic.getAll()
 	return [r.info() for r in res]
 
-def traffic_create(element_id, attrs=None):
-	res = traffic.create(element_id,**attrs)
+def traffic_create(topology_id, attrs=None):
+	res = traffic.create(topology_id,**attrs)
 	return res.info()
 
 def traffic_info(id):
