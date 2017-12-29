@@ -291,23 +291,23 @@ var Component = Class.extend({
                 		{
                    			text: "确定",
                     			click: function () {
-                       				var values = t.mutilTraffic.getValues();
+                       				var values = mutilTraffic.getValues();
                         			values.dest_element = t.ipToId(values.dest_ip);
                         			console.log(values);
                         			//start traffic
                         			ajax({
-                            				url: 'element/mutil_traffic_start',
+                            				url: 'topology/mutil_traffic_start',
                             				data: values,
                             				successFn: function (data) {
                                 			//to
                             				}
                         			});
-                        		mutilTraffic.remove();
+                        		 mutilTraffic.remove();
                        			 mutilTraffic = null;
                    			 }
                 		},
                	 		{
-                    			test: "取消",
+                    			text: "取消",
                     			click: function () {
                         			//remove the window
                         			mutilTraffic.remove();
@@ -363,7 +363,7 @@ var Component = Class.extend({
 			name:"packet_rate",
 			value:""
 		}));
-		this.mutilTraffic.show();
+		mutilTraffic.show();
 	},
 
 	showDitgWindow:function(){
