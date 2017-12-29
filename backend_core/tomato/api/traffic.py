@@ -38,5 +38,5 @@ def mutil_traffic_start(elements, attrs=None):
 	if not attrs:
 		return None
 	print elements
-	#res = traffic.mutil_traffic_start(elements, **attrs)
+	res = traffic.mutil_traffic_start(elements, attrs)
 	return None

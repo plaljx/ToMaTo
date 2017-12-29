@@ -3,6 +3,9 @@ from .db import *
 from .lib import traffic
 from .elements import Element
 
+action = "rextfv_upload_grant"
+action_use = "rextfv_upload_use"
+
 class Traffic(BaseDocument):
 
 	topology_id = StringField(required=True)
@@ -210,8 +213,6 @@ def test_usages():
 	return result
 
 def traffic_start(traffic_id):
-	action = "rextfv_upload_grant"
-	action_use = "rextfv_upload_use"
 	traffic_info = get(traffic_id).info()
 
 	tool = choose_tool(traffic_info)
@@ -326,8 +327,36 @@ def make_command(target, command, traffic_info):
 	return com
 
 
-def mutil_traffic_start(elements, **attrs):
-	#number = attrs["number"]
+def mutil_traffic_start(elements, attrs):
+	print "elements:",elements
+	print "attrs:",attrs
+	number = attrs["number"]
+	vms = choose_vms(elements, number)
+	print "choose vms:",vms
+	tool = choose_tool(attrs)
+	print "tool:",tool
+
+	source_command = get_source_command(tool, attrs)
+	dest_command = get_dest_command(tool, attrs)
+
+	#start traffics
+	for source in vms:
+		source_dir = traffic.make_command_file(source, source_command)
+		dest_dir = traffic.make_command_file(attrs["dest_element"], dest_command)
+
+		# send destination vm's command file
+		if dest_dir is not None:
+			dest_element = Element.get(attrs["dest_element"])
+			key = dest_element.action(action)
+			traffic.send_file(dest_element.info(), dest_dir, key)
+			dest_element.action(action_use)
+
+		# send source vm's command file
+		if source_dir is not None:
+			source_element = Element.get(source)
+			key = source_element.action(action)
+			traffic.send_file(source_element.info(), source_dir, key)
+			source_element.action(action_use)
 	return None
 
 
