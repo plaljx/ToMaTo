@@ -297,7 +297,7 @@ var Component = Class.extend({
                         			elements = t.topology.data.elements;
 									for (var i = 0 ; i < elements.length; i++){
 											var el = elements[i];
-											if (el.tech == "opvz"){
+											if (el.tech == "openvz"){
 												ids.push(el.id)
 											}
 									}
