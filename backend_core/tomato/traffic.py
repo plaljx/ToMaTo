@@ -180,7 +180,9 @@ def get_usages(element_ids):
 		cpu = 100 * float(temp["cpu"])
 		memory = (100 * float(temp["memory"])) /(1024*1024*float(temp["ram"]))
 		traffic = (100 * float(temp["traffic"])) / (60 * 10000 )
-		useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
+		#if one of the metrics >= 80 ,ignore it
+		if cpu <= 80 and memory <= 80 and traffic <= 80:
+			useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
 	print usages
 	print useage_ratio
 	return useage_ratio
@@ -200,9 +202,11 @@ def choose_vms(elemet_ids, number):
 	print load
 	i = 0
 	result  = []
+	print number, len(load)
 	while i < number and i < len(load):
 		result.append(load[i][0])
 		i = i + 1
+		print i
 	print "result:"
 	print result
 	return result
@@ -249,13 +253,19 @@ def choose_tool(traffic_info):
 		cap = definition[tool]
 		result = True
 		for attribute in attributes:
-			if traffic_info[attribute] != "" :
-				if not cap.has_key(attribute):
-					result = False
-					break
+			if traffic_info.has_key(attribute):
+				if traffic_info[attribute] != "" :
+					if not cap.has_key(attribute):
+						result = False
+						break
+					else:
+						if len(cap[attribute]) >2:
+							if traffic_info[attribute] not in cap[attribute]:
+								result = False
+								break
 				else:
-					if len(cap[attribute]) >2:
-						if traffic_info[attribute] not in cap[attribute]:
+					if cap.has_key(attribute):
+						if cap[attribute][1] is True:
 							result = False
 							break
 			else:
@@ -313,8 +323,11 @@ def make_command(target, command, traffic_info):
 					replacestr = command[attribute][traffic_info[attribute]]
 				else:
 					replacestr = command[attribute]
-				print "replace:",type(value),value, type(replacestr),replacestr
-				com = com.replace(value, replacestr)
+				if traffic_info.has_key(attribute):
+					print "replace:",type(value),value, type(replacestr),replacestr
+					com = com.replace(value, replacestr)
+				else:
+					com = com.replace(value, "")
 				print com
 		print com
 		add = formula1.findall(com)
@@ -330,7 +343,9 @@ def make_command(target, command, traffic_info):
 def mutil_traffic_start(elements, attrs):
 	print "elements:",elements
 	print "attrs:",attrs
-	number = attrs["number"]
+	number = int(attrs["number"])
+	#remove the destination element
+	elements.remove(attrs["dest_element"])
 	vms = choose_vms(elements, number)
 	print "choose vms:",vms
 	tool = choose_tool(attrs)
