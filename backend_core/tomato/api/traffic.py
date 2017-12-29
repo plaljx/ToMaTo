@@ -34,16 +34,9 @@ def traffic_start(traffic_ids):
 		res = traffic.traffic_start(traffic_id)
 	return res
 
-def mutil_traffic_start(topologyid, attrs=None):
+def mutil_traffic_start(elements, attrs=None):
 	if not attrs:
 		return None
-	top = topology.get(topologyid).info(True)
-	print top
-	elements = []
-	for el in top:
-		if el.has_key("tech"):
-			if el["tech"] == "opevz":
-				elements.append(el["id"])
 	print elements
 	#res = traffic.mutil_traffic_start(elements, **attrs)
 	return None

@@ -164,6 +164,17 @@ def traffic_start(api, request,selected):
 #start the mutil-source traffic
 @wrap_json
 def mutil_traffic_start(api, request, topology_id, **attrs):
-	res = api.mutil_traffic_start(topology_id, attrs)
+	top = topology_info(topology_id, True)
+	elements = {}
+	if top:
+		elements = top["elements"]
+	elementids = []
+	for el in elements:
+		print type(el), el
+		if el.has_key("tech"):
+			if el["tech"] == "opevz":
+				elementids.append(el["id"])
+	print elementids
+	res = api.mutil_traffic_start(elementids, attrs)
 	return res
 

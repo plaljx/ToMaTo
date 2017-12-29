@@ -30,8 +30,8 @@ def traffic_start(trafficIds):
 	res = get_backend_core_proxy().traffic_start(trafficIds)
 	return res
 
-def mutil_traffic_start(topology_id, attrs = None):
+def mutil_traffic_start(elements, attrs = None):
 	if not attrs:
 		return  None
-	res = get_backend_core_proxy().mutil_traffic_start(attrs);
+	res = get_backend_core_proxy().mutil_traffic_start(elements,attrs);
 	return res
