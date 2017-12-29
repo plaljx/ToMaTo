@@ -293,12 +293,20 @@ var Component = Class.extend({
                     			click: function () {
                        				var values = mutilTraffic.getValues();
                         			values.dest_element = t.ipToId(values.dest_ip);
+                        			var ids = new Array();
+                        			elements = t.topology.data.elements;
+									for (var i = 0 ; i < elements.length; i++){
+											var el = elements[i];
+											if (el.tech == "opvz"){
+												ids.push(el.id)
+											}
+									}
                         			console.log(values);
-                        			console.log('topology/'+t.topology.id+'/mutil_traffic_start');
+                        			console.log(ids);
                         			//start traffic
                         			ajax({
                             				url: 'topology/'+t.topology.id+'/mutil_traffic_start',
-                            				data: values,
+                            				data: {elements:ids, attrs:values},
                             				successFn: function (data) {
                                 			//to
                             				}
