@@ -272,12 +272,100 @@ var Component = Class.extend({
         }
         else if(choice ==2){
 			//todo
-			this.showDitgWindow();
+			this.showMutilTrafficWindow();
 		}
 		//this.checkTrafficWindow();
 		//this.trafficWindow.createTrafficList();
 		//this.trafficWindow.show();
 	},
+
+	showMutilTrafficWindow:function(){
+		var absPos = this.getAbsPos();
+		var wsPos = this.editor.workspace.container.position();
+		var t = this;
+		mutilTraffic = new AttributeWindow({
+            	title: "属性配置",
+           	width: 500,
+           	height: 800,
+            	buttons: [
+                		{
+                   			text: "确定",
+                    			click: function () {
+                       				var values = t.mutilTraffic.getValues();
+                        			values.dest_element = t.ipToId(values.dest_ip);
+                        			console.log(values);
+                        			//start traffic
+                        			ajax({
+                            				url: 'element/mutil_traffic_start',
+                            				data: values,
+                            				successFn: function (data) {
+                                			//to
+                            				}
+                        			});
+                        		mutilTraffic.remove();
+                       			 mutilTraffic = null;
+                   			 }
+                		},
+               	 		{
+                    			test: "取消",
+                    			click: function () {
+                        			//remove the window
+                        			mutilTraffic.remove();
+                        			mutilTraffic = null;
+                   			}
+               			 }
+           	 ],
+        	});
+		traffic.add(new TextElement({
+			label:"源主机数目",
+			name:"number",
+			value:""
+		}));
+		traffic.add(new TextElement({
+			label:"开始时间(s)",
+			name:"start_time",
+			value:"0"
+		}));
+		traffic.add(new TextElement({
+			label:"持续时间(s)",
+			name:"off_time",
+			value:"20.0"
+		}));
+		traffic.add(new TextElement({
+			label:"目的主机IP",
+			name:"dest_ip",
+			value:""
+			//value:"10.109.241.66"
+		}));
+		traffic.add(new TextElement({
+			label:"目的主机端口",
+			name:"dest_port",
+			value:"5002"
+		}));
+		traffic.add(new ChoiceElement({
+			label:"流量协议",
+			name:"protocol",
+			choices:{"UDP":"UDP", "TCP":"TCP","ICMP":"ICMP", "SCTP":"SCTP","DNS":"DNS", "Telnet":"Telnet", "VoIP":"VoIP"}
+		}));
+		var patternChoices = {"PERIODIC":"匀速模式", "POISSON":"泊松模式", "JITTER":"抖动模式", "BRUST":"组合模式"}
+		traffic.add(new ChoiceElement({
+			label:"流量模式",
+			name:"pattern",
+			choices:patternChoices
+		}));
+		traffic.add(new TextElement({
+			label:"数据包大小(Byte)",
+			name:"packet_size",
+			value:""
+		}));
+		traffic.add(new TextElement({
+			label:"数据包速率(个／s)",
+			name:"packet_rate",
+			value:""
+		}));
+		this.mutilTraffic.show();
+	},
+
 	showDitgWindow:function(){
 		var absPos = this.getAbsPos();
 		var wsPos = this.editor.workspace.container.position();

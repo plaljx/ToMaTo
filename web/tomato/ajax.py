@@ -161,9 +161,10 @@ def traffic_start(api, request,selected):
 	res = api.traffic_start(selected)
 	return res
 
-#start the configured D-ITG traffic
+#start the mutil-source traffic
 @wrap_json
-def ditg_start(api, request, element_id , **attrs):
-	res = api.ditg_start(element_id,attrs)
+def mutil_traffic_start(api, request, **attrs):
+	res = api.mutil_traffic_start(attrs)
+	print attrs
 	return res
 

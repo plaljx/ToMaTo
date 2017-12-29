@@ -218,15 +218,15 @@ var createElementMenu = function(obj) {
 					name:gettext("Traffic Customize"),
 					icon:"configure",
 					items:{
-						"Mgen": {
-							name:gettext("Mgen"),
+						"traffic": {
+							name:"流量生成",
 							icon:"configure",
 							callback: function() {
 								obj.showTrafficWindow(1);
 							}
 						},
-						"D_ITG": {
-							name:gettext("D-ITG"),
+						"mutil_traffic": {
+							name:"多源流量生成",
 							icon:"configure",
 							callback: function(){
 								obj.showTrafficWindow(2);
@@ -234,7 +234,7 @@ var createElementMenu = function(obj) {
 						},
 					},
 				}:null,
-
+					
 				"debug": obj.editor.options.debug_mode ? {
 					name:gettext('Debug'),
 					icon:'debug',
