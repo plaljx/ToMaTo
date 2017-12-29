@@ -231,7 +231,7 @@ urlpatterns = patterns('',
     (r'^ajax/topology/(?P<topology_id>\w{24})/traffic_list$'  ,  'tomato.ajax.traffic_list'),
     (r'^ajax/topology/(?P<traffic_id>\w{24})/traffic_remove$','tomato.ajax.traffic_remove'),
     (r'^ajax/topology/traffic_start$', 'tomato.ajax.traffic_start'),
-    (r'^ajax/topology/(?P<topology_id>\w{24})/mutil_traffic_start$', 'tomato.ajax.mutil_traffic_start'),
+    (r'^ajax/topology/mutil_traffic_start$', 'tomato.ajax.mutil_traffic_start'),
 
     url(r'^security_software/$', 'tomato.security_software.list_', name='security_software_list'),
     url(r'^security_software/add/$', 'tomato.security_software.add', name='security_software_add'),

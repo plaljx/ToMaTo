@@ -164,6 +164,8 @@ def traffic_start(api, request,selected):
 #start the mutil-source traffic
 @wrap_json
 def mutil_traffic_start(api, request, elements, attrs={}):
+	print elements
+	print attrs
 	res = api.mutil_traffic_start(elements, attrs)
 	return res
 

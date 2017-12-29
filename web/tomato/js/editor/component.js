@@ -305,7 +305,7 @@ var Component = Class.extend({
                         			console.log(ids);
                         			//start traffic
                         			ajax({
-                            				url: 'topology/'+t.topology.id+'/mutil_traffic_start',
+                            				url: 'topology/mutil_traffic_start',
                             				data: {elements:ids, attrs:values},
                             				successFn: function (data) {
                                 			//to
