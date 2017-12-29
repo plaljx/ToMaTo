@@ -30,8 +30,8 @@ def traffic_start(trafficIds):
 	res = get_backend_core_proxy().traffic_start(trafficIds)
 	return res
 
-def ditg_start(element_id , attrs = None):
+def mutil_traffic_start(topology_id, attrs = None):
 	if not attrs:
-		return None;
-	res = get_backend_core_proxy().ditg_start(element_id , attrs);
+		return  None
+	res = get_backend_core_proxy().mutil_traffic_start(attrs);
 	return res

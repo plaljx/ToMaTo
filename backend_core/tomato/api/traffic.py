@@ -1,6 +1,7 @@
 #author Nong Caihua 2016.12.29
 
 from ..import traffic
+from .. import topology
 
 
 def _getTraffic(id_):
@@ -33,7 +34,16 @@ def traffic_start(traffic_ids):
 		res = traffic.traffic_start(traffic_id)
 	return res
 
-def ditg_start(element_id, attrs=None):
-	print attrs
-	res = traffic.ditg_start(element_id , **attrs)
-	return res
+def mutil_traffic_start(topologyid, attrs=None):
+	if not attrs:
+		return None
+	top = topology.get(topologyid).info(True)
+	print top
+	elements = []
+	for el in top:
+		if el.has_key("tech"):
+			if el["tech"] == "opevz":
+				elements.append(el["id"])
+	print elements
+	#res = traffic.mutil_traffic_start(elements, **attrs)
+	return None

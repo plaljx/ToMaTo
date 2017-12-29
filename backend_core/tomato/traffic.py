@@ -3,7 +3,6 @@ from .db import *
 from .lib import traffic
 from .elements import Element
 
-
 class Traffic(BaseDocument):
 
 	topology_id = StringField(required=True)
@@ -325,6 +324,11 @@ def make_command(target, command, traffic_info):
 		com = com.replace(value, traffic_info[attribute])
 	print "final_command:", com
 	return com
+
+
+def mutil_traffic_start(elements, **attrs):
+	#number = attrs["number"]
+	return None
 
 
 

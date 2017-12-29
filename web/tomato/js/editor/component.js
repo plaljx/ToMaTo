@@ -294,9 +294,10 @@ var Component = Class.extend({
                        				var values = mutilTraffic.getValues();
                         			values.dest_element = t.ipToId(values.dest_ip);
                         			console.log(values);
+                        			console.log('topology/'+t.topology.id+'/mutil_traffic_start');
                         			//start traffic
                         			ajax({
-                            				url: 'topology/mutil_traffic_start',
+                            				url: 'topology/'+t.topology.id+'/mutil_traffic_start',
                             				data: values,
                             				successFn: function (data) {
                                 			//to
