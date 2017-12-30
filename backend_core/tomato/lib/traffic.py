@@ -3,7 +3,7 @@ import requests
 import yaml
 
 default_setting = yaml.load("""
-tools: [MGEN]
+tools: [MGEN, DITG]
 attributes: [source_port, dest_ip, dest_port, start_time, off_time, protocol, pattern, packet_size, packet_rate, tos, ttl]
 MGEN:
   name: MGEN
@@ -26,6 +26,38 @@ MGEN:
       BRUST: BRUST [RANDOM +packet_rate+ PERIODIC [+packet_rate+  +packet_size+] EXP 5.0]
       JITTER: JITTER [+packet_rate+ +packet_size+ .5]
     source_port: SRC +source_port+
+    
+DITG:
+  name: DITG
+  source_port: [True, False]
+  dest_ip: [True, False]
+  dest_port: [True, False]
+  start_time: [True, False]
+  off_time: [True, False]
+  protocol: [True, True, TCP, UDP, ICMP, Telnet, DNS, Quake3, VoIP]
+  pattrtn: [PERIODIC, UNIFORM, Exponential, Normal, POISSON]
+  packet_rate: [True, False]
+  packet_size: [True, True]
+  ttl: [True, False]
+  priority: 9
+  expression: [(off_time, *, 10 , off_time)]
+  command:
+    source: '/usr/share/D-ITG-2.8.1-r1023/bin/ITGSend ?protocol? -a +dest_ip+ -rp +dest_ip+ ?pattern? -l +off_time+'
+    dest:  '/usr/share/D-ITG-2.8.1-r1023/bin/ITGRecv'
+    protocol:
+      TCP: -T TCP
+      UDP: -T UDP
+      ICMP: -T ICMP 5
+      Telnet: Telnet
+      DNS: DNS
+      Quake3: Quake3
+      VoIP: VoIP -x G.711.2 -h RTP -VAD
+    pattern:
+      PERIODIC: -C +packet_rate+ -c +packet_size+
+      UNIFORM:  -U 800 1600 -c +packet_size+
+      Exponential: -E 10 -c +packet_size+ 
+      Normal: -N 0 1 +packet_size+
+      POISSON: -O 100 +packet_size+
 """)
 
 def get_traffic_modul():

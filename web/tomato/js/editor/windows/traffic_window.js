@@ -407,9 +407,11 @@ var TrafficWindow = Window.extend({
 		traffic.add(new ChoiceElement({
 			label:"流量协议",
 			name:"protocol",
-			choices:{"UDP":"UDP", "TCP":"TCP","ICMP":"ICMP", "SCTP":"SCTP","DNS":"DNS", "Telnet":"Telnet", "VoIP":"VoIP"}
+			choices:{"UDP":"UDP", "TCP":"TCP","ICMP":"ICMP","DNS":"DNS", "Telnet":"Telnet",
+				"VoIP":"VoIP", "Quake3":"Quake3"}
 		}));
-		var patternChoices = {"PERIODIC":"匀速模式", "POISSON":"泊松模式", "JITTER":"抖动模式", "BRUST":"组合模式"}
+		var patternChoices = {"PERIODIC":"匀速模式", "POISSON":"泊松模式", "JITTER":"抖动模式", "BRUST":"组合模式", "UNIFORM":"均匀分布",
+			"Exponential":"指数分布", "Normal":"正态分布"}
 		traffic.add(new ChoiceElement({
 			label:"流量模式",
 			name:"pattern",
