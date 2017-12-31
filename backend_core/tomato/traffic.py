@@ -174,6 +174,7 @@ def ditg_start(element_id , **attrs):
 def get_usages(element_ids):
 	usages = {}
 	useage_ratio = {}
+	print_ratio = {}
 	for id in element_ids:
 		temp = Element.getUsage(id)
 		usages[id] = temp
@@ -183,14 +184,25 @@ def get_usages(element_ids):
 		#if one of the metrics >= 80 ,ignore it
 		if cpu <= 80 and memory <= 80 and traffic <= 80:
 			useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
+		print_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
 	print usages
 	print useage_ratio
+	print "虚拟机资源使用情况:"
+	print "虚拟机编号\t\tCPU使用率(%)\t内存使用率(%)\t带宽使用率(%)"
+	for key in print_ratio:
+		print key,"\t\t",print_ratio[key][cpu],"\t",print_ratio[key][memory],"\t",print_ratio[key][traffic]
+	for key in print_ratio:
+
 	return useage_ratio
 
 def calculate_load(usages, a=0.4, b=0.3, c=0.3):
 	load = {}
 	for  key in usages:
 		load[key] = usages[key]["cpu"] * 0.4 + usages[key]["memory"] * 0.3 + usages[key]["traffic"]
+	print "虚拟机负载计算"
+	print "虚拟机编号\t\t虚拟机负载"
+	for key in load:
+		print key,"\t\t",load[key]
 	return load
 
 def choose_vms(elemet_ids, number):
@@ -325,6 +337,9 @@ def make_command(target, command, traffic_info):
 	com = command[target]
 	add = formula1.findall(com)
 	print add
+	command_process = {}
+	i = 1
+	command_process[i] = com
 	while add:
 		for value in add:
 			attribute = value[1:len(value)-1]
@@ -343,12 +358,18 @@ def make_command(target, command, traffic_info):
 					com = com.replace(value, "")
 				print com
 		print com
+		command_process[i] = com
+		i = i + 1
 		add = formula1.findall(com)
 	add2 = formula2.findall(com)
 	for value in add2:
 		attribute = value[1:len(value)-1]
 		print attribute, traffic_info[attribute]
 		com = com.replace(value, traffic_info[attribute])
+	command_process[i] = com
+	print "控制命令求解过程："
+	for key in command_process:
+		print "第",key,"步：",command_process[key]
 	print "final_command:", com
 	return com
 
