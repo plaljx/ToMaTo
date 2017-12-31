@@ -187,22 +187,22 @@ def get_usages(element_ids):
 		print_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
 	print usages
 	print useage_ratio
-	print "虚拟机资源使用情况:"
-	print "虚拟机编号\t\tCPU使用率(%)\t内存使用率(%)\t带宽使用率(%)"
+	print "VM's Resource Usage:"
+	print "VM's ID\t\tCPU Usage(%)\tMemory Usage(%)\tBandwidth Usage(%)"
 	for key in print_ratio:
-		print key,"\t\t",print_ratio[key][cpu],"\t",print_ratio[key][memory],"\t",print_ratio[key][traffic]
-	for key in print_ratio:
-
+		print  "%s\t\t%s\t%s\t%s" % (str(key), str(print_ratio[key]["cpu"]), str(print_ratio[key]["memory"]), str(print_ratio[key]["traffic"])
+		#print str(key),"\t\t",str(print_ratio[key][cpu]),"\t",str(print_ratio[key][memory]),"\t",str(print_ratio[key][traffic])
 	return useage_ratio
 
 def calculate_load(usages, a=0.4, b=0.3, c=0.3):
 	load = {}
 	for  key in usages:
 		load[key] = usages[key]["cpu"] * 0.4 + usages[key]["memory"] * 0.3 + usages[key]["traffic"]
-	print "虚拟机负载计算"
-	print "虚拟机编号\t\t虚拟机负载"
+	print "Caculate VM's Load:"
+	print "VM's ID\t\tVM's Load"
 	for key in load:
-		print key,"\t\t",load[key]
+		print "%s\t\t%s" % (str(key), str(load[key]))
+		#print str(key),"\t\t",str(oad[key])
 	return load
 
 def choose_vms(elemet_ids, number):
@@ -218,9 +218,7 @@ def choose_vms(elemet_ids, number):
 	while i < number and i < len(load):
 		result.append(load[i][0])
 		i = i + 1
-		print i
-	print "result:"
-	print result
+	print "choose vm's result:",result
 	return result
 
 def test_usages():
@@ -367,9 +365,9 @@ def make_command(target, command, traffic_info):
 		print attribute, traffic_info[attribute]
 		com = com.replace(value, traffic_info[attribute])
 	command_process[i] = com
-	print "控制命令求解过程："
+	print "The processes of get control command:"
 	for key in command_process:
-		print "第",key,"步：",command_process[key]
+		print "Step %s:%s" %(str(key), str(command_process[key]))
 	print "final_command:", com
 	return com
 
