@@ -40,7 +40,7 @@ DITG:
   packet_size: [True, True]
   ttl: [True, False]
   priority: 9
-  expression: [(off_time, *, 10 , off_time)]
+  expressions: [(off_time, *, 10 , off_time)]
   command:
     source: '/usr/share/D-ITG-2.8.1-r1023/bin/ITGSend ?protocol? -a +dest_ip+ -rp +dest_ip+ ?pattern? -l +off_time+'
     dest:  '/usr/share/D-ITG-2.8.1-r1023/bin/ITGRecv'
