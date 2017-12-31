@@ -251,32 +251,38 @@ def choose_tool(traffic_info):
 	for tool in tools:
 		#travese all the attributes
 		cap = definition[tool]
+		print "cap:", cap
 		result = True
 		for attribute in attributes:
 			if traffic_info.has_key(attribute):
 				if traffic_info[attribute] != "" :
 					if not cap.has_key(attribute):
+						print "not have attribute:",attribute
 						result = False
 						break
 					else:
 						if len(cap[attribute]) >2:
 							if traffic_info[attribute] not in cap[attribute]:
+								print "not in attribute:", cap[attribute], attribute
 								result = False
 								break
 				else:
 					if cap.has_key(attribute):
 						if cap[attribute][1] is True:
+							print "is required", attribute
 							result = False
 							break
 			else:
 				if cap.has_key(attribute):
 					if cap[attribute][1] is True:
+						print "is required2:",attribute
 						result = False
 						break
 		#if the tool satisfies all the conditions ,add it to candidates
 		if result is True:
 			candidates[tool] = definition[tool]["priority"]
 	#select the tool by priority
+	print "candidates:",candidates
 	if candidates:
 		print "candidates",candidates
 		tool = ""
@@ -293,10 +299,11 @@ def choose_tool(traffic_info):
 def get_source_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
 	print "source_command:",command
-	if traffic.get_traffic_modul().has_key("expressions"):
-		for ex in traffic.get_traffic_modul()["expressions"]:
-			if ex[1] ==  "*":
-				temp = ex[2] * int(traffic_info[ex[3]])
+	if traffic.get_traffic_modul()[tool].has_key("expressions"):
+		for ex in traffic.get_traffic_modul()[tool]["expressions"]:
+			print ex
+			if int(ex[1]) ==  3:
+				temp = int(int(ex[2]) * float(traffic_info[ex[3]]))
 				traffic_info[ex[0]] = str(temp)
 	print "traffic_info:", traffic_info
 	if command.has_key("source"):

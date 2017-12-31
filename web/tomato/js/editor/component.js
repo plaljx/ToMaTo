@@ -372,6 +372,11 @@ var Component = Class.extend({
 			name:"packet_rate",
 			value:""
 		}));
+	        mutilTraffic.add(new TextElement({
+                        label:"文件",
+                        name:"",
+                        value:""
+                }));
 		mutilTraffic.show();
 	},
 

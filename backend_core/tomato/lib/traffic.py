@@ -35,14 +35,14 @@ DITG:
   start_time: [True, False]
   off_time: [True, False]
   protocol: [True, True, TCP, UDP, ICMP, Telnet, DNS, Quake3, VoIP]
-  pattrtn: [PERIODIC, UNIFORM, Exponential, Normal, POISSON]
+  pattern: [PERIODIC, UNIFORM, Exponential, Normal, POISSON]
   packet_rate: [True, False]
   packet_size: [True, True]
   ttl: [True, False]
   priority: 9
-  expressions: [(off_time, *, 10 , off_time)]
+  expressions: [[off_time, 3, 1000 , off_time]]
   command:
-    source: '/usr/share/D-ITG-2.8.1-r1023/bin/ITGSend ?protocol? -a +dest_ip+ -rp +dest_ip+ ?pattern? -l +off_time+'
+    source: '/usr/share/D-ITG-2.8.1-r1023/bin/ITGSend ?protocol? -a +dest_ip+ -rp +dest_port+ ?pattern? -l +off_time+'
     dest:  '/usr/share/D-ITG-2.8.1-r1023/bin/ITGRecv'
     protocol:
       TCP: -T TCP
