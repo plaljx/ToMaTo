@@ -296,7 +296,8 @@ def get_source_command(tool, traffic_info):
 	if traffic.get_traffic_modul().has_key("expressions"):
 		for ex in traffic.get_traffic_modul()["expressions"]:
 			if ex[1] ==  "*":
-				traffic_info[ex[0]] = ex[2] * traffic_info[ex[3]]
+				temp = ex[2] * int(traffic_info[ex[3]])
+				traffic_info[ex[0]] = str(temp)
 	print "traffic_info:", traffic_info
 	if command.has_key("source"):
 		return make_command("source", command,traffic_info)
