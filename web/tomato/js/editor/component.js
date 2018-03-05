@@ -415,7 +415,7 @@ var Component = Class.extend({
 	},
 	ipToId:function(ip){ //change the input ip to element's id
 		for(var i = 0 ; i < this.topology.data.elements.length; i++){
-			var order = this.topology.data.elements[i];
+			var order = this.topology.data.elements[i].data;
 			if(order.tech == "openvz_interface"){
 				if(order.ip4address == ip||order.ip4address == (ip+"/24")||order.ip4address == (ip+"/22")){
 					return order.parent;
