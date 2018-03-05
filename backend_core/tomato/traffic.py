@@ -180,7 +180,7 @@ def get_usages(element_ids):
 		usages[id] = temp
 		cpu = 100 * float(temp["cpu"])
 		memory = (100 * float(temp["memory"])) /(1024*1024*float(temp["ram"]))
-		traffic = (100 * float(temp["traffic"])) / (60 * 10000 )
+		traffic = (float(temp["traffic"])) / (6*1024*1024 )
 		#if one of the metrics >= 80 ,ignore it
 		if cpu <= 80 and memory <= 80 and traffic <= 80:
 			useage_ratio[id] = {"cpu": cpu, "memory": memory,"traffic": traffic}
@@ -188,9 +188,9 @@ def get_usages(element_ids):
 	print usages
 	print useage_ratio
 	print "VM's Resource Usage:"
-	print "VM's ID\t\tCPU Usage(%)\tMemory Usage(%)\tBandwidth Usage(%)"
+	print "VM's ID\t\t\t\tCPU Usage(%)\tMemory Usage(%)\tBandwidth Usage(%)"
 	for key in print_ratio:
-		print  "%s\t\t%s\t%s\t%s" % (str(key), str(print_ratio[key]["cpu"]), str(print_ratio[key]["memory"]), str(print_ratio[key]["traffic"])
+		print  "%s\t\t%s\t%s\t%s" % (str(key), str(print_ratio[key]["cpu"]), str(print_ratio[key]["memory"]), str(print_ratio[key]["traffic"]))
 		#print str(key),"\t\t",str(print_ratio[key][cpu]),"\t",str(print_ratio[key][memory]),"\t",str(print_ratio[key][traffic])
 	return useage_ratio
 
@@ -199,7 +199,7 @@ def calculate_load(usages, a=0.4, b=0.3, c=0.3):
 	for  key in usages:
 		load[key] = usages[key]["cpu"] * 0.4 + usages[key]["memory"] * 0.3 + usages[key]["traffic"]
 	print "Caculate VM's Load:"
-	print "VM's ID\t\tVM's Load"
+	print "VM's ID\t\t\t\tVM's Load"
 	for key in load:
 		print "%s\t\t%s" % (str(key), str(load[key]))
 		#print str(key),"\t\t",str(oad[key])
@@ -210,8 +210,13 @@ def choose_vms(elemet_ids, number):
 	load = calculate_load(usages)
 	#sort
 	load = sorted(load.iteritems(), key=lambda d: d[1], reverse=False)
-	print "load:"
-	print load
+	print "load:", load
+	print "Caculate VM's Load:"
+        print "VM's ID\t\t\t\tVM's Load"
+        for item in load:
+                print "%s\t\t%s" % (str(item[0]), str(item[1]))
+                #print str(key),"\t\t",str(oad[key])
+
 	i = 0
 	result  = []
 	print number, len(load)
@@ -337,7 +342,7 @@ def make_command(target, command, traffic_info):
 	print add
 	command_process = {}
 	i = 1
-	command_process[i] = com
+	command_process[0] = com
 	while add:
 		for value in add:
 			attribute = value[1:len(value)-1]
