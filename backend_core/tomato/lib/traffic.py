@@ -1,6 +1,7 @@
 import os
 import requests
 import yaml
+import time
 
 default_setting = yaml.load("""
 tools: [MGEN, DITG]
@@ -81,11 +82,10 @@ def make_command_file(target, command):
 
 def send_file(element_info, file_dir, key):
 	url = "http://" + str(element_info["host_info"]["address"]) + ":" + str(element_info["host_info"]["fileserver_port"]) + "/" + key + "/upload"
-	print url
-	print type(file_dir),file_dir
 	upload = {"file":open(file_dir, "rb")}
+	print time.time()
 	r = requests.post(url, files=upload)
-	print r.text
+	print time.time()
 	return r.text
 
 def make_mgen_pack(traffic_info):
