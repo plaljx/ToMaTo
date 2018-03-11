@@ -260,67 +260,67 @@ def choose_tool(traffic_info):
 	definition = traffic.get_traffic_modul()
 	candidates = {}
 	attributes = definition["attributes"]
-	print attributes
+	#print attributes
 	tools = definition['tools']
 	#traverse all the tools
 	for tool in tools:
 		#travese all the attributes
 		cap = definition[tool]
-		print "cap:", cap
+		#print "cap:", cap
 		result = True
 		for attribute in attributes:
 			if traffic_info.has_key(attribute):
 				if traffic_info[attribute] != "" :
 					if not cap.has_key(attribute):
-						print "not have attribute:",attribute
+						#print "not have attribute:",attribute
 						result = False
 						break
 					else:
 						if len(cap[attribute]) >2:
 							if traffic_info[attribute] not in cap[attribute]:
-								print "not in attribute:", cap[attribute], attribute
+								#print "not in attribute:", cap[attribute], attribute
 								result = False
 								break
 				else:
 					if cap.has_key(attribute):
 						if cap[attribute][1] is True:
-							print "is required", attribute
+							#print "is required", attribute
 							result = False
 							break
 			else:
 				if cap.has_key(attribute):
 					if cap[attribute][1] is True:
-						print "is required2:",attribute
+						#print "is required2:",attribute
 						result = False
 						break
 		#if the tool satisfies all the conditions ,add it to candidates
 		if result is True:
 			candidates[tool] = definition[tool]["priority"]
 	#select the tool by priority
-	print "candidates:",candidates
+	#print "candidates:",candidates
 	if candidates:
-		print "candidates",candidates
+		#print "candidates",candidates
 		tool = ""
 		temp = 0
 		for key in candidates:
 			if candidates[key] > temp:
 				tool = key
 				temp = candidates[key]
-		print "final tool:",tool
+		#print "final tool:",tool
 		return tool
 	else:
 		return None
 
 def get_source_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	print "source_command:",command
+	#print "source_command:",command
 	if traffic.get_traffic_modul()[tool].has_key("expressions"):
 		for ex in traffic.get_traffic_modul()[tool]["expressions"]:
-			print ex
+			#print ex
 			if int(ex[1]) ==  3:
 				temp = int(int(ex[2]) * float(traffic_info[ex[3]]))
 				traffic_info[ex[0]] = str(temp)
-	print "traffic_info:", traffic_info
+	#print "traffic_info:", traffic_info
 	if command.has_key("source"):
 		return make_command("source", command,traffic_info)
 	else:
@@ -339,7 +339,7 @@ def make_command(target, command, traffic_info):
 	formula2 = re.compile('\+.*?\+')
 	com = command[target]
 	add = formula1.findall(com)
-	print add
+	#print add
 	command_process = {}
 	i = 1
 	command_process[0] = com
@@ -349,31 +349,33 @@ def make_command(target, command, traffic_info):
 			if command.has_key(attribute):
 				replacestr = ""
 				if not isinstance(command[attribute], basestring):
-					print command[attribute]
-					print traffic_info[attribute]
+					#print command[attribute]
+					#print traffic_info[attribute]
 					replacestr = command[attribute][traffic_info[attribute]]
 				else:
 					replacestr = command[attribute]
 				if traffic_info.has_key(attribute):
-					print "replace:",type(value),value, type(replacestr),replacestr
+					#print "replace:",type(value),value, type(replacestr),replacestr
 					com = com.replace(value, replacestr)
 				else:
 					com = com.replace(value, "")
 				print com
-		print com
+		#print com
 		command_process[i] = com
 		i = i + 1
 		add = formula1.findall(com)
 	add2 = formula2.findall(com)
 	for value in add2:
 		attribute = value[1:len(value)-1]
-		print attribute, traffic_info[attribute]
+		#print attribute, traffic_info[attribute]
 		com = com.replace(value, traffic_info[attribute])
 	command_process[i] = com
+	'''
 	print "The processes of get control command:"
 	for key in command_process:
 		print "Step %s:%s" %(str(key), str(command_process[key]))
 	print "final_command:", com
+	'''
 	return com
 
 
