@@ -31,15 +31,15 @@ def traffic_modify(id, attrs=None):
 	return res
 
 def traffic_start(traffic_ids):
-	print time.time()
 	for traffic_id in traffic_ids:
 		res = traffic.traffic_start(traffic_id)
+	print time.time()
 	return res
 
 def mutil_traffic_start(elements, attrs=None):
-	print time.time()
 	if not attrs:
 		return None
 	print elements
 	res = traffic.mutil_traffic_start(elements, attrs)
+	print time.time()
 	return None

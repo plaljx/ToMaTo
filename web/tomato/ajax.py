@@ -157,6 +157,7 @@ def traffic_modify(api, request,element_id, **attrs):
 @wrap_json
 def traffic_start(api, request,selected):
 	#selected:The Array of traffics' id which are selected to start
+	print time.time()
 	if not selected:
 		return 	None
 	res = api.traffic_start(selected)
