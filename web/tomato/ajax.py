@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from lib import wrap_json
+import time
 
 @wrap_json
 def topology_info(api, request, id): #@ReservedAssignment
@@ -166,6 +167,7 @@ def traffic_start(api, request,selected):
 def mutil_traffic_start(api, request, elements, attrs={}):
 	print elements
 	print attrs
+	print time.time()
 	res = api.mutil_traffic_start(elements, attrs)
 	return res
 
