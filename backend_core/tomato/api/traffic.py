@@ -2,7 +2,6 @@
 
 from ..import traffic
 from .. import topology
-import time
 
 
 def _getTraffic(id_):
@@ -29,12 +28,16 @@ def traffic_modify(id, attrs=None):
 	traffic = _getTraffic(id)
 	res = traffic.modify(**attrs)
 	return res
-
+'''
 def traffic_start(traffic_ids):
 	print "start time"
 	print time.time()
 	for traffic_id in traffic_ids:
 		res = traffic.traffic_start(traffic_id)
+	return res
+'''
+def traffic_start(traffic_ids):
+	res = traffic.traffics_start(traffic_ids)
 	return res
 
 def mutil_traffic_start(elements, attrs=None):

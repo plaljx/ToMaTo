@@ -1,4 +1,4 @@
-import re
+import re, threading, time
 from .db import *
 from .lib import traffic
 from .elements import Element
@@ -113,6 +113,8 @@ class Traffic(BaseDocument):
 
 	def modify_file(self, val):
 		self.file = val
+
+
 
 def get(id_, **kwargs):
 	try:
@@ -230,6 +232,21 @@ def test_usages():
 	elementids = ["5a436a89a67da503ac2df973", "5a436a90a67da503ac2df977","5a436a8ca67da503ac2df975", "5a436a8ba67da503ac2df974", "5a436a8ea67da503ac2df976"]
 	result = choose_vms(elementids, 4)
 	return result
+
+def traffics_start(traffic_ids):
+	print "start time"
+	print time.time()
+	threads = []
+	for traffic_id in traffic_ids:
+		t = threading.Thread(target=traffic_start, args=(traffic_id))
+		threads.append(t)
+	for i in range(threads):
+		threads[i].start()
+	for i in range(threads):
+		threads[i].join()
+	print time.time()
+	return None
+
 
 def traffic_start(traffic_id):
 	traffic_info = get(traffic_id).info()
