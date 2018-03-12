@@ -83,9 +83,8 @@ def make_command_file(target, command):
 def send_file(element_info, file_dir, key):
 	url = "http://" + str(element_info["host_info"]["address"]) + ":" + str(element_info["host_info"]["fileserver_port"]) + "/" + key + "/upload"
 	upload = {"file":open(file_dir, "rb")}
-	print time.time()
 	r = requests.post(url, files=upload)
-	print time.time()
+	print r.text
 	return r.text
 
 def make_mgen_pack(traffic_info):

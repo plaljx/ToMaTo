@@ -238,11 +238,12 @@ def traffics_start(traffic_ids):
 	print time.time()
 	threads = []
 	for traffic_id in traffic_ids:
-		t = threading.Thread(target=traffic_start, args=(traffic_id))
+		t = threading.Thread(target=traffic_start, args=(traffic_id,))
 		threads.append(t)
-	for i in range(threads):
+	number = range(len(threads))
+	for i in number:
 		threads[i].start()
-	for i in range(threads):
+	for i in number:
 		threads[i].join()
 	print time.time()
 	return None
@@ -345,7 +346,7 @@ def get_source_command(tool, traffic_info):
 
 def get_dest_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	print "dest_command:",command
+	#print "dest_command:",command
 	if command.has_key("dest"):
 		return make_command("dest", command,traffic_info)
 	else:
