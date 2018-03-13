@@ -193,7 +193,7 @@ def get_usages(element_ids):
 	print "VM's ID\t\t\t\tCPU Usage(%)\tMemory Usage(%)\tBandwidth Usage(%)"
 	for key in print_ratio:
 		print  "%s\t\t%s\t%s\t%s" % (str(key), str(print_ratio[key]["cpu"]), str(print_ratio[key]["memory"]), str(print_ratio[key]["traffic"]))
-		#print str(key),"\t\t",str(print_ratio[key][cpu]),"\t",str(print_ratio[key][memory]),"\t",str(print_ratio[key][traffic])
+		print str(key),"\t\t",str(print_ratio[key][cpu]),"\t",str(print_ratio[key][memory]),"\t",str(print_ratio[key][traffic])
 	return useage_ratio
 
 def calculate_load(usages, a=0.4, b=0.3, c=0.3):
@@ -317,14 +317,14 @@ def choose_tool(traffic_info):
 	#select the tool by priority
 	#print "candidates:",candidates
 	if candidates:
-		#print "candidates",candidates
+		print "candidates",candidates
 		tool = ""
 		temp = 0
 		for key in candidates:
 			if candidates[key] > temp:
 				tool = key
 				temp = candidates[key]
-		#print "final tool:",tool
+		print "final tool:",tool
 		return tool
 	else:
 		return None
@@ -388,12 +388,12 @@ def make_command(target, command, traffic_info):
 		#print attribute, traffic_info[attribute]
 		com = com.replace(value, traffic_info[attribute])
 	command_process[i] = com
-	'''
+
 	print "The processes of get control command:"
 	for key in command_process:
 		print "Step %s:%s" %(str(key), str(command_process[key]))
 	print "final_command:", com
-	'''
+
 	return com
 
 
