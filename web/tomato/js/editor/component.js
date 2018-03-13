@@ -419,8 +419,8 @@ var Component = Class.extend({
 		this.ditgWindow.show();
 	},
 	ipToId:function(ip){ //change the input ip to element's id
-		for(var i = 0 ; i < this.topology.data.elements.length; i++){
-			var order = this.topology.elements[i];
+		for(var i = 0 ; i < this.compoen.topology.data.elements.length; i++){
+			var order = this.compoent.topology.elements[i].data
 			if(order.tech == "openvz_interface"){
 				if(order.ip4address == ip||order.ip4address == (ip+"/24")||order.ip4address == (ip+"/22")){
 					return order.parent;
