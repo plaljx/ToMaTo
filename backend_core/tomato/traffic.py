@@ -204,7 +204,6 @@ def calculate_load(usages, a=0.4, b=0.3, c=0.3):
 	print "VM's ID\t\t\t\tVM's Load"
 	for key in load:
 		print "%s\t\t%s" % (str(key), str(load[key]))
-		#print str(key),"\t\t",str(oad[key])
 	return load
 
 def choose_vms(elemet_ids, number):
@@ -234,8 +233,6 @@ def test_usages():
 	return result
 
 def traffics_start(traffic_ids):
-	print "start time"
-	print time.time()
 	threads = []
 	for traffic_id in traffic_ids:
 		t = threading.Thread(target=traffic_start, args=(traffic_id,))
@@ -245,7 +242,6 @@ def traffics_start(traffic_ids):
 		threads[i].start()
 	for i in number:
 		threads[i].join()
-	print time.time()
 	return None
 
 
@@ -278,44 +274,36 @@ def choose_tool(traffic_info):
 	definition = traffic.get_traffic_modul()
 	candidates = {}
 	attributes = definition["attributes"]
-	#print attributes
 	tools = definition['tools']
 	#traverse all the tools
 	for tool in tools:
 		#travese all the attributes
 		cap = definition[tool]
-		#print "cap:", cap
 		result = True
 		for attribute in attributes:
 			if traffic_info.has_key(attribute):
 				if traffic_info[attribute] != "" :
 					if not cap.has_key(attribute):
-						#print "not have attribute:",attribute
 						result = False
 						break
 					else:
 						if len(cap[attribute]) >2:
 							if traffic_info[attribute] not in cap[attribute]:
-								#print "not in attribute:", cap[attribute], attribute
 								result = False
 								break
 				else:
 					if cap.has_key(attribute):
 						if cap[attribute][1] is True:
-							#print "is required", attribute
 							result = False
 							break
 			else:
 				if cap.has_key(attribute):
 					if cap[attribute][1] is True:
-						#print "is required2:",attribute
 						result = False
 						break
 		#if the tool satisfies all the conditions ,add it to candidates
 		if result is True:
 			candidates[tool] = definition[tool]["priority"]
-	#select the tool by priority
-	#print "candidates:",candidates
 	if candidates:
 		print "candidates",candidates
 		tool = ""
@@ -331,14 +319,12 @@ def choose_tool(traffic_info):
 
 def get_source_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	#print "source_command:",command
 	if traffic.get_traffic_modul()[tool].has_key("expressions"):
 		for ex in traffic.get_traffic_modul()[tool]["expressions"]:
 			#print ex
 			if int(ex[1]) ==  3:
 				temp = int(int(ex[2]) * float(traffic_info[ex[3]]))
 				traffic_info[ex[0]] = str(temp)
-	#print "traffic_info:", traffic_info
 	if command.has_key("source"):
 		return make_command("source", command,traffic_info)
 	else:
@@ -346,7 +332,6 @@ def get_source_command(tool, traffic_info):
 
 def get_dest_command(tool, traffic_info):
 	command = traffic.get_traffic_modul()[tool]["command"]
-	#print "dest_command:",command
 	if command.has_key("dest"):
 		return make_command("dest", command,traffic_info)
 	else:
@@ -367,25 +352,20 @@ def make_command(target, command, traffic_info):
 			if command.has_key(attribute):
 				replacestr = ""
 				if not isinstance(command[attribute], basestring):
-					#print command[attribute]
-					#print traffic_info[attribute]
 					replacestr = command[attribute][traffic_info[attribute]]
 				else:
 					replacestr = command[attribute]
 				if traffic_info.has_key(attribute):
-					#print "replace:",type(value),value, type(replacestr),replacestr
 					com = com.replace(value, replacestr)
 				else:
 					com = com.replace(value, "")
 				print com
-		#print com
 		command_process[i] = com
 		i = i + 1
 		add = formula1.findall(com)
 	add2 = formula2.findall(com)
 	for value in add2:
 		attribute = value[1:len(value)-1]
-		#print attribute, traffic_info[attribute]
 		com = com.replace(value, traffic_info[attribute])
 	command_process[i] = com
 
@@ -398,8 +378,6 @@ def make_command(target, command, traffic_info):
 
 
 def mutil_traffic_start(elements, attrs):
-	print "elements:",elements
-	print "attrs:",attrs
 	number = int(attrs["number"])
 	#remove the destination element
 	elements.remove(attrs["dest_element"])
