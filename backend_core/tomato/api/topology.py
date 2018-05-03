@@ -31,7 +31,7 @@ def _getSubTopology(topo_id, sub_topo_id):
 	top = topology.get(topo_id)
 	# TODO: Permission checking
 	try:
-		return topology.SubTopology.objects.get(topology=top, id=sub_topology)
+		return topology.SubTopology.objects.get(topology=top, id=sub_topo_id)
 	except DoesNotExist:
 		raise
 	except NotUniqueError:

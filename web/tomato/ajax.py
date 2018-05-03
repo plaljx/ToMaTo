@@ -217,7 +217,7 @@ def topology_remove_sub_topology(api, request, topo_id, sub_topo_id):
 	return api.topology_remove_sub_topology(topo_id, sub_topo_id)
 
 @wrap_json
-def sub_topology_add_group(api, request, topo_id, sub_topo, **data):
+def sub_topology_add_group(api, request, topo_id, sub_topo_id, **data):
 	"""
 	/ajax/topology/<topo_id>/subtopology/<sub_topo_id>/add_group
 	data: {name: <group_name>}
@@ -226,7 +226,7 @@ def sub_topology_add_group(api, request, topo_id, sub_topo, **data):
 	return api.sub_topology_add_group(topo_id, sub_topo_id, group)
 
 @wrap_json
-def sub_topology_remove_group(api, request, topo_id, sub_topo, **data):
+def sub_topology_remove_group(api, request, topo_id, sub_topo_id, **data):
 	"""
 	/ajax/topology/<topo_id>/subtopology/<sub_topo_id>/remove_group
 	data: {name: <group_name>}

@@ -111,6 +111,12 @@ var SubTopologyTab = Class.extend({
                     "callback": function(){
                         t.editor.topology.removeSubTopology(st_id);
                     }
+                },
+                "add_group": {
+                    "name": gettext("Add Group"),
+                    "callback": function(){
+                        t.editor.topology.subTopologyAddGroupDialog(st_id);
+                    }
                 }
             }
         };

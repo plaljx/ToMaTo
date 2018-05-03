@@ -16,10 +16,11 @@ var Topology = Class.extend({
 		return this.editor.workspace.canvas;
 	},
 	// load sub-topology: add tab to tab-list, and add data to this.sub_topologies
-	loadSubTopology: function(st) {
+	loadSubTopology: function(st, permitted) {
 		st.elements = [];  // added when load elements
 		this.sub_topologies.push(st);
-		this.editor.subtopology_tab.addTab(st.id, st.name);
+		if (permitted)
+			this.editor.subtopology_tab.addTab(st.id, st.name);
 		return st;
 	},
 	loadElement: function(el) {
@@ -109,8 +110,39 @@ var Topology = Class.extend({
 		this.data = data;
 		this.id = data.id;
 		this.sub_topologies = [];
-		data.sub_topologies.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);})
-		for (var i=0; i<data.sub_topologies.length; i++) this.loadSubTopology(data.sub_topologies[i]);
+		var group_names = [];
+		// if (this.options.user.name == this.)
+		// if (this.permissions.)
+		console.log(this.data.permissions[this.editor.options.user.name])
+		console.log(this.editor.options.user.name)
+		if (this.data.permissions[this.editor.options.user.name]) {
+			for (var i=0; i<data.sub_topologies.length; i++) {
+				var current = data.sub_topologies[i];
+				this.loadSubTopology(current, true);
+			}
+		} else {
+			for (var i=0; i<this.editor.options.user.groups.length; i++) {
+				group_names.push(this.editor.options.user.groups[i].group)
+			}
+			data.sub_topologies.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);})
+			for (var i=0; i<data.sub_topologies.length; i++) {
+				var current = data.sub_topologies[i];
+				// console.log("current st groups[0]: " + current.groups[0])
+				// console.log("current st groups len: " + current.groups.length)
+				var current_group_name = null;
+				for (var j=0; j<current.groups.length; j++) {
+					current_group_name = current.groups[j];
+					console.log("current_group_name: " + current_group_name)
+					if (group_names.indexOf(current_group_name) > -1) {
+						console.log(true)
+						this.loadSubTopology(current, true);
+					} else {
+						console.log(false)
+						this.loadSubTopology(current, false);
+					}
+				}
+			}
+		}
 		this.elements = {};
 		//sort elements by id so parents get loaded before children
 		data.elements.sort(function(a, b){return a.id > b.id ? 1 : (a.id < b.id ? -1 : 0);});
@@ -896,6 +928,64 @@ var Topology = Class.extend({
 		}});
 		
 		
+	},
+	subTopologyAddGroup: function (st_id, group_name) {
+		var t = this;
+		var topo_id = this.id;
+		data = { group: group_name }
+		ajax({
+			url: 'topology/'+ topo_id + '/subtopology/' + st_id + '/add_group',
+			data: data,
+			successFn: function (result) {
+				console.log('Sub Topology Add Group')
+				console.log(result)
+			},
+			errorFn: function (error) {
+				new errorWindow({error:error});
+			},
+		})
+	},
+	subTopologyAddGroupDialog: function (st_id) {
+		var t = this;
+		var subTopology, group;
+		var dialog = new AttributeWindow({
+			title: gettext('SubTopology Add Group'),
+			width: 500,
+			buttons: [
+                {
+                    text: gettext("Ok"),
+                    click: function(){
+						t.subTopologyAddGroup(st_id, group.getValue());
+						if (dialog != null) {
+							dialog.remove();
+						}
+						dialog = null;
+                    }
+                },
+				{
+					text: gettext("Cancel"),
+					click: function() {
+						if (dialog != null) {
+							dialog.remove();
+						}
+						dialog = null;
+					}
+				}
+			]
+		});
+		subTopology = dialog.add(new TextElement({
+			name: "sub_topology",
+			label: gettext("Sub Topology Id"),
+			value: st_id,
+			disabled: true,
+			help_text: gettext("The ID of sub topology."),
+		}));
+		group = dialog.add(new TextElement({
+			name: "group",
+			label: gettext("Group"),
+			help_text: gettext("The name of group"),
+		}));
+		dialog.show();
 	},
 	// `paint()` some elements and conns in specified sub-topo
 	// and `paintRemove()` other elements and conns

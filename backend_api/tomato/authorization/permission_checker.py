@@ -479,7 +479,7 @@ class PermissionChecker(UserInfo):
 		:param TopologyInfo topology_info: target topology info
 		:param str role: target role
 		"""
-		auth_check(self._has_topology_role(topology_info, role), "this operation requires %s permission on this toppology." % role)
+		auth_check(self._has_topology_role(topology_info, role), "this operation requires %s permission on this topology." % role)
 
 	def check_may_create_topologies(self):
 		"""

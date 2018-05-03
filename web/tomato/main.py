@@ -46,7 +46,8 @@ def _pending_registrations(api, request):
 @wrap_rpc
 def index(api, request):
 	try:
-		news = getNews()
+		# news = getNews()
+		news = {}
 	except:
 		news = {}
 
